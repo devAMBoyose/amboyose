@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>Spooky Mover| Porfolio</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- Your styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/responsive.css" />
+  <link rel="stylesheet" href="/assets/css/fakecode.css" />
+  <link rel="stylesheet" href="/css/footer.css" />
+  <link rel="stylesheet" href="/assets/fportfolio/spooky/assetsportfolio/spooky.css" />
+
+</head>
+
+<body>
+  <!-- cursor-follow glow background -->
+  <div id="cursor-bg" aria-hidden="true"></div>
+
+  <!-- Title bar -->
+  <header class="topbar">
+    <div class="traffic">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+    </div>
+
+    <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="siteTabs"
+      aria-label="Toggle navigation">
+      <svg width="22" height="18" viewBox="0 0 22 18" fill="none" aria-hidden="true">
+        <rect x="0" y="1" width="22" height="2" rx="1"></rect>
+        <rect x="0" y="8" width="22" height="2" rx="1"></rect>
+        <rect x="0" y="15" width="22" height="2" rx="1"></rect>
+      </svg>
+    </button>
+
+    <h1>Spooky Mover| Porfolio</h1>
+
+    <nav class="tabs" id="siteTabs" aria-label="Primary">
+      <button class="chip chip-back">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </button>
+      <button class="chip"><i class="fa-solid fa-backward"></i> Portfolio</button>
+    </nav>
+  </header>
+
+  <!-- Split layout with draggable gutter -->
+  <!-- The JS reads & updates --left to resize the split -->
+  <main id="playground" class="playground" style="--left:clamp(320px,40vw,560px);">
+
+    <!-- Left: editors -->
+    <aside class="editor-col">
+      <section class="panel">
+        <header class="panel-head">
+          <span class="badge html">HTML</span>
+          <button class="mini copy-btn" data-copy="html" type="button">Copy</button>
+        </header>
+        <textarea id="html" spellcheck="false" aria-label="HTML editor" placeholder="Write HTML here..."></textarea>
+      </section>
+
+      <section class="panel">
+        <header class="panel-head">
+          <span class="badge css">CSS</span>
+          <button class="mini copy-btn" data-copy="css" type="button">Copy</button>
+        </header>
+        <textarea id="css" spellcheck="false" aria-label="CSS editor" placeholder="Write CSS here..."></textarea>
+      </section>
+
+      <section class="panel">
+        <header class="panel-head">
+          <span class="badge js">JS</span>
+          <button class="mini copy-btn" data-copy="js" type="button">Copy</button>
+        </header>
+        <textarea id="js" spellcheck="false" aria-label="JavaScript editor"
+          placeholder="Write JavaScript here..."></textarea>
+      </section>
+    </aside>
+
+    <!-- Drag handle (the JS listens on this) -->
+    <div class="gutter" role="separator" aria-orientation="vertical" aria-label="Resize editors and preview"></div>
+
+    <!-- Right: live preview -->
+    <section class="preview-col">
+      <h2 class="page-title">Selected work across full-stack, UI/UX, and creative development.</h2>
+      <!-- <div id="app">
+        <canvas id="canvas"></canvas>
+      </div> -->
+
+      <iframe id="preview" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
+
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© BAMBY | Designed & Code with <span class="heart">♥</span></p>
+    <div class="links">
+      <a href="#">About</a>
+      <span class="dot" aria-hidden="true"></span>
+      <a href="#">Portfolio</a>
+      <span class="dot" aria-hidden="true"></span>
+      <a href="#">Resume</a>
+      <span class="dot" aria-hidden="true"></span>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+  <!-- Optional: your fake highlighter (kept) -->
+  <script src="/pport/inputfakecode.js"></script>
+
+  <!-- Live playground logic (the JS I sent) -->
+  <script src="/assets/fportfolio/spooky/assetsportfolio/spooky.js"></script>
+</body>
+
+</html>

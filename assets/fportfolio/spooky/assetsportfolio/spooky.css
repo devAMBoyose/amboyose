@@ -1,0 +1,159 @@
+:root {
+    --bg: #0c0c0f;
+    --panel: #15161a;
+    --ink: #e8e8ef;
+    --muted: #98a0b3;
+    --accent: #57ffa6;
+    --radius: 14px;
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(1200px 600px at 30% -10%, #1b1d22 0, transparent 70%),
+        radial-gradient(900px 500px at 85% 10%, #181a1f 0, transparent 60%),
+        var(--bg);
+    color: var(--ink);
+    font: 14px/1.5 "JetBrains Mono", ui-monospace, monospace;
+}
+
+.site-header,
+.site-footer {
+    padding: 12px 16px;
+    background: #0f1014d0;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #20222a;
+}
+
+.site-footer {
+    border-top: 1px solid #20222a;
+    border-bottom: 0
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(16px, 2.2vw, 20px);
+    letter-spacing: .5px
+}
+
+.playground {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) minmax(380px, 1fr);
+    gap: 14px;
+    padding: 14px 16px 24px;
+}
+
+/* PREVIEW */
+.preview-wrap {
+    width: 100%;
+    /* aspect keeps preview elegant on phones; height grows on tall screens */
+    aspect-ratio: 16 / 10;
+    background: #0a0b0e;
+    border: 1px solid #23252f;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .35);
+}
+
+#preview {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* CODE */
+.pane {
+    min-width: 0
+}
+
+.code-pane {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+}
+
+.block {
+    background: var(--panel);
+    border: 1px solid #242633;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.block__head {
+    padding: 10px 12px;
+    border-bottom: 1px solid #242633;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: .6px;
+}
+
+.codebox {
+    display: block;
+    width: 100%;
+    min-height: 180px;
+    max-height: 42vh;
+    padding: 12px;
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    resize: vertical;
+    outline: none;
+    caret-color: var(--accent);
+}
+
+/* RESPONSIVE BREAKPOINTS */
+/* Large desktop: give preview more room */
+@media (min-width: 1280px) {
+    .playground {
+        grid-template-columns: 1.2fr 0.8fr;
+    }
+}
+
+/* Tablet: stack preview on top, editors below in two columns */
+@media (max-width: 1024px) {
+    .playground {
+        grid-template-columns: 1fr;
+    }
+
+    .code-pane {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Mobile: single column, comfortable targets */
+@media (max-width: 640px) {
+    .playground {
+        padding: 12px
+    }
+
+    .code-pane {
+        grid-template-columns: 1fr;
+    }
+
+    .codebox {
+        max-height: 38vh
+    }
+
+    .preview-wrap {
+        aspect-ratio: 16/12
+    }
+}
+
+/* OPTIONAL: if a third-party floating UI (your “Spectral Ghost” panel) exists */
+.tp-rotv_b,
+.tp-rofv_b,
+.tp-rotv-b {
+    /* class names vary — keep it safe */
+    max-width: min(92vw, 440px) !important;
+    right: 12px !important;
+    left: auto !important;
+}

@@ -1,0 +1,213 @@
+/* ===== Fake-code overlay alignment ===== */
+
+/* Make each editor a positioning context */
+.panel {
+  position: relative;
+}
+
+/* Raw text hidden, caret visible, keep editor look */
+#playground textarea {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, Monaco, Consolas, "Roboto Mono", monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  tab-size: 2;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: linear-gradient(180deg, #0d0f13, #0b0c10);
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 8px;
+  padding: 14px;
+  width: 100%;
+  color: transparent;
+  /* hide raw glyphs (overlay paints colors) */
+  caret-color: #c9d1d9;
+  /* keep caret visible */
+  position: relative;
+  z-index: 1;
+  /* under the overlay */
+}
+
+/* The highlighter layer that paints colored tokens */
+.hl-layer {
+  position: absolute;
+  z-index: 2;
+  /* above textarea text */
+  pointer-events: none;
+  /* Text flow must match textarea exactly */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow: auto;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  border-radius: 8px;
+}
+
+/* Token colors (Dracula-ish) */
+.tok-com {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.tok-tag {
+  color: #e06c75;
+}
+
+.tok-attr {
+  color: #d19a66;
+}
+
+.tok-str {
+  color: #98c379;
+}
+
+.tok-kw {
+  color: #c678dd;
+}
+
+.tok-fn {
+  color: #61afef;
+}
+
+.tok-num {
+  color: #d19a66;
+}
+
+.tok-prop {
+  color: #56b6c2;
+}
+
+
+/* prevent overlay scrollbar from showing */
+.hl-layer {
+  overflow: hidden !important;
+}
+
+/* still mirror textarea scrolling, but overlay never shows its own bar */
+#playground textarea {
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+/* ===== Fake-code overlay alignment (fixed) ===== */
+
+/* Each editor remains a positioning context */
+.panel {
+  position: relative;
+}
+
+/* Raw text hidden; caret visible */
+#playground textarea {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, Monaco, Consolas, "Roboto Mono", monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  tab-size: 2;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: linear-gradient(180deg, #0d0f13, #0b0c10);
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 8px;
+  padding: 14px;
+  width: 100%;
+  color: transparent;
+  /* hide raw glyphs (overlay paints colors) */
+  caret-color: #c9d1d9;
+  /* keep caret visible */
+  position: relative;
+  z-index: 1;
+  /* under the overlay */
+  overflow: auto;
+  /* scroll source */
+  scrollbar-gutter: stable;
+}
+
+/* Highlight layer that paints colored tokens */
+.hl-layer {
+  position: absolute;
+  z-index: 2;
+  /* above textarea text */
+  pointer-events: none;
+
+  /* Make it perfectly cover the textarea content box */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  /* Mirror text metrics so tokens align 1:1 */
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  /* Match the textarea’s inner padding & radius so text lines up */
+  padding: 14px;
+  border-radius: 8px;
+
+  /* Give a base color in case some text isn’t wrapped in a token */
+  color: #c9d1d9;
+
+  /* Let the textarea’s background show through */
+  background: transparent;
+
+  /* Prevent overlay scrollbar ever showing (scroll is on the textarea) */
+  overflow: hidden !important;
+}
+
+/* Token colors (Dracula-ish) */
+.tok-com {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.tok-tag {
+  color: #e06c75;
+}
+
+.tok-attr {
+  color: #d19a66;
+}
+
+.tok-str {
+  color: #98c379;
+}
+
+.tok-kw {
+  color: #c678dd;
+}
+
+.tok-fn {
+  color: #61afef;
+}
+
+.tok-num {
+  color: #d19a66;
+}
+
+.tok-prop {
+  color: #56b6c2;
+}
+
+/* ---------- Responsive text sizing so it never overflows ---------- */
+@media (max-width: 980px) {
+  #playground textarea {
+    font-size: 12px;
+    padding: 12px;
+  }
+
+  .hl-layer {
+    font-size: 12px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  #playground textarea {
+    font-size: 11px;
+  }
+
+  .hl-layer {
+    font-size: 11px;
+  }
+}

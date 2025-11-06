@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About – {} </title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- Your existing styles -->
+  <link rel="stylesheet" href="/css/footer.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/social.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+
+  <!-- New: right-side title-bar nav -->
+  <link rel="stylesheet" href="/css/nav.css" />
+</head>
+
+<body>
+  <!-- Cursor-follow background -->
+  <div id="cursor-bg" aria-hidden="true"></div>
+
+  <div class="window">
+    <!-- Title Bar (ONE NAV lives here on the right) -->
+    <div class="title-bar">
+      <div class="dots" aria-hidden="true">
+        <span class="red"></span><span class="yellow"></span><span class="green"></span>
+      </div>
+
+      <span class="filename">About Me</span>
+
+      <!-- RIGHT-SIDE NAV (replaces old .buttons) -->
+      <div class="tb-right">
+        <!-- Hamburger (mobile only) -->
+        <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+          aria-label="Toggle menu">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </button>
+
+        <!-- Nav chips -->
+        <ul id="navMenu" class="tb-menu">
+          <li><a href="index.html" class="is-active">About</a></li>
+
+          <li class="has-submenu">
+            <button class="submenu-toggle" aria-expanded="false" aria-controls="portfolioSubmenu">
+              Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+            </button>
+
+            <ul id="portfolioSubmenu" class="submenu" role="menu" aria-label="Portfolio submenu">
+              <li><a href="/portfolio.html">All Projects</a></li>
+              <li><a href="portfolio.html#web">Web Apps</a></li>
+              <li><a href="portfolio.html#uiux">UI/UX</a></li>
+              <li><a href="portfolio.html#graphics">Graphics</a></li>
+              <li><a href="portfolio.html#demos">Interactive Demos</a></li>
+            </ul>
+          </li>
+
+          <li><a href="resume.html">Resume</a></li>
+          <li><a href="mailto:amboyose.dev@gmail.com">Email</a></li>
+          <li><a href="https://amboyose-portfolio.onrender.com" target="_blank" rel="noopener">Live Portfolio</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="profile">
+        <div class="avatar avatar-glow">
+          <img src="https://i.ibb.co/SDV36DGK/2025-07-05-12-04-38.png" alt="Anna Marice Eben Boyose">
+          <ul class="avatar-social">
+            <li><a href="mailto:amboyose.dev@gmail.com" aria-label="Email" data-tip="Email">
+                <i class="fa-solid fa-envelope"></i></a></li>
+            <li><a href="https://github.com/youruser" target="_blank" aria-label="GitHub" data-tip="GitHub"
+                rel="noopener">
+                <i class="fa-brands fa-github"></i></a></li>
+            <li><a href="https://www.linkedin.com/in/youruser" target="_blank" aria-label="LinkedIn" data-tip="LinkedIn"
+                rel="noopener">
+                <i class="fa-brands fa-linkedin-in"></i></a></li>
+            <li><a href="https://wa.me/639209890260" target="_blank" aria-label="WhatsApp" data-tip="WhatsApp"
+                rel="noopener">
+                <i class="fa-brands fa-whatsapp"></i></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- About Block -->
+      <div class="about-me">
+        <h2 class="name">ANNA MARICE EBEN BOYOSE</h2>
+        <p class="role">Full-Stack Developer | React | Node.js | PHP | Java | MongoDB | UI/UX Design</p>
+        <p class="summary">
+          Full-Stack Web Developer with a strong foundation in front-end and back-end development, passionate about
+          crafting seamless, user-focused digital experiences. Proficient in HTML, CSS, JavaScript, ReactJS, and Figma,
+          blending design and functionality. Also skilled in repairing and maintaining systems, ensuring performance,
+          reliability, and innovation in every project.
+        </p>
+
+        <ul class="details-grid">
+          <li><span class="k">Birthday:</span> <span class="v">27 January 1990</span></li>
+          <li><span class="k">Age:</span> <span class="v">35</span></li>
+          <li><span class="k">Website:</span> <span class="v"><a href="https://amboyose.com" target="_blank"
+                rel="noopener noreferrer">amboyose.com</a></span></li>
+          <li><span class="k">Degree:</span> <span class="v">BS Engineering</span></li>
+          <li><span class="k">Phone:</span> <span class="v">+63 962 989 0260</span></li>
+          <li><span class="k">Email:</span> <span class="v"><a
+                href="mailto:amboyose.dev@gmail.com">amboyose.dev@gmail.com</a></span></li>
+          <li><span class="k">City:</span> <span class="v">Philippines</span></li>
+          <li><span class="k">Freelance:</span> <span class="v">Available</span></li>
+        </ul>
+      </div>
+
+      <!-- Code Section -->
+      <div class="code-box">
+        <pre id="code" class="code"></pre>
+        <template id="codeTpl">
+          <span class="cm">// --- Experience ---</span>
+          <span class="kw">void</span> <span class="fn">experience</span>() {
+          System.out.println(<span class="str">"Website Developer / Web Designer — Ofworker (Dec 2023–Feb
+            2024)"</span>);
+          System.out.println(<span class="str">"Marketing Graphic Designer — Biosite (Feb 2024–Jul 2025)"</span>);
+          System.out.println(<span class="str">"IT Specialist — MAPIO (Sep 2018–Dec 2023)"</span>);
+          System.out.println(<span class="str">"Graphic Design — Kirobin Digital Printing (Jan 2016–Sep 2018)"</span>);
+          }
+
+          <span class="cm">// --- Education ---</span>
+          <span class="kw">void</span> <span class="fn">education</span>() {
+          System.out.println(<span class="str">"CCSP — InfoSec (2025)"</span>);
+          System.out.println(<span class="str">"HTML/CSS/JS — Johns Hopkins (2025)"</span>);
+          }
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2025 <strong>BAMBY</strong> | Designed & Coded with ❤️ </p>
+    <p class="links">
+      <a href="index.html">About</a> •
+      <a href="portfolio.html">Portfolio</a> •
+      <a href="resume.html">Resume</a> •
+      <a href="mailto:amboyose.dev@gmail.com">Contact</a>
+    </p>
+  </footer>
+
+  <!-- Your existing script -->
+  <script src="/js/script.js"></script>
+
+  <!-- New: navbar script -->
+  <script defer src="/js/nav.js"></script>
+</body>
+
+</html>

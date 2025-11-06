@@ -1,0 +1,257 @@
+/* One nav, embedded on the RIGHT of .title-bar */
+:root {
+    --nav-bg: rgba(12, 12, 16, .85);
+    --nav-text: #e9f0ff;
+    --nav-accent: #7ef6a1;
+    --nav-border: rgba(255, 255, 255, .08);
+    --chip-bg: #1b1b2f;
+    --chip-hover: #ff5b3d;
+    --chip-active: #ff3e1c;
+}
+
+/* Right side container inside title bar */
+.title-bar {
+    position: sticky;
+    /* keep your original feel */
+    top: 0;
+    z-index: 1000;
+}
+
+.title-bar .tb-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    /* anchor for dropdown/overlay */
+}
+
+/* Hamburger (mobile) */
+.tb-nav-toggle {
+    display: none;
+    width: 40px;
+    height: 34px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.tb-nav-toggle .bar {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #cfe3ff;
+    margin: 6px 0;
+    transition: .25s ease;
+}
+
+/* Menu chips (desktop row) */
+.tb-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tb-menu a,
+.submenu-toggle {
+    background: var(--chip-bg);
+    color: #cfe3ff;
+    border: 1px solid var(--nav-border);
+    border-radius: 10px;
+    padding: 7px 12px;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    transition: background .25s, color .25s, box-shadow .25s, transform .15s;
+    cursor: pointer;
+}
+
+.tb-menu a:hover,
+.submenu-toggle:hover {
+    background: var(--chip-hover);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 91, 61, .35), 0 0 10px rgba(255, 91, 61, .25) inset;
+}
+
+.tb-menu a:active,
+.submenu-toggle:active {
+    background: var(--chip-active);
+    transform: scale(.98);
+    box-shadow: 0 3px 10px rgba(255, 91, 61, .45) inset;
+}
+
+.tb-menu a.is-active {
+    background: rgba(255, 91, 61, .35),
+        0 0 10px rgba(255, 91, 61, .25);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* Dropdown (desktop) */
+.has-submenu {
+    position: relative;
+}
+
+.submenu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    /* align under the chip on the right */
+    min-width: 220px;
+    padding: 8px;
+    margin: 0;
+    list-style: none;
+    display: none;
+    background: #0f1320;
+    border: 1px solid var(--nav-border);
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .45);
+}
+
+.submenu li a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #e9f0ff;
+    text-decoration: none;
+    transition: .25s;
+    background: transparent;
+    border: 0;
+}
+
+.submenu li a:hover {
+    background: #161b2b;
+    color: var(--nav-accent);
+}
+
+.has-submenu:hover>.submenu,
+.has-submenu:focus-within>.submenu {
+    display: block;
+}
+
+/* ========= Mobile (≤ 900px) ========= */
+@media (max-width:900px) {
+    .tb-nav-toggle {
+        display: block;
+    }
+
+    /* Turn horizontal row into slide-down panel aligned to right */
+    .tb-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        display: grid;
+        gap: 6px;
+        padding: 12px;
+        background: #0b0f17;
+        border: 1px solid var(--nav-border);
+        border-radius: 12px;
+        transform: translateY(-10px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform .25s ease, opacity .25s ease;
+        width: min(92vw, 340px);
+    }
+
+    .tb-menu.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Dropdown becomes accordion */
+    .has-submenu .submenu {
+        position: static;
+        display: none;
+        padding: 6px;
+        margin-left: 0;
+        background: #0f1320;
+        border: 1px solid var(--nav-border);
+        border-radius: 10px;
+    }
+
+    .has-submenu .submenu.open {
+        display: block;
+    }
+
+    .submenu-toggle[aria-expanded="true"] i {
+        transform: rotate(180deg);
+        transition: transform .2s ease;
+    }
+
+
+    @media (max-width:900px) {
+
+        /* show hamburger */
+        .tb-nav-toggle {
+            display: block;
+        }
+
+        /* FIX: use a fixed overlay so it won't be clipped by the title/window */
+        .tb-menu {
+            position: fixed;
+            z-index: 2000;
+            /* above window & avatar */
+            top: calc(56px + env(safe-area-inset-top));
+            /* just under the bar */
+            right: 8px;
+            left: 8px;
+            display: grid;
+            gap: 8px;
+            padding: 12px;
+            background: #0b0f17;
+            border: 1px solid var(--nav-border);
+            border-radius: 14px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .45);
+            max-height: calc(100vh - 72px - env(safe-area-inset-top));
+            overflow: auto;
+
+            transform: translateY(-12px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform .25s ease, opacity .25s ease;
+        }
+
+        .tb-menu.open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* make touch targets comfy */
+        .tb-menu a,
+        .submenu-toggle {
+            padding: 12px 14px;
+            font-size: 15px;
+            border-radius: 12px;
+        }
+
+        /* Dropdown becomes accordion inside the panel */
+        .has-submenu .submenu {
+            position: static;
+            display: none;
+            padding: 6px;
+            margin: 2px 0 0 0;
+            /* no sideways shift so it aligns */
+            background: #0f1320;
+            border: 1px solid var(--nav-border);
+            border-radius: 10px;
+        }
+
+        .has-submenu .submenu.open {
+            display: block;
+        }
+
+        .submenu-toggle[aria-expanded="true"] i {
+            transform: rotate(180deg);
+            transition: transform .2s ease;
+        }
+    }
+
+}

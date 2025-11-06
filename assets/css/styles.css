@@ -1,0 +1,1153 @@
+/* GLOBAL FONT FIX — unify across site */
+body,
+.topbar,
+.footer,
+.footer p,
+.footer a,
+.tabs,
+.chip {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 400;
+}
+
+/* =========================
+   Color Variables
+   ========================= */
+:root {
+  --bg: #0b0f17;
+  --card: #0f1320;
+  --card-2: #101424;
+  --ink: #e7ecf3;
+  --muted: #97a3b6;
+  --brand: #1bb5a7;
+  --edge: #f24b3b;
+  --ring: rgba(255, 255, 255, .08);
+  --radius: 14px;
+  --gap: 18px;
+  --gutter: 6px;
+  --gutter-hit: 14px;
+
+  /* Code syntax colors */
+  --bg-dark: #0e0e1a;
+  --editor: #111122;
+  --code: #e8e8f0;
+  --comment: #6a7a89;
+  --keyword: #ffb86c;
+  --string: #50fa7b;
+  --class: #8be9fd;
+  --method: #bd93f9;
+  --number: #f1fa8c;
+
+  /* Navbar color tuning */
+  --pill: #1b2133;
+  --pill-bd: rgba(255, 255, 255, .10);
+  --nav-edge: #ff5b3d;
+}
+
+/* =========================
+   Global
+   ========================= */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: radial-gradient(80vw 80vh at 10% 90%, #1a2035 0%, #0b0f17 60%) fixed;
+  color: var(--ink);
+}
+
+/* =========================
+   Cursor-following background
+   ========================= */
+#cursor-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(600px circle at var(--cx, 50%) var(--cy, 50%), rgba(255, 155, 60, .38), rgba(255, 155, 60, 0) 45%),
+    radial-gradient(900px circle at calc(var(--cx, 50%) + 12%) calc(var(--cy, 50%) + 8%), rgba(120, 0, 255, .22), rgba(120, 0, 255, 0) 50%),
+    linear-gradient(180deg, #0d0f1a 0%, #0b0f17 100%);
+}
+
+/* =========================
+   NAVBAR (Updated gradient + edge line)
+   ========================= */
+.topbar {
+  max-width: 1120px;
+  margin: 32px auto 0;
+  padding: 12px 16px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--ink);
+  background: linear-gradient(90deg, #01b3bf 0%, #2f5c7a 45%, #2a2f45 60%, #3a2d3a 78%, #8e2623 100%);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, .55),
+    0 0 0 1px rgba(255, 255, 255, .06) inset;
+  position: relative;
+  overflow: hidden;
+}
+
+/* glowing orange edge line */
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(255, 91, 61, .85), rgba(255, 91, 61, .55));
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, .06) inset;
+}
+
+/* traffic dots */
+.traffic {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, .35) inset;
+}
+
+.red {
+  background: #ff5f57;
+}
+
+.yellow {
+  background: #febc2e;
+}
+
+.green {
+  background: #28c840;
+}
+
+/* title */
+.topbar h1 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  font-size: 16px;
+  letter-spacing: .6px;
+  color: #dfe7f5;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .35);
+}
+
+/* nav chips */
+.tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.chip {
+  background: var(--pill);
+  color: var(--ink);
+  border: 1px solid var(--pill-bd);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+}
+
+.chip:hover {
+  transform: translateY(-1px);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 255, 255, .06) inset;
+}
+
+.chip-primary {
+  background: #2a2f45;
+}
+
+/* responsive wrap for navbar */
+@media (max-width: 920px) {
+  .topbar {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .topbar h1 {
+    order: 2;
+    flex: 100%;
+  }
+
+  .tabs {
+    order: 3;
+    flex-wrap: wrap;
+  }
+}
+
+/* =========================
+   Playground split layout
+   ========================= */
+.playground {
+  --left: 480px;
+  max-width: 1200px;
+  margin: 0 auto 28px;
+  background: linear-gradient(180deg, #0f1320, #0c111d);
+  border: 1px solid var(--ring);
+  border-top: 0;
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, .5);
+  display: grid;
+  grid-template-columns: var(--left) var(--gutter) 1fr;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.editor-col {
+  padding: 18px;
+  background: #0d1220;
+  border-right: 1px solid var(--ring);
+}
+
+/* ====The column that holds the live preview */
+.preview-col {
+  height: clamp(360px, 62vh, 560px);
+}
+
+/* The actual iframe */
+.preview-col iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+  overflow: hidden;
+  /* prevent its own scrollbars */
+}
+
+/* If you wrap the iframe in a card/panel */
+.preview-card,
+.preview {
+  overflow: hidden;
+}
+
+/* ====End The column that holds the live preview */
+
+.gutter {
+  position: relative;
+  background: linear-gradient(180deg, #222b45, #1b2238);
+  cursor: col-resize;
+  width: var(--gutter);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.gutter::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc((var(--gutter)-var(--gutter-hit))/2);
+  width: var(--gutter-hit);
+  height: 100%;
+}
+
+@media (max-width:980px) {
+  .playground {
+    grid-template-columns: 1fr;
+  }
+
+  .gutter {
+    display: none;
+  }
+}
+
+/* =========================
+   Panels and Badges
+   ========================= */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--ring);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0e1426;
+  border-bottom: 1px solid var(--ring);
+  padding: 10px 12px;
+}
+
+.badge {
+  font-weight: 600;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #1b2238;
+}
+
+.badge.html {
+  color: #ff6b6b;
+}
+
+.badge.css {
+  color: #57b3ff;
+}
+
+.badge.js {
+  color: #ffe48a;
+}
+
+.mini {
+  font: inherit;
+  font-size: 12px;
+  color: var(--muted);
+  background: #131a2d;
+  border: 1px solid var(--ring);
+  border-radius: 6px;
+  padding: 2px 7px;
+  cursor: pointer;
+}
+
+/* =========================
+   Textarea & Preview
+   ========================= */
+textarea {
+  width: 100%;
+  height: 160px;
+  resize: vertical;
+  border: 0;
+  outline: 0;
+  padding: 12px 12px 16px;
+  background: var(--card-2);
+  color: var(--ink);
+  font: 13px/1.5 "JetBrains Mono", monospace;
+}
+
+textarea#html {
+  height: 80px;
+}
+
+textarea#css {
+  height: 80px;
+}
+
+textarea#js {
+  height: 80px;
+}
+
+iframe#preview {
+  width: 100%;
+  height: clamp(360px, 60vh, 640px);
+  border: 1px solid var(--ring);
+  background: #0d111a;
+  border-radius: 10px;
+  display: block;
+}
+
+/* =========================
+   Footer
+   ========================= */
+.footer {
+  max-width: 1200px;
+  margin: 14px auto 40px;
+  text-align: center;
+  color: var(--muted);
+  background: linear-gradient(180deg, #151a2f, #13182b);
+  border: 1px solid var(--ring);
+  border-top: 2px solid var(--edge);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.footer a {
+  color: #a9c7ff;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   Code View (from fakecode.css)
+   ========================= */
+.codeview {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, Monaco, Consolas, "Roboto Mono", monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  background: linear-gradient(180deg, #0d0f13, #0b0c10);
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 8px;
+  padding: 14px;
+  color: #c9d1d9;
+  overflow: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.codeview:focus {
+  outline: none;
+}
+
+.codeview::selection {
+  background: rgba(0, 255, 200, .18);
+}
+
+/* token colors */
+.tok-com {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.tok-tag {
+  color: #e06c75;
+}
+
+.tok-attr {
+  color: #d19a66;
+}
+
+.tok-str {
+  color: #98c379;
+}
+
+.tok-kw {
+  color: #c678dd;
+}
+
+.tok-fn {
+  color: #61afef;
+}
+
+.tok-num {
+  color: #d19a66;
+}
+
+.tok-prop {
+  color: #56b6c2;
+}
+
+/* preview area fix */
+.preview-wrap iframe#preview {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #111;
+}
+
+/* =========================
+   Avatar Glow (from boardp.css)
+   ========================= */
+.avatar-glow {
+  position: relative;
+}
+
+.avatar-glow::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 16px;
+  pointer-events: none;
+  box-shadow:
+    0 0 40px rgba(0, 255, 200, .18),
+    0 0 80px rgba(28, 117, 6, .14) inset;
+}
+
+/* =========================
+   Social Icons (from social.css)
+   ========================= */
+.avatar {
+  position: relative;
+}
+
+.avatar-social {
+  list-style: none;
+  margin: 10px auto 0;
+  padding: 6px 10px;
+  display: flex;
+  gap: 12px;
+  background: rgba(0, 0, 0, .35);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 50px;
+  width: max-content;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.avatar-social a {
+  --size: 36px;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  display: grid;
+  place-items: center;
+  color: #dbe2ea;
+  text-decoration: none;
+  border-radius: 50%;
+  background: #1a1e2e;
+  border: 1px solid rgba(255, 255, 255, .06);
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+  will-change: transform;
+}
+
+.avatar-social a i {
+  font-size: 15px;
+  transition: transform .25s ease;
+  will-change: transform;
+}
+
+.avatar-social a:hover {
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .35),
+    0 0 18px rgba(0, 255, 170, .35);
+  color: #ffffff;
+}
+
+.avatar-social a:hover i {
+  transform: translateY(-1px) rotate(-6deg);
+}
+
+.avatar-social a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .10) 40%, rgba(255, 255, 255, .22) 50%, transparent 60%);
+  transform: translateX(-120%);
+  transition: transform .5s ease;
+}
+
+.avatar-social a:hover::before {
+  transform: translateX(120%);
+}
+
+.avatar-social a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 255, 170, .35);
+  transform: scale(.6);
+  opacity: 0;
+}
+
+.avatar-social a:hover::after {
+  animation: ring .7s ease-out forwards;
+}
+
+@keyframes ring {
+  0% {
+    transform: scale(.6);
+    opacity: .45;
+  }
+
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+.avatar-social a[data-tip] {
+  --tip-bg: #111827;
+  --tip-color: #e5e7eb;
+}
+
+.avatar-social a[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  padding: 6px 8px;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--tip-color);
+  background: var(--tip-bg);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
+}
+
+.avatar-social a[data-tip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.avatar-social a[data-tip]::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(17, 24, 39, 1);
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+
+.avatar-social a[data-tip]:hover::before {
+  opacity: 1;
+}
+
+
+
+
+
+
+
+
+
+/* ============= GLOBAL LAYOUT WIDTH ============= */
+:root {
+  --container: 1120px;
+}
+
+/* match your screenshot width */
+
+.topbar,
+.playground,
+.footer {
+  max-width: var(--container);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============= PERFECTLY-CENTERED TOPBAR ============= */
+/* Switch from flex to grid so the title is mathematically centered */
+.topbar {
+  display: grid !important;
+  grid-template-columns: auto 1fr auto;
+  /* dots | title | tabs */
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+}
+
+/* Left: traffic dots stay left */
+.topbar .traffic {
+  grid-column: 1;
+}
+
+/* Center: title is ALWAYS centered regardless of tab width */
+.topbar h1 {
+  grid-column: 2;
+  justify-self: center;
+  margin: 0;
+  text-align: center;
+}
+
+/* Right: pills push to the far right */
+.topbar .tabs {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  /* no stray margins */
+}
+
+/* Thin orange underline matches left/right padding of the bar */
+.topbar::after {
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  border-radius: 4px;
+}
+
+/* Pill fine-tuning to match the reference look */
+.chip {
+  padding: 7px 12px;
+  border-radius: 10px;
+  background: var(--pill);
+  border: 1px solid var(--pill-bd);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .04) inset;
+}
+
+/*============= TopBar MOBILE LAYOUT =============*/
+/* topbar uses grid: dots | title | right side (burger/tabs) */
+.topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+}
+
+/* center title perfectly */
+.topbar h1 {
+  grid-column: 2;
+  justify-self: center;
+  text-align: center;
+}
+
+/* tabs align right on desktop */
+.topbar .tabs {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  gap: 10px;
+}
+
+/* burger lives in the same right slot but stays hidden on desktop */
+.nav-toggle {
+  grid-column: 3;
+  justify-self: end;
+  display: none;
+  /* hidden on desktop */
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 38px;
+  border: 1px solid rgba(255, 255, 255, .10);
+  border-radius: 12px;
+  background: #2a2f45;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
+}
+
+.nav-toggle svg rect {
+  fill: #dfe7f5;
+}
+
+
+
+/* ============= FOOTER (reference look) ============= */
+.footer {
+  background: linear-gradient(180deg, #252742 0%, #231f38 70%, #1b1d2d 100%);
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-top: 3px solid #ff5b3d;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .45);
+}
+
+.footer p {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: .2px;
+  color: #d9e1ee;
+}
+
+.footer .heart {
+  color: #ff4d6d;
+}
+
+.footer .links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13px;
+}
+
+.footer .links a {
+  color: #73e28a;
+  text-decoration: none;
+}
+
+.footer .links a:hover {
+  text-decoration: underline;
+}
+
+.footer .links .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .35);
+  align-self: center;
+}
+
+/* ============= SMALL SCREENS ============= */
+@media (max-width: 920px) {
+  .topbar {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+  }
+
+  .topbar .traffic {
+    order: -1;
+    justify-self: start;
+  }
+
+  .topbar h1 {
+    justify-self: center;
+  }
+
+  .topbar .tabs {
+    justify-self: start;
+    flex-wrap: wrap;
+  }
+}
+
+
+
+
+/* ===========================================================
+   NAVBAR BUTTON INTERACTIONS — restore hover + active color
+   =========================================================== */
+.chip {
+  background: var(--pill);
+  color: #dbe2ea;
+  border: 1px solid var(--pill-bd);
+  border-radius: 10px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.15s ease;
+}
+
+/* 🟠 hover = orange highlight like your original */
+.chip:hover {
+  background: #ff5b3d;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 16px rgba(255, 91, 61, 0.35),
+    0 0 10px rgba(255, 91, 61, 0.25) inset;
+}
+
+/* 🔴 active or clicked state = deeper orange */
+.chip:active {
+  background: #ff3e1c;
+  transform: scale(0.98);
+  box-shadow:
+    0 3px 10px rgba(255, 91, 61, 0.45) inset;
+}
+
+/* special primary tabs (like “Live ON”) */
+.chip-primary {
+  background: #2a2f45;
+  color: #fff;
+}
+
+.chip-primary:hover {
+  background: #ff5b3d;
+  color: #fff;
+}
+
+/* cursor pointer everywhere */
+.chip,
+.tabs button {
+  cursor: pointer;
+}
+
+/* ensure icons align properly in chips */
+.chip i {
+  margin-right: 6px;
+  font-family: "Font Awesome 6 Free";
+  /* keeps icon style */
+  font-weight: 900;
+}
+
+/* ensure text part uses JetBrains Mono */
+.chip span {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 400;
+}
+
+
+/* ==== Red "Back" chip button ==== */
+.chip-back {
+  background: #ff4d4d;
+  /* solid red */
+  border-color: rgba(255, 255, 255, .1);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
+  transition: background .25s ease, transform .2s ease, box-shadow .25s ease;
+}
+
+/* Hover effect: brighter red and glow */
+.chip-back:hover {
+  background: #ff5b3d;
+  box-shadow:
+    0 6px 18px rgba(255, 91, 61, .45),
+    0 0 12px rgba(255, 91, 61, .35);
+  transform: translateY(-2px);
+}
+
+/* Active (clicked) state */
+.chip-back:active {
+  background: #d8342a;
+  transform: scale(0.96);
+}
+
+/* Keep icon white inside */
+.chip-back i {
+  color: #fff;
+}
+
+/* ===========================================================
+   BACKGROUND HOVER INTERACTIONS 
+   =========================================================== */
+body.cursor-boost #cursor-bg {
+  background:
+    radial-gradient(650px circle at var(--cx, 50%) var(--cy, 50%), rgba(255, 155, 60, .50), rgba(255, 155, 60, 0) 46%),
+    radial-gradient(950px circle at calc(var(--cx, 50%) + 12%) calc(var(--cy, 50%) + 8%), rgba(120, 0, 255, .30), rgba(120, 0, 255, 0) 52%),
+    linear-gradient(180deg, #0d0f1a 0%, #0b0f17 100%);
+}
+
+.page-title {
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  color: #00ff9c;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 10px auto 10px;
+  padding: 8px 0;
+  /* border-bottom: 2px solid #ff4b4b; */
+  text-shadow: 0 0 6px rgba(0, 255, 150, 0.4);
+  max-width: 900px;
+}
+
+
+
+
+
+
+
+
+html,
+body,
+#app {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  touch-action: none;
+}
+
+#canvas {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.projects {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.projects select {
+  background: #0e1015;
+  color: #eee;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+}
+
+.projects .mini {
+  background: #1b1e24;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 13px;
+  padding: 3px 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.projects .mini:hover {
+  background: #2a2f3a;
+}
+
+
+
+
+
+
+
+
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+}
+
+#canvas {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== Fake-code overlay: grid fit (no HTML changes) ===== */
+
+/* Each editor panel becomes a 2-row grid:
+   row 1 = header, row 2 = editor area (textarea + overlay stacked) */
+#playground .panel {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  /* keep your existing look */
+  position: relative;
+}
+
+/* Header stays in row 1 */
+#playground .panel .panel-head {
+  grid-row: 1;
+  z-index: 3;
+  /* above everything in case of shadows */
+}
+
+/* Textarea sits in row 2 (underlay) */
+#playground textarea {
+  grid-row: 2;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  /* your existing editor look */
+  font-family: "JetBrains Mono", ui-monospace, Menlo, Monaco, Consolas, "Roboto Mono", monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: linear-gradient(180deg, #0d0f13, #0b0c10);
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 8px;
+  padding: 14px;
+
+  /* hide raw glyphs; caret visible */
+  color: transparent;
+  caret-color: #c9d1d9;
+
+  /* scrolling happens on the textarea */
+  overflow: auto;
+  scrollbar-gutter: stable;
+
+  /* keep it below the overlay within this grid cell */
+  z-index: 1;
+}
+
+/* Overlay (highlight layer) shares the same grid cell (row 2) */
+#playground .hl-layer {
+  grid-row: 2;
+  /* same row as the textarea */
+  align-self: stretch;
+  justify-self: stretch;
+  width: 100%;
+  height: 100%;
+
+  /* paint over the textarea */
+  z-index: 2;
+  pointer-events: none;
+
+  /* text metrics must match textarea */
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  /* match textarea’s padding & radius so lines align */
+  padding: 14px;
+  border-radius: 8px;
+
+  color: #c9d1d9;
+  /* base color when no token span */
+  background: transparent;
+
+  /* no own scrollbar; JS mirrors scroll from textarea */
+  overflow: hidden !important;
+}
+
+/* Token colors (Dracula-ish) — keep or merge with yours */
+.tok-com {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.tok-tag {
+  color: #e06c75;
+}
+
+.tok-attr {
+  color: #d19a66;
+}
+
+.tok-str {
+  color: #98c379;
+}
+
+.tok-kw {
+  color: #c678dd;
+}
+
+.tok-fn {
+  color: #61afef;
+}
+
+.tok-num {
+  color: #d19a66;
+}
+
+.tok-prop {
+  color: #56b6c2;
+}
+
+/* Responsive text sizing (optional) */
+@media (max-width: 980px) {
+
+  #playground textarea,
+  #playground .hl-layer {
+    font-size: 12px;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 420px) {
+
+  #playground textarea,
+  #playground .hl-layer {
+    font-size: 11px;
+  }
+}

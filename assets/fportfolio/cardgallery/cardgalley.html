@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Card Animated | Portfolio</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- Your site styles (keep these if you already use them) -->
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+  <link rel="stylesheet" href="/css/fakecode.css" />
+</head>
+
+<!-- data-project4 is read by the JS to name the storage key -->
+
+<body data-project4="cardgallery">
+  <!-- cursor-follow glow background -->
+  <div id="cursor-bg" aria-hidden="true"></div>
+
+  <!-- Title bar -->
+  <header class="topbar">
+    <div class="traffic" aria-hidden="true">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+    </div>
+
+    <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="siteTabs"
+      aria-label="Toggle navigation">
+      <svg width="22" height="18" viewBox="0 0 22 18" fill="none" aria-hidden="true">
+        <rect x="0" y="1" width="22" height="2" rx="1"></rect>
+        <rect x="0" y="8" width="22" height="2" rx="1"></rect>
+        <rect x="0" y="15" width="22" height="2" rx="1"></rect>
+      </svg>
+    </button>
+
+    <h1>Card Animated | Portfolio</h1>
+
+    <nav class="tabs" id="siteTabs" aria-label="Primary">
+      <button class="chip chip-back" type="button">
+        <i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span>
+      </button>
+      <button class="chip" type="button">
+        <i class="fa-solid fa-backward" aria-hidden="true"></i><span>Portfolio</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Split layout with draggable gutter -->
+  <!-- The JS reads & updates --left to resize the split -->
+  <main id="playground" class="playground" style="--left:clamp(320px,40vw,560px);">
+    <!-- Left: editors -->
+    <aside class="editor-col">
+      <!-- HTML -->
+      <section class="panel">
+        <header class="panel-head">
+          <span class="badge html">HTML</span>
+          <button class="mini copy-btn" data-copy="html" type="button">Copy</button>
+        </header>
+        <textarea id="html" spellcheck="false" aria-label="HTML editor" placeholder="Write HTML here..."></textarea>
+      </section>
+
+      <!-- CSS -->
+      <section class="panel">
+        <header class="panel-head">
+          <span class="badge css">CSS</span>
+          <button class="mini copy-btn" data-copy="css" type="button">Copy</button>
+        </header>
+        <textarea id="css" spellcheck="false" aria-label="CSS editor" placeholder="Write CSS here..."></textarea>
+      </section>
+
+      <!-- JS -->
+      <section class="panel">
+        <header class="panel-head">
+          <span class="badge js">JS</span>
+          <button class="mini copy-btn" data-copy="js" type="button">Copy</button>
+        </header>
+        <textarea id="js" spellcheck="false" aria-label="JavaScript editor"
+          placeholder="Write JavaScript here..."></textarea>
+      </section>
+
+      <!-- (Optional) Live toggle and Reset-to-blank (your script supports these if present) -->
+      <!-- <button id="liveToggle" class="mini" aria-pressed="true" type="button">Live: ON</button> -->
+      <!-- <button id="resetBlank" class="mini" type="button">Reset to blank</button> -->
+    </aside>
+
+    <!-- Drag handle (the JS listens on this) -->
+    <div class="gutter" role="separator" aria-orientation="vertical" aria-label="Resize editors and preview"></div>
+
+    <!-- Right: live preview -->
+    <section class="preview-col">
+      <h2 class="page-title">Selected work across full-stack, UI/UX, and creative development.</h2>
+      <!-- Allow scripts so your JS runs in the preview -->
+      <iframe id="preview" title="Live preview" sandbox="allow-scripts allow-modals"></iframe>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© BAMBY | Designed & Code with <span class="heart">♥</span></p>
+    <div class="links">
+      <a href="#">About</a>
+      <span class="dot" aria-hidden="true"></span>
+      <a href="#">Portfolio</a>
+      <span class="dot" aria-hidden="true"></span>
+      <a href="#">Resume</a>
+      <span class="dot" aria-hidden="true"></span>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+  <!-- Optional: your fake highlighter -->
+  <script src="/pport/inputfakecode.js"></script>
+
+  <!-- Live playground logic (match this path to your file name) -->
+  <script src="/fportfolio/cardgallery/assetsportfolio/cardanimated.js"></script>
+</body>
+
+</html>
