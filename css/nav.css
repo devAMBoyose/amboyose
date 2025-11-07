@@ -255,3 +255,24 @@
     }
 
 }
+
+/* Make all form controls inherit the site font */
+:where(button, input, select, textarea) {
+    font: inherit;
+    /* family + size + weight */
+    letter-spacing: inherit;
+}
+
+/* Ensure the submenu button explicitly uses your font */
+.submenu-toggle {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-weight: 400;
+}
+
+/* (Optional) normalize all menu items */
+.tb-menu a,
+.tb-menu .submenu a,
+.tb-menu .submenu-toggle {
+    font-family: inherit;
+    /* or repeat the JetBrains stack here */
+}

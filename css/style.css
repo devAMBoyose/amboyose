@@ -8,9 +8,17 @@
   --class: #8be9fd;
   --method: #bd93f9;
   --number: #f1fa7c;
-  /* small tweak for readability */
   --pill: #1f2437;
   --pill-bd: rgba(255, 255, 255, .08);
+
+  --font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-weight: 400;
+}
+
+html,
+body {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight);
 }
 
 /* ===== cursor-following background ===== */
