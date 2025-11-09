@@ -399,3 +399,45 @@ body {
     background-position: 0% 50%
   }
 }
+
+
+/* =============rating component =============*/
+/* Base style */
+.proj-card .meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #7EF6A1;
+}
+
+.proj-card .meta span i {
+  color: #7EF6A1;
+  cursor: pointer;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* Animate individual star only when hovered */
+.proj-card .meta span i:hover {
+  transform: scale(1.3) rotate(10deg);
+  text-shadow: 0 0 8px #7EF6A1, 0 0 16px #7EF6A1, 0 0 24px #7EF6A1;
+}
+
+/* Optional: smooth “pop back” when hover ends */
+.proj-card .meta span i:not(:hover) {
+  transform: scale(1);
+}
+
+/* Responsive font size */
+@media (max-width: 768px) {
+  .proj-card .meta span {
+    font-size: 13px;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .proj-card .meta span {
+    font-size: 12px;
+  }
+}
