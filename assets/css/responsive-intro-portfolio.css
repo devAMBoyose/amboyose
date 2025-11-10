@@ -1,0 +1,309 @@
+/* ==========================================================
+   RESPONSIVE OVERRIDES
+   - Scopes:
+     • Intro loader: #intro-loader …
+     • Portfolio/Resume shell: .window, .resume, .resume-grid, .title-bar
+   - Load this AFTER your normal CSS (and after intro-loader.css)
+   ========================================================== */
+
+/* ---------- Base tweaks for small screens ---------- */
+@media (max-width: 480px) {
+
+    /* Intro loader */
+    #intro-loader .intro__grid {
+        padding: 16px;
+    }
+
+    #intro-loader .intro__term {
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    #intro-loader .intro__term-top {
+        padding: 8px 10px;
+    }
+
+    #intro-loader .intro__host {
+        font-size: 11px;
+    }
+
+    #intro-loader .intro__term-body {
+        padding: 12px;
+    }
+
+    #intro-loader .intro__line {
+        font-size: 13px;
+    }
+
+    #intro-loader .intro__tree {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+
+    #intro-loader .intro__chips .chip {
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+
+    #intro-loader .intro__bar {
+        height: 6px;
+    }
+
+    #intro-loader .intro__pct.inbar {
+        right: 6px;
+        font-size: 11px;
+    }
+
+    /* Portfolio / Resume shell */
+    .window {
+        padding: 10px;
+    }
+
+    .title-bar .filename {
+        font-size: 14px;
+    }
+
+    .tb-menu {
+        gap: 10px;
+    }
+
+    .resume-head .resume-title {
+        font-size: 18px;
+    }
+
+    .resume-actions a {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .resume-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        /* stack left/right cards */
+        gap: 14px;
+    }
+
+    .resume-card {
+        padding: 14px;
+    }
+
+    .resume-card h2 {
+        font-size: 16px;
+    }
+
+    .bullet {
+        font-size: 14px;
+    }
+}
+
+/* ---------- Very small phones (iPhone SE: 375) ---------- */
+@media (max-width: 375px) {
+    #intro-loader .intro__line {
+        font-size: 12px;
+    }
+
+    #intro-loader .intro__tree {
+        font-size: 11.5px;
+    }
+
+    #intro-loader .intro__chips .chip {
+        font-size: 10.5px;
+    }
+
+    #intro-loader .intro__pct.inbar {
+        font-size: 10.5px;
+    }
+
+    .title-bar .filename {
+        font-size: 13px;
+    }
+
+    .resume-head .resume-title {
+        font-size: 17px;
+    }
+}
+
+/* ---------- 390–414px (iPhone 12 Pro, XR) ---------- */
+@media (min-width: 376px) and (max-width: 414px) {
+    #intro-loader .intro__term {
+        width: 96vw;
+    }
+
+    #intro-loader .intro__tree {
+        font-size: 12.25px;
+    }
+
+    #intro-loader .intro__pct.inbar {
+        right: 8px;
+    }
+}
+
+/* ---------- 430px (iPhone 14 Pro Max), 480px tall phones ---------- */
+@media (min-width: 415px) and (max-width: 480px) {
+    #intro-loader .intro__term {
+        width: 92vw;
+    }
+
+    #intro-loader .intro__line {
+        font-size: 14px;
+    }
+
+    #intro-loader .intro__chips .chip {
+        font-size: 11.5px;
+    }
+}
+
+/* ---------- 481–600px (small devices/phablets) ---------- */
+@media (min-width: 481px) and (max-width: 600px) {
+    #intro-loader .intro__grid {
+        padding: 20px;
+    }
+
+    #intro-loader .intro__term {
+        width: 85vw;
+    }
+
+    #intro-loader .intro__tree {
+        font-size: 12.5px;
+    }
+
+    #intro-loader .intro__chips .chip {
+        font-size: 12px;
+    }
+
+    .window {
+        padding: 14px;
+    }
+
+    .resume-card {
+        padding: 16px;
+    }
+}
+
+/* ---------- 601–768px (large phones / small tablets, Pixel 7, iPad Mini portrait) ---------- */
+@media (min-width: 601px) and (max-width: 768px) {
+    #intro-loader .intro__term {
+        width: 80vw;
+    }
+
+    #intro-loader .intro__line {
+        font-size: 15px;
+    }
+
+    #intro-loader .intro__tree {
+        font-size: 13px;
+    }
+
+    #intro-loader .intro__chips .chip {
+        font-size: 12.5px;
+    }
+
+    #intro-loader .intro__bar {
+        height: 7px;
+    }
+
+    .window {
+        padding: 18px;
+    }
+
+    .resume-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .resume-card h2 {
+        font-size: 18px;
+    }
+
+    .bullet {
+        font-size: 15px;
+    }
+}
+
+/* ---------- 769–912px (tablets portrait, Surface Duo) ---------- */
+@media (min-width: 769px) and (max-width: 912px) {
+    #intro-loader .intro__term {
+        width: 72vw;
+    }
+
+    #intro-loader .intro__tree {
+        font-size: 13.25px;
+    }
+
+    #intro-loader .intro__chips .chip {
+        font-size: 13px;
+    }
+
+    .resume-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+}
+
+/* ---------- 913–1024px (iPad Air/Pro portrait, small landscape tablets) ---------- */
+@media (min-width: 913px) and (max-width: 1024px) {
+    #intro-loader .intro__term {
+        width: 64vw;
+    }
+
+    .resume-grid {
+        grid-template-columns: 1fr 1.2fr;
+        gap: 22px;
+    }
+}
+
+/* ---------- 1025–1280px (laptops) ---------- */
+@media (min-width: 1025px) and (max-width: 1280px) {
+    #intro-loader .intro__term {
+        width: 58vw;
+    }
+
+    .resume-grid {
+        grid-template-columns: 1fr 1.2fr;
+        gap: 24px;
+    }
+}
+
+/* ---------- ≥1281px (desktop/large screens) ---------- */
+@media (min-width: 1281px) {
+    #intro-loader .intro__term {
+        width: min(760px, 54vw);
+    }
+
+    .resume-grid {
+        grid-template-columns: 1fr 1.3fr;
+    }
+}
+
+/* ---------- Height-based adjustments (short viewports) ---------- */
+@media (max-height: 700px) {
+    #intro-loader .intro__grid {
+        padding: 12px;
+    }
+
+    #intro-loader .intro__term-body {
+        padding: 12px;
+    }
+
+    #intro-loader .intro__chips {
+        margin: 8px 0;
+    }
+
+    #intro-loader .intro__status {
+        margin-top: 6px;
+    }
+}
+
+/* ==========================================================
+   Optional: Navigation tweaks on narrow screens
+   (keeps title-bar clean when the menu is open)
+   ========================================================== */
+@media (max-width: 480px) {
+    .tb-right .tb-menu {
+        font-size: 14px;
+    }
+
+    .tb-right .tb-nav-toggle {
+        transform: scale(.9);
+    }
+}
