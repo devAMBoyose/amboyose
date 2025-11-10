@@ -1,0 +1,28 @@
+/* Cursor glow */
+#cursor-bg {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2147483647;
+    /* stay above everything */
+    transform: translate(-50%, -50%);
+    background: radial-gradient(closest-side,
+            rgba(126, 246, 161, .28),
+            /* #7EF6A1 glow */
+            rgba(126, 246, 161, .12) 60%,
+            rgba(126, 246, 161, 0) 70%);
+    filter: blur(22px);
+    mix-blend-mode: screen;
+    /* looks great on dark UIs */
+}
+
+/* Optional: hide on touch devices (no cursor) */
+@media (hover: none) and (pointer: coarse) {
+    #cursor-bg {
+        display: none;
+    }
+}

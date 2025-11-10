@@ -4,27 +4,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About </>
-  </title>
+  <title>About – {} </title>
 
   <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <!-- Devicon for stack logos -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
+  <!-- Your existing styles -->
   <link rel="stylesheet" href="/css/footer.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/social.css" />
-  <link rel="stylesheet" href="/css/nav.css" />
+  <link rel="stylesheet" href="/css/base.css" />
 
-  <!-- Intro Loader -->
+  <!-- New: right-side title-bar nav -->
+  <link rel="stylesheet" href="/css/nav.css" />
   <link rel="stylesheet" href="/css/intro-loader.css" />
   <link rel="stylesheet" href="/css/responsive-intro-portfolio.css">
-
-  <link rel="stylesheet" href="/css/about-pro.css">
-
 </head>
+
 
 <!-- Intro Loader -->
 <div id="intro-loader" class="intro is-active" aria-hidden="true">
@@ -71,31 +69,38 @@
   </div>
 </div>
 
+
+
 <body>
   <!-- Cursor-follow background -->
   <div id="cursor-bg" aria-hidden="true"></div>
 
   <div class="window">
-    <!-- Title Bar (keep) -->
+    <!-- Title Bar (ONE NAV lives here on the right) -->
     <div class="title-bar">
       <div class="dots" aria-hidden="true">
         <span class="red"></span><span class="yellow"></span><span class="green"></span>
       </div>
 
-      <span class="filename"> </> About Me</span>
+      <span class="filename">About Me</span>
 
+      <!-- RIGHT-SIDE NAV (replaces old .buttons) -->
       <div class="tb-right">
+        <!-- Hamburger (mobile only) -->
         <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
           aria-label="Toggle menu">
           <span class="bar"></span><span class="bar"></span><span class="bar"></span>
         </button>
 
+        <!-- Nav chips -->
         <ul id="navMenu" class="tb-menu">
           <li><a href="/index.html" class="is-active">About</a></li>
+
           <li class="has-submenu">
             <button class="submenu-toggle" aria-expanded="false" aria-controls="portfolioSubmenu">
               Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
             </button>
+
             <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
               <li><a href="/portfolio.html">All Projects</a></li>
               <li><a href="/portfolio.html#web">Web Apps</a></li>
@@ -103,7 +108,9 @@
               <li><a href="/portfolio.html#graphics">Graphics</a></li>
               <li><a href="/portfolio.html#demos">Interactive Demos</a></li>
             </ul>
+
           </li>
+
           <li><a href="/resume.html">Resume</a></li>
           <li><a href="mailto:amboyose.dev@gmail.com">Email</a></li>
           <li><a href="https://amboyose-portfolio.onrender.com" target="_blank" rel="noopener">Live Portfolio</a></li>
@@ -113,7 +120,6 @@
 
     <!-- Content -->
     <div class="content">
-      <!-- LEFT: profile (keep) -->
       <div class="profile">
         <div class="avatar avatar-glow">
           <img src="https://i.ibb.co/SDV36DGK/2025-07-05-12-04-38.png" alt="Anna Marice Eben Boyose">
@@ -133,7 +139,7 @@
         </div>
       </div>
 
-      <!-- RIGHT: About (keep) -->
+      <!-- About Block -->
       <div class="about-me">
         <h2 class="name">ANNA MARICE EBEN BOYOSE</h2>
         <p class="role">Full-Stack Developer | React | Node.js | PHP | Java | MongoDB | UI/UX Design</p>
@@ -158,114 +164,47 @@
         </ul>
       </div>
 
-      <!-- ===================== NEW RIGHT-SIDE CONTENT ===================== -->
-      <!-- RIGHT-SIDE: Pro section (wrap all in .about-pro) -->
-      <div class="about-pro">
-        <!-- Stats -->
-        <section class="ap ap-stats" aria-label="Key Metrics">
-          <article class="ap-card">
-            <div class="ap-card__icon"><i class="fa-regular fa-face-smile"></i></div>
-            <div class="ap-card__num" data-count="1565">0</div>
-            <div class="ap-card__label">Happy Clients</div>
-          </article>
-          <article class="ap-card">
-            <div class="ap-card__icon"><i class="fa-solid fa-diagram-project"></i></div>
-            <div class="ap-card__num" data-count="546">0</div>
-            <div class="ap-card__label">Projects</div>
-          </article>
-          <article class="ap-card">
-            <div class="ap-card__icon"><i class="fa-regular fa-clock"></i></div>
-            <div class="ap-card__num" data-count="1763">0</div>
-            <div class="ap-card__label">Hours of Support</div>
-          </article>
-          <article class="ap-card">
-            <div class="ap-card__icon"><i class="fa-solid fa-award"></i></div>
-            <div class="ap-card__num" data-count="24">0</div>
-            <div class="ap-card__label">Certificates</div>
-          </article>
-        </section>
+      <!-- Code Section -->
+      <div class="code-box">
+        <pre id="code" class="code"></pre>
+        <template id="codeTpl">
+          <span class="cm">// --- Experience ---</span>
+          <span class="kw">void</span> <span class="fn">experience</span>() {
+          System.out.println(<span class="str">"Website Developer / Web Designer — Ofworker (Dec 2023–Feb
+            2024)"</span>);
+          System.out.println(<span class="str">"Marketing Graphic Designer — Biosite (Feb 2024–Jul 2025)"</span>);
+          System.out.println(<span class="str">"IT Specialist — MAPIO (Sep 2018–Dec 2023)"</span>);
+          System.out.println(<span class="str">"Graphic Design — Kirobin Digital Printing (Jan 2016–Sep 2018)"</span>);
+          }
 
-
-        <!-- Stack -->
-        <!-- Tech Stack Section -->
-        <section class="ap ap-stack" aria-label="Tech Stack">
-          <h3 class="ap-h3">Frontend</h3>
-          <ul class="ap-logos group-line">
-            <li><i class="devicon-javascript-plain" title="JavaScript"></i></li>
-            <li><i class="devicon-html5-plain" title="HTML5"></i></li>
-            <li><i class="devicon-css3-plain" title="CSS3"></i></li>
-            <li><i class="devicon-react-original" title="React"></i></li>
-            <li><i class="devicon-vitejs-plain" title="Vite"></i></li>
-            <li><i class="devicon-typescript-plain" title="TypeScript"></i></li>
-          </ul>
-
-          <h3 class="ap-h3">Backend &amp; Tools</h3>
-          <ul class="ap-logos group-line">
-            <li><i class="devicon-nodejs-plain" title="Node.js"></i></li>
-            <li><i class="devicon-express-original" title="Express"></i></li>
-            <li><i class="devicon-mongodb-plain" title="MongoDB"></i></li>
-            <li><i class="devicon-php-plain" title="PHP"></i></li>
-            <li><i class="devicon-mysql-original" title="MySQL"></i></li>
-            <li><i class="devicon-git-plain" title="Git"></i></li>
-          </ul>
-        </section>
-
-
-
-
-        <!-- Interests -->
-        <h4 class="ap-section-label">INTERESTS</h4>
-        <div class="interests-grid">
-          <section class="ap ap-interests" aria-label="Interests">
-            <div class="ap-panel">
-              <h4>Exploring New Technologies</h4>
-              <p>I experiment with emerging frameworks, tools, and design systems to craft seamless experiences.</p>
-            </div>
-            <div class="ap-panel -accent">
-              <h4>Building Side Projects</h4>
-              <p>Rapid prototyping sharpens skills and often becomes helpful internal tools or demos.</p>
-            </div>
-            <div class="ap-panel">
-              <h4>Contributing to Open Source</h4>
-              <p>I enjoy fixing bugs, improving docs, and collaborating with the community.</p>
-            </div>
-            <div class="ap-panel -accent">
-              <h4>Designing &amp; Prototyping</h4>
-              <p>Wireframes and prototypes help merge aesthetics with functionality.</p>
-            </div>
-        </div>
-        </section>
-
-        <!-- Hobbies -->
-
-        <h4 class="ap-section-label">HOBBIES</h4>
-        <section class="ap ap-hobbies" aria-label="Hobbies">
-          <span class="ap-chip"><i class="fa-solid fa-paintbrush"></i> Painting</span>
-          <span class="ap-chip"><i class="fa-solid fa-plane-departure"></i> Travelling</span>
-          <span class="ap-chip"><i class="fa-solid fa-person-swimming"></i> Swimming</span>
-          <span class="ap-chip"><i class="fa-solid fa-music"></i> Music</span>
-        </section>
+          <span class="cm">// --- Education ---</span>
+          <span class="kw">void</span> <span class="fn">education</span>() {
+          System.out.println(<span class="str">"CCSP — InfoSec (2025)"</span>);
+          System.out.println(<span class="str">"HTML/CSS/JS — Johns Hopkins (2025)"</span>);
+          }
+        </template>
       </div>
+    </div>
+  </div>
 
-    </div><!-- /.window -->
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2025 <strong>BAMBY</strong> | Designed & Coded with ❤️ </p>
+    <p class="links">
+      <a href="/index.html">About</a> •
+      <a href="/portfolio.html">Portfolio</a> •
+      <a href="/resume.html">Resume</a> •
+      <a href="mailto:amboyose.dev@gmail.com">Contact</a>
+    </p>
+  </footer>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-      <p>© 2025 <strong>BAMBY</strong> | Designed & Coded with ❤️ </p>
-      <p class="links">
-        <a href="/index.html">About</a> •
-        <a href="/portfolio.html">Portfolio</a> •
-        <a href="/resume.html">Resume</a> •
-        <a href="mailto:amboyose.dev@gmail.com">Contact</a>
-      </p>
-    </footer>
+  <!-- Your existing script -->
+  <script src="/js/script.js"></script>
 
-    <script defer src="/js/nav.js"></script>
+  <!-- New: navbar script -->
+  <script defer src="/js/nav.js"></script>
+  <script defer src="/js/intro-loader.js"></script>
 
-    <script defer src="/js/intro-loader.js"></script>
-
-    <!-- NEW: counters + reveal (scoped) -->
-    <script defer src="/js/about-pro.js"></script>
 </body>
 
 </html>

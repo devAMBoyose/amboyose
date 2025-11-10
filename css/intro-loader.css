@@ -201,3 +201,160 @@
         display: none;
     }
 }
+
+/* ===== Terminal-style Intro Loader (safe, isolated) ===== */
+.intro {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 7, 12, .96);
+    display: grid;
+    place-items: center;
+    z-index: 9999;
+}
+
+.intro[hidden] {
+    display: none;
+}
+
+.intro__grid {
+    width: min(920px, 92vw);
+}
+
+.intro__term {
+    background: #0f1220;
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.intro__term-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #0b0f19;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.intro__term-top .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.-red {
+    background: #ff5f56;
+}
+
+.dot.-yellow {
+    background: #ffbd2e;
+}
+
+.dot.-green {
+    background: #27c93f;
+}
+
+.intro__host {
+    margin-left: auto;
+    color: #88a6ff;
+    font-weight: 700;
+}
+
+.intro__term-body {
+    padding: 16px 16px 18px;
+    color: #cfe3ff;
+    font: 400 13px/1.55 "JetBrains Mono", monospace;
+}
+
+.intro__line {
+    color: #9fe3b0;
+    margin-bottom: 6px;
+    letter-spacing: .02em;
+}
+
+.intro__repo {
+    background: #0b0f17;
+    border: 1px solid rgba(255, 255, 255, .06);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 10px 0;
+}
+
+.intro__msg {
+    color: #d6deff;
+    opacity: .9;
+    margin-bottom: 6px;
+}
+
+.intro__msg.-ok {
+    color: #7ef6a1;
+    font-weight: 700;
+}
+
+.intro__tree div {
+    opacity: .9;
+}
+
+.intro__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.intro__chips .chip {
+    background: #12162a;
+    border: 1px solid rgba(255, 255, 255, .07);
+    color: #cfe3ff;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+.intro__progress {
+    margin-top: 10px;
+}
+
+.intro__bar {
+    position: relative;
+    height: 12px;
+    border-radius: 999px;
+    background: #12162a;
+    border: 1px solid rgba(255, 255, 255, .08);
+    overflow: hidden;
+}
+
+.intro__bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0%;
+    background: linear-gradient(90deg, #25f08a, #43a8ff);
+}
+
+.intro__pct.-inbar {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #dff7ea;
+    opacity: .9;
+    pointer-events: none;
+}
+
+.intro__status {
+    margin-top: 8px;
+    color: #9fb6ff;
+}
+
+/* Fade-out when JS completes */
+.intro.fade-out {
+    animation: introFade .45s ease forwards;
+}
+
+@keyframes introFade {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}

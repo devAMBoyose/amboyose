@@ -1,28 +1,41 @@
-
 /* ==== Brand-specific hover glows ==== */
-.avatar-social a[aria-label*="Email"]:hover    { box-shadow: 0 0 18px rgba(255,255,255,.28); }
-.avatar-social a[aria-label*="GitHub"]:hover   { box-shadow: 0 0 18px rgba(255,255,255,.20); }
-.avatar-social a[aria-label*="LinkedIn"]:hover { box-shadow: 0 0 18px rgba(14,118,168,.55); }
-.avatar-social a[aria-label*="WhatsApp"]:hover { box-shadow: 0 0 18px rgba(37,211,102,.55); }
+.avatar-social a[aria-label*="Email"]:hover {
+  box-shadow: 0 0 18px rgba(255, 255, 255, .28);
+}
+
+.avatar-social a[aria-label*="GitHub"]:hover {
+  box-shadow: 0 0 18px rgba(255, 255, 255, .20);
+}
+
+.avatar-social a[aria-label*="LinkedIn"]:hover {
+  box-shadow: 0 0 18px rgba(14, 118, 168, .55);
+}
+
+.avatar-social a[aria-label*="WhatsApp"]:hover {
+  box-shadow: 0 0 18px rgba(37, 211, 102, .55);
+}
 
 
 /* ========== Social pill base ========== */
-.avatar { position: relative; }
-.avatar-social{
+.avatar {
+  position: relative;
+}
+
+.avatar-social {
   list-style: none;
   margin: 10px auto 0;
   padding: 6px 10px;
   display: flex;
   gap: 12px;
-  background: rgba(0,0,0,.35);
-  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(0, 0, 0, .35);
+  border: 1px solid rgba(255, 255, 255, .08);
   border-radius: 50px;
   width: max-content;
   backdrop-filter: blur(6px);
 }
 
 /* Button base */
-.avatar-social a{
+.avatar-social a {
   --size: 36px;
   position: relative;
   width: var(--size);
@@ -33,14 +46,14 @@
   text-decoration: none;
   border-radius: 50%;
   background: #1a1e2e;
-  border: 1px solid rgba(255,255,255,.06);
+  border: 1px solid rgba(255, 255, 255, .06);
   overflow: hidden;
   transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
   will-change: transform;
 }
 
 /* Icon */
-.avatar-social a i{
+.avatar-social a i {
   font-size: 15px;
   transition: transform .25s ease;
   will-change: transform;
@@ -49,59 +62,72 @@
 /* ====== Hover animations ====== */
 
 /* lift + glow */
-.avatar-social a:hover{
+.avatar-social a:hover {
   transform: translateY(-3px) scale(1.06);
   box-shadow:
-    0 6px 16px rgba(0,0,0,.35),
-    0 0 18px rgba(0,255,170,.35);
+    0 6px 16px rgba(0, 0, 0, .35),
+    0 0 18px rgba(0, 255, 170, .35);
   color: #ffffff;
 }
 
 /* slight icon tilt */
-.avatar-social a:hover i{
+.avatar-social a:hover i {
   transform: translateY(-1px) rotate(-6deg);
 }
 
 /* gradient sweep */
-.avatar-social a::before{
+.avatar-social a::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.10) 40%, rgba(255,255,255,.22) 50%, transparent 60%);
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, .10) 40%, rgba(255, 255, 255, .22) 50%, transparent 60%);
   transform: translateX(-120%);
   transition: transform .5s ease;
 }
-.avatar-social a:hover::before{
+
+.avatar-social a:hover::before {
   transform: translateX(120%);
 }
 
 /* pulse ring ripple */
-.avatar-social a::after{
+.avatar-social a::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 2px solid rgba(0,255,170,.35);
+  border: 2px solid rgba(0, 255, 170, .35);
   transform: scale(.6);
   opacity: 0;
 }
-.avatar-social a:hover::after{
+
+.avatar-social a:hover::after {
   animation: ring .7s ease-out forwards;
 }
-@keyframes ring{
-  0%   { transform: scale(.6); opacity: .45; }
-  100% { transform: scale(1.3); opacity: 0; }
+
+@keyframes ring {
+  0% {
+    transform: scale(.6);
+    opacity: .45;
+  }
+
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
 }
 
 /* Tooltips */
-.avatar-social a[data-tip]{
+.avatar-social a[data-tip] {
   --tip-bg: #111827;
   --tip-color: #e5e7eb;
 }
-.avatar-social a[data-tip]::tooltip,
-.avatar-social a[data-tip]::after{ /* keep selector grouping tidy */ }
 
-.avatar-social a[data-tip]::after{
+.avatar-social a[data-tip]::tooltip,
+.avatar-social a[data-tip]::after {
+  /* keep selector grouping tidy */
+}
+
+.avatar-social a[data-tip]::after {
   content: attr(data-tip);
   position: absolute;
   bottom: calc(100% + 8px);
@@ -112,41 +138,99 @@
   line-height: 1;
   color: var(--tip-color);
   background: var(--tip-bg);
-  border: 1px solid rgba(255,255,255,.08);
+  border: 1px solid rgba(255, 255, 255, .08);
   border-radius: 8px;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: opacity .18s ease, transform .18s ease;
-  box-shadow: 0 8px 18px rgba(0,0,0,.35);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
 }
-.avatar-social a[data-tip]:hover::after{
+
+.avatar-social a[data-tip]:hover::after {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
 /* A tiny arrow for tooltip */
-.avatar-social a[data-tip]::before{
+.avatar-social a[data-tip]::before {
   content: "";
   position: absolute;
   bottom: calc(100% + 4px);
   left: 50%;
   transform: translateX(-50%);
   border: 6px solid transparent;
-  border-top-color: rgba(17,24,39,1); /* matches --tip-bg */
+  border-top-color: rgba(17, 24, 39, 1);
+  /* matches --tip-bg */
   opacity: 0;
   transition: opacity .18s ease;
 }
-.avatar-social a[data-tip]:hover::before{ opacity: 1; }
+
+.avatar-social a[data-tip]:hover::before {
+  opacity: 1;
+}
 
 /* Accessibility: respect reduced motion */
-@media (prefers-reduced-motion: reduce){
+@media (prefers-reduced-motion: reduce) {
+
   .avatar-social a,
   .avatar-social a i,
   .avatar-social a::before,
-  .avatar-social a::after{
+  .avatar-social a::after {
     transition: none !important;
     animation: none !important;
   }
 }
 
+
+
+/* ======= Icon list styling ======= */
+/* Remove dots and spacing for icon lists */
+/* Base layout for icon lists */
+.ap-logos {
+  list-style: none;
+  padding: 0;
+  margin: 1.2rem auto 2rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  position: relative;
+}
+
+/* dotted line only BELOW icons */
+.group-line::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.2);
+}
+
+/* remove any border or line from headings */
+.ap-h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin: 1rem 0 0.5rem;
+  letter-spacing: 0.5px;
+  border: none !important;
+}
+
+/* icon style */
+.ap-logos li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #fff;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.ap-logos li:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 8px #7ef6a1);
+}
