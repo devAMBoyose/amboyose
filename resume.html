@@ -4,65 +4,62 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Portfolio – Resume.java (Anna Marice Eben Boyose)</title>
+    <title>Resume</title>
 
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
-    <!-- Your existing styles -->
-    <link rel="stylesheet" href="/amboyose/css/footer.css" />
-    <link rel="stylesheet" href="/amboyose/css/responsive.css" />
-    <link rel="stylesheet" href="/amboyose/css/style.css" />
-    <link rel="stylesheet" href="/amboyose/css/social.css" />
-    <link rel="stylesheet" href="/amboyose/css/base.css" />
-    <link rel="stylesheet" href="/amboyose//css/nav.css" />
-    <link rel="stylesheet" href="/amboyose/css/portfolir.css" />
+    <!-- Your existing global styles (unchanged) -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/social.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/css/portfolir.css" />
 
-    <!-- New: projects grid -->
-    <link rel="stylesheet" href="/amboyose/css/portfolir.css" />
+    <!-- Page-only styles -->
+    <link rel="stylesheet" href="/assets/css/resume.css" />
 </head>
 
 <body>
-    <!-- cursor-follow glow background -->
+    <!-- cursor-follow glow background (existing) -->
     <div id="cursor-bg" aria-hidden="true"></div>
 
     <div class="window">
-        <!-- Title Bar -->
+        <!-- Title Bar (kept) -->
         <div class="title-bar">
             <div class="dots" aria-hidden="true">
                 <span class="red"></span><span class="yellow"></span><span class="green"></span>
             </div>
 
-            <span class="filename">Portfolio.java</span>
+            <span class="filename">Resume</span>
 
-            <!-- RIGHT-SIDE NAV -->
+            <!-- RIGHT-SIDE NAV (kept) -->
             <div class="tb-right">
-                <!-- Hamburger (mobile) -->
                 <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
                     aria-label="Toggle menu">
                     <span class="bar"></span><span class="bar"></span><span class="bar"></span>
                 </button>
 
-                <!-- Nav chips -->
                 <ul id="navMenu" class="tb-menu">
                     <li><a href="index.html">About</a></li>
 
                     <li class="has-submenu">
-                        <button class="submenu-toggle is-active" aria-expanded="true" aria-controls="portfolioSubmenu">
+                        <button class="submenu-toggle" aria-expanded="false" aria-controls="portfolioSubmenu">
                             Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
                         </button>
                         <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
-                            <li><a href="/amboyose/portfolio.html">All Projects</a></li>
-                            <li><a href="/amboyose/portfolio.html#web">Web Apps</a></li>
+                            <li><a href="/portfolio.html">All Projects</a></li>
+                            <li><a href="/portfolio.html#web">Web Apps</a></li>
                             <li><a href="/portfolio.html#uiux">UI/UX</a></li>
                             <li><a href="/portfolio.html#graphics">Graphics</a></li>
                             <li><a href="/portfolio.html#demos">Interactive Demos</a></li>
                         </ul>
-
                     </li>
 
-                    <li><a href="resume.html">Resume</a></li>
+                    <li><a href="resume.html" data-current="resume">Resume</a></li>
                     <li><a href="mailto:amboyose.dev@gmail.com">Email</a></li>
                     <li><a href="https://amboyose-portfolio.onrender.com" target="_blank" rel="noopener">Live
                             Portfolio</a></li>
@@ -70,125 +67,148 @@
             </div>
         </div>
 
-        <!-- Projects Section -->
-        <section id="all" class="proj-section">
-            <div class="proj-head">
-                <h1>PROJECTS &amp; CASE STUDIES</h1>
-                <p class="lead">Selected work across full-stack, UI/UX, and creative development.</p>
-                <p class="hint">Click any card to open the project page.</p>
+        <!-- Resume Body -->
+        <section class="resume">
+            <!-- Header row -->
+            <div class="resume-head reveal" data-reveal="fade">
+                <h1 class="resume-title">
+                    <span class="dot" aria-hidden="true"></span>
+                    CHECK MY RESUME
+                </h1>
+                <div class="resume-actions">
+                    <a href="/assets/AMB_Resume.pdf" download>
+                        <i class="fa-solid fa-download"></i> Download PDF
+                    </a>
+                </div>
             </div>
 
-            <div class="proj-grid">
-                <!-- Card 1 -->
-                <a class="proj-card" href="/amboyose/assets/fportfolio/card/sample2.html">
-                    <div class="card-banner" style="--img:url('/amboyose/assets/portfolio/card.png')"></div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Animated Card</h3>
-                        <p class="stack">HTML + CSS + JS</p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
+            <!-- Two-column main content -->
+            <div class="resume-grid">
+                <!-- LEFT: Summary / Skills -->
+                <aside class="resume-card reveal" data-reveal="slide-up">
+                    <h2><span class="dot"></span> Summary</h2>
+                    <ul class="bullet">
+                        <li>Create scalable web applications by writing and testing code, building databases/servers,
+                            and shipping APIs/services.</li>
+                        <li>Design responsive UI/UX systems, visual assets, and data-driven components for web and
+                            print.</li>
+                        <li>Maintain internal tools (HTML, CSS, JS) and CMS (e.g., WordPress) with accessibility in
+                            mind.</li>
+                        <li>Handle administrative ops: research, docs, spreadsheets, calendars, client/internal email
+                            coordination.</li>
+                    </ul>
 
-
-                <!-- Card 2 -->
-                <a class="proj-card" href="/amboyose/assets/fportfolio/liquid/liquid2.html">
-                    <div class="card-banner" style="--img:url('/amboyose/assets/portfolio/liquideffect.png')"></div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Liquid Effect Hover</h3>
-                        <p class="stack">HTML + CSS + JS</p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
+                    <h2 class="mt"><span class="dot"></span> Core Skills</h2>
+                    <div class="pills">
+                        <span class="pill reveal" data-reveal="scale-in">HTML5/CSS3</span>
+                        <span class="pill reveal" data-reveal="scale-in">JavaScript (Vanilla)</span>
+                        <span class="pill reveal" data-reveal="scale-in">Node.js / PHP (basic)</span>
+                        <span class="pill reveal" data-reveal="scale-in">MySQL</span>
+                        <span class="pill reveal" data-reveal="scale-in">REST APIs</span>
+                        <span class="pill reveal" data-reveal="scale-in">UI/UX &amp; Prototyping</span>
+                        <span class="pill reveal" data-reveal="scale-in">Illustrator / Canva</span>
+                        <span class="pill reveal" data-reveal="scale-in">Git &amp; Codespaces</span>
                     </div>
-                </a>
+                </aside>
 
-                <!-- Card 3 -->
-                <a class="proj-card" href="/amboyose/assets/fportfolio/electriccard/electric.html">
-                    <div class="card-banner" style="--img:url('/amboyose/assets/portfolio/elecboarder.png')"></div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Elect Boarder</h3>
-                        <p class="stack">HTML + CSS </p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
+                <!-- RIGHT: Experiences -->
+                <main class="resume-card reveal" data-reveal="slide-up">
+                    <h2><span class="dot"></span> Experiences</h2>
 
-                <!-- Card 4 -->
-                <a class="proj-card" href="/amboyose/assets/fportfolio/tubescursor/tubecursor.html">
-                    <div class="card-banner" style="--img:url('/amboyose/assets/portfolio/tubecursor.png')"></div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Elect Boarder</h3>
-                        <p class="stack">HTML + CSS </p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
+                    <div class="exp-item">
+                        <div class="exp-role">FULL STACK DEVELOPER — ONSITE</div>
+                        <div class="exp-dates">February 29, 2024 – July 20, 2025</div>
+                        <p class="exp-org">Biosite Medical Instrument — San Juan City, Manila, Philippines</p>
+                        <ul class="bullet">
+                            <li>Designed and developed scalable illustrations, vector graphics, icons, and infographics
+                                for web and print.</li>
+                            <li>Created responsive website layouts, wireframes, and UI/UX interfaces to boost engagement
+                                and usability.</li>
+                            <li>Built &amp; maintained internal web systems using HTML, CSS, JavaScript; aligned
+                                front-end with CMS backends.</li>
+                            <li>Developed and deployed full-stack features with Node.js/PHP; integrated RESTful APIs for
+                                seamless communication.</li>
+                            <li>Managed relational databases (MySQL), wrote optimized queries, and supported
+                                security/scalability.</li>
+                        </ul>
                     </div>
-                </a>
 
-                <!-- Card 5 -->
-                <a class="proj-card" href="#" aria-label="Open project: Personal Portfolio">
-                    <div class="card-banner">
-                        <img src="/amboyose/images/projects/portfolio-thumb.jpg"
-                            alt="Personal Portfolio project preview">
-                    </div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Personal Portfolio</h3>
-                        <p class="stack">HTML + CSS + JS</p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
-
-
-                <!-- Card 6 -->
-                <a class="proj-card" href="#" aria-label="Open project: Personal Portfolio">
-                    <div class="card-banner">
-                        <img src="/amboyose/images/projects/portfolio-thumb.jpg"
-                            alt="Personal Portfolio project preview">
-                    </div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Personal Portfolio</h3>
-                        <p class="stack">HTML + CSS + JS</p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
-
+                    <!-- Add more .exp-item blocks as needed -->
+                </main>
             </div>
+
+            <!-- Education (full-width) -->
+            <section class="resume-full reveal" data-reveal="slide-up" aria-labelledby="edu-h">
+                <h2 id="edu-h"><span class="dot"></span> Education</h2>
+                <ul class="bullet">
+                    <li><strong>BS Information Technology</strong> — (School / City), Year</li>
+                    <li>Relevant trainings/certifications: Oracle Java (fundamentals), Web Dev Bootcamps, UI/UX
+                        workshops.</li>
+                </ul>
+            </section>
+
+            <!-- Certificates -->
+            <section class="resume-full reveal" data-reveal="slide-up" id="certificates">
+                <h2 class="reveal" data-reveal="fade"><span class="dot"></span> Certificate of Completion</h2>
+
+                <div class="cert-item reveal" data-reveal="slide-up">
+                    <h3 class="cert-title">CERTIFIED CLOUD SECURITY PROFESSIONAL (CCSP)</h3>
+                    <div class="exp-dates">July 21, 2025</div>
+                    <p class="cert-org">LearnKartS – Customized eLearning Content Provider</p>
+                    <a href="https://example.com/verify/ccsp" class="verify-btn">
+                        <i class="fa-solid fa-link"></i> Verify Certificate
+                    </a>
+                </div>
+
+                <div class="cert-item reveal" data-reveal="slide-up">
+                    <h3 class="cert-title">CERTIFIED HTML, CSS, AND JAVASCRIPT FOR WEB DEVELOPERS</h3>
+                    <div class="exp-dates">May 25, 2025</div>
+                    <p class="cert-org">The Johns Hopkins University (Coursera)</p>
+                    <p class="cert-id">Credential ID: GDP2U1GW6FEA</p>
+                    <a href="https://www.coursera.org/account/accomplishments/certificate/GDP2U1GW6FEA"
+                        class="verify-btn">
+                        <i class="fa-solid fa-link"></i> Verify Certificate
+                    </a>
+                </div>
+
+                <div class="cert-item reveal" data-reveal="slide-up">
+                    <h3 class="cert-title">MONGODB AGGREGATION FUNDAMENTALS</h3>
+                    <div class="exp-dates">May 28, 2025</div>
+                    <p class="cert-org">MongoDB University</p>
+                    <a href="https://university.mongodb.com/verify/aggregation" class="verify-btn">
+                        <i class="fa-solid fa-link"></i> Verify Certificate
+                    </a>
+                </div>
+
+                <div class="cert-item reveal" data-reveal="slide-up">
+                    <h3 class="cert-title">MONGODB SCHEMA DESIGN PATTERNS AND ANTIPATTERNS SKILL</h3>
+                    <div class="exp-dates">May 25, 2025</div>
+                    <p class="cert-org">MongoDB University</p>
+                    <a href="https://university.mongodb.com/verify/schema-patterns" class="verify-btn">
+                        <i class="fa-solid fa-link"></i> Verify Certificate
+                    </a>
+                </div>
+            </section>
         </section>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer (kept) -->
     <footer class="site-footer">
         <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
         <p class="links">
-            <a href="index.html">About</a> •
-            <a href="portfolio.html">Portfolio</a> •
-            <a href="resume.html">Resume</a> •
-            <a href="mailto:amboyose.dev@gmail.com">Contact</a>
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a> •
         </p>
     </footer>
 
-    <!-- Your existing JS -->
-    <script src="/amboyose/js/script.js"></script>
-    <script defer src="/amboyose/js/nav.js"></script>
+    <!-- Your existing scripts -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+
+    <!-- Page-only JS -->
+    <script defer src="/assets/css/main/resume.js"></script>
 </body>
 
 </html>

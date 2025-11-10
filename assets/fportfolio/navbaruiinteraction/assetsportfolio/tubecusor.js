@@ -1,96 +1,75 @@
-
-
 /* =======================
-   liquid.js – Static Live Playground (module-friendly)
+   cardanimated.js – Static Live Playground (no Source toggle)
    ======================= */
 (() => {
   'use strict';
 
-  const STORAGE_NS = 'liquid_animated_playground_v1';
+  /* ---------- Per-project storage key ---------- */
+  const STORAGE_NS = 'tubes_cursor_v1';
+
   const PROJECT_NAME =
-    (document.body && document.body.dataset.project2) ||
-    new URLSearchParams(location.search).get('project2') ||
+    (document.body && document.body.dataset.project) ||
+    new URLSearchParams(location.search).get('tubes') ||
     (location.pathname.split('/').pop() || '').replace(/\.[a-z0-9]+$/i, '') ||
     'default';
   const STORAGE_KEY = `${STORAGE_NS}:${PROJECT_NAME}`;
 
-  // Elements
+  // --- Elements ---
   const els = {
     html: document.getElementById('html'),
     css: document.getElementById('css'),
     js: document.getElementById('js'),
     frame: document.getElementById('preview'),
-    live: document.getElementById('liveToggle'),
+    live: document.getElementById('liveToggle'), // not present on this page
     fills: document.querySelectorAll('[data-fill]'),
     grid: document.getElementById('playground'),
     gutter: document.querySelector('.gutter'),
     navToggle: document.getElementById('navToggle'),
     siteTabs: document.getElementById('siteTabs'),
-    resetBlank: document.getElementById('resetBlank')
+    resetBlank: document.getElementById('resetBlank') // optional
   };
 
   /* ======================
-     Build iframe document
-     Note: NO try/catch around module JS so `import` stays top-level.
+     Build HTML Document (module so imports work)
      ====================== */
   function buildDoc(html, css, js) {
     return `<!doctype html><html><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  html,body{margin:0;height:100%}
-  ${css || ''}
-</style>
-</head><body>
+<style>${css || ''}</style></head><body>
 ${html || ''}
 <script type="module">
 ${js || ''}
-// Optional console relay to parent (visible in your main page devtools)
-const relay = (type, args) => {
-  try { parent && parent.console && parent.console[type](...args); } catch(_) {}
-};
-['log','warn','error'].forEach(t=>{
-  const orig = console[t].bind(console);
-  console[t] = (...a)=>{ relay(t,a); orig(...a); };
-});
+/* Tip: static imports must remain top-level (no try/catch wrappers) */
 </script>
 </body></html>`;
   }
 
   /* ======================
-     Preview fit + cursor relay
+     Preview Enhancements (fit + cursor relay)
      ====================== */
   let ro = null;
   let fitHandler = null;
 
   function enhancePreview(iframe) {
-    const doc = iframe.contentDocument || iframe.contentWindow?.document;
+    let doc;
+    try {
+      doc = iframe.contentDocument || iframe.contentWindow?.document;
+    } catch {
+      // Cross-origin: skip enhancing to avoid console errors
+      return;
+    }
     if (!doc || !doc.body) return;
 
-    // --- NEW: allow disabling all auto-fit behavior ---
-    if (FIT_MODE === 'none') {
-      // Lock the preview; no transform/scale, no observers, fixed height.
-      try { ro && ro.disconnect(); } catch (_) { }
-      ro = null;
-      if (fitHandler) {
-        window.removeEventListener('resize', fitHandler);
-        fitHandler = null;
-      }
-      iframe.style.height = '100%';           // keep iframe steady
-      doc.documentElement.style.overflowX = ''; // normal overflow
-      doc.body.style.overflowX = '';
-      doc.body.style.transform = '';          // no scaling
-      doc.body.style.transformOrigin = '';
-      return;                                 // <— important
-    }
-    // --- existing fit-to-width code continues below ---
     const fit = () => {
       const naturalWidth = Math.max(
         doc.documentElement.scrollWidth,
         doc.body.scrollWidth,
         doc.documentElement.clientWidth
       );
-      const boxWidth = iframe.clientWidth || 1;
-      const scale = Math.min(1, boxWidth / (naturalWidth || boxWidth));
+      const boxWidth = iframe.clientWidth;
+      if (!naturalWidth || !boxWidth) return;
+
+      const scale = Math.min(1, boxWidth / naturalWidth);
       const body = doc.body;
       body.style.transformOrigin = 'top left';
       body.style.transform = `scale(${scale})`;
@@ -100,32 +79,53 @@ const relay = (type, args) => {
       const naturalHeight = Math.max(
         doc.documentElement.scrollHeight,
         body.scrollHeight
-      ) || 0;
+      );
       iframe.style.height = (naturalHeight * scale) + 'px';
     };
 
-    try { ro && ro.disconnect(); } catch (_) { }
+    if (ro) { try { ro.disconnect(); } catch (_) { } ro = null; }
+    if (fitHandler) { window.removeEventListener('resize', fitHandler); fitHandler = null; }
+
     ro = new ResizeObserver(fit);
     ro.observe(doc.documentElement);
     ro.observe(doc.body);
 
     fitHandler = fit;
     window.addEventListener('resize', fitHandler);
-    fit();
-  }
 
+    fit();
+
+    // Cursor relay (glow follows inside iframe)
+    try {
+      const root = document.documentElement;
+      doc.addEventListener('pointermove', (e) => {
+        const rect = iframe.getBoundingClientRect();
+        const clientX = rect.left + e.clientX;
+        const clientY = rect.top + e.clientY;
+        root.style.setProperty('--cx', (clientX / window.innerWidth) * 100 + '%');
+        root.style.setProperty('--cy', (clientY / window.innerHeight) * 100 + '%');
+      }, { passive: true });
+
+      const boostOn = () => document.body.classList.add('cursor-boost');
+      const boostOff = () => document.body.classList.remove('cursor-boost');
+      doc.addEventListener('pointerdown', boostOn, { passive: true });
+      doc.addEventListener('pointerup', boostOff, { passive: true });
+      doc.addEventListener('pointercancel', boostOff, { passive: true });
+    } catch (_) { }
+  }
 
   /* ======================
      Render & Persist
      ====================== */
-  function isLive() {
-    if (!els.live) return true;
-    return els.live.getAttribute('aria-pressed') === 'true';
-  }
-  function setLive(on) {
-    if (!els.live) return;
-    els.live.setAttribute('aria-pressed', on ? 'true' : 'false');
-    els.live.textContent = `Live: ${on ? 'ON' : 'OFF'}`;
+  function render() {
+    const html = els.html?.value || '';
+    const css = els.css?.value || '';
+    const js = els.js?.value || '';
+
+    els.frame.srcdoc = buildDoc(html, css, js);
+    els.frame.addEventListener('load', () => enhancePreview(els.frame), { once: true });
+
+    persist();
   }
 
   function persist() {
@@ -140,20 +140,31 @@ const relay = (type, args) => {
     } catch (_) { }
   }
 
-  function render() {
-    const html = els.html?.value || '';
-    const css = els.css?.value || '';
-    const js = els.js?.value || '';
-    els.frame.srcdoc = buildDoc(html, css, js);
-    els.frame.addEventListener('load', () => enhancePreview(els.frame), { once: true });
-    persist();
+  /* ======================
+     Live toggle (default ON if no button)
+     ====================== */
+  function isLive() {
+    if (!els.live) return true; // always live when there's no button
+    return els.live.getAttribute('aria-pressed') === 'true';
+  }
+  function setLive(on) {
+    if (!els.live) return;
+    els.live.setAttribute('aria-pressed', on ? 'true' : 'false');
+    els.live.textContent = `Live: ${on ? 'ON' : 'OFF'}`;
+  }
+  if (els.live) {
+    els.live.addEventListener('click', () => {
+      setLive(!isLive());
+      if (isLive()) render();
+    });
   }
 
-  // Save even when Live OFF; Ctrl/Cmd+Enter to force run
+  // Save even when Live is OFF; Run with Ctrl/Cmd+Enter
   let timer = null;
   function scheduleRender() {
     clearTimeout(timer);
-    timer = setTimeout(isLive() ? render : persist, 160);
+    const liveOn = isLive();
+    timer = setTimeout(liveOn ? render : persist, 160);
   }
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') render();
@@ -174,38 +185,12 @@ const relay = (type, args) => {
       if (saved.left && els.grid) els.grid.style.setProperty('--left', saved.left);
       setLive(saved.liveOn !== false);
     } else {
-      // Blank, ready for your own code
-      if (els.html) els.html.value = `<<div id="app">
-  <canvas id="canvas"></canvas>
-</div>
-\n`;
+      if (els.html) els.html.value = `<!-- 🧱 Write your HTML here -->\n`;
       if (els.css) els.css.value = `/* 🎨 Write your CSS here */\n\n`;
-      if (els.js) els.js.value = `body, html, #app {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-}
-
-body {
-  touch-action: none;
-}
-
-#app {
-  height: 100%;
-  font-family: "Montserrat", serif;
-}
-
-#canvas {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-}
-;\n`;
+      if (els.js) els.js.value = `// ⚙️ Write your JavaScript here (ES modules supported)\n`;
       setLive(true);
     }
+
     render();
   })();
 
@@ -219,9 +204,21 @@ body {
   });
 
   /* ======================
-     Draggable split
+     Quick fillers (optional)
+     ====================== */
+  els.fills?.forEach(b => b.addEventListener('click', () => {
+    const t = b.dataset.fill;
+    if (t === 'html' && els.html) els.html.value = '<h1>Live HTML</h1><p>Type anything…</p>';
+    if (t === 'css' && els.css) els.css.value = 'h1{color:#ff6b6b}body{font-family:system-ui}';
+    if (t === 'js' && els.js) els.js.value = 'console.log("Hello from the preview!")';
+    render();
+  }));
+
+  /* ======================
+     Draggable split (kept)
      ====================== */
   let dragging = false;
+
   function setLeft(px) {
     if (!els.grid) return;
     const rect = els.grid.getBoundingClientRect();
@@ -230,6 +227,7 @@ body {
     els.grid.style.setProperty('--left', `${clamped}px`);
     persist();
   }
+
   if (els.gutter) {
     els.gutter.style.touchAction = 'none';
     els.gutter.setAttribute('tabindex', '-1');
@@ -240,18 +238,24 @@ body {
       e.preventDefault();
     });
   }
+
   const onMove = (e) => {
     if (!dragging || !els.grid) return;
     const r = els.grid.getBoundingClientRect();
     setLeft(e.clientX - r.left);
   };
-  const endDrag = () => { if (dragging) { dragging = false; document.body.style.cursor = ''; } };
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    document.body.style.cursor = '';
+  };
+
   window.addEventListener('pointermove', onMove);
   window.addEventListener('pointerup', endDrag);
   window.addEventListener('pointercancel', endDrag);
   window.addEventListener('mouseleave', endDrag);
 
-  // Collapse on small screens
+  // Collapse to single column on small screens (kept)
   const mql = window.matchMedia('(max-width: 980px)');
   function handleMedia() {
     if (mql.matches && els.grid) els.grid.style.removeProperty('--left');
@@ -274,15 +278,17 @@ body {
       });
     };
     window.addEventListener('pointermove', (e) => update(e.clientX, e.clientY), { passive: true });
+
     const boost = (on) => document.body.classList.toggle('cursor-boost', on);
     window.addEventListener('pointerdown', () => boost(true), { passive: true });
     window.addEventListener('pointerup', () => boost(false), { passive: true });
     window.addEventListener('pointercancel', () => boost(false), { passive: true });
+
     update(window.innerWidth * 0.5, window.innerHeight * 0.5);
   })();
 
   /* ======================
-     Optional reset button
+     Optional reset to blank (if you add #resetBlank)
      ====================== */
   function resetToBlank() {
     if (els.html) els.html.value = `<!-- 🧱 Write your HTML here -->\n`;
@@ -300,34 +306,52 @@ body {
    ====================== */
 (() => {
   const sources = { html: '#html', css: '#css', js: '#js' };
+
   document.addEventListener('click', async (e) => {
     const btn = e.target.closest('.copy-btn[data-copy]');
     if (!btn) return;
+
     e.preventDefault();
     e.stopPropagation();
+
     const key = btn.dataset.copy;
     const src = document.querySelector(sources[key]);
     if (!src) return;
-    const text = (typeof src.value === 'string') ? src.value : (src.innerText ?? src.textContent ?? '');
+
+    const text = (typeof src.value === 'string') ? src.value
+      : (src.innerText ?? src.textContent ?? '');
+
     const flash = (ok) => {
       const prev = btn.textContent;
       btn.textContent = ok ? '✓ Copied' : '⚠️ Failed';
       btn.disabled = true;
       setTimeout(() => { btn.textContent = prev; btn.disabled = false; }, 900);
     };
-    try { await navigator.clipboard.writeText(text); flash(true); }
-    catch {
+
+    try {
+      await navigator.clipboard.writeText(text);
+      flash(true);
+    } catch {
       const ta = document.createElement('textarea');
-      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); flash(true); }
-      catch { flash(false); }
-      finally { document.body.removeChild(ta); }
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        flash(true);
+      } catch {
+        flash(false);
+      } finally {
+        document.body.removeChild(ta);
+      }
     }
   });
 
-  /* ===========================================================HAMBURGER MENU FOR MOBILE =========================================================== */
-  // Hamburger toggle
+  /* ===========================================================
+     HAMBURGER MENU FOR MOBILE
+     =========================================================== */
   (() => {
     const btn = document.getElementById('navToggle');
     const tabs = document.getElementById('siteTabs');
@@ -359,4 +383,16 @@ body {
       }
     });
   })();
+
 })();
+
+/* ======================
+   HTML box overlay tokenizer hook (kept)
+   ====================== */
+const ta = document.getElementById('htmlBox');
+const hl = document.getElementById('htmlBoxHL');
+
+function paint() { hl.innerHTML = tokenize(ta.value); } // your tokenizer here
+ta?.addEventListener('input', paint);
+ta?.addEventListener('scroll', () => { hl.parentElement.style.transform = `translateY(${-ta.scrollTop}px)`; });
+if (ta && hl) paint();

@@ -1,0 +1,203 @@
+/* ===== Intro Loader (Dark Grid Background) ===== */
+:root {
+    --intro-bg: radial-gradient(circle at top left, #28183a, #0e0e1a 80%);
+    --intro-card: #0f1729;
+    --intro-border: rgba(255, 255, 255, .08);
+    --accent: #7ef6a1;
+    --chip-bg: #1f2437;
+    --chip-bd: rgba(255, 255, 255, .08);
+    --bar-bg: rgba(255, 255, 255, .08);
+    --bar-fill: #7ef6a1;
+    --text: #e8e8f0;
+    --muted: #9fb3c8;
+    --ok: #39ff95;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+#intro-loader.intro {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    font-family: var(--mono);
+    color: var(--text);
+    background:
+        radial-gradient(600px circle at 25% 15%, rgba(255, 155, 60, .28), transparent 45%),
+        radial-gradient(900px circle at 60% 50%, rgba(120, 0, 255, .18), transparent 55%),
+        var(--intro-bg);
+}
+
+#intro-loader.intro::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(1200px 800px at 50% 50%, #000 60%, transparent 100%);
+    pointer-events: none;
+}
+
+.intro__grid {
+    min-height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 28px;
+}
+
+.intro__term {
+    width: min(760px, 92vw);
+    border: 1px solid var(--intro-border);
+    border-radius: 14px;
+    background: linear-gradient(180deg, #111427, #0b0f1a);
+    box-shadow: 0 28px 60px rgba(0, 0, 0, .55);
+    overflow: hidden;
+}
+
+.intro__term-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(12, 12, 16, .85);
+    border-bottom: 1px solid var(--intro-border);
+    color: #cfe3ff;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.-red {
+    background: #ff5f56;
+}
+
+.dot.-yellow {
+    background: #ffbd2e;
+}
+
+.dot.-green {
+    background: #27c93f;
+}
+
+.intro__host {
+    margin-left: auto;
+    opacity: .85;
+    font-size: 12px;
+}
+
+.intro__term-body {
+    padding: 16px 18px 20px;
+}
+
+.intro__line {
+    color: #a9ffb9;
+    margin-bottom: 8px;
+}
+
+.intro__msg {
+    color: var(--muted);
+    margin: 6px 0;
+}
+
+.intro__msg.-ok {
+    color: var(--ok);
+    font-weight: 700;
+}
+
+.intro__tree {
+    font-size: 13px;
+    line-height: 1.35;
+    color: #d1daea;
+    background: rgba(0, 0, 0, .2);
+    border: 1px solid var(--intro-border);
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.intro__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 10px;
+}
+
+.intro__chips .chip {
+    background: var(--chip-bg);
+    color: #dbe2ea;
+    border: 1px solid var(--chip-bd);
+    border-radius: 10px;
+    padding: 7px 12px;
+    font-size: 12px;
+}
+
+.intro__progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0 4px;
+}
+
+.intro__bar {
+    flex: 1;
+    height: 8px;
+    border-radius: 8px;
+    background: var(--bar-bg);
+    overflow: hidden;
+    border: 1px solid var(--intro-border);
+    position: relative;
+}
+
+.intro__bar-fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, var(--bar-fill), #9cffc1);
+    width: 0%;
+    transition: width .15s linear;
+}
+
+/* percent text inside the bar */
+.intro__pct.inbar {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #dff7ea;
+    opacity: .9;
+    pointer-events: none;
+}
+
+.intro__status {
+    text-align: center;
+    margin-top: 8px;
+    color: #cfe3ff;
+    letter-spacing: .02em;
+}
+
+/* Fade-out animation */
+.intro.exit {
+    animation: introFade .5s ease forwards;
+}
+
+@keyframes introFade {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .intro__bar-fill {
+        transition: none;
+    }
+
+    .intro.exit {
+        animation: none;
+        display: none;
+    }
+}

@@ -1,0 +1,42 @@
+/* ===== UserCard_v1: frame-fit fix (local to preview only) ===== */
+
+/* allow scrolling inside the preview document */
+html,
+body {
+    min-height: 100%;
+    overflow: auto;
+}
+
+/* let the card height be defined by its content (image + text) */
+.card {
+    height: auto !important;
+}
+
+/* show the whole image (no crop), keep the head visible */
+.card>img,
+.card .card-img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: auto !important;
+    /* cancel 2/3 forcing */
+    object-fit: contain !important;
+    /* never crop */
+    object-position: center top !important;
+    transform: none !important;
+    /* cancel hover zoom that can crop */
+    display: block;
+    background: #222;
+    /* clean letterbox when needed */
+}
+
+/* shorten the frosted bar so it doesn’t hide the image bottom */
+.card::before {
+    height: 20% !important;
+}
+
+/* mobile/narrow columns: make cards shrink instead of cropping */
+@media (max-width: 1100px) {
+    .card {
+        width: min(92vw, 22rem) !important;
+    }
+}
