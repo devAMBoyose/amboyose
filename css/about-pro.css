@@ -448,7 +448,41 @@
 }
 
 
+/* Missing brand colors */
+.ap-logos i[class*="laravel"] {
+    color: #FF2D20;
+}
 
+/* Laravel */
+.ap-logos i[class*="ruby"] {
+    color: #CC342D;
+}
+
+/* Ruby */
+.ap-logos i[class*="rails"] {
+    color: #CC0000;
+}
+
+/* Ruby on Rails */
+.ap-logos i[class*="java"] {
+    color: #007396;
+}
+
+/* Java */
+.ap-logos i[class*="github"] {
+    color: #181717;
+}
+
+/* GitHub */
+.ap-logos i[class*="visualstudio"] {
+    color: #5C2D91;
+}
+
+/* Visual Studio (purple) */
+/* Optional: if you prefer Express to be dark (brand) instead of pale */
+.ap-logos i[class*="express"] {
+    color: #222;
+}
 
 
 
