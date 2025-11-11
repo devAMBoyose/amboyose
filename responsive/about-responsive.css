@@ -1,0 +1,358 @@
+/* =========================================================
+   about-responsive.css
+   Responsive overrides for your About page.
+   Keeps your desktop design intact (colors, glow, layout).
+   ========================================================= */
+
+/* ---------- Wide tablets / small laptops ---------- */
+@media (max-width: 1200px) {
+    .window {
+        margin-inline: auto;
+    }
+
+    .content {
+        gap: 2rem;
+    }
+}
+
+/* ---------- Large tablets (<=1024) ---------- */
+@media (max-width: 1024px) {
+    .content {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        grid-auto-rows: minmax(min-content, max-content);
+        align-items: start;
+        gap: 1.25rem 2rem;
+    }
+
+    .about-pro {
+        grid-column: 1 / -1;
+        margin-top: 1rem;
+    }
+
+    .about-me .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .75rem 1rem;
+    }
+
+    .title-bar .tb-right {
+        gap: .5rem;
+    }
+
+    .tb-menu>li>a,
+    .tb-menu>li>button {
+        padding: .4rem .6rem;
+    }
+}
+
+/* ---------- Tablets (~900) ---------- */
+@media (max-width: 900px) {
+    .avatar img {
+        max-width: 220px;
+        height: auto;
+    }
+
+    .about-me .name {
+        font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+    }
+
+    .about-me .role {
+        font-size: clamp(.9rem, 1.9vw, 1.05rem);
+    }
+}
+
+/* ---------- Tablets / large phones (<=768) ---------- */
+@media (max-width: 768px) {
+    .content {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .profile {
+        order: 0;
+        display: grid;
+        place-items: center;
+    }
+
+    .about-me {
+        order: 1;
+    }
+
+    .about-pro {
+        order: 2;
+    }
+
+    .about-me .details-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: .6rem .8rem;
+    }
+
+    .ap-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .75rem;
+    }
+
+    .ap-stats .ap-card {
+        padding: .9rem;
+    }
+
+    .ap-logos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .6rem .75rem;
+    }
+
+    .ap-logos i {
+        font-size: 32px;
+    }
+
+    .ap-h3 {
+        margin: 1rem 0 .5rem;
+    }
+
+    .interests-grid,
+    .ap-interests {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .8rem;
+    }
+
+    .ap-hobbies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+    }
+
+    .tb-menu {
+        width: 100%;
+    }
+
+    /* keeps hamburger menu happy */
+}
+
+/* ---------- Phones (<=640) ---------- */
+@media (max-width: 640px) {
+    .title-bar .filename {
+        max-width: 60vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .about-me .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ap-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .ap-logos i {
+        font-size: 28px;
+    }
+
+    .interests-grid,
+    .ap-interests {
+        grid-template-columns: 1fr;
+    }
+
+    .content {
+        padding: 1rem;
+    }
+
+    .ap {
+        padding: .9rem;
+    }
+}
+
+/* ---------- Small phones (<=480) ---------- */
+@media (max-width: 480px) {
+    html {
+        font-size: 15px;
+    }
+
+    .about-me .name {
+        font-size: 1.1rem;
+    }
+
+    .about-me .role {
+        font-size: .95rem;
+    }
+
+    .about-me .summary {
+        font-size: inherit;
+        line-height: inherit;
+    }
+
+    .ap-chip {
+        font-size: .95rem;
+        padding: .35rem .6rem;
+    }
+
+    .ap-logos {
+        gap: .5rem;
+    }
+
+    .ap-logos i {
+        font-size: 26px;
+    }
+
+    .site-footer p.links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .25rem .5rem;
+    }
+}
+
+/* ---------- Very small phones (<=375) ---------- */
+@media (max-width: 375px) {
+    html {
+        font-size: 14px;
+    }
+
+    #cursor-bg {
+        display: none;
+    }
+
+    .content {
+        padding: .75rem;
+    }
+
+    .ap {
+        padding: .75rem;
+    }
+}
+
+/* ---------- Motion safety ---------- */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ---------- Intro Loader scaling (works with your JS) ---------- */
+@media (max-width: 768px) {
+    .intro__term {
+        transform: scale(.95);
+        transform-origin: top center;
+    }
+
+    .intro__line .typed {
+        font-size: 0.95em;
+    }
+
+    .intro__steps {
+        font-size: .95em;
+    }
+}
+
+@media (max-width: 480px) {
+    .intro__term {
+        transform: scale(.9);
+    }
+
+    .intro__pct {
+        font-size: .9em;
+    }
+}
+
+/* =========================================================
+   Avatar: preserve desktop look + fix on mobile
+   - uses a masked ::before ring so the glow is continuous
+   - no padding tricks, no cropping, no color changes
+   ========================================================= */
+
+/* Base: don’t change desktop; only prepare stacking context if needed */
+.profile .avatar {
+    position: relative;
+}
+
+/* Mobile-safe continuous glow ring */
+@media (max-width: 1024px) {
+    .avatar-glow {
+        position: relative;
+        border-radius: 16px;
+        /* match your card radius from style.css */
+        background: transparent;
+        /* allow the ring to be visible around edges */
+        overflow: visible;
+    }
+
+    /* Animated border ring drawn independently of content */
+    .avatar-glow::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        /* ring hugs the outer edge */
+        border-radius: inherit;
+        padding: 3px;
+        /* ring thickness */
+        background: linear-gradient(45deg, #00ff99, #00ffff, #f01f04, #054628, #ffd24a, #00ff99);
+        background-size: 400% 400%;
+        animation: borderMove 6s linear infinite;
+        z-index: 0;
+        pointer-events: none;
+
+        /* Show only the 3px stroke (mask out the middle) */
+        -webkit-mask:
+            linear-gradient(#000 0 0) content-box,
+            linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+    }
+
+    /* Make sure card content stays above the ring */
+    .avatar-glow>* {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Image sizing on mobile: keep proportions; do not crop */
+    .avatar-glow img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        /* your inner rounding */
+        object-fit: contain;
+        object-position: center;
+        background: #0b0f17;
+        /* matches your dark panel */
+    }
+
+    /* Social pill under the image; centered; no overlap with ring */
+    .avatar-social {
+        position: static;
+        transform: none;
+        margin-top: .5rem;
+        justify-content: center;
+    }
+}
+
+/* Slightly smaller inner image on very small phones; ring unaffected */
+@media (max-width: 480px) {
+    .avatar-glow img {
+        max-width: 200px;
+        margin-inline: auto;
+    }
+}
+
+/* Fallback keyframes (in case not defined elsewhere) */
+@keyframes borderMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}

@@ -1,0 +1,109 @@
+/* ===== Tablets portrait (768–1023) ===== */
+@media (min-width:768px) and (max-width:1023px) {
+    .apw-works {
+        margin: 48px auto 72px;
+        padding: 0 18px;
+    }
+
+    .apw-filters {
+        gap: 8px;
+    }
+}
+
+/* ===== Narrow tablets / large phones (681–767) ===== */
+@media (min-width:681px) and (max-width:767px) {
+    .apw-works {
+        padding: 0 16px;
+    }
+
+    .apw-grid {
+        gap: 18px;
+    }
+}
+
+/* ===== Phones (≤680) – iPhone/Pixel/Samsung buckets ===== */
+@media (max-width:680px) {
+    .apw-works {
+        margin: 40px auto 60px;
+        padding: 0 14px;
+    }
+
+    .apw-filters {
+        gap: 8px;
+        margin-bottom: 28px;
+    }
+
+    .apw-filter {
+        padding: 7px 14px;
+        font-size: .86rem;
+    }
+
+    .apw-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+    }
+}
+
+/* ===== Very small phones (≤430) – 14 Pro Max width bucket ===== */
+@media (max-width:430px) {
+    .pg-title {
+        font-size: 1.6rem;
+    }
+
+    .apw-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+/* ===== iPhone 12/14 Pro (~390) ===== */
+@media (max-width:393px) {
+    .pg-title {
+        font-size: 1.5rem;
+    }
+
+    .pg-eyebrow::after {
+        width: 72px;
+    }
+}
+
+/* ===== iPhone XR/11/SE2-3 (375) ===== */
+@media (max-width:375px) {
+    .apw-filter {
+        padding: 6px 12px;
+        font-size: .84rem;
+    }
+}
+
+/* ===== Small Androids (≤360) ===== */
+@media (max-width:360px) {
+    .pg-eyebrow {
+        font-size: .75rem;
+        gap: 10px;
+    }
+
+    .pg-eyebrow::after {
+        width: 60px;
+    }
+}
+
+/* ===== Large desktops (≥1440) ===== */
+@media (min-width:1440px) {
+    .apw-works {
+        max-width: 1280px;
+    }
+}
+
+/* ===== Prefers reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+
+    .apw-filter,
+    .apw-card,
+    .apw-card img {
+        transition: none !important;
+    }
+
+    .apw-filter.is-active {
+        animation: none !important;
+    }
+}
