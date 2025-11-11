@@ -1,0 +1,261 @@
+/* ===== APIs / Integrations — Base (compact) ===== */
+:root {
+    --bg: var(--bg, #0c0f0d);
+    --panel: var(--panel, #121614);
+    --ink: var(--ink, #e8ffee);
+    --muted: var(--muted, #a7c4b6);
+    --acc: var(--acc, #25e066);
+    --acc2: var(--acc2, #0bbf52);
+    --border: var(--border, #162019);
+    --shadow: var(--shadow, rgba(0, 0, 0, .35));
+    --gradA: #22e18b;
+    --gradB: #00c6ff;
+    --gradC: #9c42f5;
+}
+
+/* center the whole section and make it slimmer */
+.apis-section {
+    position: relative;
+    max-width: 1160px;
+    /* keeps content narrow on desktop */
+    margin-inline: auto;
+    padding: clamp(24px, 4.5vw, 56px) clamp(14px, 4.5vw, 40px);
+    border-top: 1px solid var(--border);
+    isolation: isolate;
+}
+
+/* subtle glow but lighter and lower height */
+.apis-section::before {
+    content: "";
+    position: absolute;
+    inset: -6% -4% auto -4%;
+    height: 220px;
+    background:
+        radial-gradient(60% 60% at 15% 30%, rgba(34, 225, 139, .12), transparent 60%),
+        radial-gradient(50% 50% at 70% 15%, rgba(156, 66, 245, .10), transparent 65%);
+    filter: blur(18px);
+    z-index: -1;
+}
+
+/* header row: title + chips */
+.section-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: .8rem;
+    margin-bottom: .9rem;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 900;
+    letter-spacing: .2px;
+    font-size: clamp(1.05rem, 1.8vw, 1.55rem);
+    /* smaller title */
+    color: var(--ink);
+}
+
+.section-emoji {
+    font-size: 1.1em;
+}
+
+/* chips (smaller) */
+.chips {
+    display: flex;
+    gap: .4rem;
+    flex-wrap: wrap;
+}
+
+.chip {
+    background: rgba(255, 255, 255, .02);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: .28rem .6rem;
+    /* tighter */
+    border-radius: 999px;
+    font: inherit;
+    font-size: .8rem;
+    cursor: pointer;
+    transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+}
+
+.chip:hover,
+.chip:focus-visible {
+    transform: translateY(-1px);
+    background: rgba(37, 224, 102, .08);
+    border-color: var(--acc);
+    color: var(--ink);
+    outline: none;
+}
+
+.chip.is-active {
+    background: linear-gradient(90deg, rgba(34, 225, 139, .16), rgba(156, 66, 245, .10));
+    border-color: rgba(92, 246, 161, .45);
+    color: var(--ink);
+}
+
+/* grid */
+.project-grid {
+    display: grid;
+    gap: clamp(12px, 1.6vw, 18px);
+    /* tighter gaps */
+    grid-template-columns: repeat(12, 1fr);
+}
+
+/* card — compact + consistent height */
+.project-card {
+    grid-column: span 12;
+    display: flex;
+    flex-direction: column;
+    /* even heights */
+    position: relative;
+    background:
+        linear-gradient(var(--panel), var(--panel)) padding-box,
+        linear-gradient(120deg, var(--gradA), var(--gradB), var(--gradC)) border-box;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: clamp(12px, 1.8vw, 16px);
+    /* smaller padding */
+    box-shadow: 0 6px 14px rgba(0, 0, 0, .32);
+    transition: transform .22s ease, box-shadow .22s ease, background-position .45s ease;
+    background-size: 100% 100%, 200% 200%;
+}
+
+.project-card:hover {
+    transform: translateY(-4px);
+    background-position: 0 0, 100% 0;
+    box-shadow: 0 12px 22px rgba(0, 0, 0, .45);
+}
+
+/* head */
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem;
+    margin-bottom: .35rem;
+}
+
+.card-title {
+    color: var(--ink);
+    font-size: clamp(.95rem, 1.5vw, 1.05rem);
+    /* smaller title */
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0;
+}
+
+/* badge smaller */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35ch;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, .04);
+    color: var(--acc);
+    border: 1px solid rgba(37, 224, 102, .32);
+    padding: .22rem .5rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 800;
+}
+
+.badge.-full {
+    color: var(--acc2);
+    border-color: rgba(11, 191, 82, .42);
+    background: rgba(11, 191, 82, .08);
+}
+
+/* text */
+.card-desc {
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.5;
+    margin: .25rem 0 .7rem;
+}
+
+/* actions pinned bottom */
+.card-actions {
+    margin-top: auto;
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+/* button — smaller + shine */
+.btn {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    padding: .42rem .85rem;
+    /* smaller */
+    background: linear-gradient(90deg, var(--gradA), var(--gradB));
+    color: #051006;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: .86rem;
+    letter-spacing: .2px;
+    border: 1px solid rgba(0, 0, 0, .12);
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.btn::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 -40%;
+    width: 38%;
+    transform: skewX(-20deg);
+    background: linear-gradient(90deg, rgba(255, 255, 255, .0), rgba(255, 255, 255, .35), rgba(255, 255, 255, .0));
+    opacity: 0;
+    transition: transform .4s ease, opacity .4s ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, .34);
+    outline: none;
+}
+
+.btn:hover::after,
+.btn:focus-visible::after {
+    opacity: .9;
+    transform: translateX(260%) skewX(-20deg);
+}
+
+.btn.-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--border);
+}
+
+.btn.-ghost:hover,
+.btn.-ghost:focus-visible {
+    border-color: var(--acc);
+}
+
+/* empty state */
+.empty-state {
+    margin-top: .8rem;
+    color: var(--muted);
+    background: rgba(255, 255, 255, .03);
+    border: 1px dashed var(--border);
+    padding: .7rem .9rem;
+    border-radius: 10px;
+    text-align: center;
+    font-size: .9rem;
+}
+
+/* reveal base (IO adds .is-visible) */
+.reveal {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
