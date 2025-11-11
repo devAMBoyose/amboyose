@@ -1,0 +1,24 @@
+/* Hide during off-screen typing */
+.typing-hide {
+    visibility: hidden;
+}
+
+/* Subtle reveal animation (no layout shift) */
+.reveal {
+    opacity: 0;
+    transform: translateY(4px);
+}
+
+.reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity .35s ease, transform .35s ease;
+}
+
+/* Off-screen typing driver (invisible) */
+.sr-typing {
+    position: absolute;
+    left: -9999px;
+    height: 0;
+    overflow: hidden;
+}

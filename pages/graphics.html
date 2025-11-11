@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Projects | Graphics </title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your existing styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/social.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <!-- New: artworks grid styles -->
+    <link rel="stylesheet" href="/css/pages/portfolio-artworks.css" />
+</head>
+
+<body>
+    <!-- cursor-follow glow background -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">Graphics </span>
+
+            <!-- RIGHT-SIDE NAV -->
+            <div class="tb-right">
+                <!-- Hamburger (mobile) -->
+                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+                    aria-label="Toggle menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+
+                <!-- Nav chips -->
+                <ul id="navMenu" class="tb-menu">
+                    <li><a href="/index.html">About</a></li>
+                    <li class="has-submenu">
+                        <button class="submenu-toggle is-active" aria-expanded="true" aria-controls="portfolioSubmenu">
+                            Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+                        </button>
+                        <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
+                            <li><a href="/portfolio.html">All Projects</a></li>
+                            <li><a href="/pages/website.html">Web Apps</a></li>
+                            <li><a href="/portfolio.html">UI/UX</a></li>
+                            <li><a href="/pages/graphics.html">Graphics</a></li>
+                            <li><a href="/portfolio.html#demos">Interactive Demos</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/resume.html">Resume</a></li>
+                    <li><a href="/contact.html">Contact Me</a></li>
+                    <li><a href="https://amboyose-portfolio.onrender.com" target="_blank" rel="noopener">Live
+                            Portfolio</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ===================== Projects Section ===================== -->
+        <!-- ===================== Projects Section ===================== -->
+        <section class="apw-works" aria-labelledby="apw-heading">
+            <header class="pg-head">
+                <span class="pg-eyebrow">PROJECTS</span>
+                <h1 class="pg-title">Sample Website</h1>
+            </header>
+
+            <!-- Filters -->
+            <div class="apw-filters" role="tablist" aria-label="Artwork filters">
+                <button class="apw-filter is-active" data-filter="all" role="tab" aria-selected="true">ALL</button>
+                <button class="apw-filter" data-filter="pullup" role="tab">PULL UP</button>
+                <button class="apw-filter" data-filter="booth" role="tab">BOOTH</button>
+                <button class="apw-filter" data-filter="packaging" role="tab">PACKAGING</button>
+                <button class="apw-filter" data-filter="popupwall" role="tab">POPUP WALL</button>
+                <button class="apw-filter" data-filter="other" role="tab">OTHER</button>
+            </div>
+
+            <!-- Grid -->
+            <div class="apw-grid">
+                <article class="apw-card" data-cat="pullup">
+                    <img src="https://via.placeholder.com/800x1200/1f2937/ffffff?text=Pull+Up+Banner+1"
+                        alt="Pull up banner">
+                </article>
+                <article class="apw-card" data-cat="pullup">
+                    <img src="https://via.placeholder.com/800x1200/0ea5e9/ffffff?text=Pull+Up+Banner+2"
+                        alt="Pull up banner 2">
+                </article>
+                <article class="apw-card" data-cat="other">
+                    <img src="https://via.placeholder.com/1200x800/a3e635/0b0f0e?text=Mug+Design" alt="Mug design">
+                </article>
+                <article class="apw-card" data-cat="booth">
+                    <img src="https://via.placeholder.com/1200x900/f59e0b/0b0f0e?text=Booth+Design" alt="Booth design">
+                </article>
+                <article class="apw-card" data-cat="packaging">
+                    <img src="https://via.placeholder.com/1000x1000/ec4899/ffffff?text=Packaging" alt="Packaging">
+                </article>
+                <article class="apw-card" data-cat="popupwall">
+                    <img src="https://via.placeholder.com/1400x900/22d3ee/0b0f0e?text=Popup+Wall" alt="Popup wall">
+                </article>
+            </div>
+        </section>
+        <!-- =================== /Projects Section ====================== -->
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="index.html">About</a> •
+            <a href="portfolio.html">Portfolio</a> •
+            <a href="resume.html">Resume</a> •
+            <a href="mailto:amboyose.dev@gmail.com">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+
+    <!-- New: artworks grid logic -->
+    <script defer src="/js/pages/portfolio-artworks.js"></script>
+</body>
+
+</html>

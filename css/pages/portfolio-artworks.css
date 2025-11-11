@@ -1,0 +1,171 @@
+:root {
+    --bg: #0b0f0e;
+    --panel: #0f1312;
+    --ink: #e8ffee;
+    --muted: #6b7c74;
+    --acc: #25e066;
+    --border: #1c2520;
+    --shadow: rgba(0, 0, 0, 0.45);
+}
+
+/* Section styling */
+.apw-works {
+    max-width: 1200px;
+    margin: 60px auto 80px;
+    padding: 0 20px;
+    font-family: "JetBrains Mono", monospace;
+    color: var(--ink);
+}
+
+.apw-label {
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.apw-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+/* Filter buttons */
+/* --- FILTER BUTTONS (Match Portfolio Buttons) --- */
+.apw-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.apw-filter {
+    background-color: rgba(126, 246, 161, 0.08);
+    /* subtle mint tint */
+    border: 1px solid rgba(126, 246, 161, 0.25);
+    color: #7ef6a1;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) inset;
+}
+
+.apw-filter:hover {
+    background-color: #7ef6a1;
+    color: #0b0f0e;
+    box-shadow: 0 0 12px rgba(126, 246, 161, 0.5), 0 0 30px rgba(126, 246, 161, 0.2);
+    transform: translateY(-1px);
+}
+
+.apw-filter.is-active {
+    background-color: #7ef6a1;
+    color: #0b0f0e;
+    box-shadow: 0 0 15px rgba(126, 246, 161, 0.6);
+    border-color: #7ef6a1;
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 15px rgba(126, 246, 161, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(126, 246, 161, 0.7);
+    }
+}
+
+.apw-filter.is-active {
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Artwork grid */
+.apw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Artwork card */
+.apw-card {
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 25px var(--shadow);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.apw-card img {
+    width: 100%;
+    display: block;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: brightness(0.92);
+}
+
+.apw-card:hover img {
+    transform: scale(1.03);
+    filter: brightness(1);
+}
+
+.apw-card:hover {
+    border-color: var(--acc);
+    box-shadow: 0 0 25px rgba(37, 224, 102, 0.3);
+    transform: translateY(-5px);
+}
+
+/* Header */
+.pg-head {
+    margin-bottom: .5rem;
+}
+
+.pg-eyebrow {
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    font-size: .8rem;
+    color: var(--pg-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pg-eyebrow::after {
+    content: "";
+    width: 90px;
+    height: 2px;
+    background: var(--pg-acc);
+    border-radius: 2px;
+}
+
+.pg-title {
+    margin: .25rem 0 1.25rem;
+    font-size: clamp(1.8rem, 2.4vw, 2.2rem);
+    color: #bfffd3;
+    text-shadow: 0 0 14px rgba(37, 224, 102, .3);
+}
+
+/* Smooth filtering */
+.apw-card.-hide {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.97);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .apw-title {
+        font-size: 1.4rem;
+    }
+
+    .apw-filter {
+        padding: 7px 14px;
+    }
+}
