@@ -1,66 +1,52 @@
 /* ===== APIs / Integrations — Responsive ===== */
 
-/* Small phones (iPhone SE) — 1 card / row, compact header */
-@media (max-width: 380px) {
-    .section-title {
-        font-size: 1.1rem;
-    }
-
-    .chip {
-        font-size: .78rem;
-        padding: .24rem .55rem;
-    }
-
-    .card-desc {
-        font-size: .88rem;
-    }
-}
-
-/* Stack header chips under title on narrow widths */
-@media (max-width: 680px) {
+/* Small phones */
+@media (max-width: 480px) {
     .section-head {
         grid-template-columns: 1fr;
         row-gap: .5rem;
     }
 
-    .chips {
-        order: 2;
+    .chip {
+        font-size: .8rem;
+        padding: .3rem .6rem;
+    }
+
+    .card-title {
+        font-size: .95rem;
+    }
+
+    .project-card {
+        padding: 14px;
     }
 }
 
-/* ≥ 600px: 2-up grid (tablet portrait & up) */
+/* ≥600px: 2-column grid */
 @media (min-width: 600px) {
     .project-card {
         grid-column: span 6;
     }
 }
 
-/* ≥ 1100px: 3-up grid, but stay compact */
-@media (min-width: 1100px) {
+/* ≥1000px: 3-column grid */
+@media (min-width: 1000px) {
     .project-card {
         grid-column: span 4;
     }
-
-    .apis-section {
-        max-width: 1200px;
-    }
-
-    /* slight widen only at large screens */
 }
 
-/* Motion prefs */
+/* Transition & accessibility */
 @media (prefers-reduced-motion: no-preference) {
     .reveal {
-        transition: opacity .4s ease, transform .4s ease;
+        transition: opacity .45s ease, transform .45s ease;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
 
-    .project-card,
+    .reveal,
     .btn,
-    .chip,
-    .reveal {
+    .chip {
         transition: none !important;
     }
 

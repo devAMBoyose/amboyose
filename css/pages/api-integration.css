@@ -1,4 +1,4 @@
-/* ===== APIs / Integrations — Base (compact) ===== */
+/* ===== APIs / Integrations — Transparent Project-Style Cards ===== */
 :root {
     --bg: var(--bg, #0c0f0d);
     --panel: var(--panel, #121614);
@@ -8,248 +8,191 @@
     --acc2: var(--acc2, #0bbf52);
     --border: var(--border, #162019);
     --shadow: var(--shadow, rgba(0, 0, 0, .35));
-    --gradA: #22e18b;
-    --gradB: #00c6ff;
-    --gradC: #9c42f5;
+    --ringA: #7ef6a1;
+    --ringB: #3de0ff;
 }
 
-/* center the whole section and make it slimmer */
+/* --- Layout Container --- */
+/* ===== Section Container ===== */
 .apis-section {
     position: relative;
-    max-width: 1160px;
-    /* keeps content narrow on desktop */
+    max-width: 1200px;
     margin-inline: auto;
-    padding: clamp(24px, 4.5vw, 56px) clamp(14px, 4.5vw, 40px);
+    padding: clamp(40px, 6vw, 80px) clamp(24px, 6vw, 60px);
+    /* ⬅ adds side padding */
     border-top: 1px solid var(--border);
-    isolation: isolate;
+    background: transparent;
 }
 
-/* subtle glow but lighter and lower height */
-.apis-section::before {
-    content: "";
-    position: absolute;
-    inset: -6% -4% auto -4%;
-    height: 220px;
-    background:
-        radial-gradient(60% 60% at 15% 30%, rgba(34, 225, 139, .12), transparent 60%),
-        radial-gradient(50% 50% at 70% 15%, rgba(156, 66, 245, .10), transparent 65%);
-    filter: blur(18px);
-    z-index: -1;
+/* ===== Project Grid (with gutters) ===== */
+.project-grid {
+    display: grid;
+    gap: clamp(18px, 2vw, 28px);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding-inline: clamp(8px, 2vw, 20px);
+    /* ⬅ safe spacing inside left/right */
+    justify-content: center;
+    box-sizing: border-box;
 }
 
-/* header row: title + chips */
+/* --- Header --- */
 .section-head {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    gap: .8rem;
-    margin-bottom: .9rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .section-title {
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    font-weight: 900;
+    color: var(--ink);
     display: flex;
     align-items: center;
     gap: .5rem;
-    font-weight: 900;
-    letter-spacing: .2px;
-    font-size: clamp(1.05rem, 1.8vw, 1.55rem);
-    /* smaller title */
-    color: var(--ink);
 }
 
 .section-emoji {
-    font-size: 1.1em;
+    font-size: 1.2em;
 }
 
-/* chips (smaller) */
+/* --- Filter Chips --- */
 .chips {
     display: flex;
-    gap: .4rem;
+    gap: .5rem;
     flex-wrap: wrap;
 }
 
 .chip {
-    background: rgba(255, 255, 255, .02);
+    background: rgba(255, 255, 255, 0.04);
     color: var(--muted);
     border: 1px solid var(--border);
-    padding: .28rem .6rem;
-    /* tighter */
+    padding: .35rem .8rem;
     border-radius: 999px;
-    font: inherit;
-    font-size: .8rem;
+    font-size: .85rem;
     cursor: pointer;
-    transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+    transition: all .25s ease;
 }
 
 .chip:hover,
-.chip:focus-visible {
-    transform: translateY(-1px);
-    background: rgba(37, 224, 102, .08);
+.chip.is-active {
+    background: rgba(37, 224, 102, .12);
     border-color: var(--acc);
     color: var(--ink);
-    outline: none;
 }
 
-.chip.is-active {
-    background: linear-gradient(90deg, rgba(34, 225, 139, .16), rgba(156, 66, 245, .10));
-    border-color: rgba(92, 246, 161, .45);
-    color: var(--ink);
-}
-
-/* grid */
+/* --- Grid --- */
 .project-grid {
     display: grid;
-    gap: clamp(12px, 1.6vw, 18px);
-    /* tighter gaps */
+    gap: clamp(18px, 2vw, 28px);
     grid-template-columns: repeat(12, 1fr);
 }
 
-/* card — compact + consistent height */
+/* --- Card (transparent floating like Projects) --- */
 .project-card {
     grid-column: span 12;
     display: flex;
     flex-direction: column;
-    /* even heights */
+    justify-content: space-between;
     position: relative;
-    background:
-        linear-gradient(var(--panel), var(--panel)) padding-box,
-        linear-gradient(120deg, var(--gradA), var(--gradB), var(--gradC)) border-box;
-    border: 1px solid transparent;
-    border-radius: 12px;
-    padding: clamp(12px, 1.8vw, 16px);
-    /* smaller padding */
-    box-shadow: 0 6px 14px rgba(0, 0, 0, .32);
-    transition: transform .22s ease, box-shadow .22s ease, background-position .45s ease;
-    background-size: 100% 100%, 200% 200%;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: clamp(16px, 2vw, 22px);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 10px 22px rgba(0, 0, 0, 0.4);
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    backdrop-filter: blur(10px);
 }
 
 .project-card:hover {
     transform: translateY(-4px);
-    background-position: 0 0, 100% 0;
-    box-shadow: 0 12px 22px rgba(0, 0, 0, .45);
+    border-color: rgba(126, 246, 161, 0.3);
+    box-shadow:
+        0 0 0 1px rgba(126, 246, 161, 0.15),
+        0 18px 30px rgba(0, 0, 0, 0.55);
 }
 
-/* head */
+/* --- Content --- */
 .card-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: .6rem;
-    margin-bottom: .35rem;
+    margin-bottom: .4rem;
 }
 
 .card-title {
-    color: var(--ink);
-    font-size: clamp(.95rem, 1.5vw, 1.05rem);
-    /* smaller title */
+    font-size: 1rem;
     font-weight: 800;
-    line-height: 1.2;
+    color: var(--ink);
     margin: 0;
 }
 
-/* badge smaller */
 .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: .35ch;
-    white-space: nowrap;
     background: rgba(255, 255, 255, .04);
+    border: 1px solid rgba(37, 224, 102, .3);
     color: var(--acc);
-    border: 1px solid rgba(37, 224, 102, .32);
-    padding: .22rem .5rem;
     border-radius: 999px;
-    font-size: .72rem;
-    font-weight: 800;
+    font-size: .50rem;
+    padding: .25rem .55rem;
+    font-weight: 700;
+    letter-spacing: .2px;
 }
 
 .badge.-full {
     color: var(--acc2);
-    border-color: rgba(11, 191, 82, .42);
-    background: rgba(11, 191, 82, .08);
+    border-color: rgba(11, 191, 82, .45);
 }
 
-/* text */
+/* --- Description --- */
 .card-desc {
     color: var(--muted);
     font-size: .9rem;
-    line-height: 1.5;
-    margin: .25rem 0 .7rem;
+    line-height: 1.55;
+    margin: .35rem 0 .8rem;
 }
 
-/* actions pinned bottom */
+/* --- Actions --- */
 .card-actions {
-    margin-top: auto;
     display: flex;
     gap: .5rem;
-    flex-wrap: wrap;
+    margin-top: auto;
 }
 
-/* button — smaller + shine */
 .btn {
-    position: relative;
-    overflow: hidden;
     display: inline-block;
-    padding: .42rem .85rem;
-    /* smaller */
-    background: linear-gradient(90deg, var(--gradA), var(--gradB));
+    padding: .45rem .9rem;
+    font-weight: 800;
+    font-size: .88rem;
     color: #051006;
+    background: linear-gradient(90deg, var(--ringA), var(--ringB));
     border-radius: 8px;
+    border: none;
+    cursor: pointer;
     text-decoration: none;
-    font-weight: 900;
-    font-size: .86rem;
-    letter-spacing: .2px;
-    border: 1px solid rgba(0, 0, 0, .12);
-    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.btn::after {
-    content: "";
-    position: absolute;
-    inset: 0 auto 0 -40%;
-    width: 38%;
-    transform: skewX(-20deg);
-    background: linear-gradient(90deg, rgba(255, 255, 255, .0), rgba(255, 255, 255, .35), rgba(255, 255, 255, .0));
-    opacity: 0;
-    transition: transform .4s ease, opacity .4s ease;
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .4);
 }
 
-.btn:hover,
-.btn:focus-visible {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, .34);
-    outline: none;
-}
-
-.btn:hover::after,
-.btn:focus-visible::after {
-    opacity: .9;
-    transform: translateX(260%) skewX(-20deg);
-}
-
-.btn.-ghost {
-    background: transparent;
-    color: var(--ink);
-    border: 1px solid var(--border);
-}
-
-.btn.-ghost:hover,
-.btn.-ghost:focus-visible {
-    border-color: var(--acc);
-}
-
-/* empty state */
+/* --- Empty state --- */
 .empty-state {
-    margin-top: .8rem;
+    margin-top: 1rem;
     color: var(--muted);
-    background: rgba(255, 255, 255, .03);
+    background: rgba(255, 255, 255, 0.03);
     border: 1px dashed var(--border);
-    padding: .7rem .9rem;
     border-radius: 10px;
+    padding: .8rem 1rem;
     text-align: center;
     font-size: .9rem;
 }
 
-/* reveal base (IO adds .is-visible) */
+/* --- Reveal animation --- */
 .reveal {
     opacity: 0;
     transform: translateY(10px);
@@ -258,4 +201,34 @@
 .reveal.is-visible {
     opacity: 1;
     transform: none;
+}
+
+/* Header */
+.pg-head {
+    margin-bottom: .5rem;
+}
+
+.pg-eyebrow {
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    font-size: .8rem;
+    color: var(--pg-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pg-eyebrow::after {
+    content: "";
+    width: 90px;
+    height: 2px;
+    background: var(--pg-acc);
+    border-radius: 2px;
+}
+
+.pg-title {
+    margin: .25rem 0 1.25rem;
+    font-size: clamp(1.8rem, 2.4vw, 2.2rem);
+    color: #bfffd3;
+    text-shadow: 0 0 14px rgba(37, 224, 102, .3);
 }
