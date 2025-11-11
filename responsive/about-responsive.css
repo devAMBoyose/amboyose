@@ -356,3 +356,48 @@
         background-position: 0% 50%;
     }
 }
+
+
+/* Intro Align Ensure full-viewport grid and perfect centering */
+.intro {
+    position: fixed;
+    inset: 0;
+    /* top/right/bottom/left: 0 */
+    display: grid;
+    place-items: center;
+    /* center both axes */
+    z-index: 9999;
+}
+
+.intro__grid {
+    width: 100%;
+    max-width: 1200px;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+}
+
+.intro__term {
+    width: 100%;
+    max-width: 960px;
+    /* size of the “terminal” */
+    margin: 0 auto;
+    /* center horizontally */
+}
+
+/* Desktop-specific nudge in case other styles collide */
+@media (min-width: 1025px) {
+
+    .intro,
+    .intro__grid {
+        place-items: center;
+    }
+}
+
+/* Also center your main window on desktop */
+.window {
+    max-width: 1200px;
+    margin-inline: auto;
+    /* center the whole app frame */
+    padding-inline: 16px;
+}
