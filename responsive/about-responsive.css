@@ -401,3 +401,11 @@
     /* center the whole app frame */
     padding-inline: 16px;
 }
+
+
+/* Keep gutters sensible on iPhone SE / very narrow widths */
+@media (max-width: 380px) {
+    .apis-section {
+        --apis-gutter: 16px;
+    }
+}

@@ -1,63 +1,52 @@
-/* ===== APIs / Integrations — Transparent Project-Style Cards ===== */
+/* ===== APIs / Integrations — Base (mobile-first) ===== */
 :root {
-    --bg: var(--bg, #0c0f0d);
-    --panel: var(--panel, #121614);
-    --ink: var(--ink, #e8ffee);
-    --muted: var(--muted, #a7c4b6);
-    --acc: var(--acc, #25e066);
-    --acc2: var(--acc2, #0bbf52);
-    --border: var(--border, #162019);
-    --shadow: var(--shadow, rgba(0, 0, 0, .35));
+    --bg: #0c0f0d;
+    --panel: #121614;
+    --ink: #e8ffee;
+    --muted: #a7c4b6;
+    --acc: #25e066;
+    --acc2: #0bbf52;
+    --border: #162019;
+    --shadow: rgba(0, 0, 0, .35);
     --ringA: #7ef6a1;
     --ringB: #3de0ff;
 }
 
-/* --- Layout Container --- */
-/* ===== Section Container ===== */
+/* Section container */
 .apis-section {
     position: relative;
     max-width: 1200px;
     margin-inline: auto;
-    padding: clamp(40px, 6vw, 80px) clamp(24px, 6vw, 60px);
-    /* ⬅ adds side padding */
+    /* safe gutters + notch-aware padding */
+    padding: clamp(32px, 6vw, 72px) max(16px, 4vw, env(safe-area-inset-left)) clamp(32px, 6vw, 72px) max(16px, 4vw, env(safe-area-inset-right));
     border-top: 1px solid var(--border);
     background: transparent;
-}
-
-/* ===== Project Grid (with gutters) ===== */
-.project-grid {
-    display: grid;
-    gap: clamp(18px, 2vw, 28px);
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    padding-inline: clamp(8px, 2vw, 20px);
-    /* ⬅ safe spacing inside left/right */
-    justify-content: center;
     box-sizing: border-box;
 }
 
-/* --- Header --- */
+/* Header */
 .section-head {
     display: grid;
     grid-template-columns: 1fr auto;
-    align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 .section-title {
-    font-size: clamp(1.2rem, 2vw, 1.6rem);
-    font-weight: 900;
-    color: var(--ink);
     display: flex;
-    align-items: center;
     gap: .5rem;
+    align-items: center;
+    color: var(--ink);
+    font-weight: 900;
+    font-size: 1.35rem;
 }
 
 .section-emoji {
     font-size: 1.2em;
 }
 
-/* --- Filter Chips --- */
+/* Chips */
 .chips {
     display: flex;
     gap: .5rem;
@@ -65,14 +54,15 @@
 }
 
 .chip {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, .04);
     color: var(--muted);
     border: 1px solid var(--border);
-    padding: .35rem .8rem;
     border-radius: 999px;
+    padding: .35rem .7rem;
+    font: inherit;
     font-size: .85rem;
     cursor: pointer;
-    transition: all .25s ease;
+    transition: all .2s ease;
 }
 
 .chip:hover,
@@ -82,63 +72,63 @@
     color: var(--ink);
 }
 
-/* --- Grid --- */
+/* Grid with built-in gutters */
 .project-grid {
     display: grid;
-    gap: clamp(18px, 2vw, 28px);
     grid-template-columns: repeat(12, 1fr);
+    gap: clamp(14px, 2.2vw, 28px);
+    padding-inline: clamp(10px, 2vw, 20px);
+    box-sizing: border-box;
+    word-break: break-word;
+    margin-bottom: 20px;
 }
 
-/* --- Card (transparent floating like Projects) --- */
+/* Card — transparent “project-style” */
 .project-card {
     grid-column: span 12;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: relative;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, .02);
+    border: 1px solid rgba(255, 255, 255, .06);
     border-radius: 16px;
-    padding: clamp(16px, 2vw, 22px);
-    box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.04),
-        0 10px 22px rgba(0, 0, 0, 0.4);
-    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    padding: clamp(14px, 2vw, 20px);
     backdrop-filter: blur(10px);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .04), 0 10px 22px rgba(0, 0, 0, .4);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 
 .project-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(126, 246, 161, 0.3);
-    box-shadow:
-        0 0 0 1px rgba(126, 246, 161, 0.15),
-        0 18px 30px rgba(0, 0, 0, 0.55);
+    transform: translateY(-3px);
+    border-color: rgba(126, 246, 161, .28);
+    box-shadow: 0 0 0 1px rgba(126, 246, 161, .15), 0 18px 30px rgba(0, 0, 0, .55);
 }
 
-/* --- Content --- */
+/* Card content */
 .card-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: .75rem;
     margin-bottom: .4rem;
 }
 
 .card-title {
-    font-size: 1rem;
-    font-weight: 800;
     color: var(--ink);
+    font-weight: 800;
+    font-size: 1.02rem;
     margin: 0;
+    line-height: 1.2;
 }
 
 .badge {
     background: rgba(255, 255, 255, .04);
-    border: 1px solid rgba(37, 224, 102, .3);
     color: var(--acc);
+    border: 1px solid rgba(37, 224, 102, .3);
     border-radius: 999px;
-    font-size: .50rem;
-    padding: .25rem .55rem;
-    font-weight: 700;
-    letter-spacing: .2px;
+    font-size: .74rem;
+    font-weight: 800;
+    padding: .24rem .55rem;
 }
 
 .badge.-full {
@@ -146,21 +136,21 @@
     border-color: rgba(11, 191, 82, .45);
 }
 
-/* --- Description --- */
 .card-desc {
     color: var(--muted);
-    font-size: .9rem;
+    font-size: .92rem;
     line-height: 1.55;
-    margin: .35rem 0 .8rem;
+    margin: .3rem 0 .9rem;
 }
 
-/* --- Actions --- */
 .card-actions {
+    margin-top: auto;
     display: flex;
     gap: .5rem;
-    margin-top: auto;
+    flex-wrap: wrap;
 }
 
+/* Buttons */
 .btn {
     display: inline-block;
     padding: .45rem .9rem;
@@ -168,9 +158,8 @@
     font-size: .88rem;
     color: #051006;
     background: linear-gradient(90deg, var(--ringA), var(--ringB));
-    border-radius: 8px;
     border: none;
-    cursor: pointer;
+    border-radius: 8px;
     text-decoration: none;
     transition: transform .2s ease, box-shadow .2s ease;
 }
@@ -180,11 +169,11 @@
     box-shadow: 0 8px 18px rgba(0, 0, 0, .4);
 }
 
-/* --- Empty state --- */
+/* Empty state */
 .empty-state {
     margin-top: 1rem;
     color: var(--muted);
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, .03);
     border: 1px dashed var(--border);
     border-radius: 10px;
     padding: .8rem 1rem;
@@ -192,7 +181,7 @@
     font-size: .9rem;
 }
 
-/* --- Reveal animation --- */
+/* Reveal */
 .reveal {
     opacity: 0;
     transform: translateY(10px);
@@ -203,32 +192,28 @@
     transform: none;
 }
 
-/* Header */
-.pg-head {
-    margin-bottom: .5rem;
+/* === ALIGN TITLE, CHIPS, AND CARDS === */
+/* 1) define a single horizontal gutter for the whole section */
+.apis-section {
+    --apis-gutter: clamp(24px, 6vw, 60px);
+    /* left/right padding to use everywhere */
+    padding-left: var(--apis-gutter);
+    padding-right: var(--apis-gutter);
 }
 
-.pg-eyebrow {
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    font-size: .8rem;
-    color: var(--pg-muted);
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
+/* 2) give the header the same gutter (so Title + Chips line up with cards) */
+.apis-section .section-head {
+    margin-left: calc(-1 * var(--apis-gutter));
+    /* reset any internal spacing */
+    margin-right: calc(-1 * var(--apis-gutter));
+    padding-left: var(--apis-gutter);
+    padding-right: var(--apis-gutter);
 }
 
-.pg-eyebrow::after {
-    content: "";
-    width: 90px;
-    height: 2px;
-    background: var(--pg-acc);
-    border-radius: 2px;
-}
-
-.pg-title {
-    margin: .25rem 0 1.25rem;
-    font-size: clamp(1.8rem, 2.4vw, 2.2rem);
-    color: #bfffd3;
-    text-shadow: 0 0 14px rgba(37, 224, 102, .3);
+/* 3) remove extra padding from the grid so it doesn't shift further right */
+.apis-section .project-grid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0;
+    margin-right: 0;
 }

@@ -1,41 +1,93 @@
-/* ===== APIs / Integrations — Responsive ===== */
+/* ===== APIs / Integrations — Responsive breakpoints ===== */
 
-/* Small phones */
-@media (max-width: 480px) {
+/* --- Small phones (iPhone SE / 320–375) --- */
+@media (max-width: 375px) {
     .section-head {
         grid-template-columns: 1fr;
         row-gap: .5rem;
     }
 
-    .chip {
-        font-size: .8rem;
-        padding: .3rem .6rem;
+    .section-title {
+        font-size: 1.15rem;
     }
 
-    .card-title {
-        font-size: .95rem;
+    .chip {
+        font-size: .8rem;
+        padding: .28rem .55rem;
     }
 
     .project-card {
         padding: 14px;
     }
+
+    .card-title {
+        font-size: .98rem;
+    }
 }
 
-/* ≥600px: 2-column grid */
+/* --- Phones (iPhone XR/12/14, Pixel 7, Galaxy S8+) --- */
+@media (min-width: 376px) and (max-width: 599px) {
+    .section-head {
+        grid-template-columns: 1fr;
+        row-gap: .6rem;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* --- ≥600px: 2-up grid (iPad Mini portrait, small tablets, Fold narrow) --- */
 @media (min-width: 600px) {
     .project-card {
         grid-column: span 6;
     }
+
+    .section-title {
+        font-size: 1.35rem;
+    }
 }
 
-/* ≥1000px: 3-column grid */
+/* --- ≥768px: tighten gutters slightly (iPad portrait / small laptops) --- */
+@media (min-width: 768px) {
+    .apis-section {
+        padding-inline: clamp(24px, 5vw, 56px);
+    }
+}
+
+/* --- ≥820–912px: tablet landscape / Surface Duo / Fold wide --- */
+@media (min-width: 820px) {
+    .section-title {
+        font-size: 1.45rem;
+    }
+}
+
+/* --- ≥1000px: 3-up grid (iPad Pro / Surface / typical desktop widths) --- */
 @media (min-width: 1000px) {
     .project-card {
         grid-column: span 4;
     }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
 }
 
-/* Transition & accessibility */
+/* --- ≥1280px: roomy desktops; keep 3-up but expand container --- */
+@media (min-width: 1280px) {
+    .apis-section {
+        max-width: 1240px;
+    }
+}
+
+/* --- ≥1440px+: large monitors; keep rhythm stable --- */
+@media (min-width: 1440px) {
+    .apis-section {
+        max-width: 1320px;
+    }
+}
+
+/* Motion preferences */
 @media (prefers-reduced-motion: no-preference) {
     .reveal {
         transition: opacity .45s ease, transform .45s ease;
