@@ -27,7 +27,8 @@
 </head>
 
 <!-- Intro Loader -->
-<div id="intro-loader" class="intro is-active" aria-hidden="true">
+<!-- Intro Loader -->
+<div id="intro-loader" class="intro is-active" aria-hidden="false" role="dialog" aria-label="Starting app">
   <div class="intro__grid">
     <div class="intro__term" role="status" aria-live="polite">
       <div class="intro__term-top">
@@ -38,38 +39,32 @@
       </div>
 
       <div class="intro__term-body">
-        <div class="intro__line" id="intro-cmd">$ npm start_</div>
-
-        <div class="intro__repo">
-          <div class="intro__msg">Repository cloned successfully</div>
-          <div class="intro__tree" id="intro-tree">
-            <div>portfolio/</div>
-            <div>├─ index.html ✓</div>
-            <div>├─ style.css ✓</div>
-            <div>└─ app.js ✓</div>
-          </div>
-          <div class="intro__msg -ok">✓ Compiled successfully</div>
+        <div class="intro__line">
+          <span id="intro-typed" class="typed"></span><span class="cursor">▌</span>
         </div>
 
-        <div class="intro__chips" id="intro-chips">
-          <span class="chip">const developer = 'BAMBY';</span>
-          <span class="chip">function createPortfolio(){}</span>
-          <span class="chip">return &lt;Portfolio /&gt;</span>
-          <span class="chip">export default App;</span>
-        </div>
+        <!-- Java backend steps -->
+        <ul class="intro__steps" id="intro-steps">
+          <li data-label="Checking JDK 17">…</li>
+          <li data-label="Resolving Gradle dependencies">…</li>
+          <li data-label="Starting Spring Boot context">…</li>
+          <li data-label="Running unit tests">…</li>
+          <li data-label="Packaging JAR">…</li>
+        </ul>
 
         <div class="intro__progress">
           <div class="intro__bar">
             <span class="intro__bar-fill" style="width:0%"></span>
-            <span class="intro__pct inbar">0%</span>
+            <span class="intro__pct">0%</span>
           </div>
         </div>
 
-        <div class="intro__status" id="intro-status">Minifying…</div>
+        <div class="intro__status" id="intro-status">Bootstrapping…</div>
       </div>
     </div>
   </div>
 </div>
+
 
 <body>
   <!-- Cursor-follow background -->
@@ -91,22 +86,25 @@
         </button>
 
         <ul id="navMenu" class="tb-menu">
-          <li><a href="/index.html" class="is-active">About</a></li>
+          <li><a href="/index.html">About</a></li>
+
           <li class="has-submenu">
             <button class="submenu-toggle" aria-expanded="false" aria-controls="portfolioSubmenu">
               Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
             </button>
             <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
-              <li><a href="/portfolio.html">All Projects</a></li>
-              <li><a href="/portfolio.html#web">Web Apps</a></li>
-              <li><a href="/portfolio.html#uiux">UI/UX</a></li>
-              <li><a href="/portfolio.html#graphics">Graphics</a></li>
-              <li><a href="/portfolio.html#demos">Interactive Demos</a></li>
+              <li><a href="#">All Projects</a></li>
+              <li><a href="/pages/website.html">Web Apps</a></li>
+              <li><a href="/portfolio.html">UI/UX</a></li>
+              <li><a href="#">Graphics</a></li>
+              <li><a href="#">Interactive Demos</a></li>
             </ul>
           </li>
-          <li><a href="/resume.html">Resume</a></li>
-          <li><a href="mailto:amboyose.dev@gmail.com">Email</a></li>
-          <li><a href="https://amboyose-portfolio.onrender.com" target="_blank" rel="noopener">Live Portfolio</a></li>
+
+          <li><a href="/resume.html" data-current="resume">Resume</a></li>
+          <li><a href="/contact.html">Contact Me</a></li>
+          <li><a href="https://amboyose-portfolio.onrender.com" target="_blank" rel="noopener">Live
+              Portfolio</a></li>
         </ul>
       </div>
     </div>

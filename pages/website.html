@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Website | Projects </title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/css/pwebsites.css" />
+</head>
+
+<body>
+    <!-- cursor-follow glow background -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename"> Website Projects </span>
+
+            <!-- RIGHT-SIDE NAV -->
+            <div class="tb-right">
+                <!-- Hamburger (mobile) -->
+                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+                    aria-label="Toggle menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+
+                <!-- Nav chips -->
+                <ul id="navMenu" class="tb-menu">
+                    <li><a href="/index.html">About</a></li>
+
+                    <li class="has-submenu">
+                        <button class="submenu-toggle is-active" aria-expanded="true" aria-controls="portfolioSubmenu">
+                            Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+                        </button>
+                        <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
+                            <li><a href="/portfolio.html">All Projects</a></li>
+                            <li><a href="/pages/website.html">Web Apps</a></li>
+                            <li><a href="/portfolio.html#uiux">UI/UX</a></li>
+                            <li><a href="/portfolio.html#graphics">Graphics</a></li>
+                            <li><a href="/portfolio.html#demos">Interactive Demos</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="/resume.html">Resume</a></li>
+                    <li><a href="/contact.html">Contact Me</a></li>
+                    <li><a href="https://amboyose-portfolio.onrender.com" target="_blank" rel="noopener">Live
+                            Portfolio</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= Projects Section (NEW) ================= -->
+        <section id="projects" class="pg">
+            <header class="pg-head">
+                <span class="pg-eyebrow">PROJECTS</span>
+                <h1 class="pg-title">Sample Website</h1>
+            </header>
+
+            <!-- ========== Project 1: HIRAVUELO ========== -->
+            <section class="pg-project" id="proj-hiravuelo">
+                <h2 class="pg-project__name">Hiravuelo Projects</h2>
+
+                <div class="pg-grid">
+                    <!-- Left: Gallery + Stats + Buttons -->
+                    <div class="pg-col pg-reveal">
+                        <!-- Browser mock + gallery -->
+                        <figure class="pg-mock pg-gallery" data-autoplay="4000" aria-label="Hiravuelo screenshots">
+                            <div class="pg-mock__bar">
+                                <span class="pg-dot"></span><span class="pg-dot"></span><span class="pg-dot"></span>
+                                <div class="pg-mock__url">hiravuelo.com</div>
+                            </div>
+
+                            <div class="pg-mock__slides">
+                                <img class="pg-mock__slide is-active" src="/pages/img/hiravouelo/1.png"
+                                    alt="Hiravuelo 1" loading="lazy">
+                                <img class="pg-mock__slide" src="/pages/img/hiravouelo/2.png" alt="Hiravuelo 2"
+                                    loading="lazy">
+                                <img class="pg-mock__slide" src="/pages/img/hiravouelo/3.png" alt="Hiravuelo 3"
+                                    loading="lazy">
+                            </div>
+
+                            <button class="pg-mock__ctrl prev" aria-label="Previous">‹</button>
+                            <button class="pg-mock__ctrl next" aria-label="Next">›</button>
+                            <div class="pg-mock__dots" aria-hidden="true"></div>
+                        </figure>
+
+                        <!-- Stats -->
+                        <div class="pg-stats">
+                            <div class="pg-stat">
+                                <i class="fa-solid fa-trophy"></i>
+                                <div class="pg-stat__num" data-target="1250">0</div>
+                                <div class="pg-stat__label">Successful Sales</div>
+                            </div>
+                            <div class="pg-stat">
+                                <i class="fa-solid fa-face-smile"></i>
+                                <div class="pg-stat__num" data-target="950">0</div>
+                                <div class="pg-stat__label">Happy Clients</div>
+                            </div>
+                            <div class="pg-stat">
+                                <i class="fa-solid fa-briefcase"></i>
+                                <div class="pg-stat__num" data-target="16">0</div>
+                                <div class="pg-stat__label">Years in Business</div>
+                            </div>
+                            <div class="pg-stat">
+                                <i class="fa-solid fa-star"></i>
+                                <div class="pg-stat__num" data-target="4.9" data-decimals="1">0</div>
+                                <div class="pg-stat__label">Average Rating</div>
+                            </div>
+                        </div>
+
+                        <!-- Boxed buttons -->
+                        <div class="pg-boxbtns">
+                            <a class="pg-boxbtn" href="https://hiravuelo.com" target="_blank" rel="noopener">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> View Project
+                            </a>
+                            <a class="pg-boxbtn" href="#" target="_blank" rel="noopener">
+                                <i class="fa-solid fa-file-lines"></i> View Source
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Info -->
+                    <aside class="pg-info pg-reveal" aria-labelledby="info-h">
+                        <h3 id="info-h" class="pg-info__title">Client Information</h3>
+                        <ul class="pg-meta">
+                            <li><strong>Category:</strong> Fullstack Web Development with Domain Setup</li>
+                            <li><strong>Client:</strong> Hiravuelo</li>
+                            <li><strong>Project date:</strong> 15 May, 2025</li>
+                            <li><strong>Project URL:</strong> <a href="https://hiravuelo.com"
+                                    target="_blank">hiravuelo.com</a></li>
+
+                        </ul>
+                        <p class="pg-desc">
+                            Hiravuelo.com is a personal brand portfolio for a freelance real estate specialist with
+                            Ayala Land,
+                            showcasing listings, expertise, and a client-first approach to build credibility with
+                            prospects.
+                        </p>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- ========== Project 2: DEVARETE ========== -->
+            <section class="pg-project" id="proj-devarete">
+                <h2 class="pg-project__name">Devarete Projects</h2>
+
+                <div class="pg-grid">
+                    <!-- Left: Gallery + Stats + Buttons -->
+                    <div class="pg-col pg-reveal">
+                        <figure class="pg-mock pg-gallery" data-autoplay="4200" aria-label="Devarete screenshots">
+                            <div class="pg-mock__bar">
+                                <span class="pg-dot"></span><span class="pg-dot"></span><span class="pg-dot"></span>
+                                <div class="pg-mock__url">devarete.com</div>
+                            </div>
+
+                            <div class="pg-mock__slides">
+                                <img class="pg-mock__slide is-active" src="/assets/images/devarete-1.jpg"
+                                    alt="Devarete 1" loading="lazy">
+                                <img class="pg-mock__slide" src="/assets/images/devarete-2.jpg" alt="Devarete 2"
+                                    loading="lazy">
+                                <img class="pg-mock__slide" src="/assets/images/devarete-3.jpg" alt="Devarete 3"
+                                    loading="lazy">
+                            </div>
+
+                            <button class="pg-mock__ctrl prev" aria-label="Previous">‹</button>
+                            <button class="pg-mock__ctrl next" aria-label="Next">›</button>
+                            <div class="pg-mock__dots" aria-hidden="true"></div>
+                        </figure>
+
+                        <div class="pg-stats">
+                            <div class="pg-stat">
+                                <i class="fa-solid fa-rocket"></i>
+                                <div class="pg-stat__num" data-target="40">0</div>
+                                <div class="pg-stat__label">Active Clients</div>
+                            </div>
+                            <div class="pg-stat">
+                                <i class="fa-solid fa-diagram-project"></i>
+                                <div class="pg-stat__num" data-target="120">0</div>
+                                <div class="pg-stat__label">Launched Projects</div>
+                            </div>
+                            <div class="pg-stat">
+                                <i class="fa-solid fa-clock"></i>
+                                <div class="pg-stat__num" data-target="24">0</div>
+                                <div class="pg-stat__label">Hour Support</div>
+                            </div>
+                            <div class="pg-stat">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <div class="pg-stat__num" data-target="5">0</div>
+                                <div class="pg-stat__label">Security Layers</div>
+                            </div>
+                        </div>
+
+                        <div class="pg-boxbtns">
+                            <a class="pg-boxbtn" href="https://devarete.com" target="_blank" rel="noopener">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Devarete
+                            </a>
+                            <a class="pg-boxbtn" href="#" target="_blank" rel="noopener">
+                                <i class="fa-solid fa-book-open"></i> Services Deck
+                            </a>
+                        </div>
+                    </div>
+
+                    <aside class="pg-info pg-reveal" aria-labelledby="info-d">
+                        <h3 id="info-d" class="pg-info__title">Client Information</h3>
+                        <ul class="pg-meta">
+                            <li><strong>Category:</strong> Digital Transformation — Websites, Smart Systems, Scalable
+                                Solutions</li>
+                            <li><strong>Client:</strong> Devarete</li>
+                            <li><strong>Project date:</strong> 2025</li>
+                            <li><strong>Project URL:</strong> <a href="https://devarete.com"
+                                    target="_blank">devarete.com</a></li>
+
+                        </ul>
+                        <p class="pg-desc">
+                            Devarete provides rapid deployment, advanced security, and dedicated support—serving as a
+                            hub for solutions,
+                            case studies, and lead capture while reflecting a modern, trustworthy brand.
+                        </p>
+                    </aside>
+                </div>
+            </section>
+        </section>
+        <!-- ================= /Projects Section ================= -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="index.html">About</a> •
+            <a href="portfolio.html">Portfolio</a> •
+            <a href="resume.html">Resume</a> •
+            <a href="mailto:amboyose.dev@gmail.com">Contact</a>
+        </p>
+    </footer>
+
+    <!-- NEW: Projects interactions -->
+    <script defer src="/js/pwebsite.js"></script>
+
+    <!-- Your existing JS (kept) -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+</body>
+
+</html>

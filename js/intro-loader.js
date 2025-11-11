@@ -1,109 +1,91 @@
-/* Animated Intro Loader — plays once per session, swap details while loading */
 (() => {
-    const $intro = document.getElementById('intro-loader');
-    if (!$intro) return;
+    const root = document.getElementById('intro-loader');
+    if (!root) return;
 
+    // Show once per session; force with ?intro=1
     const params = new URLSearchParams(location.search);
-    const force = params.get('intro') === '1';
+    const FORCE = params.get('intro') === '1';
     const KEY = 'intro_seen';
-
-    if (sessionStorage.getItem(KEY) && !force) {
-        $intro.remove();
+    if (sessionStorage.getItem(KEY) && !FORCE) {
+        root.remove();
         return;
     }
 
-    const prevOverflow = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
+    const html = document.documentElement;
+    const prevOverflow = html.style.overflow;
+    html.style.overflow = 'hidden';
 
-    const $fill = $intro.querySelector('.intro__bar-fill');
-    const $pct = $intro.querySelector('.intro__pct');
-    const $status = document.getElementById('intro-status');
-    const $cmd = document.getElementById('intro-cmd');
-    const $tree = document.getElementById('intro-tree');
-    const $chips = document.getElementById('intro-chips');
+    const typedEl = root.querySelector('#intro-typed');
+    const statusEl = root.querySelector('#intro-status');
+    const pctEl = root.querySelector('.intro__pct');
+    const fillEl = root.querySelector('.intro__bar-fill');
+    const stepsEl = root.querySelector('#intro-steps');
+    const steps = Array.from(stepsEl.querySelectorAll('li'));
 
-    const setTree = (lines) => {
-        $tree.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
-    };
-    const setChips = (arr) => {
-        $chips.innerHTML = arr.map(t => `<span class="chip">${t}</span>`).join('');
-    };
-
+    // Java-backend themed stages
     const stages = [
-        {
-            target: 15,
-            label: 'Installing dependencies…',
-            cmd: '$ npm install _',
-            tree: ['portfolio/', '├─ index.html', '└─ package.json'],
-            chips: ["const developer = 'BAMBY';"]
-        },
-        {
-            target: 35,
-            label: 'Building…',
-            cmd: '$ npm run build _',
-            tree: ['build/', '├─ assets/', '└─ chunks/'],
-            chips: ["function createPortfolio(){}", "export default App;"]
-        },
-        {
-            target: 55,
-            label: 'Optimizing bundles…',
-            cmd: '$ vite optimize _',
-            tree: ['dist/', '├─ index.html ✓', '└─ style.css ✓'],
-            chips: ["return &lt;Portfolio /&gt;"]
-        },
-        {
-            target: 75,
-            label: 'Tree-shaking modules…',
-            cmd: '$ rollup -c _',
-            tree: ['dist/', '├─ app.js ✓', '└─ vendor.js ✓'],
-            chips: ["function createPortfolio(){}", "return &lt;Portfolio /&gt;"]
-        },
-        {
-            target: 100,
-            label: 'Minifying…',
-            cmd: '$ terser app.js _',
-            tree: ['✓ Compiled successfully'],
-            chips: ["const developer = 'BAMBY';", "export default App;"]
-        }
+        { target: 12, cmd: '$ java -version', status: 'Checking JDK 17…', step: 0 },
+        { target: 30, cmd: '$ ./gradlew dependencies', status: 'Resolving Gradle dependencies…', step: 1 },
+        { target: 55, cmd: '$ ./gradlew bootRun -x test', status: 'Starting Spring Boot context…', step: 2 },
+        { target: 78, cmd: '$ ./gradlew test', status: 'Running unit tests…', step: 3 },
+        { target: 100, cmd: '$ ./gradlew bootJar', status: 'Packaging JAR…', step: 4 },
     ];
 
-    let pct = 0;
-    let i = 0;
-
-    const applyStage = (s) => {
-        if (s.cmd) $cmd.textContent = s.cmd;
-        if (s.label) $status.textContent = s.label;
-        if (s.tree) setTree(s.tree);
-        if (s.chips) setChips(s.chips);
-    };
-    applyStage(stages[0]);
-
-    function tick() {
-        const stage = stages[i] || stages[stages.length - 1];
-        const inc = Math.max(1, Math.round((stage.target - pct) * 0.22));
-        pct = Math.min(stage.target, pct + inc);
-
-        $fill.style.width = pct + '%';
-        $pct.textContent = pct + '%';
-
-        if (pct >= stage.target && i < stages.length - 1) {
-            i++;
-            applyStage(stages[i]);
-        }
-
-        if (pct >= 100) {
-            sessionStorage.setItem(KEY, '1');
-            setTimeout(() => {
-                $intro.classList.add('exit');
-                setTimeout(() => {
-                    document.documentElement.style.overflow = prevOverflow || '';
-                    $intro.remove();
-                }, 520);
-            }, 300);
-        } else {
-            setTimeout(tick, 55 + Math.random() * 120);
-        }
+    // typewriter for current command
+    let typingTimer;
+    function typeCommand(text) {
+        clearInterval(typingTimer);
+        typedEl.textContent = '';
+        let i = 0;
+        const speed = 12; // faster typing
+        typingTimer = setInterval(() => {
+            typedEl.textContent = text.slice(0, ++i);
+            if (i >= text.length) clearInterval(typingTimer);
+        }, speed);
     }
 
-    requestAnimationFrame(() => setTimeout(tick, 240));
+    let pct = 0;
+    let stageIdx = 0;
+    typeCommand(stages[0].cmd);
+    statusEl.textContent = stages[0].status;
+
+    function markStepDone(idx) {
+        const li = steps[idx];
+        if (!li || li.classList.contains('done')) return;
+        li.classList.add('done');
+        li.textContent = 'Completed';
+        li.setAttribute('aria-label', li.getAttribute('data-label') + ' completed');
+    }
+
+    function tick() {
+        const stage = stages[stageIdx];
+        const inc = Math.max(1, Math.round((stage.target - pct) * 0.25));
+        pct = Math.min(stage.target, pct + inc);
+
+        fillEl.style.width = pct + '%';
+        pctEl.textContent = pct + '%';
+
+        if (pct >= stage.target) {
+            markStepDone(stage.step);
+            if (stageIdx < stages.length - 1) {
+                stageIdx++;
+                statusEl.textContent = stages[stageIdx].status;
+                typeCommand(stages[stageIdx].cmd);
+            } else {
+                // finished
+                sessionStorage.setItem(KEY, '1');
+                setTimeout(() => {
+                    root.classList.add('exit');
+                    setTimeout(() => {
+                        html.style.overflow = prevOverflow || '';
+                        root.remove();
+                    }, 480);
+                }, 280);
+                return;
+            }
+        }
+        setTimeout(tick, 55 + Math.random() * 110);
+    }
+
+    requestAnimationFrame(() => setTimeout(tick, 180));
 })();

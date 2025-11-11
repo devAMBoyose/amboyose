@@ -4,31 +4,29 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Portfolio – Resume.java (Anna Marice Eben Boyose)</title>
+    <title>Contact – Resume.java (Anna Marice Eben Boyose)</title>
 
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
     <!-- Your existing styles -->
-    <link rel="stylesheet" href="/amboyose/css/footer.css" />
-    <link rel="stylesheet" href="/amboyose/css/responsive.css" />
-    <link rel="stylesheet" href="/amboyose/css/style.css" />
-    <link rel="stylesheet" href="/amboyose/css/social.css" />
-    <link rel="stylesheet" href="/amboyose/css/base.css" />
-    <link rel="stylesheet" href="/amboyose//css/nav.css" />
-    <link rel="stylesheet" href="/amboyose/css/portfolir.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/responsive.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/social.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
 
-    <!-- New: projects grid -->
-    <link rel="stylesheet" href="/amboyose/css/portfolir.css" />
+    <!-- Contact styles -->
+    <link rel="stylesheet" href="/css/contact.css" />
 </head>
 
 <body>
-    <!-- cursor-follow glow background -->
     <div id="cursor-bg" aria-hidden="true"></div>
 
     <div class="window">
-        <!-- Title Bar -->
+        <!-- Title Bar (unchanged) -->
         <div class="title-bar">
             <div class="dots" aria-hidden="true">
                 <span class="red"></span><span class="yellow"></span><span class="green"></span>
@@ -36,160 +34,159 @@
 
             <span class="filename">Portfolio.java</span>
 
-            <!-- RIGHT-SIDE NAV -->
             <div class="tb-right">
-                <!-- Hamburger (mobile) -->
                 <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
                     aria-label="Toggle menu">
                     <span class="bar"></span><span class="bar"></span><span class="bar"></span>
                 </button>
 
-                <!-- Nav chips -->
                 <ul id="navMenu" class="tb-menu">
-                    <li><a href="index.html">About</a></li>
+                    <li><a href="/index.html">About</a></li>
 
                     <li class="has-submenu">
-                        <button class="submenu-toggle is-active" aria-expanded="true" aria-controls="portfolioSubmenu">
+                        <button class="submenu-toggle" aria-expanded="false" aria-controls="portfolioSubmenu">
                             Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
                         </button>
                         <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
-                            <li><a href="/amboyose/portfolio.html">All Projects</a></li>
-                            <li><a href="/amboyose/portfolio.html#web">Web Apps</a></li>
-                            <li><a href="/portfolio.html#uiux">UI/UX</a></li>
-                            <li><a href="/portfolio.html#graphics">Graphics</a></li>
-                            <li><a href="/portfolio.html#demos">Interactive Demos</a></li>
+                            <li><a href="#">All Projects</a></li>
+                            <li><a href="/pages/website.html">Web Apps</a></li>
+                            <li><a href="/portfolio.html">UI/UX</a></li>
+                            <li><a href="#">Graphics</a></li>
+                            <li><a href="#">Interactive Demos</a></li>
                         </ul>
-
-
                     </li>
 
-                    <li><a href="resume.html">Resume</a></li>
-                    <li><a href="mailto:amboyose.dev@gmail.com">Email</a></li>
+                    <li><a href="/resume.html" data-current="resume">Resume</a></li>
+                    <li><a href="/contact.html">Contact Me</a></li>
                     <li><a href="https://amboyose-portfolio.onrender.com" target="_blank" rel="noopener">Live
                             Portfolio</a></li>
                 </ul>
             </div>
         </div>
 
-        <!-- Projects Section -->
-        <section id="all" class="proj-section">
-            <div class="proj-head">
-                <h1>PROJECTS &amp; CASE STUDIES</h1>
-                <p class="lead">Selected work across full-stack, UI/UX, and creative development.</p>
-                <p class="hint">Click any card to open the project page.</p>
+        <!-- ========= CONTACT SECTION ========= -->
+        <section id="contact" class="contact-wrap">
+            <div class="contact-eyebrow reveal" data-reveal="fade-up" style="--d:.0s">Contact</div>
+            <h2 class="contact-title reveal" data-reveal="fade-up" style="--d:.06s">CONTACT ME</h2>
+
+            <!-- Info Cards -->
+            <div class="contact-cards">
+                <article class="contact-card reveal" data-reveal="fade-up" style="--d:.10s">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div>
+                        <h4>My Address</h4>
+                        <p>Shaw Blvd, Mandaluyong City, Metro Manila</p>
+                    </div>
+                </article>
+
+                <article class="contact-card reveal" data-reveal="fade-up" style="--d:.14s">
+                    <i class="fa-solid fa-user-group"></i>
+                    <div>
+                        <h4>Social Profiles</h4>
+                        <p class="contact-social">
+                            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                        </p>
+                    </div>
+                </article>
+
+                <article class="contact-card reveal" data-reveal="fade-up" style="--d:.18s">
+                    <i class="fa-solid fa-envelope"></i>
+                    <div>
+                        <h4>Email Me</h4>
+                        <a href="mailto:amboyose.dev@gmail.com">amboyose.dev@gmail.com</a>
+                    </div>
+                </article>
+
+                <article class="contact-card reveal" data-reveal="fade-up" style="--d:.22s">
+                    <i class="fa-solid fa-phone"></i>
+                    <div>
+                        <h4>Call Me</h4>
+                        <p>+63 952 989 0260</p>
+                    </div>
+                </article>
             </div>
 
-            <div class="proj-grid">
-                <!-- Card 1 -->
-                <a class="proj-card" href="/amboyose/assets/fportfolio/card/sample2.html">
-                    <div class="card-banner" style="--img:url('/amboyose/assets/portfolio/card.png')"></div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Animated Card</h3>
-                        <p class="stack">HTML + CSS + JS</p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
-
-
-                <!-- Card 2 -->
-                <a class="proj-card" href="/amboyose/assets/fportfolio/liquid/liquid2.html">
-                    <div class="card-banner" style="--img:url('/amboyose/assets/portfolio/liquideffect.png')"></div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Liquid Effect Hover</h3>
-                        <p class="stack">HTML + CSS + JS</p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card 3 -->
-                <a class="proj-card" href="/amboyose/assets/fportfolio/electriccard/electric.html">
-                    <div class="card-banner" style="--img:url('/amboyose/assets/portfolio/elecboarder.png')"></div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Elect Boarder</h3>
-                        <p class="stack">HTML + CSS </p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card 4 -->
-                <a class="proj-card" href="/amboyose/assets/fportfolio/tubescursor/tubecursor.html">
-                    <div class="card-banner" style="--img:url('/amboyose/assets/portfolio/tubecursor.png')"></div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Elect Boarder</h3>
-                        <p class="stack">HTML + CSS </p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Card 5 -->
-                <a class="proj-card" href="#" aria-label="Open project: Personal Portfolio">
-                    <div class="card-banner">
-                        <img src="/amboyose/images/projects/portfolio-thumb.jpg"
-                            alt="Personal Portfolio project preview">
-                    </div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Personal Portfolio</h3>
-                        <p class="stack">HTML + CSS + JS</p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
-
-
-                <!-- Card 6 -->
-                <a class="proj-card" href="#" aria-label="Open project: Personal Portfolio">
-                    <div class="card-banner">
-                        <img src="/amboyose/images/projects/portfolio-thumb.jpg"
-                            alt="Personal Portfolio project preview">
-                    </div>
-                    <div class="card-body"><br>
-                        <h3 class="title">Personal Portfolio</h3>
-                        <p class="stack">HTML + CSS + JS</p>
-                        <div class="meta">
-                            <span><i class="fa-regular fa-heart"></i> 20</span>
-                            <span><i class="fa-regular fa-comment"></i> 5</span>
-                            <span><i class="fa-regular fa-eye"></i> 310</span>
-                        </div>
-                    </div>
-                </a>
-
+            <!-- Map -->
+            <div class="contact-map reveal" data-reveal="fade-up" style="--d:.26s">
+                <iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps?q=Shaw%20Blvd%20Mandaluyong&output=embed">
+                </iframe>
             </div>
+
+            <!-- Form -->
+            <form id="contactForm" class="contact-form reveal" data-reveal="fade-up" style="--d:.30s" novalidate>
+                <div class="contact-row">
+                    <label class="contact-field">
+                        <i class="fa-regular fa-user"></i>
+                        <input class="contact-input" type="text" name="from_name" placeholder="Your name*" required />
+                    </label>
+
+                    <label class="contact-field">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input class="contact-input" type="email" name="reply_to" placeholder="Email address*"
+                            required />
+                    </label>
+                </div>
+
+                <div class="contact-row">
+                    <label class="contact-field">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                        <input class="contact-input" type="tel" name="phone" placeholder="Phone number*" required />
+                    </label>
+
+                    <label class="contact-field">
+                        <i class="fa-solid fa-list-ul"></i>
+                        <select class="contact-select" name="service" required>
+                            <option value="" selected disabled>Select service*</option>
+                            <option>Website Design</option>
+                            <option>Front-End Development</option>
+                            <option>Back-End / API</option>
+                            <option>Branding & Graphics</option>
+                            <option>Consultation</option>
+                            <option>Other</option>
+                        </select>
+                    </label>
+                </div>
+
+                <label class="contact-field contact-field--block">
+                    <i class="fa-regular fa-message"></i>
+                    <textarea class="contact-textarea" name="message" placeholder="Write a message*"
+                        required></textarea>
+                </label>
+
+                <p class="contact-help">All fields marked * are required.</p>
+
+                <button id="submitBtn" class="contact-btn" type="submit">
+                    <span class="btn__text">Submit Message</span>
+                </button>
+
+                <div id="formStatus" class="contact-status" aria-live="polite"></div>
+            </form>
         </section>
+        <!-- ========= /CONTACT SECTION ========= -->
     </div>
 
-    <!-- Footer -->
+    <!-- Footer (unchanged) -->
     <footer class="site-footer">
         <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
         <p class="links">
-            <a href="index.html">About</a> •
-            <a href="portfolio.html">Portfolio</a> •
-            <a href="resume.html">Resume</a> •
-            <a href="mailto:amboyose.dev@gmail.com">Contact</a>
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
         </p>
     </footer>
 
     <!-- Your existing JS -->
-    <script src="/amboyose/js/script.js"></script>
-    <script defer src="/amboyose/js/nav.js"></script>
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+
+    <!-- EmailJS SDK + Contact logic + Reveal animations -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script defer src="/js/contact.js"></script>
 </body>
 
 </html>
