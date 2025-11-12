@@ -102,3 +102,31 @@
     // Initial announce
     updateCountAnnounce();
 })();
+
+
+// Hover-to-reveal "Skills" popover
+(function () {
+    const cards = document.querySelectorAll('.ac-card');
+    cards.forEach(card => {
+        const btn = card.querySelector('.ac-skill-btn');
+        const tags = card.querySelector('.ac-tags');
+        if (!btn || !tags) return;
+
+        let inside = false;
+
+        const show = () => { card.classList.add('show-skills'); btn.setAttribute('aria-expanded', 'true'); };
+        const hide = () => { if (!inside) { card.classList.remove('show-skills'); btn.setAttribute('aria-expanded', 'false'); } };
+
+        btn.addEventListener('mouseenter', () => { inside = true; show(); });
+        btn.addEventListener('mouseleave', () => { inside = false; setTimeout(hide, 60); });
+        btn.addEventListener('focus', show);
+        btn.addEventListener('blur', hide);
+
+        tags.addEventListener('mouseenter', () => { inside = true; show(); });
+        tags.addEventListener('mouseleave', () => { inside = false; setTimeout(hide, 60); });
+
+        btn.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { inside = false; hide(); btn.blur(); }
+        });
+    });
+})();

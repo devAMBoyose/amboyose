@@ -262,3 +262,81 @@
         padding: 9px 12px;
     }
 }
+
+
+/* --- Hover-to-reveal Skills --- */
+.ac-card {
+    position: relative;
+}
+
+/* anchor positioning */
+
+.ac-skill-btn {
+    border: 1px solid rgba(126, 246, 161, .35);
+    background: transparent;
+    color: #7ef6a1;
+    font: 700 12px/1 JetBrains Mono, monospace;
+    padding: 9px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.ac-skill-btn:hover {
+    transform: translateY(-1px);
+}
+
+.ac-skill-btn:focus-visible {
+    box-shadow: 0 0 0 3px rgba(126, 246, 161, .35);
+    outline: none;
+}
+
+.ac-card .ac-tags {
+    display: none;
+    position: absolute;
+    right: 14px;
+    bottom: 56px;
+    z-index: 10;
+    max-width: 520px;
+    padding: 10px;
+    margin: 0;
+    list-style: none;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: linear-gradient(180deg, #0f1526, #0a0f1e);
+    border: 1px solid rgba(126, 246, 161, .25);
+    border-radius: 12px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .35), inset 0 0 14px rgba(126, 246, 161, .06);
+}
+
+.ac-card.show-skills .ac-tags {
+    display: flex;
+}
+
+.ac-card .ac-tags::after {
+    content: "";
+    position: absolute;
+    left: 24px;
+    bottom: -8px;
+    border-width: 8px 8px 0 8px;
+    border-style: solid;
+    border-color: rgba(126, 246, 161, .25) transparent transparent transparent;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .25));
+}
+
+/* ensure tags are hidden by default */
+.ac-card .ac-tags {
+    display: none !important;
+}
+
+/* show when JS toggles the class */
+.ac-card.show-skills .ac-tags {
+    display: flex !important;
+}
+
+/* CSS-only fallback (works even if JS fails) */
+.ac-card:has(.ac-skill-btn:hover) .ac-tags,
+.ac-card:has(.ac-tags:hover) .ac-tags,
+.ac-card:has(.ac-skill-btn:focus) .ac-tags {
+    display: flex !important;
+}
