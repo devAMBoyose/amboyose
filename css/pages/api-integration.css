@@ -217,3 +217,67 @@
     margin-left: 0;
     margin-right: 0;
 }
+
+
+
+
+
+
+/* Pending/disabled style */
+.btn.-pending {
+    background: rgba(255, 255, 255, .06);
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    cursor: not-allowed;
+    pointer-events: none;
+    /* make it non-clickable */
+    box-shadow: none;
+}
+
+.btn.-pending:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: rgba(126, 246, 161, .25);
+}
+
+.btn.-pending i {
+    margin-right: .45rem;
+    font-size: .9em;
+    vertical-align: -1px;
+}
+
+
+
+
+/* Lock the "Client-side" badge to the top-right of each card */
+.project-card {
+    position: relative;
+}
+
+.project-card .card-head {
+    justify-content: flex-start;
+    /* title stays left */
+    align-items: flex-start;
+    padding-right: 96px;
+    /* space so the title doesn't collide with badge */
+}
+
+.project-card .badge {
+    position: absolute;
+    top: clamp(10px, 1.6vw, 14px);
+    right: clamp(10px, 1.6vw, 14px);
+    font-size: .72rem;
+    /* small + consistent */
+    line-height: 1;
+    padding: .22rem .52rem;
+    white-space: nowrap;
+    /* keeps pill on one line */
+    border-radius: 999px;
+}
+
+/* keep Fullstack color variant but same size/placement */
+.project-card .badge.-full {
+    position: absolute;
+    top: clamp(10px, 1.6vw, 14px);
+    right: clamp(10px, 1.6vw, 14px);
+}

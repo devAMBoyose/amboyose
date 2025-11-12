@@ -138,9 +138,64 @@
 }
 
 /* ===== Smooth filter hide (JS toggles .-hide) ===== */
-.apw-card.-hide {
+/* .apw-card.-hide {
     opacity: 0;
     pointer-events: none;
     transform: scale(.97);
     transition: opacity .3s ease, transform .3s ease;
+} */
+
+
+.apw-card.-hide {
+    display: none;
+}
+
+/* hide grid rows that end up empty */
+.apw-grid[data-empty="1"] {
+    display: none;
+    margin: 0;
+}
+
+
+/* smooth transform + opacity by default */
+.apw-card {
+    will-change: transform, opacity;
+}
+
+/* quick fade-out for non-matches before they collapse */
+.apw-card.is-fading-out {
+    opacity: 0;
+    transform: scale(.96);
+    transition: opacity .22s ease, transform .22s ease;
+}
+
+/* keep using display:none to collapse space after fade */
+.apw-card.-hide {
+    display: none;
+}
+
+/* hide empty grid rows */
+.apw-grid[data-empty="1"] {
+    display: none;
+    margin: 0;
+}
+
+
+.apw-card {
+    will-change: transform, opacity;
+}
+
+.apw-card.is-fading-out {
+    opacity: 0;
+    transform: scale(.96);
+    transition: opacity .22s ease, transform .22s ease;
+}
+
+.apw-card.-hide {
+    display: none;
+}
+
+.apw-grid[data-empty="1"] {
+    display: none;
+    margin: 0;
 }
