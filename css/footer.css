@@ -1,34 +1,86 @@
-/* ===== Static Footer ===== */
+/* ===== Straight Footer with Balanced Glow ===== */
 .site-footer {
   position: relative;
   bottom: 0;
   width: 90%;
   max-width: 1100px;
-  background: linear-gradient(90deg, #1f1f3a, #1e1331);
+  margin: 50px auto 0;
+  padding: 18px 14px;
+
+  /* Flattened gradient to avoid curve illusion */
+  background: linear-gradient(180deg, #121428 0%, #18102b 100%);
   border-top: 2px solid #ff4b2b;
-  color: #cbd5e1;
+  border-radius: 10px;
+
+  /* Keep soft glow but flatten bottom shadow */
+  box-shadow:
+    0 -3px 12px rgba(255, 75, 43, 0.18),
+    0 0 24px rgba(255, 75, 43, 0.08),
+    inset 0 0 8px rgba(255, 75, 43, 0.05);
+
   text-align: center;
+  color: #cfd9e6;
   font-family: "JetBrains Mono", monospace;
   font-size: 13px;
-  padding: 16px 10px;
-  letter-spacing: 0.3px;
-  margin-top: 30px;
-  border-radius: 12px;
-  box-shadow: 0 -4px 10px rgba(0,0,0,.4);
+  letter-spacing: 0.25px;
+
+  backdrop-filter: blur(8px);
+  transition: box-shadow 0.3s ease, transform 0.25s ease, border-color 0.25s ease;
 }
 
+/* Slight hover glow */
+.site-footer:hover {
+  border-color: #ff6b45;
+  box-shadow:
+    0 -4px 16px rgba(255, 75, 43, 0.25),
+    0 0 24px rgba(255, 75, 43, 0.15),
+    inset 0 0 12px rgba(255, 75, 43, 0.07);
+}
+
+/* Text elements */
 .site-footer p {
   margin: 4px 0;
 }
 
+/* Footer Links */
 .site-footer .links a {
   color: #7ef6a1;
   text-decoration: none;
-  margin: 0 6px;
-  transition: color 0.2s ease, text-shadow 0.3s ease;
+  margin: 0 8px;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
 }
 
 .site-footer .links a:hover {
   color: #ff4b2b;
-  text-shadow: 0 0 6px rgba(255, 75, 43, 0.6);
+  text-shadow: 0 0 8px rgba(255, 75, 43, 0.5);
+}
+
+/* Maintain even line layout (no bullet stacking) */
+.site-footer .links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.site-footer .links a::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+
+.site-footer .links a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .site-footer {
+    width: 94%;
+    padding: 16px 10px;
+    font-size: 12px;
+  }
 }

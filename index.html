@@ -4,71 +4,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About </>
-  </title>
-
+  <title>About | BAMBY</title>
+  <link rel="icon" type="image/png" href="/pages/img/mylogo/favicon.png">
 
   <!-- Fonts & Icons -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <!-- Devicon for stack logos -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
   <link rel="stylesheet" href="/css/footer.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/social.css" />
   <link rel="stylesheet" href="/css/nav.css" />
-
-  <!-- Intro Loader -->
   <link rel="stylesheet" href="/css/intro-loader.css" />
   <link rel="stylesheet" href="/css/responsive-intro-portfolio.css">
-
   <link rel="stylesheet" href="/css/about-pro.css">
   <link rel="stylesheet" href="/responsive/about-responsive.css">
-
 </head>
 
-<!-- Intro Loader -->
-<!-- Intro Loader -->
-<div id="intro-loader" class="intro is-active" aria-hidden="false" role="dialog" aria-label="Starting app">
-  <div class="intro__grid">
-    <div class="intro__term" role="status" aria-live="polite">
-      <div class="intro__term-top">
-        <span class="dot -red"></span>
-        <span class="dot -yellow"></span>
-        <span class="dot -green"></span>
-        <span class="intro__host"> bamby@portfolio:~$</span>
-      </div>
+<body>
 
-      <div class="intro__term-body">
-        <div class="intro__line">
-          <span id="intro-typed" class="typed"></span><span class="cursor">▌</span>
+  <!-- Intro Loader -->
+  <div id="intro-loader" class="intro is-active" aria-hidden="false" role="dialog" aria-label="Starting app">
+    <div class="intro__grid">
+      <div class="intro__term" role="status" aria-live="polite">
+        <div class="intro__term-top">
+          <span class="dot -red"></span>
+          <span class="dot -yellow"></span>
+          <span class="dot -green"></span>
+          <span class="intro__host"> bamby@portfolio:~$</span>
         </div>
 
-        <!-- Java backend steps -->
-        <ul class="intro__steps" id="intro-steps">
-          <li data-label="Checking JDK 17">…</li>
-          <li data-label="Resolving Gradle dependencies">…</li>
-          <li data-label="Starting Spring Boot context">…</li>
-          <li data-label="Running unit tests">…</li>
-          <li data-label="Packaging JAR">…</li>
-        </ul>
-
-        <div class="intro__progress">
-          <div class="intro__bar">
-            <span class="intro__bar-fill" style="width:0%"></span>
-            <span class="intro__pct">0%</span>
+        <div class="intro__term-body">
+          <div class="intro__line">
+            <span id="intro-typed" class="typed"></span><span class="cursor">▌</span>
           </div>
-        </div>
 
-        <div class="intro__status" id="intro-status">Bootstrapping…</div>
+          <!-- Java backend steps -->
+          <ul class="intro__steps" id="intro-steps">
+            <li data-label="Checking JDK 17">…</li>
+            <li data-label="Resolving Gradle dependencies">…</li>
+            <li data-label="Starting Spring Boot context">…</li>
+            <li data-label="Running unit tests">…</li>
+            <li data-label="Packaging JAR">…</li>
+          </ul>
+
+          <div class="intro__progress">
+            <div class="intro__bar">
+              <span class="intro__bar-fill" style="width:0%"></span>
+              <span class="intro__pct">0%</span>
+            </div>
+          </div>
+
+          <div class="intro__status" id="intro-status">Bootstrapping…</div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-
-<body>
   <!-- Cursor-follow background -->
   <div id="cursor-bg" aria-hidden="true"></div>
 
@@ -95,17 +88,15 @@
               Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
             </button>
             <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
-              <li><a href="/pages/website.html">Web Apps</a></li>
-              <li><a href="/pages/graphics.html">Graphics</a></li>
+              <li><a href="/pages/website.html">FullStack Projects</a></li>
+              <li><a href="/pages/graphics.html">Graphics / Design</a></li>
               <li><a href="/pages/api-integration.html">APIs / Integrations</a></li>
               <li><a href="/pages/interactive-demo.html">Interactive UI/UX</a></li>
             </ul>
           </li>
-
           <li><a href="/resume.html" data-current="resume">Resume</a></li>
-          <li><a href="/contact.html">Contact Me</a></li>
-          <li><a href="https://amboyose-portfolio.onrender.com" target="_blank" rel="noopener">Live
-              Portfolio</a></li>
+          <li><a href="/credentials.html" data-current="resume">Credentials</a></li>
+          <li><a href="/contact.html">Contact </a></li>
         </ul>
       </div>
     </div>
@@ -117,17 +108,25 @@
         <div class="avatar avatar-glow">
           <img src="https://i.ibb.co/SDV36DGK/2025-07-05-12-04-38.png" alt="Anna Marice Eben Boyose">
           <ul class="avatar-social">
-            <li><a href="mailto:amboyose.dev@gmail.com" aria-label="Email" data-tip="Email">
-                <i class="fa-solid fa-envelope"></i></a></li>
+            <li>
+              <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=amboyose.dev@gmail.com&amp;su=Hello%20from%20your%20portfolio&amp;body=Hi%20Anna%2C%0A%0AFound%20your%20site%20and%20would%20love%20to%20connect."
+                target="_blank" rel="noopener noreferrer" aria-label="Email" data-tip="Email">
+                <i class="fa-solid fa-envelope"></i>
+              </a>
+            </li>
             <li><a href="https://github.com/devAMBoyose" target="_blank" aria-label="GitHub" data-tip="GitHub"
                 rel="noopener">
                 <i class="fa-brands fa-github"></i></a></li>
             <li><a href="https://www.linkedin.com/in/amboyose" target="_blank" aria-label="LinkedIn" data-tip="LinkedIn"
                 rel="noopener">
                 <i class="fa-brands fa-linkedin-in"></i></a></li>
-            <li><a href="https://wa.me/639292803010" target="_blank" aria-label="WhatsApp" data-tip="WhatsApp"
+            <li>
+              <a href="viber://chat?number=%2B639292803010" target="_blank" aria-label="Viber" data-tip="Viber"
                 rel="noopener">
-                <i class="fa-brands fa-whatsapp"></i></a></li>
+                <i class="fa-brands fa-viber"></i>
+              </a>
+            </li>
+
           </ul>
         </div>
       </div>
@@ -137,10 +136,10 @@
         <h2 class="name">ANNA MARICE EBEN BOYOSE</h2>
         <p class="role">Full-Stack Developer | React | Node.js | PHP | Java | MongoDB | UI/UX Design</p>
         <p class="summary">
-          Full-Stack Web Developer with a strong foundation in front-end and back-end development, passionate about
-          crafting seamless, user-focused digital experiences. Proficient in HTML, CSS, JavaScript, ReactJS, and Figma,
-          blending design and functionality. Also skilled in repairing and maintaining systems, ensuring performance,
-          reliability, and innovation in every project.
+          I’m a Full-Stack Developer who loves building websites that are both beautiful and functional. Using modern
+          tools, I bring ideas to life with smooth interactions, clean design, and reliable performance. My goal is to
+          make every
+          project user-friendly, fast, and built to last.
         </p>
 
         <ul class="details-grid">
@@ -150,8 +149,14 @@
                 rel="noopener noreferrer">amboyose.com</a></span></li>
           <li><span class="k">Degree:</span> <span class="v">BSCpE</span></li>
           <li><span class="k">Phone:</span> <span class="v">+63 962 989 0260</span></li>
-          <li><span class="k">Email:</span> <span class="v"><a
-                href="mailto:amboyose.dev@gmail.com">amboyose.dev@gmail.com</a></span></li>
+          <li>
+            <span class="k">Email:</span>
+            <span class="v">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=amboyose.dev@gmail.com" target="_blank">
+                amboyose.dev@gmail.com
+              </a>
+            </span>
+          </li>
           <li><span class="k">City:</span> <span class="v">Philippines</span></li>
           <li><span class="k">Freelance:</span> <span class="v">Available</span></li>
         </ul>
@@ -180,7 +185,7 @@
           <article class="ap-card">
             <div class="ap-card__icon"><i class="fa-solid fa-award"></i></div>
             <div class="ap-card__num" data-count="24">0</div>
-            <div class="ap-card__label">Certificates</div>
+            <div class="ap-card__label">Licenses & Certificates</div>
           </article>
         </section>
 
@@ -210,7 +215,6 @@
             <li><i class="devicon-nodejs-plain" title="Node.js"></i></li>
             <li><i class="devicon-express-original" title="Express.js"></i></li>
             <li><i class="devicon-php-plain" title="PHP"></i></li>
-            <li><i class="devicon-ruby-plain" title="Ruby"></i></li>
             <li><i class="devicon-rails-plain" title="Ruby on Rails"></i></li>
             <li><i class="devicon-java-plain" title="Java"></i></li>
           </ul>
@@ -226,31 +230,6 @@
           </ul>
 
         </section>
-
-        <!-- <section class="ap ap-stack" aria-label="Tech Stack">
-          <h3 class="ap-h3">Frontend</h3>
-          <ul class="ap-logos group-line">
-            <li><i class="devicon-javascript-plain" title="JavaScript"></i></li>
-            <li><i class="devicon-html5-plain" title="HTML5"></i></li>
-            <li><i class="devicon-css3-plain" title="CSS3"></i></li>
-            <li><i class="devicon-react-original" title="React"></i></li>
-            <li><i class="devicon-vitejs-plain" title="Vite"></i></li>
-            <li><i class="devicon-typescript-plain" title="TypeScript"></i></li>
-          </ul>
-
-          <h3 class="ap-h3">Backend &amp; Tools</h3>
-          <ul class="ap-logos group-line">
-            <li><i class="devicon-nodejs-plain" title="Node.js"></i></li>
-            <li><i class="devicon-express-original" title="Express"></i></li>
-            <li><i class="devicon-mongodb-plain" title="MongoDB"></i></li>
-            <li><i class="devicon-php-plain" title="PHP"></i></li>
-            <li><i class="devicon-mysql-original" title="MySQL"></i></li>
-            <li><i class="devicon-git-plain" title="Git"></i></li>
-          </ul>
-        </section> -->
-
-
-
 
         <!-- Interests -->
         <h4 class="ap-section-label">INTERESTS</h4>
@@ -287,23 +266,21 @@
       </div>
 
     </div><!-- /.window -->
-
-    <!-- Footer -->
-    <footer class="site-footer">
-      <p>© 2025 <strong>BAMBY</strong> | Designed & Coded with ❤️ </p>
-      <p class="links">
-        <a href="/index.html">About</a> •
-        <a href="/portfolio.html">Portfolio</a> •
-        <a href="/resume.html">Resume</a> •
-        <a href="mailto:amboyose.dev@gmail.com">Contact</a>
-      </p>
-    </footer>
-
-    <script defer src="/js/nav.js"></script>
-    <script defer src="/js/intro-loader.js"></script>
-
-    <!-- NEW: counters + reveal (scoped) -->
-    <script defer src="/js/about-pro.js"></script>
 </body>
+<!-- Footer -->
+<footer class="site-footer">
+  <p>© 2025 <strong>BAMBY</strong> | Designed & Coded with ❤️ </p>
+  <p class="links">
+    <a href="/index.html">About</a> •
+    <a href="/portfolio.html">Portfolio</a> •
+    <a href="/resume.html">Resume</a> •
+    <a href="/contact.html">Contact</a>
+  </p>
+</footer>
+
+<script defer src="/js/nav.js"></script>
+<script defer src="/js/intro-loader.js"></script>
+<script defer src="/js/about-pro.js"></script>
+
 
 </html>
