@@ -1958,85 +1958,90 @@ window.changeDirection = changeDirection;
    ====================== */
 (() => {
   const sources = { html: '#html', css: '#css', js: '#js' };
+  // --- boot everything as soon as the script loads inside the iframe ---
+  function bootScannerDemo() {
+    cardStream = new CardStreamController();
+    particleSystem = new ParticleSystem();
+    particleScanner = new ParticleScanner();
 
-  document.addEventListener('click', async (e) => {
-    const btn = e.target.closest('.copy-btn[data-copy]');
-    if (!btn) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    const key = btn.dataset.copy;
-    const src = document.querySelector(sources[key]);
-    if (!src) return;
-
-    const text = (typeof src.value === 'string') ? src.value
-      : (src.innerText ?? src.textContent ?? '');
-
-    const flash = (ok) => {
-      const prev = btn.textContent;
-      btn.textContent = ok ? '✓ Copied' : '⚠️ Failed';
-      btn.disabled = true;
-      setTimeout(() => { btn.textContent = prev; btn.disabled = false; }, 900);
+    // expose scanner helpers
+    window.setScannerScanning = (active) => {
+      if (particleScanner) {
+        particleScanner.setScanningActive(active);
+      }
     };
 
+    window.getScannerStats = () => {
+      return particleScanner ? particleScanner.getStats() : null;
+    };
+  }
+
+  // run immediately
+  bootScannerDemo();
+
+  // expose control functions for the HTML onclick attributes
+  window.toggleAnimation = toggleAnimation;
+  window.resetPosition = resetPosition;
+  window.changeDirection = changeDirection;
+
+
+  try {
+    await navigator.clipboard.writeText(text);
+    flash(true);
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
     try {
-      await navigator.clipboard.writeText(text);
+      document.execCommand('copy');
       flash(true);
     } catch {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try {
-        document.execCommand('copy');
-        flash(true);
-      } catch {
-        flash(false);
-      } finally {
-        document.body.removeChild(ta);
-      }
+      flash(false);
+    } finally {
+      document.body.removeChild(ta);
+    }
+  }
+});
+
+/* ===========================================================
+   HAMBURGER MENU FOR MOBILE
+   =========================================================== */
+(() => {
+  const btn = document.getElementById('navToggle');
+  const tabs = document.getElementById('siteTabs');
+  if (!btn || !tabs) return;
+
+  function toggle() {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    document.documentElement.classList.toggle('nav-open', !open);
+  }
+
+  btn.addEventListener('click', toggle);
+
+  // Close when clicking outside (mobile)
+  document.addEventListener('click', (e) => {
+    const open = document.documentElement.classList.contains('nav-open');
+    if (!open) return;
+    if (!tabs.contains(e.target) && !btn.contains(e.target)) {
+      btn.setAttribute('aria-expanded', 'false');
+      document.documentElement.classList.remove('nav-open');
     }
   });
 
-  /* ===========================================================
-     HAMBURGER MENU FOR MOBILE
-     =========================================================== */
-  (() => {
-    const btn = document.getElementById('navToggle');
-    const tabs = document.getElementById('siteTabs');
-    if (!btn || !tabs) return;
-
-    function toggle() {
-      const open = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!open));
-      document.documentElement.classList.toggle('nav-open', !open);
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      btn.setAttribute('aria-expanded', 'false');
+      document.documentElement.classList.remove('nav-open');
     }
-
-    btn.addEventListener('click', toggle);
-
-    // Close when clicking outside (mobile)
-    document.addEventListener('click', (e) => {
-      const open = document.documentElement.classList.contains('nav-open');
-      if (!open) return;
-      if (!tabs.contains(e.target) && !btn.contains(e.target)) {
-        btn.setAttribute('aria-expanded', 'false');
-        document.documentElement.classList.remove('nav-open');
-      }
-    });
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        btn.setAttribute('aria-expanded', 'false');
-        document.documentElement.classList.remove('nav-open');
-      }
-    });
-  })();
-
+  });
 })();
+
+}) ();
 
 /* ======================
    HTML box overlay tokenizer hook (kept)
