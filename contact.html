@@ -21,19 +21,70 @@
 
     <!-- Contact styles -->
     <link rel="stylesheet" href="/css/contact.css" />
+
+    <style>
+        .email-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .email-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            /* tiny natural space between h4 and button */
+        }
+
+        .copy-tight {
+            margin-left: 0 !important;
+            /* remove big spacing */
+        }
+
+        .icon-btn {
+            width: 28px;
+            /* slightly smaller to match your screenshot */
+            height: 28px;
+            border-radius: 6px;
+            background: #0f1518;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            color: #6effa8;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            background: #162023;
+            transform: translateY(-2px);
+        }
+
+        .email-link {
+            color: #b9c4d0;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .email-link:hover {
+            color: #6effa8;
+        }
+    </style>
 </head>
 
 <body>
     <div id="cursor-bg" aria-hidden="true"></div>
 
     <div class="window">
-        <!-- Title Bar (unchanged) -->
+        <!-- Title Bar -->
         <div class="title-bar">
             <div class="dots" aria-hidden="true">
                 <span class="red"></span><span class="yellow"></span><span class="green"></span>
             </div>
 
-            <span class="filename">Portfolio.java</span>
+            <span class="filename">Contact Me</span>
 
             <div class="tb-right">
                 <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
@@ -68,6 +119,7 @@
 
             <!-- Info Cards -->
             <div class="contact-cards">
+                <!-- Address -->
                 <article class="contact-card reveal" data-reveal="fade-up" style="--d:.10s">
                     <i class="fa-solid fa-location-dot"></i>
                     <div>
@@ -76,28 +128,52 @@
                     </div>
                 </article>
 
+                <!-- Social Profiles -->
                 <article class="contact-card reveal" data-reveal="fade-up" style="--d:.14s">
                     <i class="fa-solid fa-user-group"></i>
                     <div>
                         <h4>Social Profiles</h4>
                         <p class="contact-social">
-                            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://web.facebook.com/bambam.wong.1/" aria-label="Facebook">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="https://www.instagram.com/bamb_y27/" aria-label="Instagram">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/amboyose/" aria-label="LinkedIn">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://www.tiktok.com/@bamby27900" aria-label="TikTok" target="_blank">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </a>
+                            <a href="https://wa.me/639292803010" aria-label="WhatsApp" target="_blank">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
                         </p>
                     </div>
                 </article>
 
-                <article class="contact-card reveal" data-reveal="fade-up" style="--d:.18s">
+                <!-- Email Me -->
+                <article class="contact-card reveal" data-reveal="fade-up" style="--d:.22s">
                     <i class="fa-solid fa-envelope"></i>
-                    <div>
-                        <h4>Email Me</h4>
-                        <a href="mailto:amboyose.dev@gmail.com">amboyose.dev@gmail.com</a>
+
+                    <div class="email-wrapper">
+                        <div class="email-header">
+                            <h4>Email Me</h4>
+                            <button class="icon-btn copy-tight" onclick="copyEmail()" aria-label="Copy Email">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <!-- Click opens mail client -->
+                        <a id="emailText" class="email-link" href="mailto:amboyose.dev@gmail.com">
+                            amboyose.dev@gmail.com
+                        </a>
                     </div>
                 </article>
 
-                <article class="contact-card reveal" data-reveal="fade-up" style="--d:.22s">
+                <!-- Call Me -->
+                <article class="contact-card reveal" data-reveal="fade-up" style="--d:.26s">
                     <i class="fa-solid fa-phone"></i>
                     <div>
                         <h4>Call Me</h4>
@@ -107,14 +183,14 @@
             </div>
 
             <!-- Map -->
-            <div class="contact-map reveal" data-reveal="fade-up" style="--d:.26s">
+            <div class="contact-map reveal" data-reveal="fade-up" style="--d:.30s">
                 <iframe loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
                     src="https://www.google.com/maps?q=Shaw%20Blvd%20Mandaluyong&output=embed">
                 </iframe>
             </div>
 
             <!-- Form -->
-            <form id="contactForm" class="contact-form reveal" data-reveal="fade-up" style="--d:.30s" novalidate>
+            <form id="contactForm" class="contact-form reveal" data-reveal="fade-up" style="--d:.34s" novalidate>
                 <div class="contact-row">
                     <label class="contact-field">
                         <i class="fa-regular fa-user"></i>
@@ -166,7 +242,7 @@
         <!-- ========= /CONTACT SECTION ========= -->
     </div>
 
-    <!-- Footer (unchanged) -->
+    <!-- Footer -->
     <footer class="site-footer">
         <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
         <p class="links">
@@ -184,6 +260,17 @@
     <!-- EmailJS SDK + Contact logic + Reveal animations -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script defer src="/js/contact.js"></script>
+
+    <!-- Copy email helper -->
+    <script>
+        function copyEmail() {
+            const email = document.getElementById("emailText").innerText;
+
+            navigator.clipboard.writeText(email).then(() => {
+                alert("Email copied: " + email);
+            });
+        }
+    </script>
 </body>
 
 </html>
