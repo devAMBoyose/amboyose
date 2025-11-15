@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Portfolio – Resume.java (Anna Marice Eben Boyose)</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your existing styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+</head>
+
+<style>
+    /* Portfolio Section */
+    .portfolio-section {
+        padding: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.9rem;
+        color: #9ca3af;
+        margin-bottom: 2rem;
+    }
+
+    .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .portfolio-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: #e5e7eb;
+        transition: 0.25s ease;
+        display: block;
+    }
+
+    .portfolio-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        transform: translateY(-4px);
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .pc-icon {
+        font-size: 1.8rem;
+        color: #dd0000;
+        margin-bottom: 0.75rem;
+    }
+
+    .portfolio-card h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .portfolio-card p {
+        font-size: 0.85rem;
+        color: #9ca3af;
+        margin-bottom: 1rem;
+    }
+
+    .pc-tag {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #25E066;
+        font-weight: 600;
+    }
+</style>
+
+<body>
+    <!-- cursor-follow glow background -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">Portfolio.java</span>
+
+            <!-- RIGHT-SIDE NAV -->
+            <div class="tb-right">
+                <!-- Hamburger (mobile) -->
+                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+                    aria-label="Toggle menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+
+
+                <ul id="navMenu" class="tb-menu">
+                    <li><a href="/index.html">About</a></li>
+
+                    <li class="has-submenu">
+                        <button class="submenu-toggle" aria-expanded="false" aria-controls="portfolioSubmenu">
+                            Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+                        </button>
+                        <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
+                            <li><a href="/pages/website.html">FullStack Projects</a></li>
+                            <li><a href="/pages/graphics.html">Graphics / Design</a></li>
+                            <li><a href="/pages/api-integration.html">APIs / Integrations</a></li>
+                            <li><a href="/pages/interactive-demo.html">Interactive UI/UX</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/resume.html" data-current="resume">Resume</a></li>
+                    <li><a href="/credentials.html" data-current="resume">Credentials</a></li>
+                    <li><a href="/contact.html">Contact </a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <section class="portfolio-section">
+            <h1 class="section-title">// Portfolio Overview</h1>
+            <p class="section-subtitle">Explore my full-stack builds, creative work, API systems, and interactive demos.
+            </p>
+
+            <div class="portfolio-grid">
+
+                <!-- FullStack Projects -->
+                <a href="/pages/website.html" class="portfolio-card">
+                    <div class="pc-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <h2>Full-Stack Engineering</h2>
+                    <p>Web applications built with Java, Spring Boot, Node.js, and modern front-end frameworks.</p>
+                    <span class="pc-tag">View Projects →</span>
+                </a>
+
+                <!-- Graphics / Design -->
+                <a href="/pages/graphics.html" class="portfolio-card">
+                    <div class="pc-icon"><i class="fa-solid fa-palette"></i></div>
+                    <h2>Graphics & Visual Design</h2>
+                    <p>Branding assets, illustrations, thumbnails, UI visuals, and creative materials.</p>
+                    <span class="pc-tag">View Works →</span>
+                </a>
+
+                <!-- API Integrations -->
+                <a href="/pages/api-integration.html" class="portfolio-card">
+                    <div class="pc-icon"><i class="fa-solid fa-code-branch"></i></div>
+                    <h2>API Architecture & Integrations</h2>
+                    <p>REST APIs, backend systems, authentication, and system integrations.</p>
+                    <span class="pc-tag">Explore APIs →</span>
+                </a>
+
+                <!-- Interactive UI/UX -->
+                <a href="/pages/interactive-demo.html" class="portfolio-card">
+                    <div class="pc-icon"><i class="fa-solid fa-cubes"></i></div>
+                    <h2>Interactive UI/UX Sandbox</h2>
+                    <p>Creative animations, UI experiments, 3D effects, and front-end micro-demos.</p>
+                    <span class="pc-tag">Try Demos →</span>
+                </a>
+
+            </div>
+        </section>
+
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+</body>
+
+</html>

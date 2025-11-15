@@ -1,5 +1,5 @@
 /* =======================
-   cardanimated.js – Static Live Playground (no Source toggle)
+  animated  – Static Live Playground (no Source toggle)
    ======================= */
 (() => {
   'use strict';
