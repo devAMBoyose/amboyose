@@ -10,13 +10,13 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
-    <!-- Your existing styles -->
+    <!-- Your existing styles (Spring Boot static paths) -->
     <link rel="stylesheet" href="/css/footer.css" />
-    <link rel="stylesheet" href="/css/nav.css" />
-    <link rel="stylesheet" href="/css/sp.base.css" />
-    <link rel="stylesheet" href="/css/sp.responsive.css" />
     <link rel="stylesheet" href="/css/style.css" />
-
+    <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/assets/css/responsive.css" />
+    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
+    <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
 </head>
 
 <body>
@@ -42,7 +42,7 @@
 
                 <nav class="tabs" id="siteTabs" aria-label="Primary">
                     <a href="/pages/website.html" class="chip-link">
-                        <button class="chip chip-back">
+                        <button class="chip chip-back" type="button">
                             <i class="fa-solid fa-house"></i>
                             <span>Home</span>
                         </button>
@@ -65,7 +65,7 @@
                 <!-- Error from controller -->
                 <p th:if="${error}" th:text="${error}" style="color:#ff6b6b; margin-bottom:0.8rem;"></p>
 
-                <!-- Form now posts to Spring Boot -->
+                <!-- Form posts to Spring Boot -->
                 <form action="/bambanking/login" method="post">
                     <div class="login-field">
                         <label for="username">username</label>
@@ -76,7 +76,7 @@
                     <div class="login-field">
                         <label for="pin">PIN</label>
                         <input type="password" id="pin" name="pin" maxlength="4" autocomplete="current-password"
-                            required placeholder="1234 / 4321 / 1111 / 2222" />
+                            required placeholder="1234" />
                     </div>
 
                     <div class="login-actions">
@@ -100,11 +100,10 @@
         </p>
     </footer>
 
-    <!-- Your existing JS -->
-    <script src="/springboot/bambanking-demo/src/assets/main.js/script.js"></script>
-    <script defer src="/springboot/bambanking-demo/src/assets/main.js/nav.js"></script>
-
-    <script defer src="/springboot/bambanking-demo/src/assets/main.js/main.js"></script>
+    <!-- Your existing JS (Spring Boot static paths) -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+    <script defer src="/js/main.js"></script>
 </body>
 
 </html>

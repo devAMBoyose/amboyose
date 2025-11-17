@@ -23,13 +23,63 @@
             font-family: "JetBrains Mono", monospace;
         }
 
+        .window {
+            max-width: 1200px;
+            margin: 2rem auto;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .title-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 1.2rem;
+        }
+
+        .tb-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chip-link {
+            text-decoration: none;
+        }
+
+        .chip {
+            border-radius: 999px;
+            padding: 0.3rem 0.9rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .chip-back {
+            background: #202631;
+            color: #f5f5f5;
+        }
+
+        .chip-logout {
+            background: #8b1e2d;
+            color: #f5f5f5;
+        }
+
+        .chip-logout i {
+            font-size: 0.7rem;
+        }
+
         .bb-dashboard {
             display: flex;
             min-height: 380px;
         }
 
         .bb-tiles-panel {
-            flex: 0 0 310px;
+            flex: 0 0 320px;
             max-width: 340px;
             padding: 1.5rem 1.3rem;
             background: #2b2240;
@@ -55,7 +105,7 @@
 
         .bb-tile:hover {
             transform: translateY(-2px);
-            background: #830808;
+            background: #0ea43a;
         }
 
         .bb-tile h2 {
@@ -70,6 +120,11 @@
 
         .bb-tile.app-transaction {
             grid-column: span 2;
+            background: #a00010;
+        }
+
+        .bb-tile.app-transaction:hover {
+            background: #c01424;
         }
 
         .bb-tile input {
@@ -91,6 +146,7 @@
             font-size: 0.7rem;
             font-weight: 600;
             cursor: pointer;
+            width: 100%;
         }
 
         .bb-tile button[type="submit"] {
@@ -102,20 +158,32 @@
             filter: brightness(1.1);
         }
 
+        .bb-tiles-panel form {
+            margin: 0;
+        }
+
+        .bb-tiles-panel a.tile-link {
+            display: block;
+        }
+
         .bb-main-panel {
             flex: 1;
             padding: 1.7rem 2rem;
             background: radial-gradient(circle at top left, #202b33 0, #050608 55%);
             color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .bb-main-panel h2 {
             margin-top: 0;
+            margin-bottom: 0.2rem;
         }
 
         .bb-main-meta {
             font-size: 0.85rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.4rem;
             opacity: 0.9;
         }
 
@@ -124,38 +192,90 @@
             margin-right: 1.5rem;
         }
 
+        .bb-main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .bb-balance-card {
+            border-radius: 16px;
+            border: 1px solid rgba(0, 255, 128, 0.8);
+            padding: 1.6rem;
+            max-width: 520px;
+            background: rgba(2, 12, 8, 0.85);
+            box-shadow: 0 0 24px rgba(0, 255, 128, 0.25);
+        }
+
+        .bb-balance-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.03em;
+        }
+
+        .bb-balance-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+
+        .bb-balance-meta {
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
+
         .bb-main-placeholder {
             border-radius: 16px;
             border: 1px dashed rgba(0, 255, 128, 0.4);
             padding: 1.5rem;
             font-size: 0.78rem;
             max-width: 520px;
-            margin-top: 0.75rem;
         }
 
-        .bb-logout-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            font-size: 0.78rem;
-            margin-top: 1.2rem;
-            text-decoration: none;
-            color: #f5f5f5;
-            opacity: 0.75;
+        .site-footer {
+            margin-top: 1rem;
         }
 
-        .bb-logout-link:hover {
-            opacity: 1;
+        /* RESPONSIVE */
+        @media (max-width: 960px) {
+            .window {
+                margin: 1rem;
+            }
+
+            .bb-dashboard {
+                flex-direction: column;
+            }
+
+            .bb-tiles-panel {
+                max-width: 100%;
+                grid-auto-rows: auto;
+            }
+
+            .bb-main-panel {
+                padding: 1.3rem 1.2rem 1.6rem;
+            }
         }
 
-        /* Small tweak to keep forms from having default margins */
-        .bb-tiles-panel form {
-            margin: 0;
-        }
+        @media (max-width: 640px) {
+            .bb-tiles-panel {
+                grid-template-columns: 1fr;
+            }
 
-        /* Make App Help tile look clickable */
-        .bb-tiles-panel a.tile-link {
-            display: block;
+            .title-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .tb-right {
+                align-self: stretch;
+                justify-content: flex-end;
+            }
+
+            .bb-balance-amount {
+                font-size: 1.6rem;
+            }
         }
     </style>
 </head>
@@ -170,6 +290,13 @@
             </div>
             <span class="filename">Bamby Banking.java</span>
             <div class="tb-right">
+                <!-- LOGOUT beside HOME -->
+                <a th:href="@{/bambanking/logout}" class="chip-link">
+                    <button class="chip chip-logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Logout</span>
+                    </button>
+                </a>
                 <a href="/pages/website.html" class="chip-link">
                     <button class="chip chip-back">
                         <i class="fa-solid fa-house"></i>
@@ -181,7 +308,7 @@
 
         <!-- MAIN DASHBOARD -->
         <div class="bb-dashboard">
-            <!-- LEFT: TILES (now real Thymeleaf forms) -->
+            <!-- LEFT: TILES -->
             <div class="bb-tiles-panel">
 
                 <!-- Check Balance -->
@@ -256,28 +383,27 @@
                 <div class="bb-main-meta">
                     <span>Welcome, <strong th:text="${username}">User</strong></span>
                     <span>Current balance:
-                        <strong>
-                            ₱<span th:text="${balance}">0.00</span>
-                        </strong>
+                        <strong>₱<span th:text="${balance}">0.00</span></strong>
                     </span>
                 </div>
 
-                <p>Use the tiles on the left to perform transactions on your account.</p>
+                <div class="bb-main-content">
+                    <!-- BIG BALANCE RESULT CARD (shown after clicking Check Balance) -->
+                    <div class="bb-balance-card" th:if="${showBalanceCard}">
+                        <h3>Current Available Balance</h3>
+                        <div class="bb-balance-amount">
+                            ₱<span th:text="${balance}">0.00</span>
+                        </div>
+                        <div class="bb-balance-meta">
+                            <span th:text="${txMessage}">You have successfully checked your balance.</span>
+                        </div>
+                    </div>
 
-                <div class="bb-main-placeholder">
-                    <!-- If controller sends a message, show it. Otherwise show default text -->
-                    <p th:if="${message}" th:text="${message}">
-                        Select a function on the left to begin.
-                    </p>
-                    <p th:unless="${message}">
-                        Select a function on the left to begin.
-                    </p>
+                    <!-- DEFAULT PLACEHOLDER when nothing selected -->
+                    <div class="bb-main-placeholder" th:unless="${showBalanceCard}">
+                        <p>Select a function on the left to begin.</p>
+                    </div>
                 </div>
-
-                <a th:href="@{/bambanking/logout}" class="bb-logout-link">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span>Logout</span>
-                </a>
             </div>
         </div>
     </div>
