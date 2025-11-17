@@ -16,157 +16,8 @@
     <link rel="stylesheet" href="/css/nav.css" />
 
     <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
+    <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
 
-    <!-- Optional quick styling for login layout -->
-    <style>
-        .login-wrapper {
-            padding: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 320px;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 420px;
-            border-radius: 12px;
-            padding: 2rem;
-            background: rgba(10, 10, 10, 0.85);
-            border: 1px solid rgba(0, 255, 128, 0.35);
-            box-shadow: 0 0 24px rgba(0, 255, 128, 0.25);
-        }
-
-        .login-card h1 {
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .login-card p {
-            font-size: 0.85rem;
-            opacity: 0.8;
-            margin-bottom: 1.4rem;
-        }
-
-        .login-field {
-            margin-bottom: 1rem;
-        }
-
-        .login-field label {
-            display: block;
-            font-size: 0.8rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .login-field input {
-            width: 100%;
-            padding: 0.55rem 0.7rem;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(5, 5, 5, 0.9);
-            color: #fff;
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.85rem;
-        }
-
-        .login-field input:focus {
-            outline: none;
-            border-color: #00ff88;
-            box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.4);
-        }
-
-        .login-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 0.75rem;
-        }
-
-        .btn-login {
-            padding: 0.55rem 1.4rem;
-            border-radius: 999px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-family: "JetBrains Mono", monospace;
-            background: linear-gradient(120deg, #00ff88, #00bcd4);
-            color: #020b06;
-            font-weight: 600;
-        }
-
-        .btn-login:disabled {
-            opacity: 0.5;
-            cursor: wait;
-        }
-
-        .login-status {
-            margin-top: 0.8rem;
-            font-size: 0.8rem;
-            min-height: 1.2em;
-        }
-
-        .login-status.ok {
-            color: #00ff88;
-        }
-
-        .login-status.err {
-            color: #ff6b81;
-        }
-
-        .token-preview {
-            margin-top: 0.75rem;
-            font-size: 0.7rem;
-            word-break: break-all;
-            opacity: 0.7;
-        }
-
-        /* Animated Neon Border Container */
-        .login-card {
-            position: relative;
-            border-radius: 16px !important;
-            padding: 2rem !important;
-            background: rgba(10, 10, 10, 0.85) !important;
-            overflow: hidden;
-        }
-
-        /* Running Glow Border */
-        .login-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            padding: 2px;
-            border-radius: 16px;
-            background: linear-gradient(120deg,
-                    #00ff88,
-                    #00bcd4,
-                    #7c4dff,
-                    #ff4081,
-                    #00ff88);
-            background-size: 300% 300%;
-            animation: neonFlow 6s ease infinite;
-            -webkit-mask:
-                linear-gradient(#000 0 0) content-box,
-                linear-gradient(#000 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-
-        /* Smooth flowing animation */
-        @keyframes neonFlow {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -189,6 +40,15 @@
                     aria-label="Toggle menu">
                     <span class="bar"></span><span class="bar"></span><span class="bar"></span>
                 </button>
+
+                <nav class="tabs" id="siteTabs" aria-label="Primary">
+                    <a href="/pages/website.html" class="chip-link">
+                        <button class="chip chip-back">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Home</span>
+                        </button>
+                    </a>
+                </nav>
 
                 <!-- Nav chips -->
                 <!-- <ul id="navMenu" class="tb-menu">
