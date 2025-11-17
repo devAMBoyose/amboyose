@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>BamBanking Login | Projects</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your existing styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/assets/css/responsive.css" />
+
+    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
+    <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
+</head>
+
+<body>
+    <!-- cursor-follow glow background -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">BamBankingLogin.java</span>
+
+            <!-- RIGHT-SIDE NAV -->
+            <div class="tb-right">
+                <!-- Hamburger (mobile) -->
+                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+                    aria-label="Toggle menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+
+                <nav class="tabs" id="siteTabs" aria-label="Primary">
+                    <a href="/pages/website.html" class="chip-link">
+                        <button class="chip chip-back">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Home</span>
+                        </button>
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- 🔐 Login Section -->
+        <div class="login-wrapper">
+            <div class="login-card">
+                <h1>Login() &nbsp;
+                    <span style="font-size:0.8rem; opacity:0.7;">// BamBanking demo</span>
+                </h1>
+                <p>
+                    Log in with a sample BamBanking account (anna, bamby, guest, sample)
+                    using your Java service logic.
+                </p>
+
+                <!-- Error from controller -->
+                <p th:if="${error}" th:text="${error}" style="color:#ff6b6b; margin-bottom:0.8rem;"></p>
+
+                <!-- Form now posts to Spring Boot -->
+                <form action="/bambanking/login" method="post">
+                    <div class="login-field">
+                        <label for="username">username</label>
+                        <input type="text" id="username" name="username" autocomplete="username" required
+                            placeholder="anna / bamby / guest / sample" />
+                    </div>
+
+                    <div class="login-field">
+                        <label for="pin">PIN</label>
+                        <input type="password" id="pin" name="pin" maxlength="4" autocomplete="current-password"
+                            required placeholder="1234" />
+                    </div>
+
+                    <div class="login-actions">
+                        <button type="submit" class="btn-login">
+                            Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+</body>
+
+</html>
