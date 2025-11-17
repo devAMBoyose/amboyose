@@ -2,56 +2,289 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>BamBanking – Dashboard</title>
-    <!-- your CSS -->
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your existing styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/assets/css/responsive.css" />
+    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
+    <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
+
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .bb-dashboard {
+            display: flex;
+            min-height: 380px;
+        }
+
+        .bb-tiles-panel {
+            flex: 0 0 310px;
+            max-width: 340px;
+            padding: 1.5rem 1.3rem;
+            background: #2b2240;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-auto-rows: 110px;
+            gap: 0.8rem;
+        }
+
+        .bb-tile {
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #047c18;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.75rem 0.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            transition: all 0.12s ease;
+        }
+
+        .bb-tile:hover {
+            transform: translateY(-2px);
+            background: #830808;
+        }
+
+        .bb-tile h2 {
+            font-size: 0.9rem;
+            margin: 0 0 0.35rem;
+        }
+
+        .bb-tile-sub {
+            font-size: 0.68rem;
+            opacity: 0.85;
+        }
+
+        .bb-tile.app-transaction {
+            grid-column: span 2;
+        }
+
+        .bb-tile input {
+            margin-top: 0.25rem;
+            padding: 0.25rem 0.35rem;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(5, 5, 5, 0.5);
+            color: #fff;
+            font-size: 0.72rem;
+            width: 100%;
+        }
+
+        .bb-tile button {
+            margin-top: 0.35rem;
+            padding: 0.35rem 0.5rem;
+            border-radius: 4px;
+            border: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .bb-tile button[type="submit"] {
+            background: #0fd469;
+            color: #020409;
+        }
+
+        .bb-tile button[type="submit"]:hover {
+            filter: brightness(1.1);
+        }
+
+        .bb-main-panel {
+            flex: 1;
+            padding: 1.7rem 2rem;
+            background: radial-gradient(circle at top left, #202b33 0, #050608 55%);
+            color: #f5f5f5;
+        }
+
+        .bb-main-panel h2 {
+            margin-top: 0;
+        }
+
+        .bb-main-meta {
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .bb-main-meta span {
+            display: inline-block;
+            margin-right: 1.5rem;
+        }
+
+        .bb-main-placeholder {
+            border-radius: 16px;
+            border: 1px dashed rgba(0, 255, 128, 0.4);
+            padding: 1.5rem;
+            font-size: 0.78rem;
+            max-width: 520px;
+            margin-top: 0.75rem;
+        }
+
+        .bb-logout-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.78rem;
+            margin-top: 1.2rem;
+            text-decoration: none;
+            color: #f5f5f5;
+            opacity: 0.75;
+        }
+
+        .bb-logout-link:hover {
+            opacity: 1;
+        }
+
+        /* Small tweak to keep forms from having default margins */
+        .bb-tiles-panel form {
+            margin: 0;
+        }
+
+        /* Make App Help tile look clickable */
+        .bb-tiles-panel a.tile-link {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="cursor-bg" aria-hidden="true"></div>
 
-    <header>
-        <h1>Welcome, <span th:text="${username}">User</span></h1>
-        <p>Current balance: <span th:text="${balance}">0.00</span></p>
-        <a href="/bambanking/logout">Logout</a>
-    </header>
+    <div class="window">
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+            <span class="filename">Bamby Banking.java</span>
+            <div class="tb-right">
+                <a href="/pages/website.html" class="chip-link">
+                    <button class="chip chip-back">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </button>
+                </a>
+            </div>
+        </div>
 
-    <section class="tiles">
+        <!-- MAIN DASHBOARD -->
+        <div class="bb-dashboard">
+            <!-- LEFT: TILES (now real Thymeleaf forms) -->
+            <div class="bb-tiles-panel">
 
-        <!-- Check balance (no amount needed) -->
-        <form action="/bambanking/check-balance" method="post" class="tile">
-            <h2>Check Balance</h2>
-            <button type="submit">Go</button>
-        </form>
+                <!-- Check Balance -->
+                <form th:action="@{/bambanking/check-balance}" method="post" class="bb-tile">
+                    <div>
+                        <h2>Check Balance</h2>
+                        <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                    </div>
+                    <button type="submit">
+                        <i class="fa-solid fa-magnifying-glass-dollar"></i> Check
+                    </button>
+                </form>
 
-        <!-- Deposit -->
-        <form action="/bambanking/deposit" method="post" class="tile">
-            <h2>Deposit</h2>
-            <input type="number" step="0.01" name="amount" placeholder="Amount" required />
-            <button type="submit">Deposit</button>
-        </form>
+                <!-- Deposit -->
+                <form th:action="@{/bambanking/deposit}" method="post" class="bb-tile">
+                    <div>
+                        <h2>Deposit Cash</h2>
+                        <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                    </div>
+                    <div>
+                        <input type="number" step="0.01" name="amount" placeholder="Amount" required />
+                        <button type="submit">
+                            <i class="fa-solid fa-circle-arrow-down"></i> Deposit
+                        </button>
+                    </div>
+                </form>
 
-        <!-- Withdraw -->
-        <form action="/bambanking/withdraw" method="post" class="tile">
-            <h2>Withdraw</h2>
-            <input type="number" step="0.01" name="amount" placeholder="Amount" required />
-            <button type="submit">Withdraw</button>
-        </form>
+                <!-- Withdraw -->
+                <form th:action="@{/bambanking/withdraw}" method="post" class="bb-tile">
+                    <div>
+                        <h2>Withdraw Cash</h2>
+                        <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                    </div>
+                    <div>
+                        <input type="number" step="0.01" name="amount" placeholder="Amount" required />
+                        <button type="submit">
+                            <i class="fa-solid fa-circle-arrow-up"></i> Withdraw
+                        </button>
+                    </div>
+                </form>
 
-        <!-- Transfer -->
-        <form action="/bambanking/transfer" method="post" class="tile">
-            <h2>Transfer</h2>
-            <input type="text" name="toUser" placeholder="To username" required />
-            <input type="number" step="0.01" name="amount" placeholder="Amount" required />
-            <button type="submit">Transfer</button>
-        </form>
+                <!-- Transfer -->
+                <form th:action="@{/bambanking/transfer}" method="post" class="bb-tile">
+                    <div>
+                        <h2>Transfer Funds</h2>
+                        <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                    </div>
+                    <div>
+                        <input type="text" name="toUser" placeholder="To username" required />
+                        <input type="number" step="0.01" name="amount" placeholder="Amount" required />
+                        <button type="submit">
+                            <i class="fa-solid fa-right-left"></i> Transfer
+                        </button>
+                    </div>
+                </form>
 
-        <!-- Help -->
-        <a class="tile" href="/bambanking/help">
-            <h2>App Help</h2>
-            <p>How BamBanking works</p>
-        </a>
+                <!-- Help -->
+                <a th:href="@{/bambanking/help}" class="bb-tile app-transaction tile-link">
+                    <div>
+                        <h2>App Transaction / Help</h2>
+                        <div class="bb-tile-sub">&laquo;extends&raquo; via Menu</div>
+                    </div>
+                    <div class="bb-tile-sub">
+                        Learn how BamBanking works.
+                    </div>
+                </a>
+            </div>
 
-    </section>
+            <!-- RIGHT: MAIN PANEL -->
+            <div class="bb-main-panel">
+                <h2>BAMBY Banking Dashboard</h2>
+                <div class="bb-main-meta">
+                    <span>Welcome, <strong th:text="${username}">User</strong></span>
+                    <span>Current balance:
+                        <strong>
+                            ₱<span th:text="${balance}">0.00</span>
+                        </strong>
+                    </span>
+                </div>
+
+                <p>Use the tiles on the left to perform transactions on your account.</p>
+
+                <div class="bb-main-placeholder">
+                    <!-- If controller sends a message, show it. Otherwise show default text -->
+                    <p th:if="${message}" th:text="${message}">
+                        Select a function on the left to begin.
+                    </p>
+                    <p th:unless="${message}">
+                        Select a function on the left to begin.
+                    </p>
+                </div>
+
+                <a th:href="@{/bambanking/logout}" class="bb-logout-link">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY Banking App with Spring Boot</strong> | Designed &amp; Coded with ❤️</p>
+    </footer>
 
 </body>
 
