@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>GCash Use Case | Java Projects</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your existing styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/assets/css/responsive.css" />
+
+    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
+    <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
+
+    <!-- Page-specific styles -->
+    <style>
+        .gcash-wrapper {
+            padding: 2rem 2.5rem 2.5rem;
+            color: #f5f5f5;
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .gcash-header h1 {
+            font-size: 1.6rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .gcash-header p {
+            font-size: 0.85rem;
+            opacity: 0.75;
+            margin-bottom: 1.5rem;
+        }
+
+        .gcash-header .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .tag-pill {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 255, 128, 0.4);
+            background: rgba(10, 30, 20, 0.8);
+        }
+
+        /* Legend cards (yellow boxes at top) */
+        .uc-legend-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .uc-legend-card {
+            min-width: 180px;
+            max-width: 240px;
+            padding: 0.7rem 0.9rem;
+            border-radius: 10px;
+            background: #fff7d6;
+            border: 1px solid #f2c14f;
+            color: #333;
+            font-size: 0.72rem;
+            line-height: 1.4;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+        }
+
+        .uc-legend-card strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Main diagram layout */
+        .uc-diagram {
+            display: grid;
+            grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.3fr);
+            gap: 2.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .gcash-wrapper {
+                padding: 1.5rem 1.25rem 2rem;
+            }
+
+            .uc-diagram {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Generic green cards */
+        .uc-card {
+            background: rgba(8, 18, 12, 0.96);
+            border: 1px solid rgba(0, 255, 128, 0.4);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            font-size: 0.75rem;
+            line-height: 1.5;
+            box-shadow: 0 0 18px rgba(0, 255, 128, 0.22);
+        }
+
+        .uc-card strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.78rem;
+        }
+
+        .uc-tag {
+            display: inline-block;
+            margin-top: 0.2rem;
+            padding: 0.08rem 0.4rem;
+            border-radius: 999px;
+            border: 1px dashed rgba(0, 255, 128, 0.5);
+            font-size: 0.63rem;
+            opacity: 0.85;
+        }
+
+        /* Arrows / connectors */
+        .uc-arrow-vertical {
+            width: 2px;
+            height: 18px;
+            background: linear-gradient(to bottom, rgba(180, 180, 180, 0.3), rgba(180, 180, 180, 0.7));
+            margin: 0.3rem auto 0.3rem;
+            border-radius: 999px;
+        }
+
+        .uc-arrow-dashed {
+            border-top: 1px dashed rgba(180, 180, 180, 0.7);
+            height: 0;
+            margin: 0.5rem 0;
+        }
+
+        /* Left side: customer & transactions */
+        .uc-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        .uc-root {
+            max-width: 260px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .uc-transactions-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .uc-transactions-row .uc-card {
+            width: 180px;
+        }
+
+        .uc-menu-block {
+            max-width: 260px;
+            margin: 0.5rem auto 0;
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        .uc-menu-label {
+            margin-top: 0.3rem;
+            font-size: 0.65rem;
+            opacity: 0.8;
+        }
+
+        .uc-help-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .uc-help-card {
+            position: relative;
+            max-width: 220px;
+        }
+
+        .uc-help-dash {
+            position: relative;
+            width: 160px;
+            border-top: 1px dashed rgba(180, 180, 180, 0.8);
+            margin: 0 auto 0.4rem;
+            font-size: 0.65rem;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        .uc-help-dash span {
+            background: rgba(8, 18, 12, 0.96);
+            padding: 0 0.35rem;
+            transform: translateY(-50%);
+            display: inline-block;
+        }
+
+        /* Right side: actors + maintenance */
+        .uc-right {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .uc-actors-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 0.6rem;
+        }
+
+        .actor-pill {
+            min-width: 150px;
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            background: #1d5cf5;
+            color: #f5f5f5;
+            font-size: 0.75rem;
+            text-align: center;
+            box-shadow: 0 0 16px rgba(0, 90, 255, 0.4);
+        }
+
+        .uc-maintenance-stack {
+            max-width: 260px;
+            margin-left: auto;
+        }
+
+        .uc-maintenance-stack .uc-card {
+            margin-bottom: 0.75rem;
+        }
+
+        .uc-maintenance-stack .uc-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .uc-section-label {
+            font-size: 0.7rem;
+            opacity: 0.75;
+            margin-bottom: 0.35rem;
+            text-align: right;
+        }
+
+        /* Small indicator row at bottom */
+        .uc-footer-note {
+            margin-top: 1.6rem;
+            font-size: 0.68rem;
+            opacity: 0.7;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- cursor-follow glow background -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">GCashUseCase.java</span>
+
+            <div class="tb-right">
+                <!-- Back to projects / home -->
+                <a href="/pages/website.html" class="chip-link">
+                    <button class="chip chip-back">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="gcash-wrapper">
+            <div class="gcash-header">
+                <h1>GCash Use Case Diagram – PRJ1_Task 1-6-1</h1>
+                <p>// Java + Spring Boot backend • Vanilla HTML/CSS frontend</p>
+
+                <div class="tag-row">
+                    <span class="tag-pill">Actor: Customer</span>
+                    <span class="tag-pill">Actor: GCash Software Engineer</span>
+                    <span class="tag-pill">Includes / Extends relationships visual only</span>
+                    <span class="tag-pill">Mapped to REST endpoints in Spring Boot</span>
+                </div>
+            </div>
+
+            <!-- Legend row: yellow notes -->
+            <div class="uc-legend-row">
+                <div class="uc-legend-card">
+                    <strong>1 = Authentication</strong>
+                    PIN-based login required before any transaction.
+                </div>
+                <div class="uc-legend-card">
+                    <strong>2–5 = Customer Transactions</strong>
+                    Check balance, deposit, withdraw, and transfer funds.
+                </div>
+                <div class="uc-legend-card">
+                    <strong>6 = App Transaction</strong>
+                    Transaction entry via the main Menu (extends).
+                </div>
+                <div class="uc-legend-card">
+                    <strong>7 = App Help</strong>
+                    Help available from Menu or during transaction.
+                </div>
+                <div class="uc-legend-card">
+                    <strong>8–10 = Engineer Scope</strong>
+                    Maintenance: updates &amp; diagnostics.
+                </div>
+            </div>
+
+            <!-- Main diagram -->
+            <div class="uc-diagram">
+                <!-- LEFT: customer + transactions -->
+                <div class="uc-left">
+                    <!-- Authentication root -->
+                    <div class="uc-card uc-root">
+                        <strong>1) Customer Authentication</strong>
+                        required before any transaction
+                    </div>
+
+                    <div class="uc-arrow-vertical"></div>
+
+                    <!-- Transactions row -->
+                    <div class="uc-transactions-row">
+                        <div class="uc-card">
+                            <strong>3) Deposit Cash</strong>
+                            <span class="uc-tag">&laquo;includes&raquo; UC1</span>
+                        </div>
+                        <div class="uc-card">
+                            <strong>4) Withdraw Cash</strong>
+                            <span class="uc-tag">&laquo;includes&raquo; UC1</span>
+                        </div>
+                        <div class="uc-card">
+                            <strong>2) Check Balance</strong>
+                            <span class="uc-tag">&laquo;includes&raquo; UC1</span>
+                        </div>
+                        <div class="uc-card">
+                            <strong>5) Transfer Funds</strong>
+                            <span class="uc-tag">&laquo;includes&raquo; UC1</span>
+                        </div>
+                        <div class="uc-card">
+                            <strong>6) App Transaction</strong>
+                            <span class="uc-tag">&laquo;extends&raquo; via Menu</span>
+                        </div>
+                    </div>
+
+                    <!-- Menu + App Help -->
+                    <div class="uc-menu-block">
+                        <div class="uc-arrow-vertical"></div>
+
+                        <div class="uc-card">
+                            <strong>Menu</strong>
+                            <div class="uc-menu-label">(extension point)</div>
+                        </div>
+
+                        <div class="uc-help-row">
+                            <div class="uc-help-card">
+                                <div class="uc-help-dash">
+                                    <span>enables</span>
+                                </div>
+                                <div class="uc-card">
+                                    <strong>7) App Help</strong>
+                                    invoked from menu / during transaction
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: actors + maintenance -->
+                <div class="uc-right">
+                    <div class="uc-actors-row">
+                        <div class="actor-pill">GCash Software Engineer</div>
+                        <div class="actor-pill">Customer</div>
+                    </div>
+
+                    <div class="uc-section-label">Engineer scope</div>
+                    <div class="uc-maintenance-stack">
+                        <div class="uc-card">
+                            <strong>8) Maintenance</strong>
+                            <span class="uc-tag">&laquo;includes&raquo; Updates &amp; Diagnostics</span>
+                        </div>
+
+                        <div class="uc-arrow-vertical"></div>
+
+                        <div class="uc-card">
+                            <strong>9) Software Updates</strong>
+                            <span class="uc-tag">&laquo;includes&raquo; by Maintenance</span>
+                        </div>
+
+                        <div class="uc-card">
+                            <strong>10) Diagnostics</strong>
+                            <span class="uc-tag">&laquo;includes&raquo; by Maintenance</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom note -->
+            <div class="uc-footer-note">
+                <span>// UI only – hook these use cases to your Spring Boot controllers &amp; REST endpoints.</span>
+                <span>// Example: <code>/api/auth/login</code>, <code>/api/transactions/deposit</code>,
+                    <code>/api/maintenance/updates</code></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Existing JS -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+    <!-- (Optional) Spring Boot / JWT integration scripts -->
+    <script src="/springboot/assets/js.main/main.js"></script>
+</body>
+
+</html>
