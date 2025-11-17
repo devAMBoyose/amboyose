@@ -1,11 +1,16 @@
 {
+
+
   "java.configuration.runtimes": [
     {
-      "name": "JavaSE-17",
-      "path": "C:/Program Files/Eclipse Adoptium/jdk-17.0.11+9",
+      "name": "JavaSE-25",
+      "path": "C:/Program Files/Eclipse Adoptium/jdk-25.0.1.8-hotspot",
       "default": true
     }
-],
-"java.compile.nullAnalysis.mode": "automatic",
-"java.configuration.updateBuildConfiguration": "interactive"
+  ],
+
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "interactive"
+
+  // ... any other settings below ...
 }
