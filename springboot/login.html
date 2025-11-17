@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/css/footer.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/assets/css/responsive.css" />
 
     <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
     <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
@@ -96,7 +97,7 @@
 
                     <div class="login-actions">
                         <button type="submit" class="btn-login" id="loginBtn">
-                            System.out.println("Login");
+                            Login
                         </button>
 
                         <small style="font-size:0.7rem; opacity:0.7;">
@@ -126,99 +127,7 @@
     <script src="/js/script.js"></script>
     <script defer src="/js/nav.js"></script>
 
-    <!-- 🔗 Login JS: calls Spring Boot JWT API -->
-    <script>
-        const API_BASE = "http://localhost:8080/api/auth"; // adjust if needed
 
-        const form = document.getElementById("loginForm");
-        const loginBtn = document.getElementById("loginBtn");
-        const statusEl = document.getElementById("loginStatus");
-        const tokenPreviewEl = document.getElementById("tokenPreview");
-        const registerLink = document.getElementById("registerLink");
-
-        function setStatus(message, ok = false) {
-            statusEl.textContent = message || "";
-            statusEl.classList.remove("ok", "err");
-            if (!message) return;
-            statusEl.classList.add(ok ? "ok" : "err");
-        }
-
-        function setLoading(isLoading) {
-            loginBtn.disabled = isLoading;
-            loginBtn.textContent = isLoading ? "Authenticating..." : 'System.out.println("Login");';
-        }
-
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            setStatus("");
-            tokenPreviewEl.textContent = "";
-            setLoading(true);
-
-            const username = document.getElementById("username").value.trim();
-            const password = document.getElementById("password").value;
-
-            try {
-                const res = await fetch(`${API_BASE}/login`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password }),
-                });
-
-                const data = await res.json();
-
-                if (!res.ok) {
-                    setStatus(typeof data === "string" ? data : "Login failed", false);
-                } else {
-                    const token = data.token;
-                    localStorage.setItem("portfolio_jwt", token);
-                    setStatus("Login successful! Token saved in localStorage ✅", true);
-                    tokenPreviewEl.textContent = "JWT: " + token;
-
-                    // Example: redirect to a protected demo page
-                    // window.location.href = "/pages/protected-demo.html";
-                }
-            } catch (err) {
-                console.error(err);
-                setStatus("Error connecting to server. Is Spring Boot running?", false);
-            } finally {
-                setLoading(false);
-            }
-        });
-
-        registerLink.addEventListener("click", async (e) => {
-            e.preventDefault();
-            setStatus("");
-            tokenPreviewEl.textContent = "";
-            setLoading(true);
-
-            const username = document.getElementById("username").value.trim() || "demo-user";
-            const password = document.getElementById("password").value || "demo-pass";
-
-            try {
-                const res = await fetch(`${API_BASE}/register`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password }),
-                });
-
-                const data = await res.json();
-
-                if (!res.ok) {
-                    setStatus(typeof data === "string" ? data : "Registration failed", false);
-                } else {
-                    const token = data.token;
-                    localStorage.setItem("portfolio_jwt", token);
-                    setStatus("User registered & logged in 🎉", true);
-                    tokenPreviewEl.textContent = "JWT: " + token;
-                }
-            } catch (err) {
-                console.error(err);
-                setStatus("Error connecting to server. Is Spring Boot running?", false);
-            } finally {
-                setLoading(false);
-            }
-        });
-    </script>
 
     <script src="/springboot/assets/js.main/main.js"></script>
 </body>
