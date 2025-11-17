@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>BamBanking – Result</title>
+    <!-- re-use your portfolio styles -->
+</head>
+
+<body>
+
+    <div class="transaction-wrapper">
+        <div class="transaction-card">
+            <h1>Transaction Result</h1>
+            <p th:utext="${message}">Result will show here</p>
+
+            <a href="/bambanking/dashboard" class="btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+
+</body>
+
+</html>
