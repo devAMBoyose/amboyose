@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>BambyBanking App | Transactions</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your existing styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/assets/css/responsive.css" />
+
+    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
+    <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
+
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .bb-dashboard {
+            display: flex;
+            min-height: 380px;
+        }
+
+        .bb-tiles-panel {
+            flex: 0 0 310px;
+            max-width: 340px;
+            padding: 1.5rem 1.3rem;
+            background: #2b2240;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-auto-rows: 110px;
+            gap: 0.8rem;
+        }
+
+        .bb-tile {
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #047c18;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.75rem 0.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            transition: all 0.12s ease;
+        }
+
+        .bb-tile:hover {
+            transform: translateY(-2px);
+            background: #830808;
+        }
+
+        .bb-tile-icon {
+            font-size: 1.1rem;
+        }
+
+        .bb-tile-sub {
+            font-size: 0.68rem;
+            opacity: 0.85;
+        }
+
+        .bb-tile.app-transaction {
+            grid-column: span 2;
+        }
+
+        .bb-main-panel {
+            flex: 1;
+            padding: 1.7rem 2rem;
+            background: radial-gradient(circle at top left, #202b33 0, #050608 55%);
+            color: #f5f5f5;
+        }
+
+        .bb-main-placeholder {
+            border-radius: 16px;
+            border: 1px dashed rgba(0, 255, 128, 0.4);
+            padding: 1.5rem;
+            font-size: 0.78rem;
+            max-width: 520px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">Bamby Banking.java</span>
+
+            <div class="tb-right">
+                <a href="/pages/website.html" class="chip-link">
+                    <button class="chip chip-back">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <!-- MAIN DASHBOARD -->
+        <div class="bb-dashboard">
+            <div class="bb-tiles-panel">
+                <a class="bb-tile" id="tileDeposit">
+                    <div>Deposit Cash</div>
+                    <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                </a>
+
+                <a class="bb-tile" id="tileWithdraw">
+                    <div>Withdraw Cash</div>
+                    <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                </a>
+
+                <a class="bb-tile app-transaction" id="tileAppTxn">
+                    <div>App Transaction</div>
+                    <div class="bb-tile-sub">&laquo;extends&raquo; via Menu</div>
+                </a>
+
+                <a class="bb-tile" id="tileBalance">
+                    <div>Check Balance</div>
+                    <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                </a>
+
+                <a class="bb-tile" id="tileTransfer">
+                    <div>Transfer Funds</div>
+                    <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                </a>
+            </div>
+
+            <div class="bb-main-panel">
+                <h2>BAMBY Banking Dashboard</h2>
+                <p>Welcome to your digital banking interface.</p>
+
+                <div class="bb-main-placeholder">
+                    Select a function on the left to begin.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY Banking App with Spring Boot</strong> | Designed & Coded with ❤️</p>
+    </footer>
+
+    <script>
+        const box = document.querySelector(".bb-main-placeholder");
+
+        async function callApi(url, options = {}) {
+            const res = await fetch(url, {
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                ...options
+            });
+            const data = await res.json();
+            box.textContent = data.message;
+        }
+
+        document.getElementById("tileBalance").onclick = () =>
+            callApi("http://localhost:8080/api/bamby/balance");
+
+        document.getElementById("tileDeposit").onclick = () => {
+            const amount = parseFloat(prompt("Deposit amount:"));
+            if (!amount) return;
+            callApi("http://localhost:8080/api/bamby/deposit", {
+                method: "POST",
+                body: JSON.stringify({ amount })
+            });
+        };
+
+        document.getElementById("tileWithdraw").onclick = () => {
+            const amount = parseFloat(prompt("Withdraw amount:"));
+            if (!amount) return;
+            callApi("http://localhost:8080/api/bamby/withdraw", {
+                method: "POST",
+                body: JSON.stringify({ amount })
+            });
+        };
+
+        document.getElementById("tileTransfer").onclick = () => {
+            const toUser = prompt("Send to:");
+            if (!toUser) return;
+            const amount = parseFloat(prompt("Amount:"));
+            if (!amount) return;
+            callApi("http://localhost:8080/api/bamby/transfer", {
+                method: "POST",
+                body: JSON.stringify({ toUser, amount })
+            });
+        };
+
+        document.getElementById("tileAppTxn").onclick = () =>
+            callApi("http://localhost:8080/api/bamby/help");
+    </script>
+
+</body>
+
+</html>
