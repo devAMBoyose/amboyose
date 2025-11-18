@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Resume – Anna Marice Eben Boyose</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #e5e7eb;
+            --page-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --accent: #059669;
+            /* emerald green */
+            --border-soft: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "JetBrains Mono", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top left, #111827 0, #020617 40%, #020617 100%);
+            padding: 24px;
+        }
+
+        /* A4 PAGE WRAPPER (210mm x 297mm) */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: transparent;
+        }
+
+        .resume-card {
+            background: var(--page-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border-soft);
+            padding: 16mm 17mm;
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.35);
+        }
+
+        .window-bar {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+        }
+
+        .dot.red {
+            background: #f97373;
+        }
+
+        .dot.yellow {
+            background: #facc15;
+        }
+
+        .dot.green {
+            background: #4ade80;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-soft);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        .header-main {
+            flex: 2;
+        }
+
+        .name {
+            font-size: 1.6rem;
+            letter-spacing: 0.06em;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+            color: var(--text-main);
+        }
+
+        .role {
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .tagline {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .header-contact {
+            flex: 1.3;
+            font-size: 0.76rem;
+            color: var(--text-muted);
+        }
+
+        .contact-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .contact-label {
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: .08em;
+            color: var(--text-muted);
+        }
+
+        .contact-value {
+            font-size: 0.76rem;
+        }
+
+        .header-contact a {
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .header-contact a:hover {
+            text-decoration: underline;
+            color: var(--accent);
+        }
+
+        /* LAYOUT GRID */
+        .layout {
+            display: grid;
+            grid-template-columns: 0.95fr 1.6fr;
+            gap: 10mm;
+            margin-top: 4mm;
+        }
+
+        .section {
+            margin-bottom: 6mm;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .summary {
+            font-size: 0.76rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .pill {
+            display: inline-block;
+            border-radius: 999px;
+            border: 1px solid var(--border-soft);
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            margin: 2px 4px 2px 0;
+            color: #111827;
+            background: #f9fafb;
+            white-space: nowrap;
+        }
+
+        .edu-item {
+            font-size: 0.75rem;
+            margin-bottom: 3px;
+        }
+
+        .muted {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        /* EXPERIENCE */
+        .job {
+            margin-bottom: 5mm;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .job-title {
+            color: var(--text-main);
+        }
+
+        .job-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .job ul {
+            list-style: disc;
+            padding-left: 14px;
+            margin-top: 2px;
+        }
+
+        .job li {
+            font-size: 0.74rem;
+            line-height: 1.5;
+            margin-bottom: 1px;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                padding: 10px;
+            }
+
+            .page {
+                width: 100%;
+            }
+
+            .resume-card {
+                padding: 14px;
+                box-shadow: none;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .job-meta {
+                text-align: left;
+            }
+        }
+
+        /* PRINT / PDF STYLES */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                background: #ffffff !important;
+                padding: 0;
+            }
+
+            .page {
+                margin: 0;
+                width: 210mm;
+                min-height: 297mm;
+            }
+
+            .resume-card {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 14mm 15mm;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <section class="resume-card">
+
+            <!-- Mac-style bar -->
+            <div class="window-bar">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+
+            <!-- HEADER -->
+            <header class="header">
+                <div class="header-main">
+                    <div class="name">Anna Marice Eben Boyose</div>
+                    <div class="role">Full-Stack Developer · Java / Node.js / PHP</div>
+                    <p class="tagline">
+                        Full-stack developer with a strong background in IT systems, security, and UI/UX.
+                        Experienced in building scalable web apps, APIs, and internal tools that support
+                        real business operations.
+                    </p>
+                </div>
+
+                <div class="header-contact">
+                    <div class="contact-row">
+                        <div>
+                            <div class="contact-label">Email</div>
+                            <div class="contact-value">
+                                <a href="mailto:amboyose.dev@gmail.com">amboyose.dev@gmail.com</a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="contact-label">Phone</div>
+                            <div class="contact-value">+63 962 989 0260</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-row">
+                        <div>
+                            <div class="contact-label">Portfolio</div>
+                            <div class="contact-value">
+                                <a href="https://amboyose.com" target="_blank">amboyose.com</a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="contact-label">Location</div>
+                            <div class="contact-value">Philippines</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- BODY GRID -->
+            <section class="layout">
+                <!-- LEFT COLUMN -->
+                <aside>
+                    <div class="section">
+                        <h2 class="section-title">Profile</h2>
+                        <p class="summary">
+                            10+ years combined experience in full-stack development, IT support, and design.
+                            Comfortable owning projects end-to-end: planning, coding, UI, deployment, and documentation.
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Tech Stack</h2>
+                        <div>
+                            <span class="pill">Java · Spring Boot</span>
+                            <span class="pill">Node.js</span>
+                            <span class="pill">PHP</span>
+                            <span class="pill">JavaScript (ES6+)</span>
+                            <span class="pill">HTML · CSS</span>
+                            <span class="pill">MySQL</span>
+                            <span class="pill">MongoDB</span>
+                            <span class="pill">REST APIs</span>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Tools & Design</h2>
+                        <div>
+                            <span class="pill">WordPress</span>
+                            <span class="pill">Git / GitHub</span>
+                            <span class="pill">Figma</span>
+                            <span class="pill">Adobe Photoshop</span>
+                            <span class="pill">EmailJS</span>
+                            <span class="pill">Linux / Servers</span>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Education</h2>
+                        <div class="edu-item">
+                            <strong>Bachelor of Science in Criminology</strong><br />
+                            <span class="muted">Completed · Continuing CS/IT certifications</span>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Soft Skills</h2>
+                        <div>
+                            <span class="pill">Problem-solving</span>
+                            <span class="pill">Detail-oriented</span>
+                            <span class="pill">Communication</span>
+                            <span class="pill">Self-learning</span>
+                            <span class="pill">Team collaboration</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- RIGHT COLUMN -->
+                <section>
+                    <div class="section">
+                        <h2 class="section-title">Experience</h2>
+
+                        <article class="job">
+                            <div class="job-header">
+                                <div class="job-title">INFOSEC / Full-Stack Developer</div>
+                                <div class="job-meta">Feb 2024 – Jul 2025 · Biosite Medical Instrument · Manila</div>
+                            </div>
+                            <ul>
+                                <li>Delivered end-to-end full-stack features from UI/UX to backend integration.</li>
+                                <li>Built responsive web systems using HTML, CSS, JS, Node.js/PHP and REST APIs.</li>
+                                <li>Managed MySQL databases with a focus on performance and data security.</li>
+                            </ul>
+                        </article>
+
+                        <article class="job">
+                            <div class="job-header">
+                                <div class="job-title">Front-End Web Developer (Remote)</div>
+                                <div class="job-meta">Dec 2023 – Feb 2024 · Ofworkers · USA</div>
+                            </div>
+                            <ul>
+                                <li>Customized WordPress themes and landing pages to match brand design.</li>
+                                <li>Improved UX, responsiveness, and SEO using analytics insights.</li>
+                                <li>Collaborated with marketing teams to ship fast, visually consistent sites.</li>
+                            </ul>
+                        </article>
+
+                        <article class="job">
+                            <div class="job-header">
+                                <div class="job-title">IT Specialist / Database Administrator</div>
+                                <div class="job-meta">Sep 2018 – Feb 2024 · Devarete Venture, Inc · Davao</div>
+                            </div>
+                            <ul>
+                                <li>Maintained company IT systems, servers, and network infrastructure.</li>
+                                <li>Managed MySQL/SQL databases including backup, recovery, and access control.</li>
+                                <li>Provided onsite tech support and coordinated with vendors for upgrades.</li>
+                            </ul>
+                        </article>
+
+                        <article class="job">
+                            <div class="job-header">
+                                <div class="job-title">Graphic Designer</div>
+                                <div class="job-meta">Jan 2013 – Sep 2018 · Kirobin Digital Printing · Panabo</div>
+                            </div>
+                            <ul>
+                                <li>Created marketing and branding materials for print and digital channels.</li>
+                                <li>Ensured visual consistency across campaigns and delivered on tight deadlines.</li>
+                            </ul>
+                        </article>
+                    </div>
+                </section>
+            </section>
+        </section>
+    </main>
+</body>
+
+</html>
