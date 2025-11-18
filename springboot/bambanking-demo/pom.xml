@@ -9,15 +9,16 @@
     <groupId>com.bamby</groupId>
     <artifactId>bambanking-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
     <name>BamBanking Demo</name>
     <description>Simple BamBanking web demo with Spring Boot + Thymeleaf</description>
-    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.3.5</version>
-        <relativePath/> <!-- always use latest installed -->
+        <relativePath/>
     </parent>
 
     <properties>
@@ -25,25 +26,25 @@
     </properties>
 
     <dependencies>
-        <!-- Web (MVC + embedded Tomcat) -->
+        <!-- Spring Boot Web (MVC + embedded Tomcat) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Thymeleaf templating -->
+        <!-- Thymeleaf templating engine -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <!-- Optional: validation support -->
+        <!-- Bean validation -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- Test (optional) -->
+        <!-- Tests (optional) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -62,28 +63,3 @@
     </build>
 
 </project>
-
-
-
-# Step 1 — Build stage
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /app
-
-# Copy all files
-COPY . .
-
-# Build the JAR
-RUN mvn clean package -DskipTests
-
-# Step 2 — Run stage
-FROM eclipse-temurin:17-jdk-alpine
-WORKDIR /app
-
-# Copy JAR from build stage
-COPY --from=build /app/target/bambanking-demo-0.0.1-SNAPSHOT.jar app.jar
-
-# Expose the port used by Render
-EXPOSE 8080
-
-# Run the app
-CMD ["java", "-jar", "app.jar"]
