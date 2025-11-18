@@ -266,97 +266,6 @@
             margin-top: 1rem;
         }
 
-        /* --- NEW: TRANSACTION HISTORY STYLES --- */
-        .bb-transactions-card {
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(3, 5, 8, 0.96);
-            padding: 1rem 1.2rem;
-        }
-
-        .bb-transactions-header {
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 0.6rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .bb-transactions-header span {
-            font-size: 0.7rem;
-            opacity: 0.7;
-        }
-
-        .bb-transactions-table-wrapper {
-            max-height: 220px;
-            overflow-y: auto;
-        }
-
-        .bb-transactions-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.72rem;
-        }
-
-        .bb-transactions-table th,
-        .bb-transactions-table td {
-            padding: 0.35rem 0.45rem;
-            text-align: left;
-            white-space: nowrap;
-        }
-
-        .bb-transactions-table th {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 0;
-            background: #05070b;
-            z-index: 1;
-        }
-
-        .bb-transactions-table tbody tr:nth-child(even) {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .bb-transactions-table tbody tr:hover {
-            background: rgba(15, 212, 105, 0.08);
-        }
-
-        .bb-tx-amount-credit {
-            color: #0fd469;
-            font-weight: 700;
-        }
-
-        .bb-tx-amount-debit {
-            color: #ff4d4f;
-            font-weight: 700;
-        }
-
-        .bb-tx-status {
-            font-size: 0.65rem;
-            padding: 0.1rem 0.4rem;
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .bb-tx-status.ok {
-            border-color: rgba(15, 212, 105, 0.9);
-            color: #0fd469;
-        }
-
-        .bb-tx-status.pending {
-            border-color: #d4b10f;
-            color: #ffd666;
-        }
-
-        .bb-tx-status.failed {
-            border-color: #ff4d4f;
-            color: #ff7875;
-        }
-
         /* --- RESPONSIVE --- */
         @media (max-width: 960px) {
             .window {
@@ -396,15 +305,6 @@
             .bb-balance-amount {
                 font-size: 1.6rem;
             }
-
-            .bb-transactions-table {
-                font-size: 0.68rem;
-            }
-
-            .bb-transactions-table th,
-            .bb-transactions-table td {
-                padding: 0.3rem;
-            }
         }
     </style>
 
@@ -427,6 +327,7 @@
                         <span>Logout</span>
                     </button>
                 </a>
+
             </div>
         </div>
 
@@ -434,6 +335,7 @@
         <div class="bb-dashboard">
             <!-- LEFT: TILES -->
             <div class="bb-tiles-panel">
+
                 <!-- Check Balance -->
                 <form th:action="@{/bambanking/check-balance}" method="post" class="bb-tile">
                     <div>
@@ -526,59 +428,6 @@
                     <div class="bb-main-placeholder" th:unless="${showBalanceCard}">
                         <p>Select a function on the left to begin.</p>
                     </div>
-
-                    <!-- NEW: RECENT TRANSACTIONS CARD -->
-                    <div class="bb-transactions-card" th:if="${transactions != null}">
-                        <div class="bb-transactions-header">
-                            <div>Recent Transactions</div>
-                            <span th:text="'Last ' + ${transactions.size()} + ' records'">Last transactions</span>
-                        </div>
-
-                        <div class="bb-transactions-table-wrapper">
-                            <table class="bb-transactions-table">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Method</th>
-                                        <th>Amount</th>
-                                        <th>Balance</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="tx : ${transactions}">
-                                        <td th:text="${#temporals.format(tx.timestamp, 'yyyy-MM-dd HH:mm')}">
-                                            2025-01-01 12:00
-                                        </td>
-                                        <td th:text="${tx.type}">Deposit</td>
-                                        <td th:text="${tx.method}">APP</td>
-                                        <td>
-                                            <span
-                                                th:classappend="${tx.type == 'Deposit'} ? ' bb-tx-amount-credit' : ' bb-tx-amount-debit'"
-                                                th:text="${tx.type == 'Deposit' ? '+' : '-'} + '₱' + ${tx.amount}">
-                                                +₱1,000.00
-                                            </span>
-                                        </td>
-                                        <td th:text="'₱' + ${tx.balanceAfter}">₱1,500.00</td>
-                                        <td>
-                                            <span class="bb-tx-status"
-                                                th:classappend="${tx.status == 'OK'} ? ' ok' : (${tx.status == 'PENDING'} ? ' pending' : ' failed')"
-                                                th:text="${tx.status}">
-                                                OK
-                                            </span>
-                                        </td>
-                                    </tr>
-
-                                    <tr th:if="${#lists.isEmpty(transactions)}">
-                                        <td colspan="6">No transactions yet.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- END NEW: RECENT TRANSACTIONS CARD -->
-
                 </div>
             </div>
         </div>

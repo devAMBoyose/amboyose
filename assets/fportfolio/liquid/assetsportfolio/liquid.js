@@ -175,12 +175,12 @@ const relay = (type, args) => {
       setLive(saved.liveOn !== false);
     } else {
       // Blank, ready for your own code
-      if (els.html) els.html.value = `<<div id="app">
+      if (els.html) els.html.value = `<div id="app">
   <canvas id="canvas"></canvas>
+  <a target="_blank" href="https://www.framer.com/marketplace/components/liquid-effect/">Framer Component</a>
 </div>
-\n`;
-      if (els.css) els.css.value = `/* 🎨 Write your CSS here */\n\n`;
-      if (els.js) els.js.value = `body, html, #app {
+`;
+      if (els.css) els.css.value = `body, html, #app {
   margin: 0;
   width: 100%;
   height: 100%;
@@ -203,7 +203,26 @@ body {
   left: 0;
   overflow: hidden;
 }
-;\n`;
+
+a {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 1px 1px 2px black;
+}
+`;
+      if (els.js) els.js.value = `import LiquidBackground from 'https://cdn.jsdelivr.net/npm/threejs-components@0.0.22/build/backgrounds/liquid1.min.js'
+
+const app = LiquidBackground(document.getElementById('canvas'))
+
+app.loadImage('https://assets.codepen.io/33787/liquid.webp')
+app.liquidPlane.material.metalness = 0.75
+app.liquidPlane.material.roughness = 0.25
+app.liquidPlane.uniforms.displacementScale.value = 5
+app.setRain(false)`;
       setLive(true);
     }
     render();
