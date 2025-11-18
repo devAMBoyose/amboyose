@@ -88,7 +88,8 @@ public class BamBankingController {
 
         // ✅ NEW: add transactions list for the table in bank-dashboard.html
         // (for now you can use an empty list if you don't have real history yet)
-        model.addAttribute("transactions", java.util.Collections.emptyList());
+        model.addAttribute("transactions",
+                txService.getRecentTransactions(acc.getUsername(), 10));
         // later, when ready: txService.getRecentTransactions(acc.getUsername(), 10);
 
         return "bank-dashboard";
