@@ -14,15 +14,14 @@
     <link rel="stylesheet" href="/css/footer.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/nav.css" />
-    <link rel="stylesheet" href="/assets/css/responsive.css" />
-    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
-    <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
 
     <style>
+        /* --- GLOBAL FONT --- */
         body {
             font-family: "JetBrains Mono", monospace;
         }
 
+        /* --- WINDOW SHELL --- */
         .window {
             max-width: 1200px;
             margin: 2rem auto;
@@ -30,6 +29,7 @@
             overflow: hidden;
         }
 
+        /* --- TITLE BAR --- */
         .title-bar {
             display: flex;
             align-items: center;
@@ -73,22 +73,30 @@
             font-size: 0.7rem;
         }
 
+        /* --- MAIN DASHBOARD LAYOUT --- */
         .bb-dashboard {
             display: flex;
             min-height: 380px;
         }
 
+        /* --- LEFT: TILES PANEL --- */
         .bb-tiles-panel {
             flex: 0 0 320px;
             max-width: 340px;
             padding: 1.5rem 1.3rem;
             background: #2b2240;
+
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            grid-auto-rows: 110px;
+
+            /* IMPORTANT: let each row size itself by content */
+            grid-auto-rows: auto !important;
+
             gap: 0.8rem;
+            align-content: flex-start;
         }
 
+        /* --- TILE CARD --- */
         .bb-tile {
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -96,11 +104,20 @@
             color: #fff;
             text-decoration: none;
             padding: 0.75rem 0.8rem;
+
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
+            align-items: stretch;
+            gap: 0.45rem;
+
             font-size: 0.78rem;
             transition: all 0.12s ease;
+            box-sizing: border-box;
+
+            /* kill any fixed heights from other CSS */
+            height: auto !important;
+            min-height: 0 !important;
         }
 
         .bb-tile:hover {
@@ -110,7 +127,7 @@
 
         .bb-tile h2 {
             font-size: 0.9rem;
-            margin: 0 0 0.35rem;
+            margin: 0 0 0.25rem;
         }
 
         .bb-tile-sub {
@@ -118,6 +135,12 @@
             opacity: 0.85;
         }
 
+        /* give space between top block and inputs/buttons */
+        .bb-tile>div+div {
+            margin-top: 0.2rem;
+        }
+
+        /* big red help tile spans full width */
         .bb-tile.app-transaction {
             grid-column: span 2;
             background: #a00010;
@@ -127,7 +150,9 @@
             background: #c01424;
         }
 
+        /* --- INPUTS & BUTTONS INSIDE TILES --- */
         .bb-tile input {
+            display: block;
             margin-top: 0.25rem;
             padding: 0.25rem 0.35rem;
             border-radius: 4px;
@@ -136,9 +161,11 @@
             color: #fff;
             font-size: 0.72rem;
             width: 100%;
+            box-sizing: border-box;
         }
 
         .bb-tile button {
+            display: block;
             margin-top: 0.35rem;
             padding: 0.35rem 0.5rem;
             border-radius: 4px;
@@ -147,6 +174,7 @@
             font-weight: 600;
             cursor: pointer;
             width: 100%;
+            box-sizing: border-box;
         }
 
         .bb-tile button[type="submit"] {
@@ -166,6 +194,7 @@
             display: block;
         }
 
+        /* --- RIGHT: MAIN PANEL --- */
         .bb-main-panel {
             flex: 1;
             padding: 1.7rem 2rem;
@@ -237,7 +266,7 @@
             margin-top: 1rem;
         }
 
-        /* RESPONSIVE */
+        /* --- RESPONSIVE --- */
         @media (max-width: 960px) {
             .window {
                 margin: 1rem;
@@ -249,7 +278,7 @@
 
             .bb-tiles-panel {
                 max-width: 100%;
-                grid-auto-rows: auto;
+                grid-auto-rows: auto !important;
             }
 
             .bb-main-panel {
@@ -278,6 +307,7 @@
             }
         }
     </style>
+
 </head>
 
 <body>
