@@ -327,12 +327,7 @@
                         <span>Logout</span>
                     </button>
                 </a>
-                <a href="/pages/website.html" class="chip-link">
-                    <button class="chip chip-back">
-                        <i class="fa-solid fa-house"></i>
-                        <span>Home</span>
-                    </button>
-                </a>
+
             </div>
         </div>
 
@@ -345,7 +340,7 @@
                 <form th:action="@{/bambanking/check-balance}" method="post" class="bb-tile">
                     <div>
                         <h2>Check Balance</h2>
-                        <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                        <div class="bb-tile-sub"> </div>
                     </div>
                     <button type="submit">
                         <i class="fa-solid fa-magnifying-glass-dollar"></i> Check
@@ -356,7 +351,7 @@
                 <form th:action="@{/bambanking/deposit}" method="post" class="bb-tile">
                     <div>
                         <h2>Deposit Cash</h2>
-                        <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                        <div class="bb-tile-sub"> </div>
                     </div>
                     <div>
                         <input type="number" step="0.01" name="amount" placeholder="Amount" required />
@@ -370,7 +365,7 @@
                 <form th:action="@{/bambanking/withdraw}" method="post" class="bb-tile">
                     <div>
                         <h2>Withdraw Cash</h2>
-                        <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                        <div class="bb-tile-sub"> </div>
                     </div>
                     <div>
                         <input type="number" step="0.01" name="amount" placeholder="Amount" required />
@@ -384,7 +379,7 @@
                 <form th:action="@{/bambanking/transfer}" method="post" class="bb-tile">
                     <div>
                         <h2>Transfer Funds</h2>
-                        <div class="bb-tile-sub">&laquo;includes&raquo; UC1</div>
+                        <div class="bb-tile-sub"> </div>
                     </div>
                     <div>
                         <input type="text" name="toUser" placeholder="To username" required />
@@ -399,7 +394,7 @@
                 <a th:href="@{/bambanking/help}" class="bb-tile app-transaction tile-link">
                     <div>
                         <h2>App Transaction / Help</h2>
-                        <div class="bb-tile-sub">&laquo;extends&raquo; via Menu</div>
+                        <div class="bb-tile-sub">via Menu</div>
                     </div>
                     <div class="bb-tile-sub">
                         Learn how BamBanking works.

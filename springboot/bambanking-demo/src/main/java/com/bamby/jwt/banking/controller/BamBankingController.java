@@ -187,9 +187,23 @@ public class BamBankingController {
         if (acc == null) {
             return "redirect:/bambanking/login";
         }
-        String result = txService.checkBalance(acc);
-        model.addAttribute("message", result);
-        return "bank-transaction";
+
+        double balance = acc.getBalance();
+
+        // nice structured data for the UI
+        model.addAttribute("username", acc.getUsername());
+        model.addAttribute("balance", balance);
+
+        model.addAttribute("txType", "Balance Inquiry");
+        model.addAttribute("success", true);
+        model.addAttribute("txRef", "BB-" + System.currentTimeMillis());
+        model.addAttribute("txDateTime",
+                java.time.LocalDateTime.now().toString().replace('T', ' '));
+        model.addAttribute("txMessage",
+                "Hello, " + acc.getUsername() + "! Your current balance is PHP "
+                        + String.format("%.2f", balance));
+
+        return "balance-result"; // <<< new template
     }
 
     @PostMapping("/transfer")
