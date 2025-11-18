@@ -10,19 +10,17 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
-    <!-- Global styles -->
-    <link rel="stylesheet" href="/css/footer.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/nav.css" />
-    <link rel="stylesheet" href="/assets/css/responsive.css" />
-    <!-- (optional, but you can keep) -->
-    <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
-    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
+    <!-- Global styles (works for Live Server AND Spring Boot) -->
+    <link rel="stylesheet" href="/css/footer.css" th:href="@{/css/footer.css}" />
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="/css/nav.css" th:href="@{/css/nav.css}" />
+    <link rel="stylesheet" href="/assets/css/responsive.css" th:href="@{/assets/css/responsive.css}" />
+    <link rel="stylesheet" href="/springboot/assets/sp.base.css" th:href="@{/springboot/assets/sp.base.css}" />
+    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css"
+        th:href="@{/springboot/assets/sp.responsive.css}" />
 
-    <!-- ✅ Login-card specific styles (inline so it ALWAYS works) -->
+    <!-- ✅ Your original inline login-card styles -->
     <style>
-        /* ========== LOGIN LAYOUT ========== */
-
         .login-wrapper {
             padding: 2rem;
             display: flex;
@@ -31,7 +29,6 @@
             min-height: 320px;
         }
 
-        /* Main login card */
         .login-card {
             position: relative;
             z-index: 1;
@@ -40,22 +37,16 @@
             border-radius: 16px;
             padding: 2rem;
             background: rgba(10, 10, 10, 0.92);
-            /* dark center */
             box-shadow: 0 0 24px rgba(0, 0, 0, 0.8);
             border: none;
-            /* important: no static border */
         }
 
-        /* 🔥 Animated neon BORDER only */
         .login-card::before {
             content: "";
             position: absolute;
             inset: 0;
-            /* same size as card */
             border-radius: inherit;
             padding: 3px;
-            /* thickness of glowing border */
-
             background: linear-gradient(130deg,
                     #13ffa1,
                     #00ccff,
@@ -63,23 +54,18 @@
                     #058a55);
             background-size: 300% 300%;
             animation: neonBorder 6s linear infinite;
-
-            /* Make it a hollow ring using masking */
             -webkit-mask:
                 linear-gradient(#fff 0 0) content-box,
                 linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
-
             mask:
                 linear-gradient(#fff 0 0) content-box,
                 linear-gradient(#fff 0 0);
             mask-composite: exclude;
-
             pointer-events: none;
             z-index: -1;
         }
 
-        /* Smooth running animation */
         @keyframes neonBorder {
             0% {
                 background-position: 0% 50%;
@@ -93,8 +79,6 @@
                 background-position: 0% 50%;
             }
         }
-
-        /* ========== TEXT & FORM INSIDE CARD ========== */
 
         .login-card h1 {
             font-size: 1.4rem;
@@ -153,34 +137,6 @@
             font-weight: 600;
         }
 
-        .btn-login:disabled {
-            opacity: 0.5;
-            cursor: wait;
-        }
-
-        .login-status {
-            margin-top: 0.8rem;
-            font-size: 0.8rem;
-            min-height: 1.2em;
-        }
-
-        .login-status.ok {
-            color: #00ff88;
-        }
-
-        .login-status.err {
-            color: #f80227;
-        }
-
-        .token-preview {
-            margin-top: 0.75rem;
-            font-size: 0.7rem;
-            word-break: break-all;
-            opacity: 0.7;
-        }
-
-        /* ========== RESPONSIVE ========== */
-
         @media (max-width: 640px) {
             .login-wrapper {
                 padding: 1.5rem 1rem;
@@ -191,7 +147,6 @@
             }
         }
     </style>
-
 </head>
 
 <body>
@@ -208,6 +163,7 @@
             <span class="filename">Banking App with Springboot JAVA</span>
 
             <div class="tb-right">
+                <!-- you can point this back to your static portfolio if you want -->
                 <a href="/pages/website.html" class="chip-link">
                     <button class="chip chip-back" type="button">
                         <i class="fa-solid fa-house"></i>
@@ -265,8 +221,8 @@
     </footer>
 
     <!-- JS -->
-    <script src="/js/script.js"></script>
-    <script src="/js/nav.js" defer></script>
+    <script src="/js/script.js" th:src="@{/js/script.js}"></script>
+    <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
 </body>
 
 </html>
