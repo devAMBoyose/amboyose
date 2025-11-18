@@ -1,7 +1,12 @@
 package com.bamby.jwt.banking.service;
 
 import com.bamby.jwt.banking.model.Account;
+import com.bamby.jwt.banking.model.Transaction;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class TransactionService {
@@ -112,5 +117,37 @@ public class TransactionService {
                 + "- Transfer: send money to another user.<br>"
                 + "- Tips: amounts must be positive; PIN is required at login.<br>"
                 + "=================<br>";
+    }
+
+    // ========== NEW METHODS FOR HISTORY ==========
+
+    // record one transaction in history
+    public void record(String username,
+            String type,
+            double amount,
+            double balanceAfter,
+            boolean success) {
+
+        String status = success ? "OK" : "FAILED";
+
+        Transaction tx = new Transaction(
+                LocalDateTime.now(),
+                type,
+                "APP", // method
+                amount,
+                balanceAfter,
+                status);
+
+        // add newest at top of list
+        db.getTxList(username).add(0, tx);
+    }
+
+    // get last N transactions for dashboard
+    public List<Transaction> getRecentTransactions(String username, int limit) {
+        List<Transaction> list = db.getTxList(username);
+        if (list.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return list.size() <= limit ? list : list.subList(0, limit);
     }
 }

@@ -1,6 +1,7 @@
 package com.bamby.jwt.banking.service;
 
 import com.bamby.jwt.banking.model.Account;
+import com.bamby.jwt.banking.model.Transaction;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -8,8 +9,12 @@ import java.util.*;
 @Component
 public class DataStore {
 
+    // existing data
     public final Map<String, Account> accounts = new HashMap<>();
     public final List<String> logs = new ArrayList<>();
+
+    // ✅ NEW: transaction history per username
+    public final Map<String, List<Transaction>> txHistory = new HashMap<>();
 
     public DataStore() {
         seedData();
@@ -18,6 +23,7 @@ public class DataStore {
     private void seedData() {
         accounts.clear();
         logs.clear();
+        txHistory.clear();
 
         // Demo users
         accounts.put("anna", new Account("anna", 1234, 1500.00));
@@ -34,5 +40,12 @@ public class DataStore {
 
     public static String php(double v) {
         return String.format("PHP %.2f", v);
+    }
+
+    // ✅ helper – always returns a list for that user
+    public List<Transaction> getTxList(String username) {
+        return txHistory.computeIfAbsent(
+                username.toLowerCase(),
+                k -> new ArrayList<>());
     }
 }
