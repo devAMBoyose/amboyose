@@ -124,6 +124,9 @@ public class BamBankingController {
 
         double newBalance = acc.getBalance();
 
+        // ✅ NEW: record this withdrawal in history
+        txService.record(acc.getUsername(), "Withdrawal", amount, newBalance, success);
+
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("txType", "Withdrawal");
         model.addAttribute("amount", amount);
@@ -136,6 +139,7 @@ public class BamBankingController {
         model.addAttribute("txMessage", txMessage);
 
         return "transaction-result";
+
     }
 
     // --------------------------
@@ -166,6 +170,9 @@ public class BamBankingController {
 
         double newBalance = acc.getBalance();
 
+        // ✅ NEW: record this deposit in history
+        txService.record(acc.getUsername(), "Deposit", amount, newBalance, success);
+
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("txType", "Deposit");
         model.addAttribute("amount", amount);
@@ -182,6 +189,7 @@ public class BamBankingController {
 
         // ✅ NEW: use your custom deposit UI
         return "deposit-result";
+
     }
 
     // --------------------------
