@@ -10,13 +10,188 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
-    <!-- Your existing styles (Spring Boot static paths) -->
+    <!-- Global styles -->
     <link rel="stylesheet" href="/css/footer.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/nav.css" />
     <link rel="stylesheet" href="/assets/css/responsive.css" />
-    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
+    <!-- (optional, but you can keep) -->
     <link rel="stylesheet" href="/springboot/assets/sp.base.css" />
+    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css" />
+
+    <!-- ✅ Login-card specific styles (inline so it ALWAYS works) -->
+    <style>
+        /* ========== LOGIN LAYOUT ========== */
+
+        .login-wrapper {
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 320px;
+        }
+
+        /* Main login card */
+        .login-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 16px;
+            padding: 2rem;
+            background: rgba(10, 10, 10, 0.92);
+            /* dark center */
+            box-shadow: 0 0 24px rgba(0, 0, 0, 0.8);
+            border: none;
+            /* important: no static border */
+        }
+
+        /* 🔥 Animated neon BORDER only */
+        .login-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            /* same size as card */
+            border-radius: inherit;
+            padding: 3px;
+            /* thickness of glowing border */
+
+            background: linear-gradient(130deg,
+                    #13ffa1,
+                    #00ccff,
+                    #ff0066,
+                    #058a55);
+            background-size: 300% 300%;
+            animation: neonBorder 6s linear infinite;
+
+            /* Make it a hollow ring using masking */
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+
+            mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Smooth running animation */
+        @keyframes neonBorder {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* ========== TEXT & FORM INSIDE CARD ========== */
+
+        .login-card h1 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-card p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 1.4rem;
+        }
+
+        .login-field {
+            margin-bottom: 1rem;
+        }
+
+        .login-field label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .login-field input {
+            width: 100%;
+            padding: 0.55rem 0.7rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(5, 5, 5, 0.9);
+            color: #fff;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.85rem;
+        }
+
+        .login-field input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.4);
+        }
+
+        .login-actions {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+
+        .btn-login {
+            padding: 0.55rem 1.4rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: "JetBrains Mono", monospace;
+            background: linear-gradient(120deg, #04864a, #00bcd4);
+            color: #020b06;
+            font-weight: 600;
+        }
+
+        .btn-login:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        .login-status {
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            min-height: 1.2em;
+        }
+
+        .login-status.ok {
+            color: #00ff88;
+        }
+
+        .login-status.err {
+            color: #f80227;
+        }
+
+        .token-preview {
+            margin-top: 0.75rem;
+            font-size: 0.7rem;
+            word-break: break-all;
+            opacity: 0.7;
+        }
+
+        /* ========== RESPONSIVE ========== */
+
+        @media (max-width: 640px) {
+            .login-wrapper {
+                padding: 1.5rem 1rem;
+            }
+
+            .login-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -30,43 +205,35 @@
                 <span class="red"></span><span class="yellow"></span><span class="green"></span>
             </div>
 
-            <span class="filename">BamBankingLogin.java</span>
+            <span class="filename">Banking App with Springboot JAVA</span>
 
-            <!-- RIGHT-SIDE NAV -->
             <div class="tb-right">
-                <!-- Hamburger (mobile) -->
-                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
-                    aria-label="Toggle menu">
-                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-                </button>
-
-                <nav class="tabs" id="siteTabs" aria-label="Primary">
-                    <a href="/pages/website.html" class="chip-link">
-                        <button class="chip chip-back" type="button">
-                            <i class="fa-solid fa-house"></i>
-                            <span>Home</span>
-                        </button>
-                    </a>
-                </nav>
+                <a href="/pages/website.html" class="chip-link">
+                    <button class="chip chip-back" type="button">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </button>
+                </a>
             </div>
         </div>
 
         <!-- 🔐 Login Section -->
         <div class="login-wrapper">
             <div class="login-card">
-                <h1>Login() &nbsp;
+                <h1>
+                    Login()
                     <span style="font-size:0.8rem; opacity:0.7;">// BamBanking demo</span>
                 </h1>
                 <p>
                     Log in with a sample BamBanking account (anna, bamby, guest, sample)
-                    using your Java service logic.
+                    and PIN (1234) to explore the demo application.
                 </p>
 
                 <!-- Error from controller -->
                 <p th:if="${error}" th:text="${error}" style="color:#ff6b6b; margin-bottom:0.8rem;"></p>
 
                 <!-- Form posts to Spring Boot -->
-                <form action="/bambanking/login" method="post">
+                <form th:action="@{/bambanking/login}" action="/bambanking/login" method="post">
                     <div class="login-field">
                         <label for="username">username</label>
                         <input type="text" id="username" name="username" autocomplete="username" required
@@ -80,9 +247,7 @@
                     </div>
 
                     <div class="login-actions">
-                        <button type="submit" class="btn-login">
-                            Login
-                        </button>
+                        <button type="submit" class="btn-login">Login</button>
                     </div>
                 </form>
             </div>
@@ -100,10 +265,9 @@
         </p>
     </footer>
 
-    <!-- Your existing JS (Spring Boot static paths) -->
+    <!-- JS -->
     <script src="/js/script.js"></script>
-    <script defer src="/js/nav.js"></script>
-    <script defer src="/js/main.js"></script>
+    <script src="/js/nav.js" defer></script>
 </body>
 
 </html>

@@ -99,6 +99,47 @@
     opacity: 0.7;
 }
 
+
+
+/* 🔥 Animated Neon Border (Running Gradient) */
+.glow-frame {
+    position: relative;
+    border-radius: 18px;
+    padding: 0.6rem;
+    background: linear-gradient(130deg,
+            #00ff99,
+            #00ccff,
+            #ff0066,
+            #ffaa00,
+            #00ff99);
+    background-size: 300% 300%;
+    animation: borderRun 6s linear infinite;
+}
+
+/* Inside content */
+.glow-frame .content {
+    background: #080b16;
+    border-radius: 14px;
+    padding: 1rem;
+}
+
+/* 🔄 Animation loop */
+@keyframes borderRun {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+
 /* Animated Neon Border Container */
 .login-card {
     position: relative;
