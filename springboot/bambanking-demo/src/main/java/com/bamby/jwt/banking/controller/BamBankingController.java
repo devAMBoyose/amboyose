@@ -89,32 +89,101 @@ public class BamBankingController {
     }
 
     // --------------------------
-    // TRANSACTIONS
+    // WITHDRAW – detailed result page
+    // --------------------------
+    @PostMapping("/withdraw")
+    public String handleWithdraw(@RequestParam double amount,
+            HttpSession session,
+            Model model) {
+
+        Account acc = getSessionAccount(session);
+        if (acc == null) {
+            return "redirect:/bambanking/login";
+        }
+
+        double oldBalance = acc.getBalance();
+        boolean success = false;
+        String txMessage;
+
+        if (amount <= 0) {
+            txMessage = "Withdrawal failed. Amount must be greater than zero.";
+        } else if (amount > oldBalance) {
+            txMessage = "Withdrawal failed. Insufficient balance.";
+        } else {
+            acc.setBalance(oldBalance - amount);
+            success = true;
+            txMessage = "Withdrawal successful! Your new balance is PHP "
+                    + String.format("%.2f", acc.getBalance());
+        }
+
+        double newBalance = acc.getBalance();
+
+        model.addAttribute("username", acc.getUsername());
+        model.addAttribute("txType", "Withdrawal");
+        model.addAttribute("amount", amount);
+        model.addAttribute("oldBalance", oldBalance);
+        model.addAttribute("newBalance", newBalance);
+        model.addAttribute("success", success);
+        model.addAttribute("txRef", "BB-" + System.currentTimeMillis());
+        model.addAttribute("txDateTime",
+                java.time.LocalDateTime.now().toString().replace('T', ' '));
+        model.addAttribute("txMessage", txMessage);
+
+        return "transaction-result";
+    }
+
+    // --------------------------
+    // DEPOSIT – detailed result page
+    // --------------------------
+    @PostMapping("/deposit")
+    public String handleDeposit(@RequestParam double amount,
+            HttpSession session,
+            Model model) {
+
+        Account acc = getSessionAccount(session);
+        if (acc == null) {
+            return "redirect:/bambanking/login";
+        }
+
+        double oldBalance = acc.getBalance();
+        boolean success = false;
+        String txMessage;
+
+        if (amount <= 0) {
+            txMessage = "Deposit failed. Amount must be greater than zero.";
+        } else {
+            acc.setBalance(oldBalance + amount);
+            success = true;
+            txMessage = "Deposit successful! Your new balance is PHP "
+                    + String.format("%.2f", acc.getBalance());
+        }
+
+        double newBalance = acc.getBalance();
+
+        model.addAttribute("username", acc.getUsername());
+        model.addAttribute("txType", "Deposit");
+        model.addAttribute("amount", amount);
+        model.addAttribute("oldBalance", oldBalance);
+        model.addAttribute("newBalance", newBalance);
+        model.addAttribute("success", success);
+        model.addAttribute("txRef", "BB-" + System.currentTimeMillis());
+        model.addAttribute("txDateTime",
+                java.time.LocalDateTime.now().toString().replace('T', ' '));
+        model.addAttribute("txMessage", txMessage);
+
+        return "transaction-result";
+    }
+
+    // --------------------------
+    // TRANSACTIONS (simple text page)
     // --------------------------
     @PostMapping("/check-balance")
     public String checkBalance(HttpSession session, Model model) {
         Account acc = getSessionAccount(session);
+        if (acc == null) {
+            return "redirect:/bambanking/login";
+        }
         String result = txService.checkBalance(acc);
-        model.addAttribute("message", result);
-        return "bank-transaction";
-    }
-
-    @PostMapping("/deposit")
-    public String deposit(@RequestParam double amount,
-            HttpSession session,
-            Model model) {
-        Account acc = getSessionAccount(session);
-        String result = txService.deposit(acc, amount);
-        model.addAttribute("message", result);
-        return "bank-transaction";
-    }
-
-    @PostMapping("/withdraw")
-    public String withdraw(@RequestParam double amount,
-            HttpSession session,
-            Model model) {
-        Account acc = getSessionAccount(session);
-        String result = txService.withdraw(acc, amount);
         model.addAttribute("message", result);
         return "bank-transaction";
     }
@@ -125,6 +194,9 @@ public class BamBankingController {
             HttpSession session,
             Model model) {
         Account acc = getSessionAccount(session);
+        if (acc == null) {
+            return "redirect:/bambanking/login";
+        }
         String result = txService.transfer(acc, toUser, amount);
         model.addAttribute("message", result);
         return "bank-transaction";
