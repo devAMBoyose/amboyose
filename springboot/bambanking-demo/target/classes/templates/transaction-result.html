@@ -247,6 +247,41 @@
             box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7);
         }
 
+
+        .tx-actions {
+            margin-top: 1.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .btn-link {
+            padding: 0.55rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 255, 128, 0.55);
+            background: transparent;
+            color: #00ff9c;
+            font-size: 0.85rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-link.secondary {
+            border-color: rgba(160, 160, 160, 0.6);
+            color: #e0e0e0;
+        }
+
+        .btn-link:hover {
+            background: rgba(0, 255, 128, 0.08);
+        }
+
+        .btn-link.secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+
         @media (max-width: 640px) {
             .tx-card {
                 padding: 1.5rem 1.6rem;
@@ -371,21 +406,25 @@
                     </p>
 
                     <div class="tx-actions">
-                        <a th:href="@{/bambanking/dashboard}" class="bb-btn bb-btn-primary">
-                            <i class="fa-solid fa-gauge-high"></i>
+                        <!-- Back to Dashboard -->
+                        <a class="btn-link" th:href="@{/bambanking/dashboard}">
+                            <i class="fa-solid fa-gauge"></i>
                             Back to Dashboard
                         </a>
 
-                        <a th:href="@{/bambanking/withdraw}" class="bb-btn">
-                            <i class="fa-solid fa-arrow-down-long"></i>
+                        <!-- New Withdrawal -->
+                        <a class="btn-link secondary" th:href="@{/bambanking/dashboard}">
+                            <i class="fa-solid fa-money-bill-trend-up"></i>
                             New Withdrawal
                         </a>
 
-                        <a th:href="@{/bambanking/deposit}" class="bb-btn">
-                            <i class="fa-solid fa-arrow-up-long"></i>
+                        <!-- New Deposit -->
+                        <a class="btn-link secondary" th:href="@{/bambanking/dashboard}">
+                            <i class="fa-solid fa-circle-plus"></i>
                             New Deposit
                         </a>
                     </div>
+
                 </footer>
             </div>
         </section>

@@ -171,7 +171,11 @@ public class BamBankingController {
                 java.time.LocalDateTime.now().toString().replace('T', ' '));
         model.addAttribute("txMessage", txMessage);
 
-        return "transaction-result";
+        // ⛔ OLD:
+        // return "transaction-result";
+
+        // ✅ NEW: use your custom deposit UI
+        return "deposit-result";
     }
 
     // --------------------------
