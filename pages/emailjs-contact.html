@@ -426,17 +426,17 @@
         </p>
     </footer>
 
-<!-- THEME TOGGLE JS (click + drag) -->
+<!-- THEME TOGGLE JS (click + smooth drag) -->
 <script>
-    const toggle = document.getElementById("themeToggle");
     const wrapper = document.querySelector(".theme-toggle-wrapper");
+    const toggle = document.getElementById("themeToggle");
 
-    if (toggle && wrapper) {
+    if (wrapper && toggle) {
         const buttons = toggle.querySelectorAll("button");
 
         // ----- THEME SWITCH -----
         buttons.forEach((btn) => {
-            btn.addEventListener("click", (e) => {
+            btn.addEventListener("click", () => {
                 const theme = btn.dataset.theme;
 
                 // active state
@@ -453,30 +453,25 @@
         });
 
         // ----- DRAGGABLE PANEL -----
-        let isDragging = false;
-        let startX = 0, startY = 0;
-        let startLeft = 0, startTop = 0;
+        let dragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
 
         wrapper.addEventListener("pointerdown", (e) => {
-            isDragging = true;
+            dragging = true;
             wrapper.setPointerCapture(e.pointerId);
 
-            startX = e.clientX;
-            startY = e.clientY;
-
             const rect = wrapper.getBoundingClientRect();
-            startLeft = rect.left;
-            startTop = rect.top;
+            // store where inside the panel you grabbed it
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
         });
 
         wrapper.addEventListener("pointermove", (e) => {
-            if (!isDragging) return;
+            if (!dragging) return;
 
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-
-            let newLeft = startLeft + dx;
-            let newTop = startTop + dy;
+            let left = e.clientX - offsetX;
+            let top = e.clientY - offsetY;
 
             const vw = window.innerWidth;
             const vh = window.innerHeight;
@@ -485,24 +480,27 @@
             const h = rect.height;
 
             // keep inside screen
-            newLeft = Math.max(0, Math.min(vw - w, newLeft));
-            newTop = Math.max(0, Math.min(vh - h, newTop));
+            left = Math.max(0, Math.min(vw - w, left));
+            top = Math.max(0, Math.min(vh - h, top));
 
-            wrapper.style.left = newLeft + "px";
-            wrapper.style.top = newTop + "px";
+            wrapper.style.left = left + "px";
+            wrapper.style.top = top + "px";
             wrapper.style.right = "auto";
             wrapper.style.bottom = "auto";
+
+            // stop the page from scrolling while dragging
+            e.preventDefault();
         });
 
-        wrapper.addEventListener("pointerup", (e) => {
-            isDragging = false;
-            wrapper.releasePointerCapture(e.pointerId);
-        });
+        function endDrag(e) {
+            dragging = false;
+            try {
+                wrapper.releasePointerCapture(e.pointerId);
+            } catch (_) {}
+        }
 
-        wrapper.addEventListener("pointercancel", (e) => {
-            isDragging = false;
-            wrapper.releasePointerCapture(e.pointerId);
-        });
+        wrapper.addEventListener("pointerup", endDrag);
+        wrapper.addEventListener("pointercancel", endDrag);
     }
 </script>
 </body>
