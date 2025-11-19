@@ -1,7 +1,8 @@
 com\bamby\jwt\banking\service\DataStore.class
-com\bamby\jwt\banking\model\Account.class
+com\bamby\jwt\banking\model\Transaction.class
 com\bamby\jwt\JwtDemoApplication.class
 com\bamby\jwt\banking\service\AuthService.class
 com\bamby\jwt\banking\controller\BamBankingController.class
 com\bamby\jwt\banking\service\MaintenanceService.class
 com\bamby\jwt\banking\service\TransactionService.class
+com\bamby\jwt\banking\model\Account.class

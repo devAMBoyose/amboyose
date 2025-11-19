@@ -523,9 +523,9 @@
                     </div>
 
                     <!-- DEFAULT PLACEHOLDER when nothing selected -->
-                    <div class="bb-main-placeholder" th:unless="${showBalanceCard}">
+                    <!-- <div class="bb-main-placeholder" th:unless="${showBalanceCard}">
                         <p>Select a function on the left to begin.</p>
-                    </div>
+                    </div> -->
 
                     <!-- NEW: RECENT TRANSACTIONS CARD -->
                     <div class="bb-transactions-card" th:if="${transactions != null}">
@@ -587,6 +587,9 @@
     <footer class="site-footer">
         <p>© 2025 <strong>BAMBY Banking App with Spring Boot</strong> | Designed &amp; Coded with ❤️</p>
     </footer>
+
+    <script src="/js/script.js" th:src="@{/js/script.js}"></script>
+    <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
 
 </body>
 

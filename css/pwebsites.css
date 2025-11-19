@@ -424,4 +424,18 @@
     .pg .pg-stat {
         animation: none !important;
     }
+
+    /* --- Normalize project heading spacing on phones --- */
+    @media (max-width: 680px) {
+        .pg-project__name {
+            margin: 0 0 12px;
+            /* no top margin, consistent gap under the title */
+        }
+    }
+
+    @media (max-width:375px) {
+        .pg-project__name {
+            margin: 0 0 1.25rem;
+        }
+    }
 }

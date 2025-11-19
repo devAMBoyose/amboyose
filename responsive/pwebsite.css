@@ -24,6 +24,7 @@
     }
 }
 
+
 /* ---------- Tablets portrait (768–1023)  iPad Mini/Air, Surface Pro 7 portrait ---------- */
 @media (min-width:768px) and (max-width:1023px) {
     .pg {
@@ -293,4 +294,7 @@
     .pg-mock__ctrl {
         display: none;
     }
+
+
+
 }
