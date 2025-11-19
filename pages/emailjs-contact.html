@@ -215,13 +215,12 @@
         }
 
         /* ---------- SUN / MOON TOGGLE ---------- */
-        .theme-toggle-wrapper {
+       .theme-toggle-wrapper {
     position: fixed;      /* float over the whole page */
     right: 18px;
     top: 140px;
     z-index: 9999;
     background: transparent;
-    touch-action: none;   /* important for smooth touch-drag */
 }
 
         .theme-toggle {
@@ -426,7 +425,7 @@
         </p>
     </footer>
 
-<!-- THEME TOGGLE JS (click + smooth drag) -->
+<!-- THEME TOGGLE JS (click + drag, safe for other buttons) -->
 <script>
     const wrapper = document.querySelector(".theme-toggle-wrapper");
     const toggle = document.getElementById("themeToggle");
@@ -434,16 +433,14 @@
     if (wrapper && toggle) {
         const buttons = toggle.querySelectorAll("button");
 
-        // ----- THEME SWITCH -----
+        // ---------- THEME SWITCH ----------
         buttons.forEach((btn) => {
             btn.addEventListener("click", () => {
                 const theme = btn.dataset.theme;
 
-                // active state
                 buttons.forEach((b) => b.classList.remove("is-active"));
                 btn.classList.add("is-active");
 
-                // apply theme
                 if (theme === "light") {
                     document.body.classList.add("light-theme");
                 } else {
@@ -452,26 +449,25 @@
             });
         });
 
-        // ----- DRAGGABLE PANEL -----
+        // ---------- DRAG LOGIC (MOUSE + TOUCH) ----------
         let dragging = false;
-        let offsetX = 0;
-        let offsetY = 0;
+        let startX = 0, startY = 0;
+        let startLeft = 0, startTop = 0;
 
-        wrapper.addEventListener("pointerdown", (e) => {
+        function startDrag(clientX, clientY) {
             dragging = true;
-            wrapper.setPointerCapture(e.pointerId);
-
             const rect = wrapper.getBoundingClientRect();
-            // store where inside the panel you grabbed it
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
-        });
+            startX = clientX;
+            startY = clientY;
+            startLeft = rect.left;
+            startTop = rect.top;
+        }
 
-        wrapper.addEventListener("pointermove", (e) => {
+        function moveDrag(clientX, clientY) {
             if (!dragging) return;
 
-            let left = e.clientX - offsetX;
-            let top = e.clientY - offsetY;
+            let left = startLeft + (clientX - startX);
+            let top = startTop + (clientY - startY);
 
             const vw = window.innerWidth;
             const vh = window.innerHeight;
@@ -479,7 +475,6 @@
             const w = rect.width;
             const h = rect.height;
 
-            // keep inside screen
             left = Math.max(0, Math.min(vw - w, left));
             top = Math.max(0, Math.min(vh - h, top));
 
@@ -487,20 +482,40 @@
             wrapper.style.top = top + "px";
             wrapper.style.right = "auto";
             wrapper.style.bottom = "auto";
-
-            // stop the page from scrolling while dragging
-            e.preventDefault();
-        });
-
-        function endDrag(e) {
-            dragging = false;
-            try {
-                wrapper.releasePointerCapture(e.pointerId);
-            } catch (_) {}
         }
 
-        wrapper.addEventListener("pointerup", endDrag);
-        wrapper.addEventListener("pointercancel", endDrag);
+        function endDrag() {
+            dragging = false;
+        }
+
+        // Mouse
+        wrapper.addEventListener("mousedown", (e) => {
+            e.preventDefault();       // don't start text selection
+            startDrag(e.clientX, e.clientY);
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (!dragging) return;
+            moveDrag(e.clientX, e.clientY);
+        });
+
+        document.addEventListener("mouseup", endDrag);
+
+        // Touch
+        wrapper.addEventListener("touchstart", (e) => {
+            const t = e.touches[0];
+            startDrag(t.clientX, t.clientY);
+        }, { passive: true });
+
+        document.addEventListener("touchmove", (e) => {
+            if (!dragging) return;
+            const t = e.touches[0];
+            moveDrag(t.clientX, t.clientY);
+            e.preventDefault();      // stop page from scrolling while dragging
+        }, { passive: false });
+
+        document.addEventListener("touchend", endDrag);
+        document.addEventListener("touchcancel", endDrag);
     }
 </script>
 </body>
