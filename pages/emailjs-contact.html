@@ -216,12 +216,13 @@
 
         /* ---------- SUN / MOON TOGGLE ---------- */
         .theme-toggle-wrapper {
-            position: absolute;
-            right: 24px;
-            top: 110px;
-            z-index: 30;
-            background: transparent;
-        }
+    position: fixed;      /* float over the whole page */
+    right: 18px;
+    top: 140px;
+    z-index: 9999;
+    background: transparent;
+    touch-action: none;   /* important for smooth touch-drag */
+}
 
         .theme-toggle {
             display: inline-flex;
