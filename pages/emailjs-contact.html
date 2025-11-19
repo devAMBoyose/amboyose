@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Email JS | Portfolio </title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your existing styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <style>
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        /* Card ---------------------------------------------------- */
+        .card {
+            width: 100%;
+            max-width: 950px;
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+            padding: 22px 22px 40px;
+            /* bottom space for button */
+        }
+
+        .card-header h1 {
+            margin: 0 0 6px;
+            font-size: 18px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .card-header p {
+            margin: 0 0 18px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Form layout --------------------------------------------- */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .field--full {
+            margin-top: 4px;
+        }
+
+        .label {
+            font-size: 12px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .label i {
+            font-size: 13px;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            border-radius: 10px;
+            border: 1px solid #111827;
+            background: #020617;
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            padding: 10px 11px;
+            outline: none;
+            transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+        }
+
+        .field textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .field select {
+            appearance: none;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent-soft);
+            background: #020617;
+        }
+
+        .helper {
+            margin: 4px 0 0;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .status {
+            min-height: 18px;
+            margin-top: 6px;
+            font-size: 12px;
+        }
+
+        .status .ok {
+            color: var(--ok);
+        }
+
+        .status .err {
+            color: var(--danger);
+        }
+
+        /* EMAIL-SPECIFIC BUTTON (no conflict with global .btn) ---- */
+        .email-btn {
+            margin-top: 16px;
+            border: none;
+            border-radius: 999px;
+            padding: 10px 30px;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            background: #6effa8;
+            color: #022c22;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 14px 30px rgba(16, 185, 129, 0.45);
+            transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+
+            /* center inside form */
+            align-self: center;
+        }
+
+        .email-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.02);
+            box-shadow: 0 18px 40px rgba(16, 185, 129, 0.6);
+        }
+
+        .email-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.5);
+        }
+
+        .email-btn:disabled {
+            opacity: 0.6;
+            cursor: default;
+            box-shadow: none;
+        }
+
+        /* Responsive ---------------------------------------------- */
+        @media (max-width: 720px) {
+            .page {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 18px 14px 40px;
+            }
+
+            .row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- cursor-follow glow background -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">Email JS Contact Form</span>
+
+            <!-- RIGHT-SIDE NAV -->
+            <div class="tb-right">
+                <!-- Hamburger (mobile) -->
+                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+                    aria-label="Toggle menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+
+                <!-- ONE unified menu -->
+                <ul id="navMenu" class="tb-menu">
+                    <li>
+                        <!-- a = chip, no nested button -->
+                        <a href="/pages/api-integration.html" class="chip chip-back chip-link">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+
+
+        </div>
+
+
+        <main class="page">
+            <section class="card">
+                <header class="card-header">
+                    <h1>EmailJS Contact Form</h1>
+                    <p>Serverless form-to-email for my portfolio. All messages go straight to
+                        <strong>bamby.dev@gmail.com</strong>.
+                    </p>
+                </header>
+
+                <form id="contactForm" class="contact-form" novalidate>
+                    <div class="row">
+                        <label class="field">
+                            <span class="label">
+                                <i class="fa-regular fa-user"></i>
+                                Your name*
+                            </span>
+                            <input type="text" name="from_name" required />
+                        </label>
+
+                        <label class="field">
+                            <span class="label">
+                                <i class="fa-regular fa-envelope"></i>
+                                Email address*
+                            </span>
+                            <input type="email" name="reply_to" required />
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <label class="field">
+                            <span class="label">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                                Phone number*
+                            </span>
+                            <input type="tel" name="phone" required />
+                        </label>
+
+                        <label class="field">
+                            <span class="label">
+                                <i class="fa-solid fa-list-ul"></i>
+                                Select service*
+                            </span>
+                            <select name="service" required>
+                                <option value="" disabled selected>Select service</option>
+                                <option>Website Design</option>
+                                <option>Front-End Development</option>
+                                <option>Back-End / API</option>
+                                <option>Branding & Graphics</option>
+                                <option>Consultation</option>
+                                <option>Other</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <label class="field field--full">
+                        <span class="label">
+                            <i class="fa-regular fa-message"></i>
+                            Write a message*
+                        </span>
+                        <textarea name="message" required></textarea>
+                    </label>
+
+                    <p class="helper">All fields marked * are required.</p>
+
+                    <!-- ✅ NEW UNIQUE CLASS -->
+                    <button id="submitBtn" class="email-btn" type="submit">
+                        <span class="btn__text">Submit Message</span>
+                    </button>
+
+                    <div id="formStatus" class="status" aria-live="polite"></div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+    <script src="/pages/assets/email.js"></script>
+</body>
+
+</html>
