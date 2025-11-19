@@ -42,10 +42,20 @@ public class DataStore {
         return String.format("PHP %.2f", v);
     }
 
-    // ✅ helper – always returns a list for that user
+    // helper – always returns a list for that user
     public List<Transaction> getTxList(String username) {
         return txHistory.computeIfAbsent(
                 username.toLowerCase(),
                 k -> new ArrayList<>());
     }
+
+    // Signup username existence check
+    public boolean exists(String username) {
+        return accounts.containsKey(username);
+    }
+
+    public void save(Account acc) {
+        accounts.put(acc.getUsername(), acc);
+    }
+
 }

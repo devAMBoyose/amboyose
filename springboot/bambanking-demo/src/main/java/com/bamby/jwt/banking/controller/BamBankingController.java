@@ -258,4 +258,26 @@ public class BamBankingController {
         model.addAttribute("message", result);
         return "bank-transaction";
     }
+
+    @PostMapping("/signup")
+    public String handleSignup(@RequestParam String fullName,
+            @RequestParam String email,
+            @RequestParam String pin,
+            HttpSession session,
+            Model model) {
+
+        Account acc = authService.register(fullName, email, pin);
+
+        if (acc == null) {
+            model.addAttribute("signupError", "Sign up failed. Email already used or invalid PIN.");
+            return "bank-login"; // balik sa login page, same UI
+        }
+
+        // ✅ auto-login – ilagay sa session
+        session.setAttribute("username", acc.getUsername());
+
+        // redirect sa existing dashboard mo (hindi gagalawin yung logic doon)
+        return "redirect:/bambanking/dashboard";
+    }
+
 }

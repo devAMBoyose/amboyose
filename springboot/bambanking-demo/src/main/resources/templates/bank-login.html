@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="/springboot/assets/sp.responsive.css"
         th:href="@{/springboot/assets/sp.responsive.css}" />
 
+
+
     <!-- ✅ Your original inline login-card styles + flip card additions -->
     <style>
         .login-wrapper {
@@ -373,49 +375,44 @@
                                 </button>
                                 <button class="login-tab active" id="tabSignupBack" type="button">
                                     <i class="fa-regular fa-id-card"></i>
-                                    Sign up (demo)
+                                    Sign up
                                 </button>
                             </div>
 
                             <h1>
                                 Signup()
-                                <span style="font-size:0.8rem; opacity:0.7;">// UI only, no backend</span>
+                                <span style="font-size:0.8rem; opacity:0.7;">// Backend Enabled</span>
                             </h1>
                             <p>
-                                This is a demo sign-up card to showcase the flip animation.
-                                // no backend logic
+                                Backend integration is enabled and operating correctly for this sign-up process.
                             </p>
 
-                            <form onsubmit="return false;">
-
-                                <!-- Fullname (full width) -->
+                            <form th:action="@{/bambanking/signup}" method="post">
                                 <div class="login-field signup-full">
-                                    <label for="demo-name">fullName</label>
-                                    <input type="text" id="demo-name" placeholder="Bamby Demo User" />
+                                    <label for="fullName">fullName</label>
+                                    <input type="text" id="fullName" name="fullName" required
+                                        placeholder="Bamby Demo User" />
                                 </div>
 
-                                <!-- Email + PIN in 2 columns -->
                                 <div class="signup-grid">
                                     <div class="login-field">
-                                        <label for="demo-email">email</label>
-                                        <input type="email" id="demo-email" placeholder="bamby@example.com" />
+                                        <label for="email">email</label>
+                                        <input type="email" id="email" name="email" required
+                                            placeholder="bamby@example.com" />
                                     </div>
 
                                     <div class="login-field">
-                                        <label for="demo-pin">choosePIN</label>
-                                        <input type="password" id="demo-pin" maxlength="4"
-                                            placeholder="**** (demo only)" />
+                                        <label for="pin">choosePIN</label>
+                                        <input type="password" id="pin" name="pin" maxlength="4" required
+                                            placeholder="****" />
                                     </div>
                                 </div>
 
                                 <div class="login-actions">
-                                    <button type="button" class="btn-signup">
+                                    <button type="submit" class="btn-signup">
                                         Create Demo Account
                                     </button>
                                 </div>
-
-
-
                             </form>
 
                         </div>

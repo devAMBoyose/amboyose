@@ -35,4 +35,39 @@ public class AuthService {
         db.log(ok ? "ENGINEER AUTH OK" : "ENGINEER AUTH FAIL");
         return ok;
     }
+
+    public Account register(String fullName, String email, String pin) {
+
+        if (email == null || pin == null) {
+            return null;
+        }
+
+        int pinInt;
+        try {
+            pinInt = Integer.parseInt(pin);
+        } catch (NumberFormatException e) {
+            // invalid PIN (hindi number)
+            db.log("REGISTER FAIL (invalid PIN) for " + email);
+            return null;
+        }
+
+        // gagamitin natin ang email bilang username
+        String username = email.toLowerCase();
+
+        // check kung existing na ang account
+        if (db.accounts.containsKey(username)) {
+            db.log("REGISTER FAIL (duplicate user) " + username);
+            return null;
+        }
+
+        // Account(String username, int pin, double balance)
+        Account acc = new Account(username, pinInt, 0.0);
+
+        // isave sa in-memory database
+        db.accounts.put(username, acc);
+
+        db.log("REGISTER OK for user " + username + " (" + fullName + ")");
+        return acc;
+    }
+
 }
