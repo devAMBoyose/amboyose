@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/css/nav.css" />
 
     <style>
+        /* ---------- PAGE & CARD ---------- */
         .page {
             min-height: 100vh;
             display: flex;
@@ -24,7 +25,11 @@
             padding: 24px;
         }
 
-        /* Card ---------------------------------------------------- */
+        .window {
+            position: relative;
+            /* so the toggle can sit on the right of this "window" */
+        }
+
         .card {
             width: 100%;
             max-width: 950px;
@@ -33,7 +38,6 @@
             border: 1px solid var(--border);
             box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
             padding: 22px 22px 40px;
-            /* bottom space for button */
         }
 
         .card-header h1 {
@@ -49,7 +53,7 @@
             color: var(--text-muted);
         }
 
-        /* Form layout --------------------------------------------- */
+        /* ---------- FORM LAYOUT ---------- */
         .contact-form {
             display: flex;
             flex-direction: column;
@@ -95,7 +99,7 @@
             font-size: 13px;
             padding: 10px 11px;
             outline: none;
-            transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+            transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease;
         }
 
         .field textarea {
@@ -135,7 +139,7 @@
             color: var(--danger);
         }
 
-        /* EMAIL-SPECIFIC BUTTON (no conflict with global .btn) ---- */
+        /* ---------- EMAIL-SPECIFIC BUTTON ---------- */
         .email-btn {
             margin-top: 16px;
             border: none;
@@ -151,8 +155,6 @@
             justify-content: center;
             box-shadow: 0 14px 30px rgba(16, 185, 129, 0.45);
             transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
-
-            /* center inside form */
             align-self: center;
         }
 
@@ -173,7 +175,102 @@
             box-shadow: none;
         }
 
-        /* Responsive ---------------------------------------------- */
+        /* ---------- LIGHT THEME OVERRIDES ----------
+           Default = your existing DARK theme
+           When body has .light-theme we flip card & inputs to light mode
+        ------------------------------------------------ */
+        body.light-theme {
+            background: #f5f5f5;
+            color: #111827;
+        }
+
+        body.light-theme .card {
+            background: #ffffff;
+            border-color: #e5e7eb;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.25);
+        }
+
+        body.light-theme .card-header p {
+            color: #6b7280;
+        }
+
+        body.light-theme .field input,
+        body.light-theme .field select,
+        body.light-theme .field textarea {
+            background: #f9fafb;
+            border-color: #cbd5f5;
+            color: #111827;
+        }
+
+        body.light-theme .field input:focus,
+        body.light-theme .field select:focus,
+        body.light-theme .field textarea:focus {
+            background: #ffffff;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.35);
+        }
+
+        body.light-theme .helper {
+            color: #6b7280;
+        }
+
+        /* ---------- SUN / MOON TOGGLE ---------- */
+        .theme-toggle-wrapper {
+            position: absolute;
+            right: 24px;
+            top: 110px;
+            z-index: 30;
+            background: transparent;
+        }
+
+        .theme-toggle {
+            display: inline-flex;
+            flex-direction: column;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            overflow: hidden;
+            background: #020617;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        body.light-theme .theme-toggle {
+            background: #ffffff;
+            border-color: rgba(148, 163, 184, 0.8);
+        }
+
+        .theme-toggle button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #e5e7eb;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .theme-toggle button+button {
+            border-top: 1px solid rgba(148, 163, 184, 0.4);
+        }
+
+        body.light-theme .theme-toggle button {
+            color: #111827;
+        }
+
+        .theme-toggle button.is-active {
+            background: #111827;
+            color: #facc15;
+        }
+
+        body.light-theme .theme-toggle button.is-active {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
         @media (max-width: 720px) {
             .page {
                 padding: 16px;
@@ -185,6 +282,11 @@
 
             .row {
                 grid-template-columns: 1fr;
+            }
+
+            .theme-toggle-wrapper {
+                right: 12px;
+                top: 130px;
             }
         }
     </style>
@@ -215,7 +317,6 @@
                 <!-- ONE unified menu -->
                 <ul id="navMenu" class="tb-menu">
                     <li>
-                        <!-- a = chip, no nested button -->
                         <a href="/pages/api-integration.html" class="chip chip-back chip-link">
                             <i class="fa-solid fa-house"></i>
                             <span>Home</span>
@@ -223,12 +324,21 @@
                     </li>
                 </ul>
             </div>
-
-
-
-
         </div>
 
+        <!-- THEME TOGGLE (sun / moon) -->
+        <div class="theme-toggle-wrapper">
+            <div class="theme-toggle" id="themeToggle">
+                <!-- Light -->
+                <button type="button" data-theme="light">
+                    <i class="fa-regular fa-sun"></i>
+                </button>
+                <!-- Dark -->
+                <button type="button" data-theme="dark" class="is-active">
+                    <i class="fa-regular fa-moon"></i>
+                </button>
+            </div>
+        </div>
 
         <main class="page">
             <section class="card">
@@ -294,7 +404,6 @@
 
                     <p class="helper">All fields marked * are required.</p>
 
-                    <!-- NEW UNIQUE CLASS -->
                     <button id="submitBtn" class="email-btn" type="submit">
                         <span class="btn__text">Submit Message</span>
                     </button>
@@ -319,10 +428,33 @@
     <!-- Your existing JS -->
     <script src="/js/script.js"></script>
     <script defer src="/js/nav.js"></script>
-
-    <!-- EmailJS SDK (must be before your email.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="/pages/assets/p.emailjs.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- THEME TOGGLE JS -->
+    <script>
+        const toggle = document.getElementById("themeToggle");
+        if (toggle) {
+            const buttons = toggle.querySelectorAll("button");
+
+            buttons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const theme = btn.dataset.theme;
+
+                    // update active state in UI
+                    buttons.forEach((b) => b.classList.remove("is-active"));
+                    btn.classList.add("is-active");
+
+                    // apply theme to body
+                    if (theme === "light") {
+                        document.body.classList.add("light-theme");
+                    } else {
+                        document.body.classList.remove("light-theme");
+                    }
+                });
+            });
+        }
+    </script>
 </body>
 
 </html>
