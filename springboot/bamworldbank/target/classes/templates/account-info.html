@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>BAMWORLDBANK – Account info</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/bank.css" />
+</head>
+
+<body class="page page--dashboard">
+    <div class="bg-orbit"></div>
+    <div class="bg-orbit bg-orbit-2"></div>
+
+    <header class="top-bar glass">
+        <div class="top-bar__left">
+            <span class="app-logo">BAMWORLDBANK</span>
+        </div>
+        <div class="top-bar__right">
+            <a href="/dashboard" class="btn btn--ghost">Back to dashboard</a>
+            <a href="/logout" class="btn btn--ghost">Logout</a>
+        </div>
+    </header>
+
+    <main class="dash-layout">
+        <section class="dash-main">
+            <article class="card glass">
+                <header class="quick-actions__header">
+                    <h2>Account information</h2>
+                    <p class="caption">Summary of your BAMWORLDBANK demo account.</p>
+                </header>
+
+                <div class="feature-grid">
+                    <div class="feature-tile">
+                        <span class="feature-label">Account holder</span>
+                        <p th:text="${#strings.toUpperCase(account.cardHolderName)}">BAMWORLDBANK USER</p>
+                    </div>
+                    <div class="feature-tile">
+                        <span class="feature-label">Email</span>
+                        <p th:text="${account.ownerEmail}">you@example.com</p>
+                    </div>
+                    <div class="feature-tile">
+                        <span class="feature-label">Card number</span>
+                        <p th:text="${account.cardNumberMasked}">**** **** **** 1234</p>
+                    </div>
+                    <div class="feature-tile">
+                        <span class="feature-label">Valid thru</span>
+                        <p th:text="${account.cardValid}">12/30</p>
+                    </div>
+                    <div class="feature-tile">
+                        <span class="feature-label">Current balance</span>
+                        <p th:text="${#numbers.formatDecimal(account.balance,2,'COMMA',2,'POINT')}">5,200.00</p>
+                    </div>
+                    <div class="feature-tile">
+                        <span class="feature-label">Withdrawal limit</span>
+                        <p th:text="${account.withdrawalLimit}">300.00</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <aside class="dash-side">
+            <section class="card glass tx-card">
+                <header>
+                    <h3>Last operation receipt</h3>
+                    <p class="caption">Latest transaction on this account.</p>
+                </header>
+
+                <div th:if="${lastTransaction != null}">
+                    <p class="tx-main">
+                        <span class="tx-type" th:text="${lastTransaction.type}">TRANSFER</span>
+                        <span class="tx-date"
+                            th:text="${#temporals.format(lastTransaction.createdAt, 'MMM d, yyyy HH:mm')}">
+                            Nov 20, 2025 14:32
+                        </span>
+                    </p>
+                    <p class="tx-meta">
+                        <span class="tx-desc" th:text="${lastTransaction.description}">Description</span>
+                        <span class="tx-amount" th:text="${lastTransaction.amount}">100.00</span>
+                    </p>
+                </div>
+
+                <p th:if="${lastTransaction == null}" class="tx-empty">
+                    No transactions yet for this account.
+                </p>
+            </section>
+        </aside>
+    </main>
+
+    <script src="/js/bank.js"></script>
+</body>
+
+</html>

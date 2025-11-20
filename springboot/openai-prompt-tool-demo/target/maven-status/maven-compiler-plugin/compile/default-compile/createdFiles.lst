@@ -1,0 +1,3 @@
+com\amboyose\openai\service\OpenAiService.class
+com\amboyose\openai\controller\PromptController.class
+com\amboyose\openai\OpenAiPromptToolApplication.class

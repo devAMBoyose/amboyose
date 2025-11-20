@@ -1,0 +1,274 @@
+/* =========================================================
+   BAMWORLDBANK – DASHBOARD RESPONSIVE ONLY
+   This file overrides /css/bank.css for tablets & mobiles.
+   ========================================================= */
+
+/* ---------- up to small laptops / large tablets ---------- */
+@media (max-width: 1024px) {
+
+    .page--dashboard {
+        padding: 16px 12px 28px;
+    }
+
+    .top-bar {
+        max-width: 940px;
+        margin-bottom: 24px;
+        padding: 14px 16px;
+    }
+
+    .dash-layout {
+        max-width: 940px;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+        gap: 24px;
+    }
+
+    .card--gradient {
+        padding: 20px 18px;
+    }
+
+    .card-number {
+        font-size: 1.15rem;
+        letter-spacing: 0.18em;
+    }
+
+    .feature-grid {
+        gap: 12px;
+    }
+}
+
+/* ---------- tablets (portrait) & small devices ---------- */
+@media (max-width: 900px) {
+
+    /* stack main + side in one column */
+    .dash-layout {
+        grid-template-columns: minmax(0, 1fr);
+        max-width: 720px;
+    }
+
+    .dash-main,
+    .dash-side {
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    /* give a bit more breathing room between sections */
+    .dash-main {
+        gap: 22px;
+    }
+
+    .dash-side {
+        gap: 22px;
+    }
+
+    .top-bar {
+        max-width: 720px;
+    }
+
+    .tx-card {
+        max-height: 260px;
+    }
+}
+
+/* ---------- phones & small tablets (<= 768px) ---------- */
+@media (max-width: 768px) {
+
+    .page--dashboard {
+        padding: 14px 10px 24px;
+    }
+
+    .top-bar {
+        margin-bottom: 18px;
+        padding: 12px 12px;
+        border-radius: 16px;
+    }
+
+    .app-logo {
+        font-size: 0.8rem;
+        letter-spacing: 0.16em;
+    }
+
+    .top-bar__right {
+        gap: 6px;
+    }
+
+    .card {
+        padding: 16px 14px;
+        border-radius: 18px;
+    }
+
+    .card--gradient {
+        padding: 18px 14px;
+    }
+
+    .card-header {
+        margin-bottom: 10px;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-number {
+        font-size: 1rem;
+        letter-spacing: 0.16em;
+        margin-bottom: 12px;
+    }
+
+    .card-info {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .card-info__group {
+        min-width: 130px;
+    }
+
+    .balance-amount {
+        font-size: 1.4rem;
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .feature-tile {
+        padding: 12px 10px;
+        border-radius: 16px;
+    }
+
+    .feature-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+
+    .feature-label {
+        font-size: 0.78rem;
+    }
+
+    .tx-card {
+        max-height: 220px;
+    }
+
+    /* E-wallet sheet: feel more like native bottom sheet */
+    .sheet {
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        padding: 14px 12px 16px;
+    }
+
+    .sheet-header h3 {
+        font-size: 0.92rem;
+    }
+}
+
+/* ---------- small phones (<= 480px) ---------- */
+@media (max-width: 480px) {
+
+    .page--dashboard {
+        padding: 10px 8px 20px;
+    }
+
+    .top-bar {
+        padding: 10px 10px;
+        margin-bottom: 14px;
+    }
+
+    .top-bar__left h1 {
+        font-size: 0.75rem;
+    }
+
+    .top-bar__right .btn {
+        padding-inline: 10px;
+        font-size: 0.78rem;
+    }
+
+    .dash-main,
+    .dash-side {
+        gap: 18px;
+    }
+
+    .card-number {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+    }
+
+    .label {
+        font-size: 0.68rem;
+    }
+
+    .value {
+        font-size: 0.85rem;
+    }
+
+    .inline-form input {
+        font-size: 0.8rem;
+        padding: 8px 10px;
+    }
+
+    .btn--primary {
+        padding: 9px 12px;
+        font-size: 0.82rem;
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* make the sheet almost full-screen on tiny phones */
+    .sheet-overlay {
+        align-items: flex-end;
+    }
+
+    .sheet {
+        border-radius: 14px 14px 0 0;
+        max-height: 82vh;
+    }
+}
+
+/* ---------- ultra-small phones (<= 360px) ---------- */
+@media (max-width: 360px) {
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-number {
+        font-size: 0.9rem;
+        letter-spacing: 0.12em;
+    }
+}
+
+/* Additional responsive tweaks for the BAMWORLDBANK dashboard */
+
+@media (max-width: 1200px) {
+    .top-bar {
+        max-width: 100%;
+        margin-inline: auto;
+    }
+
+    .dash-layout {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .dash-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .dash-side {
+        order: -1;
+        /* side panel appears on top on mobile */
+    }
+}
+
+@media (max-width: 600px) {
+    .top-bar {
+        margin-bottom: 16px;
+    }
+}

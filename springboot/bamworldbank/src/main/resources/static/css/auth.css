@@ -1,0 +1,180 @@
+/* Auth layout only – scoped to .page--auth so dashboard is safe */
+
+.page--auth .auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.page--auth .auth-card {
+    width: 430px;
+    position: relative;
+    border-radius: 22px;
+    padding: 32px 32px 40px;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 0.9),
+        0 30px 70px rgba(0, 0, 0, 0.6);
+}
+
+.page--auth .auth-header {
+    margin-bottom: 1.2rem;
+}
+
+.page--auth .app-logo {
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.page--auth .auth-subtitle {
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    opacity: 0.85;
+}
+
+/* Tabs */
+
+.page--auth .auth-tabs {
+    display: inline-flex;
+    background: rgba(45, 212, 191, 0.16);
+    border: 1px solid rgba(45, 212, 191, 0.55);
+    border-radius: 999px;
+    padding: 4px;
+    gap: 4px;
+    margin-top: 0.8rem;
+}
+
+.page--auth .auth-tabs__btn {
+    border: 0;
+    background: transparent;
+    padding: 6px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    color: #d1fae5;
+    opacity: 0.6;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    transition: background 140ms, opacity 140ms, transform 140ms;
+}
+
+.page--auth .auth-tabs__btn.is-active {
+    background: #059669;
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+/* Flip card */
+
+.page--auth .auth-card-outer {
+    perspective: 1400px;
+}
+
+.page--auth .auth-card-inner {
+    position: relative;
+    width: 100%;
+    min-height: 480px;
+    /* enough for signup */
+    transform-style: preserve-3d;
+    transition: transform 520ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.page--auth .auth-card-inner.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.page--auth .auth-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    padding-top: 12px;
+}
+
+.page--auth .auth-face--back {
+    transform: rotateY(180deg);
+}
+
+/* Form fields */
+
+.page--auth .auth-form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.page--auth .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 0.8rem;
+    font-size: 0.82rem;
+}
+
+.page--auth .field span {
+    opacity: 0.85;
+}
+
+.page--auth .field input {
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.55);
+    background: rgba(15, 23, 42, 0.75);
+    color: #e5e7eb;
+    outline: none;
+    transition: border-color 150ms, background 150ms, box-shadow 150ms;
+    font-size: 0.82rem;
+}
+
+.page--auth .field input::placeholder {
+    color: rgba(148, 163, 184, 0.75);
+}
+
+.page--auth .field input:focus {
+    border-color: #6366f1;
+    background: #020617;
+    box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6);
+}
+
+/* 3-column name row */
+
+.page--auth .row-3 {
+    display: flex;
+    gap: 10px;
+}
+
+.page--auth .row-3 .field {
+    flex: 1;
+}
+
+/* Buttons + meta */
+
+.page--auth .auth-btn {
+    margin-top: 0.2rem;
+}
+
+.page--auth .auth-meta {
+    margin-top: 0.75rem;
+    font-size: 0.74rem;
+    opacity: 0.8;
+}
+
+@media (max-width: 520px) {
+    .page--auth .auth-card {
+        width: 100%;
+        padding: 24px 20px 30px;
+    }
+
+    .page--auth .auth-card-inner {
+        min-height: 520px;
+    }
+
+    .page--auth .row-3 {
+        flex-direction: column;
+    }
+}

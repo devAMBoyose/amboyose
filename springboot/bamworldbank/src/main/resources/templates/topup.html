@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>BAMWORLDBANK – Top up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/bank.css" />
+</head>
+
+<body class="page page--dashboard">
+    <div class="bg-orbit"></div>
+    <div class="bg-orbit bg-orbit-2"></div>
+
+    <header class="top-bar glass">
+        <div class="top-bar__left">
+            <span class="app-logo">BAMWORLDBANK</span>
+        </div>
+        <div class="top-bar__right">
+            <a href="/dashboard" class="btn btn--ghost">Back to dashboard</a>
+            <a href="/logout" class="btn btn--ghost">Logout</a>
+        </div>
+    </header>
+
+    <main class="dash-layout">
+        <section class="dash-main">
+            <article class="card glass dash-balance">
+                <header class="dash-balance__header">
+                    <h2>Top up wallet</h2>
+                    <p class="caption">
+                        Current balance:
+                        <strong th:text="${#numbers.formatDecimal(account.balance,2,'COMMA',2,'POINT')}">
+                            5,200.00
+                        </strong>
+                    </p>
+                </header>
+
+                <form class="dash-actions" method="post" action="/topup">
+                    <div class="inline-form">
+                        <input type="number" name="amount" step="0.01" min="0" placeholder="Amount" required />
+                    </div>
+                    <div class="inline-form">
+                        <input type="text" name="source" placeholder="Source (e.g. Debit card / GCash)" />
+                    </div>
+                    <button type="submit" class="btn btn--primary full-width">
+                        Confirm top up
+                    </button>
+                </form>
+
+                <p class="dash-meta">
+                    Demo only – top ups adjust your portfolio balance and generate a top-up receipt.
+                </p>
+            </article>
+        </section>
+
+        <aside class="dash-side">
+            <section class="card glass tx-card">
+                <header>
+                    <h3>Top up receipt</h3>
+                </header>
+
+                <div th:if="${transaction != null}">
+                    <div class="tx-main">
+                        <span class="tx-type" th:text="${transaction.type}">TOPUP</span>
+                        <span class="tx-date"
+                            th:text="${#temporals.format(transaction.createdAt, 'MMM d, yyyy HH:mm')}">
+                            Nov 20, 2025 14:32
+                        </span>
+                    </div>
+                    <div class="tx-meta">
+                        <span class="tx-desc" th:text="${transaction.description}">
+                            Top up via debit card
+                        </span>
+                        <span class="tx-amount" th:text="${transaction.amount}">
+                            500.00
+                        </span>
+                    </div>
+                </div>
+
+                <p th:if="${transaction == null}" class="tx-empty">
+                    No top up yet. Submit the form to generate a receipt.
+                </p>
+            </section>
+        </aside>
+    </main>
+
+    <script src="/js/bank.js"></script>
+</body>
+
+</html>

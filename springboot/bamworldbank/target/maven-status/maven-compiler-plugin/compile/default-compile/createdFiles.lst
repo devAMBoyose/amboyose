@@ -1,0 +1,8 @@
+bamworldbank\model\Account.class
+bamworldbank\BamworldbankApplication.class
+bamworldbank\model\AccountRepository.class
+bamworldbank\model\Transaction.class
+bamworldbank\auth\AuthController.class
+bamworldbank\setting\SettingsController.class
+bamworldbank\dashboard\DashboardController.class
+bamworldbank\model\TransactionRepository.class

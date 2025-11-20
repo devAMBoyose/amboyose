@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>BAMWORLDBANK – Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Your existing global styles -->
+    <link rel="stylesheet" href="/css/bank.css" />
+
+    <!-- New auth-specific styles -->
+    <link rel="stylesheet" href="/css/auth.css" />
+</head>
+
+<body class="page page--auth">
+    <div class="bg-orbit"></div>
+    <div class="bg-orbit bg-orbit-2"></div>
+
+    <main class="auth-wrapper">
+        <section class="auth-card glass">
+
+            <!-- HEADER -->
+            <header class="auth-header">
+                <h1 class="app-logo">BAMWORLDBANK</h1>
+                <p class="auth-subtitle">Secure login to your mini demo bank.</p>
+
+                <!-- Tabs -->
+                <div class="auth-tabs" id="authTabs">
+                    <button class="auth-tabs__btn is-active" data-view="login">Log in</button>
+                    <button class="auth-tabs__btn" data-view="signup">Sign up</button>
+                </div>
+            </header>
+
+            <!-- Messages -->
+            <div th:if="${error}" class="alert alert--error" th:text="${error}"></div>
+            <div th:if="${message}" class="alert alert--success" th:text="${message}"></div>
+
+            <!-- Flip card -->
+            <div class="auth-card-outer">
+                <div class="auth-card-inner" id="authCard">
+
+                    <!-- FRONT: LOGIN -->
+                    <div class="auth-face auth-face--front">
+                        <form class="auth-form" action="/auth/login" method="post">
+
+                            <label class="field">
+                                <span>Email</span>
+                                <input type="email" name="email" required placeholder="you@example.com">
+                            </label>
+
+                            <label class="field">
+                                <span>Password</span>
+                                <input type="password" name="password" required placeholder="••••••••">
+                            </label>
+
+                            <button class="btn btn--primary auth-btn" type="submit">Log in</button>
+
+                            <p class="auth-meta">
+                                This is a <strong>portfolio demo</strong>. Any email &amp; password will create a
+                                sandbox account.
+                            </p>
+                        </form>
+                    </div>
+
+                    <!-- BACK: SIGN UP -->
+                    <div class="auth-face auth-face--back">
+                        <!-- important: new endpoint -->
+                        <form class="auth-form" action="/auth/register" method="post">
+
+                            <div class="row-3">
+                                <label class="field">
+                                    <span>First Name</span>
+                                    <input type="text" name="firstName" required>
+                                </label>
+
+                                <label class="field">
+                                    <span>Middle Name</span>
+                                    <input type="text" name="middleName">
+                                </label>
+
+                                <label class="field">
+                                    <span>Last Name</span>
+                                    <input type="text" name="lastName" required>
+                                </label>
+                            </div>
+
+                            <label class="field">
+                                <span>Email</span>
+                                <input type="email" name="email" required placeholder="you@example.com">
+                            </label>
+
+                            <label class="field">
+                                <span>Create password</span>
+                                <input type="password" name="password" required>
+                            </label>
+
+                            <label class="field">
+                                <span>Confirm password</span>
+                                <input type="password" name="passwordConfirm" required>
+                            </label>
+
+                            <button class="btn btn--primary auth-btn" type="submit">
+                                Create demo account
+                            </button>
+
+                            <p class="auth-meta">
+                                After sign-up, you’ll be asked to log in with your new credentials.
+                            </p>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Existing JS -->
+    <script src="/js/bank.js"></script>
+
+    <!-- New auth flip / tab logic -->
+    <script src="/js/auth.js"></script>
+</body>
+
+</html>

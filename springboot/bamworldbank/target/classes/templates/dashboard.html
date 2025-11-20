@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BAMWORLDBANK – Dashboard</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/bank.css" />
+    <link rel="stylesheet" href="/css/bank-dashboard-responsive.css" />
+</head>
+
+<body class="page page--dashboard">
+    <!-- Background -->
+    <div class="bg-orbit"></div>
+    <div class="bg-orbit bg-orbit-2"></div>
+
+    <!-- Top navigation bar -->
+    <header class="top-bar glass">
+        <div class="top-bar__left">
+            <h1 class="app-logo">BAMWORLDBANK</h1>
+        </div>
+
+        <div class="top-bar__right">
+            <!-- Profile / greeting -->
+            <button class="profile-pill" type="button" id="profileBtn">
+                <span class="profile-avatar">
+                    <img th:src="@{/img/user-avatar.png}" alt="User avatar" />
+                </span>
+                <span class="profile-meta">
+                    <span class="profile-name" th:text="${#strings.toUpperCase(account.cardHolderName)}">
+                        ANNA MARICE BOYOSE
+                    </span>
+                    <span class="profile-tag">Personal account</span>
+                </span>
+            </button>
+
+            <!-- Optional theme toggle icon (kept for future) -->
+            <button class="btn btn--ghost" id="darkModeToggle" type="button">
+                <i class="fa-regular fa-clock"></i>
+            </button>
+
+            <a href="/logout" class="btn btn--primary">Logout</a>
+        </div>
+    </header>
+
+    <!-- Main dashboard layout -->
+    <main class="dash-layout">
+        <!-- LEFT COLUMN -->
+        <section class="dash-main">
+
+            <!-- ACTIVE CARD -->
+            <article class="card card--gradient card--payment glass">
+                <div class="card-shell">
+                    <header class="card-header card-header--payment">
+                        <div>
+                            <p class="card-label">Virtual debit card</p>
+                            <h2 class="card-title">BAMWORLDBANK</h2>
+                        </div>
+
+                        <div class="card-brand-stack">
+                            <span class="card-scheme" th:text="${account.cardBrand}">VISA</span>
+                        </div>
+                    </header>
+
+                    <!-- CHIP + CONTACTLESS -->
+                    <div class="card-chip-row">
+                        <span class="card-chip"></span>
+                        <span class="card-contactless">
+                            <i class="fa-solid fa-wifi"></i>
+                        </span>
+                    </div>
+
+                    <!-- CARD NUMBER -->
+                    <div class="card-number-row">
+                        <p class="card-number" id="cardNumber" data-masked="**** **** **** 7607"
+                            th:text="${account.cardNumberMasked}">
+                            **** **** **** 7607
+                        </p>
+                    </div>
+
+                    <!-- HOLDER + EXPIRY -->
+                    <div class="card-footer-row">
+                        <div class="card-info__group">
+                            <span class="label">Card holder</span>
+                            <p class="value" th:text="${#strings.toUpperCase(account.cardHolderName)}">
+                                ANNA MARICE BOYOSE
+                            </p>
+                        </div>
+
+                        <div class="card-info__group">
+                            <span class="label">Valid thru</span>
+                            <p class="value" th:text="${account.cardValid}">
+                                08/27
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- QUICK ACTIONS -->
+            <article class="card glass">
+                <header class="quick-actions__header">
+                    <h2>Quick actions</h2>
+                    <p class="caption">Common operations you’d expect in a real banking app.</p>
+                </header>
+
+                <div class="feature-grid">
+
+                    <a class="feature-tile" href="/account-info">
+                        <span class="feature-icon feature-icon--teal">
+                            <i class="fa-regular fa-id-card"></i>
+                        </span>
+                        <span class="feature-label">Account info</span>
+                    </a>
+
+                    <a class="feature-tile" href="/transfer">
+                        <span class="feature-icon feature-icon--teal">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        </span>
+                        <span class="feature-label">Transfer</span>
+                    </a>
+
+                    <a class="feature-tile" href="/topup">
+                        <span class="feature-icon feature-icon--orange">
+                            <i class="fa-solid fa-wallet"></i>
+                        </span>
+                        <span class="feature-label">Top up</span>
+                    </a>
+
+                    <a class="feature-tile" href="/autodebit">
+                        <span class="feature-icon feature-icon--orange">
+                            <i class="fa-solid fa-rotate"></i>
+                        </span>
+                        <span class="feature-label">Auto debit</span>
+                    </a>
+
+                    <!-- Pay / E-Wallet -->
+                    <button class="feature-tile" type="button" id="ewalletBtn">
+                        <span class="feature-icon feature-icon--teal">
+                            <i class="fa-solid fa-wallet"></i>
+                        </span>
+                        <span class="feature-label">Pay / E-Wallet</span>
+                    </button>
+
+                    <!-- Other Bank -->
+                    <button class="feature-tile" type="button">
+                        <span class="feature-icon feature-icon--orange">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </span>
+                        <span class="feature-label">Other bank</span>
+                    </button>
+
+                    <button class="feature-tile" type="button">
+                        <span class="feature-icon feature-icon--teal">
+                            <i class="fa-solid fa-coins"></i>
+                        </span>
+                        <span class="feature-label">Money changers</span>
+                    </button>
+
+                    <button class="feature-tile" type="button">
+                        <span class="feature-icon feature-icon--orange">
+                            <i class="fa-solid fa-grip"></i>
+                        </span>
+                        <span class="feature-label">More</span>
+                    </button>
+                </div>
+            </article>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="dash-side">
+
+            <!-- CURRENT BALANCE (top-right card) -->
+            <article class="card glass dash-balance">
+                <header class="dash-balance__header">
+                    <div>
+                        <h2>Current Balance</h2>
+                        <p class="caption">Your available wallet balance.</p>
+                    </div>
+                </header>
+
+                <div class="dash-balance__body">
+                    <div class="dash-balance__amount-row">
+                        <h3 class="balance-amount card-balance" id="cardBalance" data-masked="••••••"
+                            th:text="${#numbers.formatDecimal(account.balance, 2, 'COMMA', 2, 'POINT')}">
+                            5,200.00
+                        </h3>
+
+                        <!-- Eye toggle moved here to mimic design -->
+                        <button type="button" class="card-eye-btn" id="cardNumberToggle"
+                            aria-label="Show card number & balance">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <form class="dash-actions" action="/deposit" method="post">
+                        <div class="inline-form">
+                            <input type="number" name="amount" placeholder="Amount" step="0.01" min="0" required />
+                        </div>
+
+                        <button type="submit" class="btn btn--primary full-width">
+                            Deposit
+                        </button>
+                    </form>
+                </div>
+            </article>
+
+            <!-- RECENT TRANSACTIONS -->
+            <section class="card glass tx-card">
+                <header>
+                    <h3>Recent transactions</h3>
+                </header>
+
+                <div th:if="${transactions != null and transactions.size() > 0}">
+                    <ul class="tx-list">
+                        <li th:each="tx : ${transactions}">
+                            <p class="tx-main">
+                                <span class="tx-type" th:text="${tx.type}">TRANSFER</span>
+                                <span class="tx-date" th:text="${#temporals.format(tx.createdAt, 'MMM d, yyyy HH:mm')}">
+                                    Nov 20 2025
+                                </span>
+                            </p>
+                            <p class="tx-meta">
+                                <span class="tx-desc" th:text="${tx.description}">Description</span>
+                                <span class="tx-amount" th:text="${tx.amount}">100.00</span>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <p th:if="${transactions == null or transactions.size() == 0}" class="tx-empty">
+                    No transactions yet — try Deposit, Withdraw, or Send now.
+                </p>
+            </section>
+
+        </aside>
+    </main>
+
+    <!-- E-WALLET MODAL (global) -->
+    <div class="sheet-overlay" id="ewalletSheet" hidden>
+        <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ewalletSheetTitle">
+            <header class="sheet-header">
+                <h3 id="ewalletSheetTitle">Pay / Transfer to E-Wallet</h3>
+                <button class="sheet-close" type="button" id="ewalletCloseBtn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </header>
+
+            <div class="sheet-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="ewalletSearch" placeholder="Search E-Wallet" autocomplete="off" />
+            </div>
+
+            <p class="caption sheet-section-label">E-Wallets</p>
+
+            <ul class="ewallet-list" id="ewalletList">
+                <!-- Items rendered by JS -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- PROFILE MODAL (glass) -->
+    <div class="sheet-overlay" id="profileSheet" hidden>
+        <div class="sheet sheet--glass" role="dialog" aria-modal="true" aria-labelledby="profileSheetTitle">
+            <header class="sheet-header">
+                <h3 id="profileSheetTitle">Personal information</h3>
+                <button class="sheet-close" type="button" id="profileCloseBtn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </header>
+
+            <div class="profile-modal-header">
+                <div class="profile-avatar profile-avatar--lg">
+                    <img th:src="@{/img/user-avatar.png}" alt="User avatar" />
+                </div>
+                <div class="profile-modal-meta">
+                    <p class="profile-name" th:text="${#strings.toUpperCase(account.cardHolderName)}">
+                        ANNA MARICE BOYOSE
+                    </p>
+                    <p class="profile-tag">BAMWORLDBANK personal account</p>
+                </div>
+            </div>
+
+            <div class="profile-modal-body">
+                <div class="profile-row">
+                    <span class="profile-label">Email</span>
+                    <span class="profile-value" th:text="${account.ownerEmail}">bamby.dev@example.com</span>
+                </div>
+                <div class="profile-row">
+                    <span class="profile-label">Card brand</span>
+                    <span class="profile-value" th:text="${account.cardBrand}">VISA</span>
+                </div>
+                <div class="profile-row">
+                    <span class="profile-label">Card number</span>
+                    <span class="profile-value" th:text="${account.cardNumberMasked}">
+                        **** **** **** 7607
+                    </span>
+                </div>
+                <div class="profile-row">
+                    <span class="profile-label">Current balance</span>
+                    <span class="profile-value"
+                        th:text="${#numbers.formatDecimal(account.balance, 2, 'COMMA', 2, 'POINT')}">
+                        5,200.00
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/bank.js"></script>
+</body>
+
+</html>
