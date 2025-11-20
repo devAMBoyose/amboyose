@@ -86,8 +86,8 @@ public class BamBankingController {
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("balance", acc.getBalance());
 
-        // ✅ NEW: add transactions list for the table in bank-dashboard.html
-        // (for now you can use an empty list if you don't have real history yet)
+        // add transactions list for the table in bank-dashboard.html
+        // (for now you can use an empty list)
         model.addAttribute("transactions",
                 txService.getRecentTransactions(acc.getUsername(), 10));
         // later, when ready: txService.getRecentTransactions(acc.getUsername(), 10);
@@ -125,7 +125,7 @@ public class BamBankingController {
 
         double newBalance = acc.getBalance();
 
-        // ✅ NEW: record this withdrawal in history
+        // NEW: record this withdrawal in history
         txService.record(acc.getUsername(), "Withdrawal", amount, newBalance, success);
 
         model.addAttribute("username", acc.getUsername());
@@ -171,7 +171,7 @@ public class BamBankingController {
 
         double newBalance = acc.getBalance();
 
-        // ✅ NEW: record this deposit in history
+        // NEW: record this deposit in history
         txService.record(acc.getUsername(), "Deposit", amount, newBalance, success);
 
         model.addAttribute("username", acc.getUsername());
@@ -185,10 +185,10 @@ public class BamBankingController {
                 java.time.LocalDateTime.now().toString().replace('T', ' '));
         model.addAttribute("txMessage", txMessage);
 
-        // ⛔ OLD:
+        // OLD:
         // return "transaction-result";
 
-        // ✅ NEW: use your custom deposit UI
+        // NEW: use your custom deposit UI
         return "deposit-result";
 
     }
@@ -273,7 +273,7 @@ public class BamBankingController {
             return "bank-login"; // balik sa login page, same UI
         }
 
-        // ✅ auto-login – ilagay sa session
+        // auto-login – ilagay sa session
         session.setAttribute("username", acc.getUsername());
 
         // redirect sa existing dashboard mo (hindi gagalawin yung logic doon)
