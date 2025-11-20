@@ -1,10 +1,16 @@
+// =========================================================
+// BAMWORLDBANK FRONTEND JS
+// Safe on both LOGIN and DASHBOARD pages
+// =========================================================
+
 // ---------------- THEME + SETTINGS ----------------
 (function () {
     const root = document.documentElement;
     const THEME_KEY = "bamworldbank-theme";
 
-    const toggleBtn = document.getElementById("themeToggle"); // optional, for auth page
-    const darkToggle = document.getElementById("darkModeToggle");
+    // Optional controls – only exist on some pages
+    const themeToggleBtn = document.getElementById("themeToggle");  // e.g. on auth page
+    const darkToggle = document.getElementById("darkModeToggle");   // e.g. on dashboard
     const notifToggle = document.getElementById("notifToggle");
     const saveSettings = document.getElementById("saveSettings");
     const statusEl = document.getElementById("settingsStatus");
@@ -14,16 +20,18 @@
             root.style.setProperty("--bg", "#e5e7eb");
             root.style.setProperty("--bg-soft", "rgba(243, 244, 246, 0.9)");
             root.style.setProperty("--glass", "rgba(255,255,255,0.9)");
-            root.style.setProperty("--text", "#020617");
+            root.style.setProperty("--text-main", "#020617");
         } else {
+            // Dark = reset to CSS defaults
             root.style.removeProperty("--bg");
             root.style.removeProperty("--bg-soft");
             root.style.removeProperty("--glass");
-            root.style.removeProperty("--text");
+            root.style.removeProperty("--text-main");
         }
         localStorage.setItem(THEME_KEY, mode);
     };
 
+    // Initialize theme from saved preference
     const saved = localStorage.getItem(THEME_KEY);
     if (saved === "light") {
         setTheme("light");
@@ -33,33 +41,38 @@
         if (darkToggle) darkToggle.checked = true;
     }
 
-    if (toggleBtn) {
-        toggleBtn.addEventListener("click", () => {
-            const next =
-                localStorage.getItem(THEME_KEY) === "light" ? "dark" : "light";
+    // Click toggle (e.g. sun/moon icon)
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener("click", () => {
+            const current = localStorage.getItem(THEME_KEY) || "dark";
+            const next = current === "light" ? "dark" : "light";
             setTheme(next);
             if (darkToggle) darkToggle.checked = next === "dark";
         });
     }
 
+    // Dashboard switch (checkbox style – if you later make it a switch)
     if (darkToggle) {
         darkToggle.addEventListener("change", () => {
             setTheme(darkToggle.checked ? "dark" : "light");
         });
     }
 
+    // Demo settings save (optional panel)
     if (saveSettings && statusEl) {
         saveSettings.addEventListener("click", async () => {
             try {
                 const payload = {
-                    darkMode: darkToggle ? darkToggle.checked : false,
-                    notifications: notifToggle ? notifToggle.checked : false,
+                    darkMode: darkToggle ? !!darkToggle.checked : false,
+                    notifications: notifToggle ? !!notifToggle.checked : false,
                 };
+
                 const res = await fetch("/api/settings", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload),
                 });
+
                 if (res.ok) {
                     statusEl.textContent = "Settings saved (demo only).";
                 } else {
@@ -80,7 +93,11 @@
     const listEl = document.getElementById("ewalletList");
     const searchInput = document.getElementById("ewalletSearch");
 
+    // Only run on dashboard where elements exist
     if (!btn || !overlay || !listEl) return;
+
+    // Ensure overlay starts hidden
+    overlay.style.display = "none";
 
     const EWALLETS = [
         { name: "ShopeePay", sub: "SHOPEEPAY", logo: "/img/ewallet/shopeepay.png" },
@@ -89,11 +106,7 @@
         { name: "DCPay / COINS.PH", sub: "COINSPH", logo: "/img/ewallet/coins.png" },
         { name: "SpeedyPay / eMango Pay", sub: "EMANGO", logo: "" },
         { name: "Alipay / Lazada Wallet", sub: "ALIPAY_LAZADA", logo: "/img/ewallet/lazada.png" },
-        {
-            name: "CIS Bayad Center / Bayad",
-            sub: "BAYAD",
-            logo: "/img/ewallet/bayad.png"
-        },
+        { name: "CIS Bayad Center / Bayad", sub: "BAYAD", logo: "/img/ewallet/bayad.png" },
         {
             name: "I-Remit / iCASH",
             sub: "IREMIT",
@@ -131,7 +144,8 @@
     }
 
     function openSheet() {
-        overlay.hidden = false;
+        overlay.style.display = "flex";
+        overlay.removeAttribute("hidden");
         document.body.classList.add("modal-open");
         requestAnimationFrame(() => {
             overlay.classList.add("is-open");
@@ -142,7 +156,8 @@
         overlay.classList.remove("is-open");
         document.body.classList.remove("modal-open");
         setTimeout(() => {
-            overlay.hidden = true;
+            overlay.style.display = "none";
+            overlay.setAttribute("hidden", "");
         }, 200);
     }
 
@@ -150,9 +165,7 @@
     if (closeBtn) closeBtn.addEventListener("click", closeSheet);
 
     overlay.addEventListener("click", (e) => {
-        if (e.target === overlay) {
-            closeSheet();
-        }
+        if (e.target === overlay) closeSheet();
     });
 
     if (searchInput) {
@@ -165,6 +178,7 @@
         });
     }
 
+    // Initial list
     render(EWALLETS);
 })();
 
@@ -174,10 +188,15 @@
     const overlay = document.getElementById("profileSheet");
     const closeBtn = document.getElementById("profileCloseBtn");
 
+    // Only on dashboard
     if (!btn || !overlay) return;
 
+    // Ensure overlay starts hidden
+    overlay.style.display = "none";
+
     function openProfile() {
-        overlay.hidden = false;
+        overlay.style.display = "flex";
+        overlay.removeAttribute("hidden");
         document.body.classList.add("modal-open");
         requestAnimationFrame(() => {
             overlay.classList.add("is-open");
@@ -188,7 +207,8 @@
         overlay.classList.remove("is-open");
         document.body.classList.remove("modal-open");
         setTimeout(() => {
-            overlay.hidden = true;
+            overlay.style.display = "none";
+            overlay.setAttribute("hidden", "");
         }, 200);
     }
 
@@ -200,7 +220,7 @@
     });
 
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && !overlay.hidden) {
+        if (e.key === "Escape" && overlay.style.display !== "none") {
             closeProfile();
         }
     });
@@ -209,58 +229,77 @@
 // -------------- CARD NUMBER + BALANCE TOGGLE --------------
 (function () {
     const numberEl = document.getElementById("cardNumber");
+    const numberToggle = document.getElementById("cardNumberToggle");
+
+    // either id="balanceToggle" or class="js-balance-toggle" will work
     const balanceEl = document.getElementById("cardBalance");
-    const toggleBtn = document.getElementById("cardNumberToggle");
+    const balanceToggle =
+        document.getElementById("balanceToggle") ||
+        document.querySelector(".js-balance-toggle");
 
-    if (!numberEl || !toggleBtn) return;
+    // ----- CARD NUMBER -----
+    if (numberEl && numberToggle) {
+        const maskedNumber = numberEl.dataset.masked || numberEl.textContent.trim();
+        const fullNumber =
+            numberEl.dataset.full && numberEl.dataset.full.trim().length > 0
+                ? numberEl.dataset.full.trim()
+                : maskedNumber;
 
-    // card number values
-    const maskedNumber = numberEl.dataset.masked || numberEl.textContent.trim();
-    const fullNumber =
-        numberEl.dataset.full && numberEl.dataset.full.trim().length > 0
-            ? numberEl.dataset.full.trim()
-            : maskedNumber;
+        let showNumber = false;
 
-    // balance values
-    let maskedBalance = null;
-    let fullBalance = null;
+        function updateNumber() {
+            showNumber = !showNumber;
+            numberEl.textContent = showNumber ? fullNumber : maskedNumber;
+            numberToggle.innerHTML = showNumber
+                ? '<i class="fa-regular fa-eye-slash"></i>'
+                : '<i class="fa-regular fa-eye"></i>';
+        }
 
-    if (balanceEl) {
-        maskedBalance = balanceEl.dataset.masked || "••••••";
-        fullBalance =
+        numberToggle.addEventListener("click", updateNumber);
+    }
+
+    // ----- BALANCE -----
+    if (balanceEl && balanceToggle) {
+        const maskedBalance = balanceEl.dataset.masked || "••••••";
+        const fullBalance =
             balanceEl.dataset.full && balanceEl.dataset.full.trim().length > 0
                 ? balanceEl.dataset.full.trim()
                 : balanceEl.textContent.trim();
-    }
 
-    let isVisible = false;
+        let showBalance = true; // starts visible
 
-    toggleBtn.addEventListener("click", () => {
-        isVisible = !isVisible;
-
-        numberEl.textContent = isVisible ? fullNumber : maskedNumber;
-
-        if (balanceEl) {
-            balanceEl.textContent = isVisible ? fullBalance : maskedBalance;
+        function updateBalance() {
+            showBalance = !showBalance;
+            balanceEl.textContent = showBalance ? fullBalance : maskedBalance;
+            balanceToggle.innerHTML = showBalance
+                ? '<i class="fa-regular fa-eye-slash"></i>'
+                : '<i class="fa-regular fa-eye"></i>';
         }
 
-        toggleBtn.innerHTML = isVisible
-            ? '<i class="fa-regular fa-eye-slash"></i>'
-            : '<i class="fa-regular fa-eye"></i>';
-    });
+        // initial icon state (showing balance)
+        balanceToggle.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
+
+        balanceToggle.addEventListener("click", updateBalance);
+    }
 })();
 
-// ---------------- AUTH FLIP TABS ----------------
+
+
+// ---------------- AUTH FLIP TABS (LOGIN PAGE) ----------------
 (function () {
     const tabs = document.querySelectorAll(".auth-tabs__btn");
     const card = document.getElementById("authCard");
+
+    // Only on login/auth page
     if (!tabs.length || !card) return;
 
     tabs.forEach((btn) => {
         btn.addEventListener("click", () => {
+            // Set active tab style
             tabs.forEach((t) => t.classList.remove("is-active"));
             btn.classList.add("is-active");
 
+            // Flip auth card
             if (btn.dataset.view === "signup") {
                 card.classList.add("is-flipped");
             } else {

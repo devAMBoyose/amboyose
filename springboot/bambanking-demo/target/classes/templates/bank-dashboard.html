@@ -14,399 +14,9 @@
     <link rel="stylesheet" href="/css/footer.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+    <link rel="stylesheet" href="/css/quickactions.css" />
 
-    <style>
-        /* --- GLOBAL FONT --- */
-        body {
-            font-family: "JetBrains Mono", monospace;
-        }
-
-        /* --- WINDOW SHELL --- */
-        .window {
-            max-width: 1200px;
-            margin: 2rem auto;
-            border-radius: 18px;
-            overflow: hidden;
-        }
-
-        /* --- TITLE BAR --- */
-        .title-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.6rem 1.2rem;
-        }
-
-        .tb-right {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .chip-link {
-            text-decoration: none;
-        }
-
-        .chip {
-            border-radius: 999px;
-            padding: 0.3rem 0.9rem;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            font-size: 0.78rem;
-            font-weight: 600;
-        }
-
-        .chip-back {
-            background: #202631;
-            color: #f5f5f5;
-        }
-
-        .chip-logout {
-            background: #8b1e2d;
-            color: #f5f5f5;
-        }
-
-        .chip-logout i {
-            font-size: 0.7rem;
-        }
-
-        /* --- MAIN DASHBOARD LAYOUT --- */
-        .bb-dashboard {
-            display: flex;
-            min-height: 380px;
-        }
-
-        /* --- LEFT: TILES PANEL --- */
-        .bb-tiles-panel {
-            flex: 0 0 320px;
-            max-width: 340px;
-            padding: 1.5rem 1.3rem;
-            background: #000000;
-
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-
-            /* IMPORTANT: let each row size itself by content */
-            grid-auto-rows: auto !important;
-
-            gap: 0.8rem;
-            align-content: flex-start;
-        }
-
-        /* --- TILE CARD --- */
-        .bb-tile {
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: #047c18;
-            color: #fff;
-            text-decoration: none;
-            padding: 0.75rem 0.8rem;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: stretch;
-            gap: 0.45rem;
-
-            font-size: 0.78rem;
-            transition: all 0.12s ease;
-            box-sizing: border-box;
-
-            /* kill any fixed heights from other CSS */
-            height: auto !important;
-            min-height: 0 !important;
-        }
-
-        .bb-tile:hover {
-            transform: translateY(-2px);
-            background: #0ea43a;
-        }
-
-        .bb-tile h2 {
-            font-size: 0.9rem;
-            margin: 0 0 0.25rem;
-        }
-
-        .bb-tile-sub {
-            font-size: 0.68rem;
-            opacity: 0.85;
-        }
-
-        /* give space between top block and inputs/buttons */
-        .bb-tile>div+div {
-            margin-top: 0.2rem;
-        }
-
-        /* big red help tile spans full width */
-        .bb-tile.app-transaction {
-            grid-column: span 2;
-            background: #a00010;
-        }
-
-        .bb-tile.app-transaction:hover {
-            background: #c01424;
-        }
-
-        /* --- INPUTS & BUTTONS INSIDE TILES --- */
-        .bb-tile input {
-            display: block;
-            margin-top: 0.25rem;
-            padding: 0.25rem 0.35rem;
-            border-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            background: rgba(5, 5, 5, 0.5);
-            color: #fff;
-            font-size: 0.72rem;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .bb-tile button {
-            display: block;
-            margin-top: 0.35rem;
-            padding: 0.35rem 0.5rem;
-            border-radius: 4px;
-            border: none;
-            font-size: 0.7rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .bb-tile button[type="submit"] {
-            background: #0fd469;
-            color: #020409;
-        }
-
-        .bb-tile button[type="submit"]:hover {
-            filter: brightness(1.1);
-        }
-
-        .bb-tiles-panel form {
-            margin: 0;
-        }
-
-        .bb-tiles-panel a.tile-link {
-            display: block;
-        }
-
-        /* --- RIGHT: MAIN PANEL --- */
-        .bb-main-panel {
-            flex: 1;
-            padding: 1.7rem 2rem;
-            background: radial-gradient(circle at top left, #202b33 0, #050608 55%);
-            color: #f5f5f5;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .bb-main-panel h2 {
-            margin-top: 0;
-            margin-bottom: 0.2rem;
-        }
-
-        .bb-main-meta {
-            font-size: 0.85rem;
-            margin-bottom: 0.4rem;
-            opacity: 0.9;
-        }
-
-        .bb-main-meta span {
-            display: inline-block;
-            margin-right: 1.5rem;
-        }
-
-        .bb-main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.9rem;
-        }
-
-        .bb-balance-card {
-            border-radius: 16px;
-            border: 1px solid rgba(0, 255, 128, 0.8);
-            padding: 1.6rem;
-            max-width: 520px;
-            background: rgba(2, 12, 8, 0.85);
-            box-shadow: 0 0 24px rgba(0, 255, 128, 0.25);
-        }
-
-        .bb-balance-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.6rem;
-            letter-spacing: 0.03em;
-        }
-
-        .bb-balance-amount {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 0.4rem;
-        }
-
-        .bb-balance-meta {
-            font-size: 0.8rem;
-            opacity: 0.85;
-        }
-
-        .bb-main-placeholder {
-            border-radius: 16px;
-            border: 1px dashed rgba(0, 255, 128, 0.4);
-            padding: 1.5rem;
-            font-size: 0.78rem;
-            max-width: 520px;
-        }
-
-        .site-footer {
-            margin-top: 1rem;
-        }
-
-        /* --- NEW: TRANSACTION HISTORY STYLES --- */
-        .bb-transactions-card {
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(3, 5, 8, 0.96);
-            padding: 1rem 1.2rem;
-        }
-
-        .bb-transactions-header {
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 0.6rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .bb-transactions-header span {
-            font-size: 0.7rem;
-            opacity: 0.7;
-        }
-
-        .bb-transactions-table-wrapper {
-            max-height: 220px;
-            overflow-y: auto;
-        }
-
-        .bb-transactions-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.72rem;
-        }
-
-        .bb-transactions-table th,
-        .bb-transactions-table td {
-            padding: 0.35rem 0.45rem;
-            text-align: left;
-            white-space: nowrap;
-        }
-
-        .bb-transactions-table th {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 0;
-            background: #05070b;
-            z-index: 1;
-        }
-
-        .bb-transactions-table tbody tr:nth-child(even) {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .bb-transactions-table tbody tr:hover {
-            background: rgba(15, 212, 105, 0.08);
-        }
-
-        .bb-tx-amount-credit {
-            color: #0fd469;
-            font-weight: 700;
-        }
-
-        .bb-tx-amount-debit {
-            color: #ff4d4f;
-            font-weight: 700;
-        }
-
-        .bb-tx-status {
-            font-size: 0.65rem;
-            padding: 0.1rem 0.4rem;
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .bb-tx-status.ok {
-            border-color: rgba(15, 212, 105, 0.9);
-            color: #0fd469;
-        }
-
-        .bb-tx-status.pending {
-            border-color: #d4b10f;
-            color: #ffd666;
-        }
-
-        .bb-tx-status.failed {
-            border-color: #ff4d4f;
-            color: #ff7875;
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 960px) {
-            .window {
-                margin: 1rem;
-            }
-
-            .bb-dashboard {
-                flex-direction: column;
-            }
-
-            .bb-tiles-panel {
-                max-width: 100%;
-                grid-auto-rows: auto !important;
-            }
-
-            .bb-main-panel {
-                padding: 1.3rem 1.2rem 1.6rem;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .bb-tiles-panel {
-                grid-template-columns: 1fr;
-            }
-
-            .title-bar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-
-            .tb-right {
-                align-self: stretch;
-                justify-content: flex-end;
-            }
-
-            .bb-balance-amount {
-                font-size: 1.6rem;
-            }
-
-            .bb-transactions-table {
-                font-size: 0.68rem;
-            }
-
-            .bb-transactions-table th,
-            .bb-transactions-table td {
-                padding: 0.3rem;
-            }
-        }
-    </style>
 
 </head>
 
@@ -488,6 +98,58 @@
                     </div>
                 </form>
 
+
+                <!-- QUICK ACTIONS -->
+
+                <section class="bb-quick-actions">
+                    <header class="qa-head">
+                        <h3>Quick Actions</h3>
+                        <p>Common operations you’d expect in a real banking app.</p>
+                    </header>
+
+                    <div class="qa-grid">
+                        <div class="qa-item">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span>Account info</span>
+                        </div>
+
+                        <div class="qa-item">
+                            <i class="fa-solid fa-right-left"></i>
+                            <span>Transfer</span>
+                        </div>
+
+                        <div class="qa-item">
+                            <i class="fa-solid fa-wallet"></i>
+                            <span>Top up</span>
+                        </div>
+
+                        <div class="qa-item">
+                            <i class="fa-solid fa-rotate"></i>
+                            <span>Auto debit</span>
+                        </div>
+
+                        <div class="qa-item">
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+                            <span>Pay / E-Wallet</span>
+                        </div>
+
+                        <div class="qa-item">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <span>Other bank</span>
+                        </div>
+
+                        <div class="qa-item">
+                            <i class="fa-solid fa-coins"></i>
+                            <span>Money Changers</span>
+                        </div>
+
+                        <div class="qa-item">
+                            <i class="fa-solid fa-ellipsis"></i>
+                            <span>More</span>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Help -->
                 <a th:href="@{/bambanking/help}" class="bb-tile app-transaction tile-link">
                     <div>
@@ -498,6 +160,7 @@
                         Learn how BamBanking works.
                     </div>
                 </a>
+
             </div>
 
             <!-- RIGHT: MAIN PANEL -->
@@ -511,23 +174,130 @@
                 </div>
 
                 <div class="bb-main-content">
-                    <!-- BIG BALANCE RESULT CARD (shown after clicking Check Balance) -->
-                    <div class="bb-balance-card" th:if="${showBalanceCard}">
-                        <h3>Current Available Balance</h3>
-                        <div class="bb-balance-amount">
-                            ₱<span th:text="${balance}">0.00</span>
+
+                    <!-- TOP GRID -->
+                    <div class="bb-main-grid">
+                        <!-- LEFT COLUMN: BALANCE + VIRTUAL CARD -->
+                        <div class="bb-main-left">
+                            <!-- BIG BALANCE RESULT CARD -->
+                            <div class="bb-balance-card" th:if="${showBalanceCard}">
+                                <h3>Current Available Balance</h3>
+                                <div class="bb-balance-amount">
+                                    ₱<span th:text="${balance}">0.00</span>
+                                </div>
+                                <div class="bb-balance-meta">
+                                    <span th:text="${txMessage}">You have successfully checked your balance.</span>
+                                </div>
+                            </div>
+
+                            <!-- VIRTUAL CARD WIDGET (SEPARATE BOX) -->
+                            <section class="bb-widget-card bb-cards-widget">
+                                <header class="bb-widget-head">
+                                    <div>
+                                        <h3>Virtual Card</h3>
+                                        <p>Flip the card to view front and back details.</p>
+                                    </div>
+                                </header>
+
+                                <div class="bb-card-flip" data-card="visa">
+                                    <div class="bb-card-inner">
+                                        <!-- FRONT -->
+                                        <div class="bb-card-face front">
+                                            <div class="bb-card-row-top">
+                                                <span class="bb-card-type">VISA</span>
+                                                <span class="bb-card-bank">BAM BANKING</span>
+                                            </div>
+                                            <div class="bb-card-chip"></div>
+                                            <div class="bb-card-globe"></div>
+
+                                            <div class="bb-card-number">
+                                                4321&nbsp;****&nbsp;****&nbsp;9876
+                                            </div>
+
+                                            <div class="bb-card-row-bottom">
+                                                <div>
+                                                    <span class="bb-card-label">CARDHOLDER</span>
+                                                    <span class="bb-card-name">ANNA MARICE</span>
+                                                </div>
+                                                <div>
+                                                    <span class="bb-card-label">VALID THRU</span>
+                                                    <span class="bb-card-valid">06/30</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- BACK -->
+                                        <div class="bb-card-face back">
+                                            <div class="bb-card-strip"></div>
+                                            <div class="bb-card-signature">
+                                                <span class="bb-card-sign-label">Authorized Signature</span>
+                                                <span class="bb-card-cvv-label">CVV</span>
+                                                <span class="bb-card-cvv">***</span>
+                                            </div>
+                                            <p class="bb-card-back-text">
+                                                BamBanking virtual card for demo use only. Not a real payment
+                                                instrument.
+                                            </p>
+                                            <span class="bb-card-brand">BAMBY BANKING</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
-                        <div class="bb-balance-meta">
-                            <span th:text="${txMessage}">You have successfully checked your balance.</span>
+
+                        <!-- RIGHT COLUMN: CURRENCY CONVERTER WIDGET -->
+                        <div class="bb-main-right">
+                            <section class="bb-widget-card bb-fx-widget">
+                                <header class="bb-widget-head">
+                                    <div>
+                                        <h3>Currency Converter</h3>
+                                        <p>Quick FX with swap and live-style display.</p>
+                                    </div>
+                                </header>
+
+                                <div class="bb-fx-body">
+                                    <label class="bb-label">Amount</label>
+                                    <input type="number" id="fxAmount" class="bb-input" value="1" min="0" step="0.01" />
+
+                                    <div class="bb-fx-row">
+                                        <div class="bb-fx-col">
+                                            <label class="bb-label">From</label>
+                                            <select id="fxFrom" class="bb-select">
+                                                <option value="USD" selected>USD</option>
+                                                <option value="EUR">EUR</option>
+                                                <option value="PHP">PHP</option>
+                                                <option value="JPY">JPY</option>
+                                            </select>
+                                        </div>
+
+                                        <button type="button" class="bb-fx-swap" id="fxSwap"
+                                            aria-label="Swap currencies">
+                                            <i class="fa-solid fa-right-left"></i>
+                                        </button>
+
+                                        <div class="bb-fx-col">
+                                            <label class="bb-label">To</label>
+                                            <select id="fxTo" class="bb-select">
+                                                <option value="PHP" selected>PHP</option>
+                                                <option value="USD">USD</option>
+                                                <option value="EUR">EUR</option>
+                                                <option value="JPY">JPY</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="bb-btn-main" id="fxConvert">
+                                        Convert
+                                    </button>
+
+                                    <p class="bb-fx-result" id="fxResult">1 USD = ? PHP</p>
+
+                                </div>
+                            </section>
                         </div>
                     </div>
 
-                    <!-- DEFAULT PLACEHOLDER when nothing selected -->
-                    <!-- <div class="bb-main-placeholder" th:unless="${showBalanceCard}">
-                        <p>Select a function on the left to begin.</p>
-                    </div> -->
-
-                    <!-- NEW: RECENT TRANSACTIONS CARD -->
+                    <!-- RECENT TRANSACTIONS CARD (example, keep as-is) -->
                     <div class="bb-transactions-card" th:if="${transactions != null}">
                         <div class="bb-transactions-header">
                             <div>Recent Transactions</div>
@@ -577,7 +347,6 @@
                             </table>
                         </div>
                     </div>
-                    <!-- END NEW: RECENT TRANSACTIONS CARD -->
 
                 </div>
             </div>
@@ -590,6 +359,8 @@
 
     <script src="/js/script.js" th:src="@{/js/script.js}"></script>
     <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
+    <script src="/js/dashboard.js" defer th:src="@{/js/dashboard.js}"></script>
+
 
 </body>
 

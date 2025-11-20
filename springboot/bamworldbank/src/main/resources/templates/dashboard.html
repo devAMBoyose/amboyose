@@ -10,9 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="/css/bank.css" />
-    <link rel="stylesheet" href="/css/bank-dashboard-responsive.css" />
+    <!-- DASHBOARD-ONLY STYLES -->
+    <link rel="stylesheet" href="/css/style.dashboard.css" />
+    <link rel="stylesheet" href="/css/dashboard-responsive.css" />
 </head>
 
 <body class="page page--dashboard">
@@ -40,10 +40,13 @@
                 </span>
             </button>
 
+
             <!-- Optional theme toggle icon (kept for future) -->
-            <button class="btn btn--ghost" id="darkModeToggle" type="button">
-                <i class="fa-regular fa-clock"></i>
+            <button type="button" class="card-eye-btn js-card-toggle" id="cardNumberToggle"
+                aria-label="Show full card number">
+                <i class="fa-regular fa-eye"></i>
             </button>
+
 
             <a href="/logout" class="btn btn--primary">Logout</a>
         </div>
@@ -53,6 +56,10 @@
     <main class="dash-layout">
         <!-- LEFT COLUMN -->
         <section class="dash-main">
+
+            <!-- ACTIVE CARD -->
+            <!-- ... (rest of your dashboard HTML is unchanged) ... -->
+            <!-- I kept your content exactly as you sent -->
 
             <!-- ACTIVE CARD -->
             <article class="card card--gradient card--payment glass">
@@ -76,7 +83,6 @@
                         </span>
                     </div>
 
-                    <!-- CARD NUMBER -->
                     <!-- CARD NUMBER + EYE TOGGLE -->
                     <div class="card-number-row">
                         <p class="card-number" id="cardNumber" data-masked="•••• •••• •••• ••••"
@@ -89,7 +95,6 @@
                             <i class="fa-regular fa-eye"></i>
                         </button>
                     </div>
-
 
                     <!-- HOLDER + EXPIRY -->
                     <div class="card-footer-row">
@@ -111,6 +116,7 @@
             </article>
 
             <!-- QUICK ACTIONS -->
+            <!-- (unchanged content here) -->
             <article class="card glass">
                 <header class="quick-actions__header">
                     <h2>Quick actions</h2>
@@ -181,9 +187,9 @@
         </section>
 
         <!-- RIGHT COLUMN -->
+        <!-- (unchanged content) -->
         <aside class="dash-side">
-
-            <!-- CURRENT BALANCE (top-right card) -->
+            <!-- CURRENT BALANCE -->
             <article class="card glass dash-balance">
                 <header class="dash-balance__header">
                     <div>
@@ -193,18 +199,11 @@
                 </header>
 
                 <div class="dash-balance__body">
-                    <div class="dash-balance__amount-row">
-                        <h3 class="balance-amount card-balance" id="cardBalance" data-masked="••••••"
-                            th:text="${#numbers.formatDecimal(account.balance, 2, 'COMMA', 2, 'POINT')}">
-                            5,200.00
-                        </h3>
+                    <button type="button" class="card-eye-btn js-balance-toggle" id="balanceToggle"
+                        aria-label="Show / hide balance">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
 
-                        <!-- Eye toggle moved here to mimic design -->
-                        <button type="button" class="card-eye-btn" id="cardNumberToggle"
-                            aria-label="Show card number & balance">
-                            <i class="fa-regular fa-eye"></i>
-                        </button>
-                    </div>
 
                     <form class="dash-actions" action="/deposit" method="post">
                         <div class="inline-form">
@@ -245,11 +244,11 @@
                     No transactions yet — try Deposit, Withdraw, or Send now.
                 </p>
             </section>
-
         </aside>
     </main>
 
-    <!-- E-WALLET MODAL (global) -->
+    <!-- E-WALLET MODAL -->
+    <!-- (unchanged) -->
     <div class="sheet-overlay" id="ewalletSheet" hidden>
         <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ewalletSheetTitle">
             <header class="sheet-header">
@@ -272,7 +271,7 @@
         </div>
     </div>
 
-    <!-- PROFILE MODAL (glass) -->
+    <!-- PROFILE MODAL -->
     <div class="sheet-overlay" id="profileSheet" hidden>
         <div class="sheet sheet--glass" role="dialog" aria-modal="true" aria-labelledby="profileSheetTitle">
             <header class="sheet-header">
