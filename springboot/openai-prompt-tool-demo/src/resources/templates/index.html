@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>OpenAI Prompt Tool | Demo</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --bg: #020617;
+            --card-bg: #020617;
+            --border: #1f2937;
+            --accent: #6effa8;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "JetBrains Mono", monospace;
+            background: radial-gradient(circle at top, #0f172a, #020617 55%);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 720px;
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border);
+            padding: 1.5rem 1.75rem;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .7rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            padding: .25rem .6rem;
+            border-radius: 999px;
+            background: rgba(22, 163, 74, .1);
+            color: #bbf7d0;
+            border: 1px solid rgba(34, 197, 94, .4);
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            margin: .5rem 0 0.25rem;
+        }
+
+        .card-desc {
+            font-size: .85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            border-radius: .75rem;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: var(--text-main);
+            padding: .75rem .9rem;
+            resize: vertical;
+            font-family: inherit;
+            font-size: .85rem;
+        }
+
+        textarea:focus {
+            outline: 1px solid var(--accent);
+            box-shadow: 0 0 0 1px rgba(110, 255, 168, 0.4);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: .75rem;
+            margin-top: .75rem;
+        }
+
+        .btn-run {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            border-radius: 999px;
+            padding: .5rem 1.1rem;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: .8rem;
+            background: linear-gradient(135deg, #22c55e, #6effa8);
+            color: #022c22;
+            font-weight: 600;
+        }
+
+        .btn-run:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+        .status {
+            font-size: .75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+
+        .output-wrapper {
+            margin-top: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #111827;
+        }
+
+        .output-label {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--text-muted);
+            margin-bottom: .4rem;
+        }
+
+        .output-box {
+            min-height: 80px;
+            max-height: 260px;
+            overflow-y: auto;
+            padding: .75rem .9rem;
+            border-radius: .75rem;
+            border: 1px solid #111827;
+            background: radial-gradient(circle at top left, rgba(22, 163, 74, .15), #020617 55%);
+            font-size: .85rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 1.25rem 1.25rem;
+            }
+
+            .actions {
+                flex-direction: column-reverse;
+                align-items: stretch;
+            }
+
+            .btn-run {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <span class="badge">
+            <i class="fa-solid fa-bolt"></i>
+            Client-side
+        </span>
+        <h1 class="card-title">OpenAI Prompt Tool</h1>
+        <p class="card-desc">
+            Custom prompt runner integrated with the OpenAI API. Type a prompt below and watch the AI response stream in
+            live.
+        </p>
+
+        <label for="prompt" style="font-size:.75rem;color:#9ca3af;margin-bottom:.25rem;display:block">
+            Prompt
+        </label>
+        <textarea id="prompt" placeholder="Ask anything… e.g. 'Explain Java Spring Boot to a beginner.'"></textarea>
+
+        <div class="actions">
+            <div class="status" id="status">
+                <i class="fa-regular fa-clock"></i>
+                Ready
+            </div>
+            <button class="btn-run" id="runBtn">
+                <i class="fa-solid fa-terminal"></i>
+                Run Prompt
+            </button>
+        </div>
+
+        <div class="output-wrapper">
+            <div class="output-label">Live output</div>
+            <div class="output-box" id="output"></div>
+        </div>
+    </div>
+
+    <script>
+        const runBtn = document.getElementById('runBtn');
+        const statusEl = document.getElementById('status');
+        const outputEl = document.getElementById('output');
+        const promptEl = document.getElementById('prompt');
+
+        async function typeWriter(text) {
+            outputEl.textContent = '';
+            for (let i = 0; i < text.length; i++) {
+                outputEl.textContent += text[i];
+                outputEl.scrollTop = outputEl.scrollHeight;
+                await new Promise(r => setTimeout(r, 15)); // streaming effect
+            }
+        }
+
+        runBtn.addEventListener('click', async () => {
+            const prompt = promptEl.value.trim();
+            if (!prompt) {
+                alert('Please enter a prompt.');
+                return;
+            }
+
+            runBtn.disabled = true;
+            statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Running prompt…';
+
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+
+                const data = await res.json();
+                await typeWriter(data.reply || 'No response.');
+                statusEl.innerHTML = '<i class="fa-regular fa-circle-check"></i> Completed';
+            } catch (err) {
+                console.error(err);
+                outputEl.textContent = 'Error calling backend: ' + err;
+                statusEl.innerHTML = '<i class="fa-regular fa-circle-xmark"></i> Error';
+            } finally {
+                runBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
