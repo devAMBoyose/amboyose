@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Currency Converter API | Demo</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Global styles (same as bank-login) -->
+    <link rel="stylesheet" href="/css/footer.css" th:href="@{/css/footer.css}" />
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="/css/nav.css" th:href="@{/css/nav.css}" />
+    <link rel="stylesheet" href="/assets/css/responsive.css" th:href="@{/assets/css/responsive.css}" />
+    <link rel="stylesheet" href="/springboot/assets/sp.base.css" th:href="@{/springboot/assets/sp.base.css}" />
+    <link rel="stylesheet" href="/springboot/assets/sp.responsive.css"
+        th:href="@{/springboot/assets/sp.responsive.css}" />
+
+    <!-- Card-specific styles for this demo -->
+    <link rel="stylesheet" href="/css/fx-converter.css" th:href="@{/css/fx-converter.css}" />
+</head>
+
+<body>
+    <!-- cursor-follow glow background (same as bank-login) -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">Currency Converter API | Spring Boot</span>
+
+            <div class="tb-right">
+                <a href="https://amboyose.onrender.com/pages/api-integration.html" class="chip-link">
+                    <button class="chip chip-back" type="button">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main content area (reuse login-wrapper for spacing) -->
+        <div class="fx-wrapper">
+            <div class="fx-card card">
+
+                <header class="card-head">
+                    <h1 class="title">
+                        Currency Converter
+                        <span class="badge">API</span>
+                    </h1>
+                    <span class="pill">Client-side</span>
+                </header>
+
+                <p class="subtitle">
+                    Live FX rates with amount entry, swap, and mini result display.
+                </p>
+
+                <div class="form-row">
+                    <label>Amount</label>
+                    <input id="amount" type="number" value="1" min="0" step="0.01">
+                </div>
+
+                <div class="form-row two-cols">
+                    <div>
+                        <label>From</label>
+                        <select id="from">
+                            <option value="USD">USD</option>
+                            <option value="PHP">PHP</option>
+                            <option value="EUR" selected>EUR</option>
+                            <option value="JPY">JPY</option>
+                        </select>
+                    </div>
+
+                    <button id="swap" class="swap" type="button" title="Swap currencies">
+                        <i class="fa-solid fa-right-left"></i>
+                    </button>
+
+                    <div>
+                        <label>To</label>
+                        <select id="to">
+                            <option value="USD" selected>USD</option>
+                            <option value="PHP">PHP</option>
+                            <option value="EUR">EUR</option>
+                            <option value="JPY">JPY</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="convertBtn" class="btn-primary" type="button">
+                    Convert
+                </button>
+
+                <p id="result" class="result">
+                    1 EUR = ? USD
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (same style as bank-login) -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing global JS (includes cursor movement) -->
+    <script src="/js/script.js" th:src="@{/js/script.js}"></script>
+    <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
+
+    <!-- FX converter logic -->
+    <script src="/js/fx-converter.js" th:src="@{/js/fx-converter.js}"></script>
+</body>
+
+</html>
