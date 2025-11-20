@@ -356,16 +356,7 @@
       gap: 0.9rem;
   }
 
-  /* Make the two top widgets stretch to same height */
-  .bb-main-left,
-  .bb-main-right {
-      align-items: stretch;
-  }
 
-  .bb-main-left>.bb-widget-card,
-  .bb-main-right>.bb-widget-card {
-      height: 100%;
-  }
 
   /* === GENERIC WIDGET CARD ======================================== */
 
@@ -513,8 +504,12 @@
   }
 
   .bb-card-face.front {
-      background: radial-gradient(circle at 25% 15%, #17b1ff, #001528 55%, #000109);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+      background: radial-gradient(circle at 30% 20%,
+              #00ffd0,
+              #00b498 45%,
+              #00463a 65%,
+              #000d0a 85%);
+      box-shadow: 0 16px 40px rgba(0, 255, 136, 0.35);
   }
 
   .bb-card-face.back {
@@ -558,7 +553,10 @@
       width: 180px;
       height: 180px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 10%, #46f3ff, #1477ff 45%, transparent 70%);
+      background: radial-gradient(circle at 40% 30%,
+              #3affc9,
+              #00bfa6 40%,
+              transparent 75%);
       opacity: 0.55;
   }
 

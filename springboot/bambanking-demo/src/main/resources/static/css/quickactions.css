@@ -81,3 +81,33 @@
     word-break: break-word;
     /* avoid text spilling out */
 }
+
+@media (max-width: 640px) {
+    /* QUICK ACTIONS – mobile only tweaks */
+
+    /* tighten spacing a bit */
+    .bb-quick-actions .qa-grid {
+        gap: 0.45rem;
+    }
+
+    .bb-quick-actions .qa-item {
+        padding: 0.45rem 0.35rem;
+        /* make tiles slightly taller so text has breathing room */
+        min-height: 70px;
+    }
+
+    .bb-quick-actions .qa-item i {
+        display: block;
+        font-size: 1rem;
+        /* slightly smaller icon */
+        margin-bottom: 0.15rem;
+    }
+
+    .bb-quick-actions .qa-item span {
+        display: block;
+        font-size: 0.68rem;
+        /* smaller label so it fits in 2 columns */
+        line-height: 1.2;
+        text-align: center;
+    }
+}

@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/css/nav.css" />
     <link rel="stylesheet" href="/css/dashboard.css" />
     <link rel="stylesheet" href="/css/quickactions.css" />
+    <link rel="stylesheet" href="/css/bb-theme-toggle.css" />
 
 
 </head>
@@ -105,6 +106,7 @@
                     <header class="qa-head">
                         <h3>Quick Actions</h3>
                     </header>
+                    <br>
 
                     <div class="qa-grid">
                         <div class="qa-item">
@@ -171,6 +173,18 @@
                         <strong>₱<span th:text="${balance}">0.00</span></strong>
                     </span>
                 </div>
+                <!-- THEME TOGGLE INSIDE DASHBOARD -->
+                <div class="bb-theme-toggle-holder">
+                    <div class="bb-theme-toggle" id="bbThemeToggle">
+                        <button type="button" data-theme="light" class="is-active">
+                            <i class="fa-regular fa-sun"></i>
+                        </button>
+                        <button type="button" data-theme="dark">
+                            <i class="fa-regular fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+
 
                 <div class="bb-main-content">
 
@@ -359,6 +373,7 @@
     <script src="/js/script.js" th:src="@{/js/script.js}"></script>
     <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
     <script src="/js/dashboard.js" defer th:src="@{/js/dashboard.js}"></script>
+    <script src="/js/bb-theme-toggle.js" defer th:src="@{/js/bb-theme-toggle.js}"></script>
 
 
 </body>
