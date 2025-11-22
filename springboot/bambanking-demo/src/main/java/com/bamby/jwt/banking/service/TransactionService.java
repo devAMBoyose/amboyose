@@ -71,9 +71,6 @@ public class TransactionService {
         if (from == null) {
             return "No active account.<br>Please log in again.";
         }
-        if (toUser == null || toUser.isBlank()) {
-            return "❌ Please enter a valid target username.";
-        }
         if (amount <= 0) {
             return "❌ Invalid transfer amount.";
         }
@@ -119,9 +116,7 @@ public class TransactionService {
                 + "=================<br>";
     }
 
-    // ========== NEW METHODS FOR HISTORY ==========
-
-    // record one transaction in history
+    // record one transaction in history (now with reference)
     public void record(String username,
             String type,
             double amount,
@@ -129,6 +124,7 @@ public class TransactionService {
             boolean success) {
 
         String status = success ? "OK" : "FAILED";
+        String reference = generateReference(type);
 
         Transaction tx = new Transaction(
                 LocalDateTime.now(),
@@ -136,10 +132,30 @@ public class TransactionService {
                 "APP", // method
                 amount,
                 balanceAfter,
-                status);
+                status,
+                reference);
 
         // add newest at top of list
         db.getTxList(username).add(0, tx);
+    }
+
+    // generate reference like BB-DEP-<timestamp>, BB-WDL-<timestamp>, etc.
+    private String generateReference(String type) {
+        String lower = type.toLowerCase();
+        String prefix;
+        if (lower.contains("deposit")) {
+            prefix = "DEP";
+        } else if (lower.contains("withdraw")) {
+            prefix = "WDL";
+        } else if (lower.contains("transfer")) {
+            prefix = "TRF";
+        } else if (lower.contains("balance")) {
+            prefix = "BAL";
+        } else {
+            prefix = "GEN";
+        }
+        long now = System.currentTimeMillis();
+        return "BB-" + prefix + "-" + now;
     }
 
     // get last N transactions for dashboard

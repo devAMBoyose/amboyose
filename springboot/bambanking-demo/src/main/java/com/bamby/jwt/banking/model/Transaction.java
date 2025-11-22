@@ -5,24 +5,27 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     private LocalDateTime timestamp;
-    private String type; // Deposit, Withdrawal, Transfer
-    private String method; // APP, CHECK, etc.
+    private String type; // Deposit, Withdrawal, Transfer, Balance Inquiry, etc.
+    private String method; // APP, CHECK, ATM, etc.
     private double amount;
     private double balanceAfter;
     private String status; // OK, PENDING, FAILED
+    private String reference; // NEW: unique reference per transaction
 
     public Transaction(LocalDateTime timestamp,
             String type,
             String method,
             double amount,
             double balanceAfter,
-            String status) {
+            String status,
+            String reference) {
         this.timestamp = timestamp;
         this.type = type;
         this.method = method;
         this.amount = amount;
         this.balanceAfter = balanceAfter;
         this.status = status;
+        this.reference = reference;
     }
 
     public LocalDateTime getTimestamp() {
@@ -47,5 +50,10 @@ public class Transaction {
 
     public String getStatus() {
         return status;
+    }
+
+    // NEW: getter for reference
+    public String getReference() {
+        return reference;
     }
 }

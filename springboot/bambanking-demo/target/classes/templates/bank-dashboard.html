@@ -17,8 +17,6 @@
     <link rel="stylesheet" href="/css/dashboard.css" />
     <link rel="stylesheet" href="/css/quickactions.css" />
     <link rel="stylesheet" href="/css/bb-theme-toggle.css" />
-
-
 </head>
 
 <body>
@@ -99,9 +97,7 @@
                     </div>
                 </form>
 
-
                 <!-- QUICK ACTIONS -->
-
                 <section class="bb-quick-actions">
                     <header class="qa-head">
                         <h3>Quick Actions</h3>
@@ -173,6 +169,7 @@
                         <strong>₱<span th:text="${balance}">0.00</span></strong>
                     </span>
                 </div>
+
                 <!-- THEME TOGGLE INSIDE DASHBOARD -->
                 <div class="bb-theme-toggle-holder">
                     <div class="bb-theme-toggle" id="bbThemeToggle">
@@ -184,7 +181,6 @@
                         </button>
                     </div>
                 </div>
-
 
                 <div class="bb-main-content">
 
@@ -310,7 +306,7 @@
                         </div>
                     </div>
 
-                    <!-- RECENT TRANSACTIONS CARD (example, keep as-is) -->
+                    <!-- RECENT TRANSACTIONS CARD -->
                     <div class="bb-transactions-card" th:if="${transactions != null}">
                         <div class="bb-transactions-header">
                             <div>Recent Transactions</div>
@@ -321,14 +317,16 @@
                             <table class="bb-transactions-table">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Method</th>
-                                        <th>Amount</th>
-                                        <th>Balance</th>
-                                        <th>Status</th>
+                                        <th>DATE</th>
+                                        <th>TYPE</th>
+                                        <th>METHOD</th>
+                                        <th>AMOUNT</th>
+                                        <th>BALANCE</th>
+                                        <th>REFERENCE</th>
+                                        <th>STATUS</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
                                     <tr th:each="tx : ${transactions}">
                                         <td th:text="${#temporals.format(tx.timestamp, 'yyyy-MM-dd HH:mm')}">
@@ -344,6 +342,10 @@
                                             </span>
                                         </td>
                                         <td th:text="'₱' + ${tx.balanceAfter}">₱1,500.00</td>
+
+                                        <!-- NEW: show reference here -->
+                                        <td th:text="${tx.reference}">BB-0000000000000</td>
+
                                         <td>
                                             <span class="bb-tx-status"
                                                 th:classappend="${tx.status == 'OK'} ? ' ok' : (${tx.status == 'PENDING'} ? ' pending' : ' failed')"
@@ -354,7 +356,7 @@
                                     </tr>
 
                                     <tr th:if="${#lists.isEmpty(transactions)}">
-                                        <td colspan="6">No transactions yet.</td>
+                                        <td colspan="7">No transactions yet.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -374,8 +376,6 @@
     <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
     <script src="/js/dashboard.js" defer th:src="@{/js/dashboard.js}"></script>
     <script src="/js/bb-theme-toggle.js" defer th:src="@{/js/bb-theme-toggle.js}"></script>
-
-
 </body>
 
 </html>
