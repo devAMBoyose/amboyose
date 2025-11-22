@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-@CrossOrigin(origins = "https://amboyose.onrender.com") // your portfolio domain
+@CrossOrigin(origins = "https://amboyose.onrender.com")
 @RestController
 @RequestMapping("/api")
 public class DemoInfoController {
@@ -20,10 +20,13 @@ public class DemoInfoController {
     @GetMapping("/demo-balance")
     public DemoBalanceResponse getDemoBalance() {
 
-        // 🔑 KEY: use Anna's username as stored in DataStore
-        Account anna = dataStore.accounts.get("anna"); // username = "anna"
+        // Get Anna's account
+        Account anna = dataStore.accounts.get("anna");
 
-        BigDecimal balance = (anna != null) ? anna.getBalance() : BigDecimal.ZERO;
+        // Fix: use BigDecimal.ZERO, not 0
+        BigDecimal balance = (anna != null)
+                ? BigDecimal.valueOf(anna.getBalance())
+                : BigDecimal.ZERO;
 
         return new DemoBalanceResponse(balance);
     }
