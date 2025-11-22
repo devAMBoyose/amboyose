@@ -1,0 +1,225 @@
+/* Transaction Result – matches BamBanking dashboard look */
+
+.bb-tx-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "JetBrains Mono", monospace;
+    background: radial-gradient(circle at top left, #202b33 0, #050608 55%);
+    color: #f5f5f5;
+}
+
+/* Make window full-width but centered nicely */
+.bb-tx-body .window {
+    max-width: 960px;
+    margin: 2rem auto;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #020617;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.65);
+}
+
+/* Reuse title bar from dashboard, just tweak title */
+.bb-tx-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.bb-tx-title i {
+    color: #22c55e;
+}
+
+/* Main panel wrapper */
+.bb-tx-main-panel {
+    padding: 1.8rem 2rem 2.2rem;
+    background: radial-gradient(circle at top left, #202b33 0, #050608 60%);
+}
+
+/* Card */
+.bb-tx-card {
+    border-radius: 18px;
+    border: 1px solid rgba(0, 255, 128, 0.55);
+    background: rgba(2, 10, 8, 0.94);
+    box-shadow: 0 0 30px rgba(0, 255, 128, 0.20);
+    padding: 1.6rem 1.8rem 1.4rem;
+}
+
+/* Header */
+.bb-tx-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.bb-tx-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.bb-tx-icon.ok {
+    background: rgba(34, 197, 94, 0.16);
+    color: #22c55e;
+}
+
+.bb-tx-icon.fail {
+    background: rgba(248, 113, 113, 0.18);
+    color: #f97373;
+}
+
+.bb-tx-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.bb-tx-subtitle {
+    margin-top: 0.1rem;
+    font-size: 0.8rem;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* status pill */
+.bb-tx-status-pill {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 0.14rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.55);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.bb-tx-status-pill.ok {
+    border-color: rgba(34, 197, 94, 0.85);
+    color: #22c55e;
+}
+
+.bb-tx-status-pill.fail {
+    border-color: rgba(248, 113, 113, 0.95);
+    color: #fecaca;
+}
+
+/* message */
+.bb-tx-message {
+    font-size: 0.85rem;
+    margin: 0.5rem 0 1.2rem;
+    opacity: 0.9;
+}
+
+/* grid */
+.bb-tx-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 1.6rem;
+    font-size: 0.82rem;
+}
+
+.bb-tx-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.bb-tx-label {
+    font-size: 0.75rem;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.bb-tx-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ref + copy */
+.bb-tx-ref {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.bb-tx-copy-btn {
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    background: transparent;
+    color: #e5e7eb;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.7rem;
+    padding: 0;
+}
+
+.bb-tx-copy-btn:hover {
+    background: rgba(148, 163, 184, 0.18);
+}
+
+/* footer actions */
+.bb-tx-footer {
+    margin-top: 1.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    font-size: 0.8rem;
+}
+
+.bb-tx-link-main,
+.bb-tx-link-alt {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-decoration: none;
+    border-radius: 999px;
+    padding: 0.5rem 1.1rem;
+    font-weight: 600;
+}
+
+.bb-tx-link-main {
+    background: linear-gradient(120deg, #04864a, #00bcd4);
+    color: #020b06;
+}
+
+.bb-tx-link-main:hover {
+    filter: brightness(1.06);
+}
+
+.bb-tx-link-alt {
+    background: transparent;
+    color: #e5e7eb;
+    border: 1px solid rgba(148, 163, 184, 0.65);
+}
+
+.bb-tx-link-alt:hover {
+    background: rgba(15, 23, 42, 0.85);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .bb-tx-main-panel {
+        padding: 1.4rem 1.2rem 1.8rem;
+    }
+
+    .bb-tx-card {
+        padding: 1.4rem 1.2rem 1.3rem;
+    }
+
+    .bb-tx-grid {
+        grid-template-columns: 1fr;
+    }
+}

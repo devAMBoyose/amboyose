@@ -221,18 +221,69 @@ public class BamBankingController {
         return "balance-result"; // <<< new template
     }
 
+    // --------------------------
+    // TRANSFER – detailed result page + history
+    // --------------------------
     @PostMapping("/transfer")
-    public String transfer(@RequestParam String toUser,
+    public String handleTransfer(@RequestParam String toUser,
             @RequestParam double amount,
             HttpSession session,
             Model model) {
+
         Account acc = getSessionAccount(session);
         if (acc == null) {
             return "redirect:/bambanking/login";
         }
+
+        double oldBalance = acc.getBalance();
+
+        // Reuse existing business logic (validation + transfer + logs)
         String result = txService.transfer(acc, toUser, amount);
-        model.addAttribute("message", result);
-        return "bank-transaction";
+        boolean success = result != null && result.startsWith("✅");
+
+        // Always record for the sender (your existing history system)
+        txService.record(
+                acc.getUsername(),
+                "Transfer",
+                amount,
+                acc.getBalance(), // balance after tx (unchanged if failed)
+                success);
+
+        // If successful, also record for the receiver
+        if (success) {
+            Account toAcc = db.accounts.get(toUser.toLowerCase());
+            if (toAcc != null) {
+                txService.record(
+                        toAcc.getUsername(),
+                        "Transfer (incoming)",
+                        amount,
+                        toAcc.getBalance(),
+                        true);
+            }
+        }
+
+        String cleanMessage = result
+                .replace("❌ ", "")
+                .replace("✅ ", "")
+                .replace("<br>", " ")
+                .replace("<strong>", "")
+                .replace("</strong>", "")
+                .trim();
+
+        // These fields transaction-result.html template
+        model.addAttribute("username", acc.getUsername());
+        model.addAttribute("txType", "Transfer");
+        model.addAttribute("amount", amount);
+        model.addAttribute("oldBalance", oldBalance);
+        model.addAttribute("newBalance", acc.getBalance());
+        model.addAttribute("success", success);
+        model.addAttribute("txRef", "BB-" + System.currentTimeMillis());
+        model.addAttribute("txDateTime",
+                java.time.LocalDateTime.now().toString().replace('T', ' '));
+        model.addAttribute("txMessage", cleanMessage);
+        model.addAttribute("txCounterparty", toUser);
+
+        return "transaction-result";
     }
 
     @GetMapping("/help")
