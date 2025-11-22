@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="bbTransferModal">
+        <div class="bb-modal" id="bbTransferModal" aria-hidden="true">
+            <div class="bb-modal-backdrop" id="bbTransferBackdrop"></div>
+
+            <div class="bb-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="bbTransferTitle">
+                <div class="bb-modal-header">
+                    <h3 id="bbTransferTitle">Quick Transfer</h3>
+                    <button type="button" class="bb-modal-close" id="bbTransferClose">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="bb-modal-body">
+                    <form th:action="@{/bambanking/transfer}" method="post" class="bb-modal-form" id="bbTransferForm">
+                        <div class="bb-modal-field">
+                            <label for="qaToUser">To username</label>
+                            <input type="text" id="qaToUser" name="toUser" placeholder="To username" required>
+                        </div>
+
+                        <div class="bb-modal-field">
+                            <label for="qaAmount">Amount</label>
+                            <input type="number" id="qaAmount" name="amount" step="0.01" placeholder="Amount" required>
+                        </div>
+
+                        <div class="bb-modal-footer">
+                            <button type="button" class="bb-modal-btn ghost" id="bbTransferCancel">
+                                Cancel
+                            </button>
+                            <button type="submit" class="bb-modal-btn">
+                                <i class="fa-solid fa-right-left"></i>
+                                Transfer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
