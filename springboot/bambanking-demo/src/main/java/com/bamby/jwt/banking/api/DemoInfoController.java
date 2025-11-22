@@ -1,29 +1,33 @@
-// Example: src/main/java/com/bambanking/api/DemoInfoController.java
-package com.bambanking.api;
+package com.bamby.jwt.banking.api;
 
+import com.bamby.jwt.banking.model.Account;
+import com.bamby.jwt.banking.service.DataStore;
 import org.springframework.web.bind.annotation.*;
+
 import java.math.BigDecimal;
 
-@CrossOrigin(origins = "https://amboyose.onrender.com") // or your portfolio domain
+@CrossOrigin(origins = "https://amboyose.onrender.com") // your portfolio domain
 @RestController
 @RequestMapping("/api")
 public class DemoInfoController {
 
-    private final AccountService accountService;
+    private final DataStore dataStore;
 
-    public DemoInfoController(AccountService accountService) {
-        this.accountService = accountService;
+    public DemoInfoController(DataStore dataStore) {
+        this.dataStore = dataStore;
     }
 
     @GetMapping("/demo-balance")
     public DemoBalanceResponse getDemoBalance() {
-        // 👉 Use a safe DEMO account or fixed demo data
-        BigDecimal balance = accountService.getBalance("DEMO_ACCOUNT_ID");
+
+        // 🔑 KEY: use Anna's username as stored in DataStore
+        Account anna = dataStore.accounts.get("anna"); // username = "anna"
+
+        BigDecimal balance = (anna != null) ? anna.getBalance() : BigDecimal.ZERO;
 
         return new DemoBalanceResponse(balance);
     }
 
-    // Simple DTO class
     public static class DemoBalanceResponse {
         private BigDecimal balance;
 

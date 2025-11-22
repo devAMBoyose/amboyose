@@ -127,7 +127,7 @@
         const balanceEl = document.getElementById("demo-balance");
         if (!balanceEl) return;
 
-        // Optional: show a loading state
+        // show loading while Render wakes up
         balanceEl.textContent = "Loading…";
 
         try {
@@ -145,12 +145,12 @@
                 });
         } catch (err) {
             console.error("Failed to load demo balance", err);
-            balanceEl.textContent = "₱ 120,540.75"; // fallback
+            balanceEl.textContent = "₱ 120,540.75"; // fallback dummy value
         }
     }
 
-    // Load on page open
     loadDemoBalance();
 </script>
+
 
 </html>
