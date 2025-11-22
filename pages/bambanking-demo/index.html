@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BamBanking – Java Spring Boot Demo</title>
+
+    <!-- JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/pages/bambanking-demo/style.css" />
+</head>
+
+<body>
+    <div class="page">
+        <header class="top-bar">
+            <div class="logo">
+                <span class="logo-dot"></span>
+                <span class="logo-text">BamBanking</span>
+            </div>
+            <nav class="nav">
+                <a href="#features">Features</a>
+                <a href="#screenshots">Screenshots</a>
+                <a href="#demo">Live Demo</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- HERO -->
+            <section class="hero">
+                <div class="hero-left">
+                    <h1>Java Spring Boot Banking Dashboard Demo</h1>
+                    <p class="subtitle">
+                        Secure login, balance view, and transaction flows built with
+                        <strong>Spring Boot + Thymeleaf</strong>, deployed on Render.
+                    </p>
+                    <p class="note">
+                        ⚠ The live backend runs on <strong>Render Free Tier</strong>.
+                        When you open the demo, it may take <strong>20–60 seconds</strong> to wake up.
+                    </p>
+
+                    <div class="hero-actions" id="demo">
+                        <a class="btn-primary" href="https://amboyose-bambanking.onrender.com/bambanking/login"
+                            target="_blank" rel="noreferrer">
+                            Open Live Backend Demo
+                        </a>
+                        <a class="btn-ghost" href="#screenshots">View screenshots first</a>
+                    </div>
+
+                    <div class="tech-tags">
+                        <span>Spring Boot</span>
+                        <span>Java</span>
+                        <span>JWT Auth</span>
+                        <span>Thymeleaf</span>
+                    </div>
+                </div>
+
+                <div class="hero-right">
+                    <div class="mock-card">
+                        <p class="mock-title">BamBanking Dashboard</p>
+                        <p class="mock-balance-label">Current Balance</p>
+                        <p class="mock-balance" id="demo-balance">₱ 120,540.75</p>
+                        <div class="mock-row">
+                            <span>Last transaction</span>
+                            <span>+₱ 3,250.00</span>
+                        </div>
+                        <div class="mock-row">
+                            <span>Status</span>
+                            <span class="status-pill">LIVE DEMO</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FEATURES -->
+            <section id="features" class="features">
+                <h2>What this demo shows</h2>
+                <div class="feature-grid">
+                    <div class="feature">
+                        <h3>Secure Login</h3>
+                        <p>Custom login form, server-side validation, and JWT-based authentication flow.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Account Overview</h3>
+                        <p>Responsive dashboard with current balance, recent transactions, and quick actions.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Transactions</h3>
+                        <p>Deposit, withdraw, and transfer pages powered by Spring MVC controllers.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Production-style Setup</h3>
+                        <p>Maven project, environment variables, and deployment to Render Web Service.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCREENSHOTS -->
+            <section id="screenshots" class="screenshots">
+                <h2>UI Preview</h2>
+                <p class="screenshots-note">
+                    Replace these gray boxes with real screenshots of your BamBanking app.
+                </p>
+                <div class="screenshots-grid">
+                    <div class="screenshot-box">Login Page</div>
+                    <div class="screenshot-box">Dashboard</div>
+                    <div class="screenshot-box">Transaction Flow</div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="footer">
+                <p>Built by Anna Marice Eben Boyose (BAMBY) · Java Web Services Portfolio</p>
+                <p>
+                    Main portfolio:
+                    <a href="https://amboyose.onrender.com" target="_blank" rel="noreferrer">
+                        amboyose.onrender.com
+                    </a>
+                </p>
+            </footer>
+        </main>
+    </div>
+</body>
+<script>
+    async function loadDemoBalance() {
+        const balanceEl = document.getElementById("demo-balance");
+        if (!balanceEl) return;
+
+        // Optional: show a loading state
+        balanceEl.textContent = "Loading…";
+
+        try {
+            const res = await fetch("https://amboyose-bambanking.onrender.com/api/demo-balance");
+            if (!res.ok) throw new Error("HTTP " + res.status);
+
+            const data = await res.json();
+            const balance = Number(data.balance || 0);
+
+            balanceEl.textContent =
+                "₱ " +
+                balance.toLocaleString("en-PH", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+        } catch (err) {
+            console.error("Failed to load demo balance", err);
+            balanceEl.textContent = "₱ 120,540.75"; // fallback
+        }
+    }
+
+    // Load on page open
+    loadDemoBalance();
+</script>
+
+</html>
