@@ -1,7 +1,6 @@
 package com.bamby.jwt.banking.api;
 
 import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
 
 @CrossOrigin(origins = "*")
@@ -12,18 +11,16 @@ public class DemoInfoController {
     // ------------------ DEMO BALANCE API ------------------
     @GetMapping("/demo-balance")
     public DemoBalanceResponse getDemoBalance() {
-        // Fixed demo value – safe, no DB/DataStore access
         return new DemoBalanceResponse(new BigDecimal("120540.75"));
     }
 
     // ------------------ DEMO LAST TRANSACTION API ------------------
     @GetMapping("/demo-last-transaction")
     public DemoLastTransactionResponse getDemoLastTransaction() {
-        // Fixed demo last transaction – safe demo data
         return new DemoLastTransactionResponse("DEPOSIT", new BigDecimal("3250.00"));
     }
 
-    // ------------------ DTO CLASSES ------------------
+    // ------------------ DTO CLASSES (INSIDE ONLY!) ------------------
 
     public static class DemoBalanceResponse {
         private BigDecimal balance;
