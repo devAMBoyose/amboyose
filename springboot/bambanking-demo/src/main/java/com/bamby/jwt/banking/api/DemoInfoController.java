@@ -20,10 +20,10 @@ public class DemoInfoController {
     @GetMapping("/demo-balance")
     public DemoBalanceResponse getDemoBalance() {
 
-        // Get Anna's account
+        // Get Anna's account by username
         Account anna = dataStore.accounts.get("anna");
 
-        // Fix: use BigDecimal.ZERO, not 0
+        // ✅ IMPORTANT: convert double -> BigDecimal
         BigDecimal balance = (anna != null)
                 ? BigDecimal.valueOf(anna.getBalance())
                 : BigDecimal.ZERO;
