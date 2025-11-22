@@ -1,35 +1,29 @@
 package com.bamby.jwt.banking.api;
 
-import com.bamby.jwt.banking.model.Account;
-import com.bamby.jwt.banking.service.DataStore;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-@CrossOrigin(origins = "https://amboyose.onrender.com")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class DemoInfoController {
 
-    private final DataStore dataStore;
-
-    public DemoInfoController(DataStore dataStore) {
-        this.dataStore = dataStore;
-    }
-
+    // ------------------ DEMO BALANCE API ------------------
     @GetMapping("/demo-balance")
     public DemoBalanceResponse getDemoBalance() {
-
-        // Get Anna's account by username
-        Account anna = dataStore.accounts.get("anna");
-
-        // ✅ IMPORTANT: convert double -> BigDecimal
-        BigDecimal balance = (anna != null)
-                ? BigDecimal.valueOf(anna.getBalance())
-                : BigDecimal.ZERO;
-
-        return new DemoBalanceResponse(balance);
+        // Fixed demo value – safe, no DB/DataStore access
+        return new DemoBalanceResponse(new BigDecimal("120540.75"));
     }
+
+    // ------------------ DEMO LAST TRANSACTION API ------------------
+    @GetMapping("/demo-last-transaction")
+    public DemoLastTransactionResponse getDemoLastTransaction() {
+        // Fixed demo last transaction – safe demo data
+        return new DemoLastTransactionResponse("DEPOSIT", new BigDecimal("3250.00"));
+    }
+
+    // ------------------ DTO CLASSES ------------------
 
     public static class DemoBalanceResponse {
         private BigDecimal balance;
@@ -46,30 +40,30 @@ public class DemoInfoController {
             this.balance = balance;
         }
     }
-}
 
-public static class DemoLastTransactionResponse {
-    private String type;
-    private BigDecimal amount;
+    public static class DemoLastTransactionResponse {
+        private String type;
+        private BigDecimal amount;
 
-    public DemoLastTransactionResponse(String type, BigDecimal amount) {
-        this.type = type;
-        this.amount = amount;
-    }
+        public DemoLastTransactionResponse(String type, BigDecimal amount) {
+            this.type = type;
+            this.amount = amount;
+        }
 
-    public String getType() {
-        return type;
-    }
+        public String getType() {
+            return type;
+        }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
+        public void setType(String type) {
+            this.type = type;
+        }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+        public BigDecimal getAmount() {
+            return amount;
+        }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+        public void setAmount(BigDecimal amount) {
+            this.amount = amount;
+        }
     }
 }
