@@ -37,9 +37,15 @@
                         <strong>Spring Boot + Thymeleaf</strong>, deployed on Render.
                     </p>
                     <p class="note">
-                        ⚠ The live backend runs on <strong>Render Free Tier</strong>.
-                        When you open the demo, it may take <strong>20–60 seconds</strong> to wake up.
+                        ⚠ The live backend runs on Render Free Tier. When you open the demo, it may take
+                        <strong>20–60 seconds</strong> to wake up.
+                        <br><br>
+                        ✅ The <strong>Current Balance</strong> on the card is loaded from the
+                        <strong>BamBanking API (Anna demo account)</strong>.
+                        When you log in to the live demo and make a deposit/withdraw, refresh this page and
+                        the balance will update based on the latest data.
                     </p>
+
 
                     <div class="hero-actions" id="demo">
                         <a class="btn-primary" href="https://amboyose-bambanking.onrender.com/bambanking/login"
@@ -62,10 +68,11 @@
                         <p class="mock-title">BamBanking Dashboard</p>
                         <p class="mock-balance-label">Current Balance</p>
                         <p class="mock-balance" id="demo-balance">₱ 120,540.75</p>
-                        <div class="mock-row">
+                        <p class="mock-row">
                             <span>Last transaction</span>
-                            <span>+₱ 3,250.00</span>
-                        </div>
+                            <span id="demo-last-tx-amount">Loading…</span>
+                        </p>
+
                         <div class="mock-row">
                             <span>Status</span>
                             <span class="status-pill">LIVE DEMO</span>
@@ -104,9 +111,15 @@
                     Replace these gray boxes with real screenshots of your BamBanking app.
                 </p>
                 <div class="screenshots-grid">
-                    <div class="screenshot-box">Login Page</div>
-                    <div class="screenshot-box">Dashboard</div>
-                    <div class="screenshot-box">Transaction Flow</div>
+                    <div class="screenshot-box">
+                        <img src="./assets/login.png" alt="BamBanking login page" class="screenshot-img">
+                    </div>
+                    <div class="screenshot-box">
+                        <img src="./assets/dashboard.png" alt="BamBanking dashboard" class="screenshot-img">
+                    </div>
+                    <div class="screenshot-box">
+                        <img src="./assets/transactions.png" alt="BamBanking transaction flow" class="screenshot-img">
+                    </div>
                 </div>
             </section>
 
@@ -152,6 +165,7 @@
 
     loadDemoBalance();
 </script>
+<script src="/pages/bambanking-demo/demo-last.js"></script>
 
 
 </html>

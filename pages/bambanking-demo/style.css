@@ -317,3 +317,19 @@ body {
         padding-left: 0.1rem;
     }
 }
+
+.screenshot-box {
+    border-radius: 1rem;
+    padding: 0.75rem;
+    border: 1px dashed var(--border);
+    background: rgba(15, 23, 42, 0.8);
+    text-align: center;
+}
+
+/* new */
+.screenshot-img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.8rem;
+    display: block;
+}

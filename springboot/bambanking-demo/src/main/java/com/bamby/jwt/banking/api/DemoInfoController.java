@@ -47,3 +47,29 @@ public class DemoInfoController {
         }
     }
 }
+
+public static class DemoLastTransactionResponse {
+    private String type;
+    private BigDecimal amount;
+
+    public DemoLastTransactionResponse(String type, BigDecimal amount) {
+        this.type = type;
+        this.amount = amount;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+}
