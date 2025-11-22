@@ -117,7 +117,7 @@ public class TransactionService {
     }
 
     // record one transaction in history (now with reference)
-    public void record(String username,
+    public String record(String username,
             String type,
             double amount,
             double balanceAfter,
@@ -129,14 +129,17 @@ public class TransactionService {
         Transaction tx = new Transaction(
                 LocalDateTime.now(),
                 type,
-                "APP", // method
+                "APP",
                 amount,
                 balanceAfter,
                 status,
                 reference);
 
-        // add newest at top of list
+        // newest on top
         db.getTxList(username).add(0, tx);
+
+        // IMPORTANT: return the same reference so controller can use it
+        return reference;
     }
 
     // generate reference like BB-DEP-<timestamp>, BB-WDL-<timestamp>, etc.

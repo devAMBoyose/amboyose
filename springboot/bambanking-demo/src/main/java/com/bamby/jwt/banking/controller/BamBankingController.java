@@ -98,6 +98,9 @@ public class BamBankingController {
     // --------------------------
     // WITHDRAW – detailed result page
     // --------------------------
+    // --------------------------
+    // WITHDRAW – detailed result page
+    // --------------------------
     @PostMapping("/withdraw")
     public String handleWithdraw(@RequestParam double amount,
             HttpSession session,
@@ -109,24 +112,26 @@ public class BamBankingController {
         }
 
         double oldBalance = acc.getBalance();
-        boolean success = false;
-        String txMessage;
 
-        if (amount <= 0) {
-            txMessage = "Withdrawal failed. Amount must be greater than zero.";
-        } else if (amount > oldBalance) {
-            txMessage = "Withdrawal failed. Insufficient balance.";
-        } else {
-            acc.setBalance(oldBalance - amount);
-            success = true;
-            txMessage = "Withdrawal successful! Your new balance is PHP "
-                    + String.format("%.2f", acc.getBalance());
-        }
+        // reuse service logic (returns string with <br> and <strong>)
+        String resultMessage = txService.withdraw(acc, amount);
+
+        boolean success = resultMessage != null && resultMessage.startsWith("✅");
 
         double newBalance = acc.getBalance();
 
-        // NEW: record this withdrawal in history
-        txService.record(acc.getUsername(), "Withdrawal", amount, newBalance, success);
+        // record in history
+        txService.record(
+                acc.getUsername(),
+                "Withdrawal",
+                amount,
+                newBalance,
+                success);
+
+        // strip emojis, keep HTML tags
+        String cleanMessage = resultMessage
+                .replace("✅ ", "")
+                .replace("❌ ", "");
 
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("txType", "Withdrawal");
@@ -134,13 +139,13 @@ public class BamBankingController {
         model.addAttribute("oldBalance", oldBalance);
         model.addAttribute("newBalance", newBalance);
         model.addAttribute("success", success);
-        model.addAttribute("txRef", "BB-" + System.currentTimeMillis());
+        model.addAttribute("txRef", "BB-WDL-" + System.currentTimeMillis());
         model.addAttribute("txDateTime",
                 java.time.LocalDateTime.now().toString().replace('T', ' '));
-        model.addAttribute("txMessage", txMessage);
+        model.addAttribute("txMessage", cleanMessage);
 
-        return "transaction-result";
-
+        // use the same nice UI as deposit (your unified result template)
+        return "transaction-result"; // or "withdraw-result" if you have a separate file
     }
 
     // --------------------------
@@ -157,40 +162,35 @@ public class BamBankingController {
         }
 
         double oldBalance = acc.getBalance();
-        boolean success = false;
-        String txMessage;
 
-        if (amount <= 0) {
-            txMessage = "Deposit failed. Amount must be greater than zero.";
-        } else {
-            acc.setBalance(oldBalance + amount);
-            success = true;
-            txMessage = "Deposit successful! Your new balance is PHP "
-                    + String.format("%.2f", acc.getBalance());
-        }
+        String result = txService.deposit(acc, amount);
+        boolean success = result != null && result.startsWith("✅");
 
-        double newBalance = acc.getBalance();
+        // ONE source of truth for history + reference
+        String txRef = txService.record(
+                acc.getUsername(),
+                "Deposit",
+                amount,
+                acc.getBalance(),
+                success);
 
-        // NEW: record this deposit in history
-        txService.record(acc.getUsername(), "Deposit", amount, newBalance, success);
+        String cleanMessage = result
+                .replace("✅ ", "")
+                .replace("❌ ", "")
+                .trim();
 
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("txType", "Deposit");
         model.addAttribute("amount", amount);
         model.addAttribute("oldBalance", oldBalance);
-        model.addAttribute("newBalance", newBalance);
+        model.addAttribute("newBalance", acc.getBalance());
         model.addAttribute("success", success);
-        model.addAttribute("txRef", "BB-" + System.currentTimeMillis());
+        model.addAttribute("txRef", txRef);
         model.addAttribute("txDateTime",
                 java.time.LocalDateTime.now().toString().replace('T', ' '));
-        model.addAttribute("txMessage", txMessage);
+        model.addAttribute("txMessage", cleanMessage);
 
-        // OLD:
-        // return "transaction-result";
-
-        // NEW: use your custom deposit UI
         return "deposit-result";
-
     }
 
     // --------------------------
@@ -218,7 +218,7 @@ public class BamBankingController {
                 "Hello, " + acc.getUsername() + "! Your current balance is PHP "
                         + String.format("%.2f", balance));
 
-        return "balance-result"; // <<< new template
+        return "balance-result";
     }
 
     // --------------------------
@@ -237,19 +237,18 @@ public class BamBankingController {
 
         double oldBalance = acc.getBalance();
 
-        // Reuse existing business logic (validation + transfer + logs)
         String result = txService.transfer(acc, toUser, amount);
         boolean success = result != null && result.startsWith("✅");
 
-        // Always record for the sender (your existing history system)
-        txService.record(
+        // record for sender – capture reference
+        String txRef = txService.record(
                 acc.getUsername(),
                 "Transfer",
                 amount,
                 acc.getBalance(), // balance after tx (unchanged if failed)
                 success);
 
-        // If successful, also record for the receiver
+        // record for receiver (doesn't need same ref shown in THIS page)
         if (success) {
             Account toAcc = db.accounts.get(toUser.toLowerCase());
             if (toAcc != null) {
@@ -263,21 +262,20 @@ public class BamBankingController {
         }
 
         String cleanMessage = result
-                .replace("❌ ", "")
                 .replace("✅ ", "")
+                .replace("❌ ", "")
                 .replace("<br>", " ")
                 .replace("<strong>", "")
                 .replace("</strong>", "")
                 .trim();
 
-        // These fields transaction-result.html template
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("txType", "Transfer");
         model.addAttribute("amount", amount);
         model.addAttribute("oldBalance", oldBalance);
         model.addAttribute("newBalance", acc.getBalance());
         model.addAttribute("success", success);
-        model.addAttribute("txRef", "BB-" + System.currentTimeMillis());
+        model.addAttribute("txRef", txRef);
         model.addAttribute("txDateTime",
                 java.time.LocalDateTime.now().toString().replace('T', ' '));
         model.addAttribute("txMessage", cleanMessage);

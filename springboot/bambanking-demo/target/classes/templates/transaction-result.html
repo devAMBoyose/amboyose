@@ -63,7 +63,6 @@
             overflow: hidden;
         }
 
-        /* subtle glow accent */
         .tx-card::before {
             content: "";
             position: absolute;
@@ -247,7 +246,6 @@
             box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7);
         }
 
-
         .tx-actions {
             margin-top: 1.8rem;
             display: flex;
@@ -281,7 +279,6 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-
         @media (max-width: 640px) {
             .tx-card {
                 padding: 1.5rem 1.6rem;
@@ -304,9 +301,6 @@
 </head>
 
 <body>
-    <!-- If you have a global nav, you can include it here -->
-    <!-- <div th:replace="fragments/nav :: navbar"></div> -->
-
     <main class="tx-page">
         <section class="tx-card">
             <div class="tx-card-inner">
@@ -327,20 +321,26 @@
                 </header>
 
                 <!-- STATUS -->
+                <!-- SUCCESS -->
                 <div class="tx-status success" th:if="${success}">
                     <div class="tx-status-icon">
                         <i class="fa-solid fa-check"></i>
                     </div>
-                    <div th:text="${txMessage}">
-                        Withdrawal successful!
+                    <!-- 🔥 CLEAN MESSAGE, NO OLD/WITHDRAWN/NEW HERE -->
+                    <div>
+                        <span th:text="${txType} + ' successful!'">
+                            Transaction successful!
+                        </span>
                     </div>
                 </div>
 
+                <!-- ERROR -->
                 <div class="tx-status error" th:if="${success == false}">
                     <div class="tx-status-icon">
                         <i class="fa-solid fa-xmark"></i>
                     </div>
-                    <div th:text="${txMessage}">
+                    <!-- For errors we still show full backend message -->
+                    <div th:utext="${txMessage}">
                         Transaction failed. Please try again.
                     </div>
                 </div>
@@ -371,23 +371,7 @@
                         </div>
                     </div>
 
-                    <div th:if="${oldBalance != null}">
-                        <div class="tx-item-label">Old balance</div>
-                        <div class="tx-item-value">
-                            PHP
-                            <span
-                                th:text="${#numbers.formatDecimal(oldBalance, 1, 'COMMA', 2, 'POINT')}">2,000.00</span>
-                        </div>
-                    </div>
-
-                    <div th:if="${newBalance != null}">
-                        <div class="tx-item-label">New balance</div>
-                        <div class="tx-item-value">
-                            PHP
-                            <span
-                                th:text="${#numbers.formatDecimal(newBalance, 1, 'COMMA', 2, 'POINT')}">1,500.00</span>
-                        </div>
-                    </div>
+                    <!-- Old/New balance rows REMOVED to avoid redundancy -->
 
                     <div>
                         <div class="tx-item-label">Date &amp; time</div>
@@ -406,33 +390,25 @@
                     </p>
 
                     <div class="tx-actions">
-                        <!-- Back to Dashboard -->
                         <a class="btn-link" th:href="@{/bambanking/dashboard}">
                             <i class="fa-solid fa-gauge"></i>
                             Back to Dashboard
                         </a>
 
-                        <!-- New Withdrawal -->
                         <a class="btn-link secondary" th:href="@{/bambanking/dashboard}">
                             <i class="fa-solid fa-money-bill-trend-up"></i>
                             New Withdrawal
                         </a>
 
-                        <!-- New Deposit -->
                         <a class="btn-link secondary" th:href="@{/bambanking/dashboard}">
                             <i class="fa-solid fa-circle-plus"></i>
                             New Deposit
                         </a>
                     </div>
-
                 </footer>
             </div>
         </section>
     </main>
-
-    <!-- your existing footer fragment if any -->
-    <!-- <div th:replace="fragments/footer :: footer"></div> -->
-
 </body>
 
 </html>
