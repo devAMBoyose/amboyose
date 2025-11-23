@@ -12,7 +12,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
-  <!-- Your existing styles -->
   <link rel="stylesheet" href="/css/footer.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/social.css" />
@@ -21,9 +20,6 @@
   <link rel="stylesheet" href="/css/responsive-intro-portfolio.css">
   <link rel="stylesheet" href="/css/about-pro.css">
   <link rel="stylesheet" href="/responsive/about-responsive.css">
-
-  <!-- BamBoy assistant styles -->
-  <link rel="stylesheet" href="/pages/bamboy/bamboy.css">
 </head>
 
 <body>
@@ -70,7 +66,7 @@
   <div id="cursor-bg" aria-hidden="true"></div>
 
   <div class="window">
-    <!-- Title Bar -->
+    <!-- Title Bar (keep) -->
     <div class="title-bar">
       <div class="dots" aria-hidden="true">
         <span class="red"></span><span class="yellow"></span><span class="green"></span>
@@ -107,7 +103,7 @@
 
     <!-- Content -->
     <div class="content">
-      <!-- LEFT: profile -->
+      <!-- LEFT: profile (keep) -->
       <div class="profile">
         <div class="avatar avatar-glow">
           <img src="https://i.ibb.co/SDV36DGK/2025-07-05-12-04-38.png" alt="Anna Marice Eben Boyose">
@@ -130,13 +126,13 @@
                 <i class="fa-brands fa-viber"></i>
               </a>
             </li>
+
           </ul>
         </div>
       </div>
 
-      <!-- RIGHT: About -->
-      <div class="about-me" id="about-me" data-bamboy-label="About Me"
-        data-bamboy-keywords="about summary profile intro full-stack developer skills">
+      <!-- RIGHT: About (keep) -->
+      <div class="about-me">
         <h2 class="name">ANNA MARICE EBEN BOYOSE</h2>
         <p class="role">Full-Stack Developer | React | Node.js | PHP | Java | MongoDB | UI/UX Design</p>
         <p class="summary">
@@ -166,12 +162,11 @@
         </ul>
       </div>
 
-      <!-- RIGHT: Pro section -->
+      <!-- ===================== NEW RIGHT-SIDE CONTENT ===================== -->
+      <!-- RIGHT-SIDE: Pro section (wrap all in .about-pro) -->
       <div class="about-pro">
-
         <!-- Stats -->
-        <section class="ap ap-stats" aria-label="Key Metrics" id="stats" data-bamboy-label="Stats & Highlights"
-          data-bamboy-keywords="projects clients support certificates numbers stats">
+        <section class="ap ap-stats" aria-label="Key Metrics">
           <article class="ap-card">
             <div class="ap-card__icon"><i class="fa-regular fa-face-smile"></i></div>
             <div class="ap-card__num" data-count="1565">0</div>
@@ -194,9 +189,11 @@
           </article>
         </section>
 
+
+        <!-- Stack -->
         <!-- Tech Stack Section -->
-        <section class="ap ap-stack" aria-label="Tech Stack" id="tech-stack" data-bamboy-label="Tech Stack"
-          data-bamboy-keywords="skills skill frontend backend react node php java javascript database tools stack">
+
+        <section class="ap ap-stack" aria-label="Tech Stack">
 
           <!-- ===== FRONTEND ===== -->
           <h3 class="ap-h3">Frontend</h3>
@@ -231,6 +228,7 @@
             <li><i class="devicon-github-original" title="GitHub"></i></li>
             <li><i class="devicon-visualstudio-plain" title="VS Code"></i></li>
           </ul>
+
         </section>
 
         <!-- Interests -->
@@ -253,10 +251,11 @@
               <h4>Designing &amp; Prototyping</h4>
               <p>Wireframes and prototypes help merge aesthetics with functionality.</p>
             </div>
-          </section>
         </div>
+        </section>
 
         <!-- Hobbies -->
+
         <h4 class="ap-section-label">HOBBIES</h4>
         <section class="ap ap-hobbies" aria-label="Hobbies">
           <span class="ap-chip"><i class="fa-solid fa-paintbrush"></i> Painting</span>
@@ -264,92 +263,24 @@
           <span class="ap-chip"><i class="fa-solid fa-person-swimming"></i> Swimming</span>
           <span class="ap-chip"><i class="fa-solid fa-music"></i> Music</span>
         </section>
-      </div> <!-- /.about-pro -->
-
-    </div> <!-- /.content -->
-  </div> <!-- /.window -->
-
-  <!-- Footer -->
-  <footer class="site-footer">
-    <p>© 2025 <strong>BAMBY</strong> | Designed & Coded with ❤️ </p>
-    <p class="links">
-      <a href="/index.html">About</a> •
-      <a href="/portfolio.html">Portfolio</a> •
-      <a href="/resume.html">Resume</a> •
-      <a href="/contact.html">Contact</a> •
-    </p>
-  </footer>
-
-  <!-- 🔽 BamBoy widget HTML (always at bottom so everything is loaded) -->
-  <div class="bamboy-widget">
-
-    <!-- FLOATING ROBOT HEAD BUTTON -->
-    <button id="bamboyToggle" class="robot-button" aria-label="Open BamBoy assistant">
-      <div class="robot-head-only robot-floating">
-        <!-- Antenna -->
-        <div class="robot-antenna">
-          <span class="antenna-stem"></span>
-          <span class="antenna-tip"></span>
-        </div>
-
-        <!-- Head -->
-        <div class="robot-head">
-          <div class="robot-head-shell">
-            <div class="robot-face">
-              <span class="eye eye-left"></span>
-              <span class="eye eye-right"></span>
-              <span class="cheek cheek-left"></span>
-              <span class="cheek cheek-right"></span>
-              <span class="mouth"></span>
-            </div>
-          </div>
-          <div class="robot-ear ear-left"></div>
-          <div class="robot-ear ear-right"></div>
-        </div>
-      </div>
-    </button>
-
-    <!-- CHAT WINDOW -->
-    <div class="bamboy-window" id="bamboyWindow">
-
-      <div class="bamboy-header">
-        <div class="header-robot-small">
-          <div class="robot-head small">
-            <div class="robot-head-shell">
-              <div class="robot-face">
-                <span class="eye eye-left"></span>
-                <span class="eye eye-right"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="header-text">
-          <h3>BAMBOY</h3>
-          <p>Online • Portfolio Assistant</p>
-        </div>
-        <button id="bamboyClose" class="close-btn" aria-label="Close BamBoy">×</button>
       </div>
 
-      <div class="bamboy-messages" id="bamboyMessages">
-        <!-- JS inserts messages -->
-      </div>
-
-      <form id="bamboyForm" class="bamboy-input">
-        <input id="bamboyInput" type="text" placeholder="Ask something…" autocomplete="off" />
-        <button type="submit">Send</button>
-      </form>
-
-    </div>
-  </div>
-  <!-- 🔼 END BamBoy widget -->
-
-  <!-- Your existing scripts -->
-  <script defer src="/js/nav.js"></script>
-  <script defer src="/js/intro-loader.js"></script>
-  <script defer src="/js/about-pro.js"></script>
-
-  <!-- BamBoy logic -->
-  <script src="/pages/bamboy/bamboy.js"></script>
+    </div><!-- /.window -->
 </body>
+<!-- Footer -->
+<footer class="site-footer">
+  <p>© 2025 <strong>BAMBY</strong> | Designed & Coded with ❤️ </p>
+  <p class="links">
+    <a href="/index.html">About</a> •
+    <a href="/portfolio.html">Portfolio</a> •
+    <a href="/resume.html">Resume</a> •
+    <a href="/contact.html">Contact</a> •
+  </p>
+</footer>
+
+<script defer src="/js/nav.js"></script>
+<script defer src="/js/intro-loader.js"></script>
+<script defer src="/js/about-pro.js"></script>
+
 
 </html>
