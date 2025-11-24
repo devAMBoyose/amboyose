@@ -247,19 +247,11 @@
                 you view the HTML, CSS, and JavaScript source code used to create it.
             </p>
 
-            <!-- bullets -->
-            <div class="demo-meta">
-                <ul>
-                    <li>Smooth beam light animation</li>
-                    <li>3D stacked card hover interaction</li>
-                    <li>Built with pure HTML, CSS, and JavaScript</li>
-                </ul>
-            </div>
 
             <!-- preview -->
             <div class="preview-box">
                 <!-- This loads the real running demo -->
-                <iframe src="animation.html" title="Card Beam Animation Preview"></iframe>
+                <iframe src="index.html" title="Card Beam Animation Preview"></iframe>
             </div>
 
             <!-- code viewer -->
@@ -275,42 +267,25 @@
                             </button>
                         </header>
                         <pre class="code-pre"><code id="code-html">
+&lt;<span class="tok-tag">main</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-demo&quot;</span>&gt;
+  &lt;<span class="tok-tag">section</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-grid&quot;</span>&gt;
+    &lt;<span class="tok-tag">article</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card&quot;</span>&gt;
+      &lt;<span class="tok-tag">h2</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-title&quot;</span>&gt;Quantum UI&lt;/<span class="tok-tag">h2</span>&gt;
+      &lt;<span class="tok-tag">p</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-body&quot;</span>&gt;
+        Next-gen UI framework designed for speed, interactivity, and effortless scalability.
+      &lt;/<span class="tok-tag">p</span>&gt;
+    &lt;/<span class="tok-tag">article</span>&gt;
 
-                                <!-- This is for HTML -->
-<body>
-    <div class="controls">
-        <button class="control-btn" onclick="toggleAnimation()">⏸️ Pause</button>
-        <button class="control-btn" onclick="resetPosition()">🔄 Reset</button>
-        <button class="control-btn" onclick="changeDirection()">
-            ↔️ Direction
-        </button>
-    </div>
-
-    <div class="speed-indicator">
-        Speed: <span id="speedValue">120</span> px/s
-    </div>
-
-    <div class="container">
-        <canvas id="particleCanvas"></canvas>
-        <canvas id="scannerCanvas"></canvas>
-
-        <div class="scanner"></div>
-
-        <div class="card-stream" id="cardStream">
-            <div class="card-line" id="cardLine"></div>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="script.js"></script>
-
-    <div class="inspiration-credit">
-        Inspired by
-        <a href="https://evervault.com/" target="_blank">@evervault.com</a>
-    </div>
-</body>
-
-                    <!-- This END for HTML -->
+    &lt;<span class="tok-tag">article</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card&quot;</span>&gt;
+      &lt;<span class="tok-tag">h2</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-title&quot;</span>&gt;Pulse Metrics&lt;/<span class="tok-tag">h2</span>&gt;
+      &lt;<span class="tok-tag">p</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-body&quot;</span>&gt;
+        Real-time dashboards with smooth card beam effects on hover.
+      &lt;/<span class="tok-tag">p</span>&gt;
+    &lt;/<span class="tok-tag">article</span>&gt;
+  &lt;/<span class="tok-tag">section</span>&gt;
+&lt;/<span class="tok-tag">main</span>&gt;
+            </code></pre>
+                    </article>
 
                     <!-- CSS -->
                     <article class="code-card">
@@ -321,8 +296,6 @@
                             </button>
                         </header>
                         <pre class="code-pre"><code id="code-css">
-
-                            <!-- This IS for CSS -->
 <span class="tok-tag">:root</span> {
   <span class="tok-attr">--bg</span>: <span class="tok-str">#020617</span>;
   <span class="tok-attr">--card-bg</span>: <span class="tok-str">radial-gradient(circle at top left, #1f2937, #020617)</span>;
@@ -388,8 +361,6 @@
             </code></pre>
                     </article>
 
-                    <!-- This END for CSS -->
-
                     <!-- JavaScript -->
                     <article class="code-card">
                         <header class="code-card-head">
@@ -399,8 +370,6 @@
                             </button>
                         </header>
                         <pre class="code-pre"><code id="code-js">
-
-                            <!-- This IS for js -->
 <span class="tok-key">const</span> cards = document.querySelectorAll(<span class="tok-str">&quot;.card&quot;</span>);
 
 cards.forEach(<span class="tok-key">card</span> =&gt; {
@@ -420,7 +389,7 @@ cards.forEach(<span class="tok-key">card</span> =&gt; {
 });
             </code></pre>
                     </article>
-                    <!-- This END for js -->
+
                 </div>
             </div>
 
