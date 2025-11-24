@@ -1,0 +1,45 @@
+/* Align all logos */
+.ap-logos li {
+    list-style: none;
+    display: inline-block;
+    margin: 0 12px;
+}
+
+/* Icon size */
+.ap-logos i,
+.ap-logos img {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.9;
+    transition: 0.25s ease;
+}
+
+/* Hover glow */
+.ap-logos i:hover,
+.ap-logos img:hover {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.7));
+}
+
+/* Full-color Java icon styling */
+.stack-icon,
+.java-icon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    display: inline-block;
+    border: none;
+    background: transparent;
+    /* important so no box */
+    opacity: 0.9;
+    transition: 0.25s ease;
+}
+
+.stack-icon:hover,
+.java-icon:hover {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.8));
+}

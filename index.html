@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="/css/responsive-intro-portfolio.css">
   <link rel="stylesheet" href="/css/about-pro.css">
   <link rel="stylesheet" href="/responsive/about-responsive.css">
+  <link rel="stylesheet" href="/css/iconstechstack.css">
 
   <!-- BamBoy assistant styles -->
   <link rel="stylesheet" href="/pages/bamboy/bamboy.css">
@@ -202,36 +203,55 @@
           <h3 class="ap-h3">Frontend</h3>
           <ul class="ap-logos group-line">
             <!-- Core / Vanilla -->
-            <li><i class="devicon-html5-plain" title="HTML5"></i></li>
-            <li><i class="devicon-css3-plain" title="CSS3"></i></li>
-            <li><i class="devicon-javascript-plain" title="Vanilla JavaScript"></i></li>
+            <li><i class="devicon-html5-plain colored" title="HTML5"></i></li>
+            <li><i class="devicon-css3-plain colored" title="CSS3"></i></li>
+            <li><i class="devicon-javascript-plain colored" title="Vanilla JavaScript"></i></li>
 
             <!-- Frameworks / Libraries -->
-            <li><i class="devicon-react-original" title="React"></i></li>
-            <li><i class="devicon-vitejs-plain" title="Vite"></i></li>
-            <li><i class="devicon-typescript-plain" title="TypeScript"></i></li>
+            <li><i class="devicon-react-original colored" title="React"></i></li>
+            <li><i class="devicon-vitejs-plain colored" title="Vite"></i></li>
+            <li><i class="devicon-typescript-plain colored" title="TypeScript"></i></li>
           </ul>
 
           <!-- ===== BACKEND ===== -->
           <h3 class="ap-h3">Backend</h3>
           <ul class="ap-logos group-line">
-            <li><i class="devicon-nodejs-plain" title="Node.js"></i></li>
-            <li><i class="devicon-express-original" title="Express.js"></i></li>
-            <li><i class="devicon-php-plain" title="PHP"></i></li>
-            <li><i class="devicon-rails-plain" title="Ruby on Rails"></i></li>
-            <li><i class="devicon-java-plain" title="Java"></i></li>
+            <li><i class="devicon-nodejs-plain colored" title="Node.js"></i></li>
+            <li><i class="devicon-express-original colored" title="Express.js"></i></li>
+            <li><i class="devicon-php-plain colored" title="PHP"></i></li>
+
+            <!-- Spring Boot -->
+            <li><i class="devicon-spring-original colored" title="Spring Boot"></i></li>
+
+            <!-- PostgreSQL -->
+            <li><i class="devicon-postgresql-plain colored" title="PostgreSQL"></i></li>
+
+            <!-- Full-color Java icon -->
+            <li>
+              <img src="/assets/icons/java.svg" alt="Java" class="stack-icon java-icon" title="Java">
+            </li>
           </ul>
 
           <!-- ===== DATABASE & TOOLS ===== -->
           <h3 class="ap-h3">Database &amp; Tools</h3>
           <ul class="ap-logos group-line">
-            <li><i class="devicon-mongodb-plain" title="MongoDB"></i></li>
-            <li><i class="devicon-mysql-original" title="MySQL"></i></li>
-            <li><i class="devicon-git-plain" title="Git"></i></li>
-            <li><i class="devicon-github-original" title="GitHub"></i></li>
-            <li><i class="devicon-visualstudio-plain" title="VS Code"></i></li>
+            <!-- Databases -->
+            <li><i class="devicon-mongodb-plain colored" title="MongoDB"></i></li>
+            <li><i class="devicon-mysql-original colored" title="MySQL"></i></li>
+
+            <!-- DevOps / Platforms -->
+            <li><i class="devicon-docker-plain colored" title="Docker"></i></li>
+
+            <!-- Git & Code Tools -->
+            <li><i class="devicon-git-plain colored" title="Git"></i></li>
+            <li><i class="devicon-github-original colored" title="GitHub"></i></li>
+            <li><i class="devicon-visualstudio-plain colored" title="VS Code"></i></li>
+
+
           </ul>
+
         </section>
+
 
         <!-- Interests -->
         <h4 class="ap-section-label">INTERESTS</h4>
@@ -342,14 +362,15 @@
     </div>
   </div>
   <!-- 🔼 END BamBoy widget -->
-
+  <script src="/pages/bamboy/bamboy.js"></script>
+  <script src="js/bamboy-glow.js"></script>
   <!-- Your existing scripts -->
   <script defer src="/js/nav.js"></script>
   <script defer src="/js/intro-loader.js"></script>
   <script defer src="/js/about-pro.js"></script>
 
   <!-- BamBoy logic -->
-  <script src="/pages/bamboy/bamboy.js"></script>
+
 </body>
 
 </html>

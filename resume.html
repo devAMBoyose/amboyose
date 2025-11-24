@@ -18,6 +18,8 @@
 
     <!-- Page-only styles -->
     <link rel="stylesheet" href="/assets/css/resume.css" />
+    <!-- BamBoy assistant styles -->
+    <link rel="stylesheet" href="/pages/bamboy/bamboy.css">
 </head>
 
 <body>
@@ -377,6 +379,8 @@
         </section>
     </div>
 
+
+
     <!-- Footer (kept) -->
     <footer class="site-footer">
         <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
@@ -388,12 +392,77 @@
         </p>
     </footer>
 
+    <!-- 🔽 BamBoy widget HTML (always at bottom so everything is loaded) -->
+    <div class="bamboy-widget">
+
+        <!-- FLOATING ROBOT HEAD BUTTON -->
+        <button id="bamboyToggle" class="robot-button" aria-label="Open BamBoy assistant">
+            <div class="robot-head-only robot-floating">
+                <!-- Antenna -->
+                <div class="robot-antenna">
+                    <span class="antenna-stem"></span>
+                    <span class="antenna-tip"></span>
+                </div>
+
+                <!-- Head -->
+                <div class="robot-head">
+                    <div class="robot-head-shell">
+                        <div class="robot-face">
+                            <span class="eye eye-left"></span>
+                            <span class="eye eye-right"></span>
+                            <span class="cheek cheek-left"></span>
+                            <span class="cheek cheek-right"></span>
+                            <span class="mouth"></span>
+                        </div>
+                    </div>
+                    <div class="robot-ear ear-left"></div>
+                    <div class="robot-ear ear-right"></div>
+                </div>
+            </div>
+        </button>
+
+        <!-- CHAT WINDOW -->
+        <div class="bamboy-window" id="bamboyWindow">
+
+            <div class="bamboy-header">
+                <div class="header-robot-small">
+                    <div class="robot-head small">
+                        <div class="robot-head-shell">
+                            <div class="robot-face">
+                                <span class="eye eye-left"></span>
+                                <span class="eye eye-right"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-text">
+                    <h3>BAMBOY</h3>
+                    <p>Online • Portfolio Assistant</p>
+                </div>
+                <button id="bamboyClose" class="close-btn" aria-label="Close BamBoy">×</button>
+            </div>
+
+            <div class="bamboy-messages" id="bamboyMessages">
+                <!-- JS inserts messages -->
+            </div>
+
+            <form id="bamboyForm" class="bamboy-input">
+                <input id="bamboyInput" type="text" placeholder="Ask something…" autocomplete="off" />
+                <button type="submit">Send</button>
+            </form>
+
+        </div>
+    </div>
+    <!-- 🔼 END BamBoy widget -->
+    <script src="/pages/bamboy/bamboy.js"></script>
+
     <!-- Your existing scripts -->
     <script src="/js/script.js"></script>
     <script defer src="/js/nav.js"></script>
 
     <!-- Page-only JS -->
     <script defer src="/assets/css/main/resume.js"></script>
+
 </body>
 
 </html>
