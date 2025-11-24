@@ -330,9 +330,7 @@ ${js || ''}
 
       if (els.css)
         els.css.value = `
-/* Reset and base styles */
 
-/* CSS Variables */
 :root {
   --color-neutral-900: oklch(0.185 0 0);
 
