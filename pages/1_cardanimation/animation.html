@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Card Beam Animation | Portfolio</title>
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your global styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .page-content {
+            padding: 40px 45px 44px;
+            max-width: 980px;
+            margin: 0 auto;
+            color: #f9fafb;
+        }
+
+        /* Header row: title + View Code */
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .demo-header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .demo-sub {
+            margin: 0 0 16px;
+            max-width: 640px;
+            opacity: 0.85;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* bullets row */
+        .demo-meta {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .demo-meta ul {
+            margin: 0;
+            padding-left: 18px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* preview box */
+        .preview-box {
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: #020617;
+            padding: 14px;
+        }
+
+        .preview-box iframe {
+            width: 100%;
+            height: 460px;
+            border: none;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        /* code section container */
+        #codeBox {
+            display: none;
+            margin-top: 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: #020617;
+            padding: 18px 18px 22px;
+        }
+
+        /* code cards */
+        .code-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .code-card {
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: #020617;
+            padding: 8px 10px 10px;
+        }
+
+        .code-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .code-pre {
+            margin: 0;
+            padding: 8px 10px 10px;
+            background: #020617;
+            border-radius: 6px;
+            overflow: auto;
+            max-height: 260px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .code-pre code {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        /* fake-code token colors */
+        .tok-tag {
+            color: #60a5fa;
+        }
+
+        .tok-attr {
+            color: #f97316;
+        }
+
+        .tok-str {
+            color: #facc15;
+        }
+
+        .tok-punc {
+            color: #9ca3af;
+        }
+
+        .tok-key {
+            color: #22c55e;
+        }
+
+        .tok-fn {
+            color: #a855f7;
+        }
+
+        .tok-num {
+            color: #f97316;
+        }
+
+        .tok-com {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        /* badges */
+        .badge-html,
+        .badge-css,
+        .badge-js {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            color: #e5e7eb;
+        }
+
+        /* copy button */
+        .copy-btn {
+            font-size: 12px;
+            padding: 4px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.9);
+            background: #020617;
+            color: #e5e7eb;
+            cursor: pointer;
+        }
+
+        .copy-btn.copied {
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding-inline: 20px;
+            }
+
+            .demo-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .demo-meta {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- cursor-follow glow background -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">Card Beam Animation</span>
+
+            <div class="tb-right">
+                <button class="chip chip-back" onclick="location.href='/portfolio.html'">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="page-content">
+
+            <!-- header row -->
+            <div class="demo-header">
+                <h1>Card Beam Animation</h1>
+
+                <!-- View Code toggle -->
+                <button id="toggleCode" class="chip">
+                    <i class="fa-solid fa-code"></i>
+                    <span>View Code</span>
+                </button>
+            </div>
+
+            <p class="demo-sub">
+                This page displays the live demo of the card beam animation and lets
+                you view the HTML, CSS, and JavaScript source code used to create it.
+            </p>
+
+            <!-- bullets -->
+            <div class="demo-meta">
+                <ul>
+                    <li>Smooth beam light animation</li>
+                    <li>3D stacked card hover interaction</li>
+                    <li>Built with pure HTML, CSS, and JavaScript</li>
+                </ul>
+            </div>
+
+            <!-- preview -->
+            <div class="preview-box">
+                <!-- This loads the real running demo -->
+                <iframe src="animation.html" title="Card Beam Animation Preview"></iframe>
+            </div>
+
+            <!-- code viewer -->
+            <div id="codeBox">
+                <div class="code-grid">
+
+                    <!-- HTML -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-html">HTML</span>
+                            <button class="copy-btn" type="button" data-copy="code-html">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+                        <pre class="code-pre"><code id="code-html">
+
+                                <!-- This is for HTML -->
+<body>
+    <div class="controls">
+        <button class="control-btn" onclick="toggleAnimation()">⏸️ Pause</button>
+        <button class="control-btn" onclick="resetPosition()">🔄 Reset</button>
+        <button class="control-btn" onclick="changeDirection()">
+            ↔️ Direction
+        </button>
+    </div>
+
+    <div class="speed-indicator">
+        Speed: <span id="speedValue">120</span> px/s
+    </div>
+
+    <div class="container">
+        <canvas id="particleCanvas"></canvas>
+        <canvas id="scannerCanvas"></canvas>
+
+        <div class="scanner"></div>
+
+        <div class="card-stream" id="cardStream">
+            <div class="card-line" id="cardLine"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
+
+    <div class="inspiration-credit">
+        Inspired by
+        <a href="https://evervault.com/" target="_blank">@evervault.com</a>
+    </div>
+</body>
+
+                    <!-- This END for HTML -->
+
+                    <!-- CSS -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-css">CSS</span>
+                            <button class="copy-btn" type="button" data-copy="code-css">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+                        <pre class="code-pre"><code id="code-css">
+
+                            <!-- This IS for CSS -->
+<span class="tok-tag">:root</span> {
+  <span class="tok-attr">--bg</span>: <span class="tok-str">#020617</span>;
+  <span class="tok-attr">--card-bg</span>: <span class="tok-str">radial-gradient(circle at top left, #1f2937, #020617)</span>;
+}
+
+<span class="tok-tag">body</span> {
+  <span class="tok-attr">margin</span>: <span class="tok-num">0</span>;
+  <span class="tok-attr">min-height</span>: <span class="tok-num">100vh</span>;
+  <span class="tok-attr">background</span>: radial-gradient(circle at top left, #1f2937, #020617 <span class="tok-num">55%</span>, #020617);
+  <span class="tok-attr">color</span>: #e5e7eb;
+  <span class="tok-attr">font-family</span>: system-ui, -apple-system, BlinkMacSystemFont, <span class="tok-str">&quot;JetBrains Mono&quot;</span>, monospace;
+}
+
+<span class="tok-tag">.card-demo</span> {
+  <span class="tok-attr">display</span>: flex;
+  <span class="tok-attr">justify-content</span>: center;
+  <span class="tok-attr">padding</span>: <span class="tok-num">32px</span> <span class="tok-num">16px</span>;
+}
+
+<span class="tok-tag">.card-grid</span> {
+  <span class="tok-attr">display</span>: grid;
+  <span class="tok-attr">gap</span>: <span class="tok-num">18px</span>;
+  <span class="tok-attr">width</span>: min(<span class="tok-num">640px</span>, <span class="tok-num">100%</span>);
+}
+
+<span class="tok-tag">.card</span> {
+  <span class="tok-attr">position</span>: relative;
+  <span class="tok-attr">padding</span>: <span class="tok-num">18px</span> <span class="tok-num">20px</span> <span class="tok-num">22px</span>;
+  <span class="tok-attr">border-radius</span>: <span class="tok-num">18px</span>;
+  <span class="tok-attr">background</span>: var(<span class="tok-attr">--card-bg</span>);
+  <span class="tok-attr">overflow</span>: hidden;
+  <span class="tok-attr">border</span>: <span class="tok-num">1px</span> solid rgba(<span class="tok-num">148</span>, <span class="tok-num">163</span>, <span class="tok-num">184</span>, <span class="tok-num">0.45</span>);
+}
+
+/* beam layer */
+<span class="tok-tag">.card::before</span> {
+  <span class="tok-attr">content</span>: <span class="tok-str">&quot;&quot;</span>;
+  <span class="tok-attr">position</span>: absolute;
+  <span class="tok-attr">inset</span>: -<span class="tok-num">40%</span>;
+  <span class="tok-attr">background</span>:
+    radial-gradient(circle at var(<span class="tok-attr">--mx</span>, <span class="tok-num">50%</span>) var(<span class="tok-attr">--my</span>, <span class="tok-num">0%</span>),
+    rgba(<span class="tok-num">56</span>, <span class="tok-num">189</span>, <span class="tok-num">248</span>, <span class="tok-num">0.30</span>),
+    transparent <span class="tok-num">60%</span>);
+  <span class="tok-attr">opacity</span>: <span class="tok-num">0.9</span>;
+  <span class="tok-attr">mix-blend-mode</span>: screen;
+  <span class="tok-attr">transition</span>: opacity <span class="tok-num">0.35s</span> ease;
+  <span class="tok-attr">pointer-events</span>: none;
+}
+
+<span class="tok-tag">.card:hover::before</span> {
+  <span class="tok-attr">opacity</span>: <span class="tok-num">1</span>;
+}
+
+<span class="tok-tag">.card-title</span> {
+  <span class="tok-attr">font-size</span>: <span class="tok-num">1.05rem</span>;
+  <span class="tok-attr">margin-bottom</span>: <span class="tok-num">0.25rem</span>;
+}
+
+<span class="tok-tag">.card-body</span> {
+  <span class="tok-attr">font-size</span>: <span class="tok-num">0.9rem</span>;
+  <span class="tok-attr">opacity</span>: <span class="tok-num">0.9</span>;
+}
+            </code></pre>
+                    </article>
+
+                    <!-- This END for CSS -->
+
+                    <!-- JavaScript -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-js">JavaScript</span>
+                            <button class="copy-btn" type="button" data-copy="code-js">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+                        <pre class="code-pre"><code id="code-js">
+
+                            <!-- This IS for js -->
+<span class="tok-key">const</span> cards = document.querySelectorAll(<span class="tok-str">&quot;.card&quot;</span>);
+
+cards.forEach(<span class="tok-key">card</span> =&gt; {
+  card.addEventListener(<span class="tok-str">&quot;mousemove&quot;</span>, (<span class="tok-key">event</span>) =&gt; {
+    <span class="tok-key">const</span> rect = card.getBoundingClientRect();
+    <span class="tok-key">const</span> x = event.clientX - rect.left;
+    <span class="tok-key">const</span> y = event.clientY - rect.top;
+
+    card.style.setProperty(<span class="tok-str">&quot;--mx&quot;</span>, `${x}px`);
+    card.style.setProperty(<span class="tok-str">&quot;--my&quot;</span>, `${y}px`);
+  });
+
+  card.addEventListener(<span class="tok-str">&quot;mouseleave&quot;</span>, () =&gt; {
+    card.style.removeProperty(<span class="tok-str">&quot;--mx&quot;</span>);
+    card.style.removeProperty(<span class="tok-str">&quot;--my&quot;</span>);
+  });
+});
+            </code></pre>
+                    </article>
+                    <!-- This END for js -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS (if you use them globally) -->
+    <script src="/js/script.js"></script>
+    <script src="/js/nav.js" defer></script>
+
+    <!-- Toggle + Copy behaviour -->
+    <script>
+        const toggleBtn = document.getElementById("toggleCode");
+        const codeBox = document.getElementById("codeBox");
+
+        toggleBtn.addEventListener("click", () => {
+            const open = codeBox.style.display === "block";
+            codeBox.style.display = open ? "none" : "block";
+            toggleBtn.innerHTML = open
+                ? '<i class="fa-solid fa-code"></i> <span>View Code</span>'
+                : '<i class="fa-solid fa-code"></i> <span>Hide Code</span>';
+        });
+
+        // Copy buttons
+        document.querySelectorAll(".copy-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-copy");
+                const codeEl = document.getElementById(id);
+                if (!codeEl) return;
+
+                const text = codeEl.textContent.replace(/\u00A0/g, " ").trim();
+
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.classList.add("copied");
+                    btn.innerHTML = "<i class='fa-solid fa-check'></i> Copied";
+                    setTimeout(() => {
+                        btn.classList.remove("copied");
+                        btn.innerHTML = "<i class='fa-solid fa-copy'></i> Copy";
+                    }, 1200);
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
