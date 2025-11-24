@@ -1,0 +1,153 @@
+/* =======================================
+   RESPONSIVE LAYOUT OVERRIDES
+   Works for: iPhone SE → Desktop
+   ======================================= */
+
+/* ---------- Medium screens (<= 1200px) ---------- */
+@media (max-width: 1200px) {
+    .topbar {
+        margin-inline: 1rem;
+    }
+
+    .playground {
+        margin-inline: 1rem;
+    }
+}
+
+/* ---------- Tablet & small laptop (<= 980px) ---------- */
+@media (max-width: 980px) {
+
+    /* Show hamburger, simplify topbar */
+    .nav-toggle {
+        display: inline-flex;
+    }
+
+    .topbar {
+        gap: 0.75rem;
+        padding-inline: 0.9rem;
+    }
+
+    .topbar h1 {
+        font-size: 0.86rem;
+    }
+
+    /* Turn tabs into dropdown-style mobile menu */
+    .tabs {
+        position: absolute;
+        top: calc(100% + 0.45rem);
+        right: 0.35rem;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.5rem;
+        border-radius: 14px;
+        background: rgba(15, 23, 42, 0.98);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.98);
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-6px);
+        transition: opacity 0.18s ease-out, transform 0.18s ease-out;
+    }
+
+    html.nav-open .tabs {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .tabs .chip {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    /* Playground collapses into single column */
+    .playground {
+        display: block;
+        padding: 1rem 1rem 1.2rem;
+        margin-inline: 1rem;
+        --left: auto;
+    }
+
+    .editor-col,
+    .preview-col {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .editor-col {
+        margin-bottom: 1rem;
+    }
+
+    .gutter {
+        display: none !important;
+    }
+
+    #preview {
+        min-height: 340px;
+    }
+}
+
+/* ---------- Phones (<= 768px) ---------- */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .topbar {
+        margin-top: 0.75rem;
+        padding-inline: 0.75rem;
+    }
+
+    .topbar h1 {
+        display: none;
+        /* keep header compact on very small screens */
+    }
+
+    .playground {
+        margin: 0.9rem 0.75rem 1.6rem;
+        padding-inline: 0.85rem;
+    }
+
+    .panel textarea {
+        font-size: 0.78rem;
+    }
+
+    .hl-layer {
+        inset: 1.9rem 0.7rem 0.7rem 0.7rem;
+        font-size: 0.78rem;
+    }
+
+    #preview {
+        min-height: 320px;
+    }
+
+    .footer {
+        padding-inline: 0.9rem;
+    }
+}
+
+/* ---------- Extra small phones (<= 480px, ex: iPhone SE) ---------- */
+@media (max-width: 480px) {
+    .topbar {
+        border-radius: 16px;
+    }
+
+    .playground {
+        padding-inline: 0.75rem;
+        border-radius: 16px;
+    }
+
+    .panel {
+        border-radius: 12px;
+    }
+
+    #preview {
+        border-radius: 12px;
+        min-height: 300px;
+    }
+
+    .footer .links {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
