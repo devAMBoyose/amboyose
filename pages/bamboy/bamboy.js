@@ -98,10 +98,12 @@
         ],
 
         education: [
-            "JAVA Programming NC III (2025)",
-            "Robotics Process Automation – BluePrism (2022)",
-            "BS Criminology (2007–2012)",
-            "Computer Hardware Servicing NC II (2013)"
+            "JAVA Programming",
+            "Certified DevOps - By Linkedin Learning PagerDuty",
+            "Certified in Software Engineering - IBM Learning",
+            "Johns Hopkins University - Certified Web Developers",
+            "Robotics Process Automation – BluePrism",
+            "Computer Hardware Servicing NC II",
         ],
 
         certifications: [
