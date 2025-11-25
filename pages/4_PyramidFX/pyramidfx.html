@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Pyramid FX | Portfolio</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your global styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .page-content {
+            padding: 40px 45px 44px;
+            max-width: 980px;
+            margin: 0 auto;
+            color: #f9fafb;
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .demo-header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .demo-sub {
+            margin: 0 0 16px;
+            max-width: 640px;
+            opacity: 0.85;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .demo-meta {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .demo-meta ul {
+            margin: 0;
+            padding-left: 18px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .preview-box {
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: radial-gradient(circle at top, #020617, #020617 55%, #000);
+            padding: 14px;
+        }
+
+        .preview-box iframe {
+            width: 100%;
+            height: 460px;
+            border: none;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        #codeBox {
+            display: none;
+            margin-top: 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: #020617;
+            padding: 18px 18px 22px;
+        }
+
+        .code-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .code-card {
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: #020617;
+            padding: 8px 10px 10px;
+        }
+
+        .code-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .code-pre {
+            margin: 0;
+            padding: 8px 10px 10px;
+            background: #020617;
+            border-radius: 6px;
+            overflow: auto;
+            max-height: 260px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .code-pre code {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .badge-html,
+        .badge-js {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            color: #e5e7eb;
+        }
+
+        .copy-btn {
+            font-size: 12px;
+            padding: 4px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.9);
+            background: #020617;
+            color: #e5e7eb;
+            cursor: pointer;
+        }
+
+        .copy-btn.copied {
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+
+        .tok-tag {
+            color: #7dd3fc;
+        }
+
+        .tok-attr {
+            color: #a5b4fc;
+        }
+
+        .tok-str {
+            color: #f97373;
+        }
+
+        .tok-punc {
+            color: #e5e7eb;
+            opacity: 0.75;
+        }
+
+        .tok-comment {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding-inline: 20px;
+            }
+
+            .demo-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .demo-meta {
+                justify-content: flex-start;
+            }
+
+            .preview-box iframe {
+                height: 360px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- cursor-follow glow background (from your global CSS) -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">Pyramid FX | Projects </span>
+
+            <div class="tb-right">
+                <button class="chip chip-back" onclick="location.href='/pages/interactive-demo.html'">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <div class="demo-header">
+                <div>
+                    <h1>Pyramid FX</h1>
+                    <p class="demo-sub">
+                        A glowing particle pyramid with multiple themed effects:
+                        lightning bolts, volcanic shards, arctic rings, emerald spirals
+                        and solar flares — all triggered from a single button.
+                    </p>
+
+                    <div class="demo-meta">
+                        <ul>
+                            <li>Built with Three.js + Postprocessing</li>
+                            <li>Multi-theme particle &amp; lightning effects</li>
+                            <li>GPU-accelerated WebGL scene</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- View Code toggle -->
+                <button id="toggleCode" class="chip">
+                    <i class="fa-solid fa-code"></i>
+                    <span>View Code</span>
+                </button>
+            </div>
+
+            <!-- Preview -->
+            <div class="preview-box">
+                <!-- IMPORTANT: iframe points to the demo file in this folder -->
+                <iframe src="sample.html" title="Pyramid FX Preview"></iframe>
+            </div>
+
+            <!-- Code viewer (short, not full giant JS) -->
+            <div id="codeBox">
+                <div class="code-grid">
+
+                    <!-- HTML snippet -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-html">HTML</span>
+                            <button class="copy-btn" type="button" data-copy="code-html">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+
+                        <pre class="code-pre"><code id="code-html">
+<span class="tok-tag">&lt;body&gt;</span>
+  <span class="tok-tag">&lt;div</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"ui-container"</span><span class="tok-tag">&gt;</span>
+    <span class="tok-tag">&lt;button</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"effect-trigger"</span><span class="tok-tag">&gt;</span>
+      Trigger Effect
+    <span class="tok-tag">&lt;/button&gt;</span>
+    <span class="tok-tag">&lt;div</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"effect-info"</span><span class="tok-tag">&gt;</span>
+      Lightning Storm
+    <span class="tok-tag">&lt;/div&gt;</span>
+  <span class="tok-tag">&lt;/div&gt;</span>
+
+  <span class="tok-comment">&lt;!-- Pyramid FX: Three.js scene with particle pyramid &amp; effects --&gt;</span>
+  <span class="tok-tag">&lt;script</span> <span class="tok-attr">type</span><span class="tok-punc">=</span><span class="tok-str">"module"</span><span class="tok-tag">&gt;</span>
+    <span class="tok-comment">// import three + addons, build pyramid &amp; effects</span>
+    ...
+  <span class="tok-tag">&lt;/script&gt;</span>
+<span class="tok-tag">&lt;/body&gt;</span>
+</code></pre>
+                    </article>
+
+                    <!-- JS snippet -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-js">JavaScript</span>
+                            <button class="copy-btn" type="button" data-copy="code-js">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+                        <pre class="code-pre"><code id="code-js">
+<span class="tok-comment">// Import Three.js + postprocessing</span>
+<span class="tok-tag">import</span> * as THREE <span class="tok-tag">from</span> <span class="tok-str">"three"</span>;
+<span class="tok-comment">// OrbitControls, EffectComposer, UnrealBloomPass...</span>
+
+<span class="tok-comment">// Create scene, camera, renderer</span>
+<span class="tok-tag">const</span> scene  = <span class="tok-tag">new</span> THREE.Scene();
+<span class="tok-tag">const</span> camera = <span class="tok-tag">new</span> THREE.PerspectiveCamera(...);
+<span class="tok-tag">const</span> renderer = <span class="tok-tag">new</span> THREE.WebGLRenderer({ antialias: <span class="tok-str">true</span> });
+
+<span class="tok-comment">// Build outer/inner particle pyramids + edge lines</span>
+<span class="tok-tag">function</span> createParticlePyramid(...) { ... }
+
+<span class="tok-comment">// Effect themes: lightning, shards, rings, spiral, flare</span>
+<span class="tok-tag">const</span> effectThemes = [ ... ];
+
+<span class="tok-comment">// Triggered by the button</span>
+document.getElementById(<span class="tok-str">"effect-trigger"</span>)
+  .addEventListener(<span class="tok-str">"click"</span>, () =&gt; {
+    <span class="tok-comment">// cycle themes + fire the current FX</span>
+  });
+
+<span class="tok-comment">// Animation loop: rotate pyramids, update particles &amp; FX</span>
+<span class="tok-tag">function</span> animate() {
+  requestAnimationFrame(animate);
+  ...
+}
+animate();
+</code></pre>
+                    </article>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS -->
+    <script src="/js/script.js"></script>
+    <script src="/js/nav.js" defer></script>
+
+    <!-- Toggle + Copy behaviour (same as Spooky page) -->
+    <script>
+        const toggleBtn = document.getElementById("toggleCode");
+        const codeBox = document.getElementById("codeBox");
+
+        toggleBtn.addEventListener("click", () => {
+            const open = codeBox.style.display === "block";
+            codeBox.style.display = open ? "none" : "block";
+            toggleBtn.innerHTML = open
+                ? '<i class="fa-solid fa-code"></i> <span>View Code</span>'
+                : '<i class="fa-solid fa-code"></i> <span>Hide Code</span>';
+        });
+
+        document.querySelectorAll(".copy-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-copy");
+                const codeEl = document.getElementById(id);
+                if (!codeEl) return;
+
+                const text = codeEl.textContent.replace(/\u00A0/g, " ").trim();
+
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.classList.add("copied");
+                    btn.innerHTML = "<i class='fa-solid fa-check'></i> Copied";
+                    setTimeout(() => {
+                        btn.classList.remove("copied");
+                        btn.innerHTML = "<i class='fa-solid fa-copy'></i> Copy";
+                    }, 1200);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
