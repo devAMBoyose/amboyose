@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Card Beam Animation | Portfolio</title>
+    <title>Liquid Effect | Portfolio</title>
 
     <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
@@ -46,21 +46,6 @@
             opacity: 0.85;
             font-size: 0.95rem;
             line-height: 1.6;
-        }
-
-        /* bullets row */
-        .demo-meta {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
-
-        .demo-meta ul {
-            margin: 0;
-            padding-left: 18px;
-            line-height: 1.6;
-            opacity: 0.9;
         }
 
         /* preview box */
@@ -198,10 +183,6 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-
-            .demo-meta {
-                justify-content: flex-start;
-            }
         }
     </style>
 </head>
@@ -218,7 +199,7 @@
                 <span class="red"></span><span class="yellow"></span><span class="green"></span>
             </div>
 
-            <span class="filename">Card Beam Animation</span>
+            <span class="filename">Liquid Hover</span>
 
             <div class="tb-right">
                 <button class="chip chip-back" onclick="location.href='/pages/interactive-demo.html'">
@@ -233,7 +214,7 @@
 
             <!-- header row -->
             <div class="demo-header">
-                <h1>Card Beam Animation</h1>
+                <h1>Liquid Hover Animation</h1>
 
                 <!-- View Code toggle -->
                 <button id="toggleCode" class="chip">
@@ -243,15 +224,13 @@
             </div>
 
             <p class="demo-sub">
-                This page displays the live demo of the card beam animation and lets
+                This page displays the live demo of the Liquid Hover animation and lets
                 you view the HTML, CSS, and JavaScript source code used to create it.
             </p>
 
-
             <!-- preview -->
             <div class="preview-box">
-                <!-- This loads the real running demo -->
-                <iframe src="index.html" title="Card Beam Animation Preview"></iframe>
+                <iframe src="sample.html" title="Liquid Hover Preview"></iframe>
             </div>
 
             <!-- code viewer -->
@@ -266,25 +245,14 @@
                                 <i class="fa-solid fa-copy"></i> Copy
                             </button>
                         </header>
-                        <pre class="code-pre"><code id="code-html">
-&lt;<span class="tok-tag">main</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-demo&quot;</span>&gt;
-  &lt;<span class="tok-tag">section</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-grid&quot;</span>&gt;
-    &lt;<span class="tok-tag">article</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card&quot;</span>&gt;
-      &lt;<span class="tok-tag">h2</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-title&quot;</span>&gt;Quantum UI&lt;/<span class="tok-tag">h2</span>&gt;
-      &lt;<span class="tok-tag">p</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-body&quot;</span>&gt;
-        Next-gen UI framework designed for speed, interactivity, and effortless scalability.
-      &lt;/<span class="tok-tag">p</span>&gt;
-    &lt;/<span class="tok-tag">article</span>&gt;
 
-    &lt;<span class="tok-tag">article</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card&quot;</span>&gt;
-      &lt;<span class="tok-tag">h2</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-title&quot;</span>&gt;Pulse Metrics&lt;/<span class="tok-tag">h2</span>&gt;
-      &lt;<span class="tok-tag">p</span> <span class="tok-attr">class</span>=<span class="tok-str">&quot;card-body&quot;</span>&gt;
-        Real-time dashboards with smooth card beam effects on hover.
-      &lt;/<span class="tok-tag">p</span>&gt;
-    &lt;/<span class="tok-tag">article</span>&gt;
-  &lt;/<span class="tok-tag">section</span>&gt;
-&lt;/<span class="tok-tag">main</span>&gt;
-            </code></pre>
+                        <pre class="code-pre"><code id="code-html">
+<span class="tok-tag">&lt;div</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"app"</span><span class="tok-tag">&gt;</span>
+  <span class="tok-tag">&lt;canvas</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"canvas"</span><span class="tok-tag">&gt;&lt;/canvas&gt;</span>
+  <span class="tok-tag">&lt;a</span> <span class="tok-attr">target</span><span class="tok-punc">=</span><span class="tok-str">"_blank"</span>
+  <span class="tok-tag">&lt;/a&gt;</span>
+<span class="tok-tag">&lt;/div&gt;</span>
+</code></pre>
                     </article>
 
                     <!-- CSS -->
@@ -295,70 +263,43 @@
                                 <i class="fa-solid fa-copy"></i> Copy
                             </button>
                         </header>
+
                         <pre class="code-pre"><code id="code-css">
-<span class="tok-tag">:root</span> {
-  <span class="tok-attr">--bg</span>: <span class="tok-str">#020617</span>;
-  <span class="tok-attr">--card-bg</span>: <span class="tok-str">radial-gradient(circle at top left, #1f2937, #020617)</span>;
-}
+<span class="tok-tag">html</span><span class="tok-punc">,</span> <span class="tok-tag">body</span><span class="tok-punc">,</span> <span class="tok-tag">#app</span> <span class="tok-punc">{</span>
+  <span class="tok-key">margin</span><span class="tok-punc">:</span> <span class="tok-num">0</span><span class="tok-punc">;</span>
+  <span class="tok-key">width</span><span class="tok-punc">:</span> <span class="tok-num">100%</span><span class="tok-punc">;</span>
+  <span class="tok-key">height</span><span class="tok-punc">:</span> <span class="tok-num">100%</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span>
 
-<span class="tok-tag">body</span> {
-  <span class="tok-attr">margin</span>: <span class="tok-num">0</span>;
-  <span class="tok-attr">min-height</span>: <span class="tok-num">100vh</span>;
-  <span class="tok-attr">background</span>: radial-gradient(circle at top left, #1f2937, #020617 <span class="tok-num">55%</span>, #020617);
-  <span class="tok-attr">color</span>: #e5e7eb;
-  <span class="tok-attr">font-family</span>: system-ui, -apple-system, BlinkMacSystemFont, <span class="tok-str">&quot;JetBrains Mono&quot;</span>, monospace;
-}
+<span class="tok-tag">body</span> <span class="tok-punc">{</span>
+  <span class="tok-key">touch-action</span><span class="tok-punc">:</span> <span class="tok-str">none</span><span class="tok-punc">;</span>
+  <span class="tok-key">overflow</span><span class="tok-punc">:</span> <span class="tok-str">hidden</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span>
 
-<span class="tok-tag">.card-demo</span> {
-  <span class="tok-attr">display</span>: flex;
-  <span class="tok-attr">justify-content</span>: center;
-  <span class="tok-attr">padding</span>: <span class="tok-num">32px</span> <span class="tok-num">16px</span>;
-}
+<span class="tok-tag">#app</span> <span class="tok-punc">{</span>
+  <span class="tok-key">height</span><span class="tok-punc">:</span> <span class="tok-num">100%</span><span class="tok-punc">;</span>
+  <span class="tok-key">font-family</span><span class="tok-punc">:</span> <span class="tok-str">"Montserrat"</span><span class="tok-punc">,</span> <span class="tok-str">serif</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span>
 
-<span class="tok-tag">.card-grid</span> {
-  <span class="tok-attr">display</span>: grid;
-  <span class="tok-attr">gap</span>: <span class="tok-num">18px</span>;
-  <span class="tok-attr">width</span>: min(<span class="tok-num">640px</span>, <span class="tok-num">100%</span>);
-}
+<span class="tok-tag">#canvas</span> <span class="tok-punc">{</span>
+  <span class="tok-key">position</span><span class="tok-punc">:</span> <span class="tok-str">fixed</span><span class="tok-punc">;</span>
+  <span class="tok-key">top</span><span class="tok-punc">:</span> <span class="tok-num">0</span><span class="tok-punc">;</span>
+  <span class="tok-key">right</span><span class="tok-punc">:</span> <span class="tok-num">0</span><span class="tok-punc">;</span>
+  <span class="tok-key">bottom</span><span class="tok-punc">:</span> <span class="tok-num">0</span><span class="tok-punc">;</span>
+  <span class="tok-key">left</span><span class="tok-punc">:</span> <span class="tok-num">0</span><span class="tok-punc">;</span>
+  <span class="tok-key">overflow</span><span class="tok-punc">:</span> <span class="tok-str">hidden</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span>
 
-<span class="tok-tag">.card</span> {
-  <span class="tok-attr">position</span>: relative;
-  <span class="tok-attr">padding</span>: <span class="tok-num">18px</span> <span class="tok-num">20px</span> <span class="tok-num">22px</span>;
-  <span class="tok-attr">border-radius</span>: <span class="tok-num">18px</span>;
-  <span class="tok-attr">background</span>: var(<span class="tok-attr">--card-bg</span>);
-  <span class="tok-attr">overflow</span>: hidden;
-  <span class="tok-attr">border</span>: <span class="tok-num">1px</span> solid rgba(<span class="tok-num">148</span>, <span class="tok-num">163</span>, <span class="tok-num">184</span>, <span class="tok-num">0.45</span>);
-}
-
-/* beam layer */
-<span class="tok-tag">.card::before</span> {
-  <span class="tok-attr">content</span>: <span class="tok-str">&quot;&quot;</span>;
-  <span class="tok-attr">position</span>: absolute;
-  <span class="tok-attr">inset</span>: -<span class="tok-num">40%</span>;
-  <span class="tok-attr">background</span>:
-    radial-gradient(circle at var(<span class="tok-attr">--mx</span>, <span class="tok-num">50%</span>) var(<span class="tok-attr">--my</span>, <span class="tok-num">0%</span>),
-    rgba(<span class="tok-num">56</span>, <span class="tok-num">189</span>, <span class="tok-num">248</span>, <span class="tok-num">0.30</span>),
-    transparent <span class="tok-num">60%</span>);
-  <span class="tok-attr">opacity</span>: <span class="tok-num">0.9</span>;
-  <span class="tok-attr">mix-blend-mode</span>: screen;
-  <span class="tok-attr">transition</span>: opacity <span class="tok-num">0.35s</span> ease;
-  <span class="tok-attr">pointer-events</span>: none;
-}
-
-<span class="tok-tag">.card:hover::before</span> {
-  <span class="tok-attr">opacity</span>: <span class="tok-num">1</span>;
-}
-
-<span class="tok-tag">.card-title</span> {
-  <span class="tok-attr">font-size</span>: <span class="tok-num">1.05rem</span>;
-  <span class="tok-attr">margin-bottom</span>: <span class="tok-num">0.25rem</span>;
-}
-
-<span class="tok-tag">.card-body</span> {
-  <span class="tok-attr">font-size</span>: <span class="tok-num">0.9rem</span>;
-  <span class="tok-attr">opacity</span>: <span class="tok-num">0.9</span>;
-}
-            </code></pre>
+<span class="tok-tag">a</span> <span class="tok-punc">{</span>
+  <span class="tok-key">position</span><span class="tok-punc">:</span> <span class="tok-str">fixed</span><span class="tok-punc">;</span>
+  <span class="tok-key">bottom</span><span class="tok-punc">:</span> <span class="tok-num">30px</span><span class="tok-punc">;</span>
+  <span class="tok-key">left</span><span class="tok-punc">:</span> <span class="tok-num">50%</span><span class="tok-punc">;</span>
+  <span class="tok-key">transform</span><span class="tok-punc">:</span> <span class="tok-fn">translateX</span><span class="tok-punc">(</span><span class="tok-str">-50%</span><span class="tok-punc">);</span>
+  <span class="tok-key">color</span><span class="tok-punc">:</span> <span class="tok-str">#fff</span><span class="tok-punc">;</span>
+  <span class="tok-key">text-decoration</span><span class="tok-punc">:</span> <span class="tok-str">none</span><span class="tok-punc">;</span>
+  <span class="tok-key">text-shadow</span><span class="tok-punc">:</span> <span class="tok-num">1px</span> <span class="tok-num">1px</span> <span class="tok-num">2px</span> <span class="tok-str">black</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span>
+</code></pre>
                     </article>
 
                     <!-- JavaScript -->
@@ -369,30 +310,33 @@
                                 <i class="fa-solid fa-copy"></i> Copy
                             </button>
                         </header>
+
                         <pre class="code-pre"><code id="code-js">
-<span class="tok-key">const</span> cards = document.querySelectorAll(<span class="tok-str">&quot;.card&quot;</span>);
+<span class="tok-key">import</span> <span class="tok-fn">LiquidBackground</span>
+  <span class="tok-key">from</span> <span class="tok-str">"https://cdn.jsdelivr.net/npm/threejs-components@0.0.22/build/backgrounds/liquid1.min.js"</span><span class="tok-punc">;</span>
 
-cards.forEach(<span class="tok-key">card</span> =&gt; {
-  card.addEventListener(<span class="tok-str">&quot;mousemove&quot;</span>, (<span class="tok-key">event</span>) =&gt; {
-    <span class="tok-key">const</span> rect = card.getBoundingClientRect();
-    <span class="tok-key">const</span> x = event.clientX - rect.left;
-    <span class="tok-key">const</span> y = event.clientY - rect.top;
+<span class="tok-key">const</span> <span class="tok-attr">app</span> <span class="tok-punc">=</span>
+  <span class="tok-fn">LiquidBackground</span><span class="tok-punc">(</span>
+    <span class="tok-fn">document</span><span class="tok-punc">.</span><span class="tok-fn">getElementById</span><span class="tok-punc">(</span><span class="tok-str">"canvas"</span><span class="tok-punc">)</span>
+  <span class="tok-punc">);</span>
 
-    card.style.setProperty(<span class="tok-str">&quot;--mx&quot;</span>, `${x}px`);
-    card.style.setProperty(<span class="tok-str">&quot;--my&quot;</span>, `${y}px`);
-  });
+<span class="tok-attr">app</span><span class="tok-punc">.</span><span class="tok-fn">loadImage</span><span class="tok-punc">(</span><span class="tok-str">"https://assets.codepen.io/33787/liquid.webp"</span><span class="tok-punc">);</span>
 
-  card.addEventListener(<span class="tok-str">&quot;mouseleave&quot;</span>, () =&gt; {
-    card.style.removeProperty(<span class="tok-str">&quot;--mx&quot;</span>);
-    card.style.removeProperty(<span class="tok-str">&quot;--my&quot;</span>);
-  });
-});
-            </code></pre>
+<span class="tok-attr">app</span><span class="tok-punc">.</span><span class="tok-attr">liquidPlane</span><span class="tok-punc">.</span><span class="tok-attr">material</span><span class="tok-punc">.</span><span class="tok-key">metalness</span>
+  <span class="tok-punc">=</span> <span class="tok-num">0.75</span><span class="tok-punc">;</span>
+
+<span class="tok-attr">app</span><span class="tok-punc">.</span><span class="tok-attr">liquidPlane</span><span class="tok-punc">.</span><span class="tok-attr">material</span><span class="tok-punc">.</span><span class="tok-key">roughness</span>
+  <span class="tok-punc">=</span> <span class="tok-num">0.25</span><span class="tok-punc">;</span>
+
+<span class="tok-attr">app</span><span class="tok-punc">.</span><span class="tok-attr">liquidPlane</span><span class="tok-punc">.</span><span class="tok-attr">uniforms</span><span class="tok-punc">.</span><span class="tok-attr">displacementScale</span><span class="tok-punc">.</span><span class="tok-attr">value</span>
+  <span class="tok-punc">=</span> <span class="tok-num">5</span><span class="tok-punc">;</span>
+
+<span class="tok-attr">app</span><span class="tok-punc">.</span><span class="tok-fn">setRain</span><span class="tok-punc">(</span><span class="tok-key">false</span><span class="tok-punc">);</span>
+</code></pre>
                     </article>
 
                 </div>
             </div>
-
         </div>
     </div>
 

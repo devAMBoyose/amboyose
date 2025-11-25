@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Background</title>
+
+    <style>
+        html,
+        body,
+        #app {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            touch-action: none;
+            overflow: hidden;
+        }
+
+        #app {
+            height: 100%;
+            font-family: "Montserrat", serif;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+        }
+
+        a {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            text-decoration: none;
+            text-shadow: 1px 1px 2px black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <canvas id="canvas"></canvas>
+
+    </div>
+
+    <script type="module">
+        import LiquidBackground from "https://cdn.jsdelivr.net/npm/threejs-components@0.0.22/build/backgrounds/liquid1.min.js";
+
+        const app = LiquidBackground(document.getElementById("canvas"));
+
+        app.loadImage("https://assets.codepen.io/33787/liquid.webp");
+        app.liquidPlane.material.metalness = 0.75;
+        app.liquidPlane.material.roughness = 0.25;
+        app.liquidPlane.uniforms.displacementScale.value = 5;
+        app.setRain(false);
+    </script>
+</body>
+
+</html>

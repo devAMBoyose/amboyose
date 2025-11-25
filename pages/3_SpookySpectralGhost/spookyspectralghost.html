@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Spooky Spectral Ghost | Portfolio</title>
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your global styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .page-content {
+            padding: 40px 45px 44px;
+            max-width: 980px;
+            margin: 0 auto;
+            color: #f9fafb;
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .demo-header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .demo-sub {
+            margin: 0 0 16px;
+            max-width: 640px;
+            opacity: 0.85;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .preview-box {
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: #020617;
+            padding: 14px;
+        }
+
+        .preview-box iframe {
+            width: 100%;
+            height: 460px;
+            border: none;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        #codeBox {
+            display: none;
+            margin-top: 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: #020617;
+            padding: 18px 18px 22px;
+        }
+
+        .code-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .code-card {
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: #020617;
+            padding: 8px 10px 10px;
+        }
+
+        .code-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .code-pre {
+            margin: 0;
+            padding: 8px 10px 10px;
+            background: #020617;
+            border-radius: 6px;
+            overflow: auto;
+            max-height: 260px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .code-pre code {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .badge-html,
+        .badge-css,
+        .badge-js {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            color: #e5e7eb;
+        }
+
+        .copy-btn {
+            font-size: 12px;
+            padding: 4px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.9);
+            background: #020617;
+            color: #e5e7eb;
+            cursor: pointer;
+        }
+
+        .copy-btn.copied {
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding-inline: 20px;
+            }
+
+            .demo-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <div class="title-bar">
+            <div class="dots">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">Spooky Spectral Ghost</span>
+
+            <div class="tb-right">
+                <button class="chip chip-back" onclick="location.href='/pages/interactive-demo.html'">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="demo-header">
+                <h1>Spooky Spectral Ghost</h1>
+
+                <button id="toggleCode" class="chip">
+                    <i class="fa-solid fa-code"></i>
+                    <span>View Code</span>
+                </button>
+            </div>
+
+            <p class="demo-sub">
+                A spectral ghost following your cursor, with glowing eyes, particles, fireflies,
+                and an analog VHS-style decay effect. Includes a spooky preloader and quote.
+            </p>
+
+            <div class="preview-box">
+                <iframe src="sample.html" title="Spooky Spectral Ghost Demo"></iframe>
+            </div>
+
+            <div id="codeBox">
+                <div class="code-grid">
+
+                    <!-- HTML snippet -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-html">HTML</span>
+                            <button class="copy-btn" type="button" data-copy="code-html">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+                        <pre class="code-pre"><code id="code-html">
+&lt;!-- Preloader --&gt;
+&lt;div id="preloader" class="preloader"&gt;
+  &lt;div class="preloader-content"&gt;
+    &lt;div class="ghost-loader"&gt;
+      &lt;svg class="ghost-svg" viewBox="0 0 512 512"&gt;
+        &lt;path class="ghost-body" ... &gt;&lt;/path&gt;
+        &lt;circle class="ghost-eye left-eye" cx="208" cy="225" r="22"&gt;&lt;/circle&gt;
+        &lt;circle class="ghost-eye right-eye" cx="297" cy="225" r="22"&gt;&lt;/circle&gt;
+      &lt;/svg&gt;
+    &lt;/div&gt;
+    &lt;div class="loading-text"&gt;Summoning spirits&lt;/div&gt;
+    &lt;div class="loading-progress"&gt;
+      &lt;div class="progress-bar"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Main Content --&gt;
+&lt;div class="content" id="main-content"&gt;
+  &lt;div class="quote-container"&gt;
+    &lt;h1 class="quote"&gt;
+      Veil of Dust&lt;br /&gt;
+      Trail of Ash&lt;br /&gt;
+      Heart of Ice
+    &lt;/h1&gt;
+    &lt;span class="author"&gt;Whispers through memory&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+                    </article>
+
+                    <!-- CSS snippet -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-css">CSS</span>
+                            <button class="copy-btn" type="button" data-copy="code-css">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+                        <pre class="code-pre"><code id="code-css">
+@import url("https://fonts.googleapis.com/css2?family=Boldonse&amp;display=swap");
+
+@font-face {
+  font-family: "PPSupplyMono";
+  src: url("https://assets.codepen.io/7558/PPSupplyMono-Variable.woff2")
+    format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #111;
+}
+
+/* Preloader */
+.preloader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg,#0a0a0a,#1a1a1a,#0a0a0a);
+}
+
+/* ...rest of styles same as sample.html ... */
+</code></pre>
+                    </article>
+
+                    <!-- JS snippet -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-js">JavaScript</span>
+                            <button class="copy-btn" type="button" data-copy="code-js">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+                        <pre class="code-pre"><code id="code-js">
+&lt;script type="module"&gt;
+import * as THREE from "https://esm.sh/three";
+import { Pane } from "https://cdn.skypack.dev/tweakpane@4.0.4";
+import {
+  EffectComposer,
+  RenderPass,
+  UnrealBloomPass,
+  OutputPass,
+  ShaderPass
+} from "./three-postprocessing-modules.js"; // in sample we import from CDN
+
+// Preloader manager, scene, camera, spooky ghost, particles,
+// fireflies, analog decay shader, and animate() loop
+// (see full implementation in sample.html)
+&lt;/script&gt;
+</code></pre>
+                    </article>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <script src="/js/script.js"></script>
+    <script src="/js/nav.js" defer></script>
+
+    <script>
+        const toggleBtn = document.getElementById("toggleCode");
+        const codeBox = document.getElementById("codeBox");
+
+        toggleBtn.addEventListener("click", () => {
+            const open = codeBox.style.display === "block";
+            codeBox.style.display = open ? "none" : "block";
+            toggleBtn.innerHTML = open
+                ? '<i class="fa-solid fa-code"></i> <span>View Code</span>'
+                : '<i class="fa-solid fa-code"></i> <span>Hide Code</span>';
+        });
+
+        document.querySelectorAll(".copy-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-copy");
+                const codeEl = document.getElementById(id);
+                if (!codeEl) return;
+
+                const text = codeEl.textContent.replace(/\u00A0/g, " ").trim();
+
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.classList.add("copied");
+                    btn.innerHTML = "<i class='fa-solid fa-check'></i> Copied";
+                    setTimeout(() => {
+                        btn.classList.remove("copied");
+                        btn.innerHTML = "<i class='fa-solid fa-copy'></i> Copy";
+                    }, 1200);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
