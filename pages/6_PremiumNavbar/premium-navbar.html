@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Premium Navigation (FutureNav) | Portfolio</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- Your global styles -->
+  <link rel="stylesheet" href="/css/footer.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/nav.css" />
+
+  <style>
+    body {
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .page-content {
+      padding: 40px 45px 44px;
+      max-width: 980px;
+      margin: 0 auto;
+      color: #f9fafb;
+    }
+
+    /* Header row: title + View Code */
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .demo-header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .demo-sub {
+      margin: 0 0 16px;
+      max-width: 640px;
+      opacity: 0.85;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* bullets row */
+    .demo-meta {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+
+    .demo-meta ul {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    /* preview box */
+    .preview-box {
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: radial-gradient(circle at top, #020617, #020617 55%, #000);
+      padding: 14px;
+    }
+
+    .preview-box iframe {
+      width: 100%;
+      height: 460px;
+      border: none;
+      border-radius: 10px;
+      background: #000;
+    }
+
+    /* code section container */
+    #codeBox {
+      display: none;
+      margin-top: 28px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: #020617;
+      padding: 18px 18px 22px;
+    }
+
+    /* code cards */
+    .code-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .code-card {
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: #020617;
+      padding: 8px 10px 10px;
+    }
+
+    .code-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .code-pre {
+      margin: 0;
+      padding: 8px 10px 10px;
+      background: #020617;
+      border-radius: 6px;
+      overflow: auto;
+      max-height: 260px;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre;
+    }
+
+    .code-pre code {
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    /* small language badges */
+    .badge-html,
+    .badge-css,
+    .badge-js {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: #e5e7eb;
+    }
+
+    /* copy button */
+    .copy-btn {
+      font-size: 12px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      background: #020617;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .copy-btn.copied {
+      border-color: #22c55e;
+      color: #22c55e;
+    }
+
+    /* fake syntax colors */
+    .tok-tag {
+      color: #7dd3fc;
+    }
+
+    .tok-attr {
+      color: #a5b4fc;
+    }
+
+    .tok-str {
+      color: #f97373;
+    }
+
+    .tok-punc {
+      color: #e5e7eb;
+      opacity: 0.75;
+    }
+
+    .tok-comment {
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .page-content {
+        padding-inline: 20px;
+      }
+
+      .demo-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .demo-meta {
+        justify-content: flex-start;
+      }
+
+      .preview-box iframe {
+        height: 360px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- cursor-follow glow background (from your global CSS) -->
+  <div id="cursor-bg" aria-hidden="true"></div>
+
+  <div class="window">
+    <!-- Title Bar -->
+    <div class="title-bar">
+      <div class="dots">
+        <span class="red"></span><span class="yellow"></span><span class="green"></span>
+      </div>
+
+      <span class="filename">Premium Navbar / FutureNav</span>
+
+      <div class="tb-right">
+        <button class="chip chip-back" onclick="location.href='/pages/interactive-demo.html'">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <!-- header row -->
+      <div class="demo-header">
+        <div>
+          <h1>Premium Navigation – FutureNav</h1>
+          <p class="demo-sub">
+            A premium navbar + single-page layout built with Tailwind CSS. Smooth
+            scrolling, active link highlighting, mobile hamburger menu, and a glass
+            UI glow that feels like a futuristic dashboard.
+          </p>
+          <div class="demo-meta">
+            <ul>
+              <li>Built with Tailwind CSS + vanilla JS</li>
+              <li>Smooth scrolling &amp; section highlighting</li>
+              <li>Responsive desktop &amp; mobile navigation</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- View Code toggle -->
+        <button id="toggleCode" class="chip">
+          <i class="fa-solid fa-code"></i>
+          <span>View Code</span>
+        </button>
+      </div>
+
+      <!-- preview -->
+      <div class="preview-box">
+        <!-- IMPORTANT: this points to the demo file in the same folder -->
+        <iframe src="demo.html" title="FutureNav Premium Navigation Preview"></iframe>
+      </div>
+
+      <!-- code viewer -->
+      <div id="codeBox">
+        <div class="code-grid">
+          <!-- HTML fake code -->
+          <article class="code-card">
+            <header class="code-card-head">
+              <span class="badge-html">HTML</span>
+              <button class="copy-btn" type="button" data-copy="code-html">
+                <i class="fa-solid fa-copy"></i> Copy
+              </button>
+            </header>
+
+            <pre class="code-pre"><code id="code-html">
+<span class="tok-comment">&lt;!-- FutureNav wrapper --&gt;</span>
+<span class="tok-tag">&lt;body</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"bg-black text-white font-['Space_Grotesk'] overflow-x-hidden"</span><span class="tok-tag">&gt;</span>
+  <span class="tok-comment">&lt;!-- Neon grid + blurred circles --&gt;</span>
+  <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"fixed inset-0 overflow-hidden pointer-events-none z-0"</span><span class="tok-tag">&gt;</span>
+    <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"absolute top-20 left-10 w-96 h-96 bg-indigo-900/10 rounded-full blur-3xl"</span><span class="tok-tag">&gt;&lt;/div&gt;</span>
+    <span class="tok-comment">&lt;!-- grid columns + rows --&gt;</span>
+  <span class="tok-tag">&lt;/div&gt;</span>
+
+  <span class="tok-comment">&lt;!-- Glass navbar --&gt;</span>
+  <span class="tok-tag">&lt;nav</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"navbar"</span>
+       <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"fixed top-0 left-0 right-0 bg-gray-900/70 backdrop-blur-lg border-b border-cyan-500/30 z-50"</span><span class="tok-tag">&gt;</span>
+    <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"container mx-auto px-6 py-3 flex items-center justify-between"</span><span class="tok-tag">&gt;</span>
+
+      <span class="tok-comment">&lt;!-- Logo block --&gt;</span>
+      <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"flex items-center"</span><span class="tok-tag">&gt;</span>
+        <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"relative mr-2"</span><span class="tok-tag">&gt;</span>
+          <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"absolute inset-0 bg-cyan-400/30 rounded-md blur-sm"</span><span class="tok-tag">&gt;&lt;/div&gt;</span>
+          <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"w-10 h-10 rounded-md bg-gradient-to-br from-indigo-600 to-purple-600 ..."</span><span class="tok-tag">&gt;</span>
+            <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"font-bold text-lg bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent"</span><span class="tok-tag">&gt;</span>FN<span class="tok-tag">&lt;/div&gt;</span>
+          <span class="tok-tag">&lt;/div&gt;</span>
+        <span class="tok-tag">&lt;/div&gt;</span>
+        <span class="tok-tag">&lt;span</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"text-xl font-medium bg-gradient-to-r from-indigo-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent"</span><span class="tok-tag">&gt;</span>
+          FutureNav
+        <span class="tok-tag">&lt;/span&gt;</span>
+      <span class="tok-tag">&lt;/div&gt;</span>
+
+      <span class="tok-comment">&lt;!-- Desktop links --&gt;</span>
+      <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"hidden md:flex items-center space-x-1"</span><span class="tok-tag">&gt;</span>
+        <span class="tok-tag">&lt;a</span> <span class="tok-attr">href</span><span class="tok-punc">=</span><span class="tok-str">"#home"</span>   <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"nav-link px-4 py-2"</span><span class="tok-tag">&gt;</span>Home<span class="tok-tag">&lt;/a&gt;</span>
+        <span class="tok-tag">&lt;a</span> <span class="tok-attr">href</span><span class="tok-punc">=</span><span class="tok-str">"#about"</span>  ...<span class="tok-tag">&gt;</span>About<span class="tok-tag">&lt;/a&gt;</span>
+        <span class="tok-tag">&lt;a</span> <span class="tok-attr">href</span><span class="tok-punc">=</span><span class="tok-str">"#services"</span>...<span class="tok-tag">&gt;</span>Services<span class="tok-tag">&lt;/a&gt;</span>
+        <span class="tok-tag">&lt;a</span> <span class="tok-attr">href</span><span class="tok-punc">=</span><span class="tok-str">"#portfolio"</span>...<span class="tok-tag">&gt;</span>Portfolio<span class="tok-tag">&lt;/a&gt;</span>
+        <span class="tok-tag">&lt;a</span> <span class="tok-attr">href</span><span class="tok-punc">=</span><span class="tok-str">"#contact"</span> ...<span class="tok-tag">&gt;</span>Contact<span class="tok-tag">&lt;/a&gt;</span>
+      <span class="tok-tag">&lt;/div&gt;</span>
+
+      <span class="tok-comment">&lt;!-- Mobile hamburger --&gt;</span>
+      <span class="tok-tag">&lt;button</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"mobile-menu-button"</span> ...<span class="tok-tag">&gt;</span>☰<span class="tok-tag">&lt;/button&gt;</span>
+    <span class="tok-tag">&lt;/div&gt;</span>
+
+    <span class="tok-comment">&lt;!-- Collapsible mobile list --&gt;</span>
+    <span class="tok-tag">&lt;div</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"mobile-menu"</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"md:hidden h-0 overflow-hidden"</span><span class="tok-tag">&gt;</span>
+      <span class="tok-tag">&lt;a</span> <span class="tok-attr">href</span><span class="tok-punc">=</span><span class="tok-str">"#home"</span>   <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"mobile-nav-link block px-4 py-2"</span><span class="tok-tag">&gt;</span>Home<span class="tok-tag">&lt;/a&gt;</span>
+      ...
+    <span class="tok-tag">&lt;/div&gt;</span>
+  <span class="tok-tag">&lt;/nav&gt;</span>
+
+  <span class="tok-comment">&lt;!-- Sections: #home, #about, #services, #portfolio, #contact --&gt;</span>
+<span class="tok-tag">&lt;/body&gt;</span>
+</code></pre>
+          </article>
+
+          <!-- CSS fake code -->
+          <article class="code-card">
+            <header class="code-card-head">
+              <span class="badge-css">CSS</span>
+              <button class="copy-btn" type="button" data-copy="code-css">
+                <i class="fa-solid fa-copy"></i> Copy
+              </button>
+            </header>
+
+            <pre class="code-pre"><code id="code-css">
+<span class="tok-comment">/* Core theme variables */</span>
+<span class="tok-tag">:root</span> {
+  <span class="tok-attr">--primary</span><span class="tok-punc">:</span> <span class="tok-str">#6366f1</span>;
+  <span class="tok-attr">--secondary</span><span class="tok-punc">:</span> <span class="tok-str">#06b6d4</span>;
+  <span class="tok-attr">--accent</span><span class="tok-punc">:</span> <span class="tok-str">#a855f7</span>;
+  <span class="tok-attr">--navbar-bg</span><span class="tok-punc">:</span> <span class="tok-str">rgba(17,24,39,0.7)</span>;
+  <span class="tok-attr">--glass-effect</span><span class="tok-punc">:</span> <span class="tok-str">blur(12px)</span>;
+}
+
+<span class="tok-tag">body</span> {
+  <span class="tok-attr">background-color</span><span class="tok-punc">:</span> <span class="tok-str">#030712</span>;
+  <span class="tok-attr">color</span><span class="tok-punc">:</span> <span class="tok-str">#f3f4f6</span>;
+  <span class="tok-attr">font-family</span><span class="tok-punc">:</span> <span class="tok-str">"Space Grotesk"</span>, system-ui;
+  <span class="tok-attr">overflow-x</span><span class="tok-punc">:</span> <span class="tok-str">hidden</span>;
+}
+
+<span class="tok-comment">/* Glass navbar that darkens on scroll */</span>
+<span class="tok-tag">#navbar</span> {
+  <span class="tok-attr">position</span><span class="tok-punc">:</span> <span class="tok-str">fixed</span>;
+  <span class="tok-attr">top</span><span class="tok-punc">:</span> <span class="tok-str">0</span>;
+  <span class="tok-attr">left</span><span class="tok-punc">:</span> <span class="tok-str">0</span>;
+  <span class="tok-attr">right</span><span class="tok-punc">:</span> <span class="tok-str">0</span>;
+  <span class="tok-attr">background-color</span><span class="tok-punc">:</span> <span class="tok-str">var(--navbar-bg)</span>;
+  <span class="tok-attr">backdrop-filter</span><span class="tok-punc">:</span> <span class="tok-str">var(--glass-effect)</span>;
+  <span class="tok-attr">border-bottom</span><span class="tok-punc">:</span> <span class="tok-str">1px solid rgba(99,102,241,0.3)</span>;
+  <span class="tok-attr">transition</span><span class="tok-punc">:</span> <span class="tok-str">all 0.3s ease</span>;
+}
+
+<span class="tok-tag">#navbar.scrolled</span> {
+  <span class="tok-attr">background-color</span><span class="tok-punc">:</span> <span class="tok-str">rgba(17,24,39,0.9)</span>;
+  <span class="tok-attr">box-shadow</span><span class="tok-punc">:</span> <span class="tok-str">0 4px 20px rgba(0,0,0,0.3)</span>;
+}
+
+<span class="tok-comment">/* Active link underline glow */</span>
+<span class="tok-tag">.nav-link</span> {
+  <span class="tok-attr">position</span><span class="tok-punc">:</span> <span class="tok-str">relative</span>;
+}
+
+<span class="tok-tag">.nav-link::after</span> {
+  <span class="tok-attr">content</span><span class="tok-punc">:</span> <span class="tok-str">""</span>;
+  <span class="tok-attr">position</span><span class="tok-punc">:</span> <span class="tok-str">absolute</span>;
+  <span class="tok-attr">bottom</span><span class="tok-punc">:</span> <span class="tok-str">0</span>;
+  <span class="tok-attr">left</span><span class="tok-punc">:</span> <span class="tok-str">50%</span>;
+  <span class="tok-attr">width</span><span class="tok-punc">:</span> <span class="tok-str">0</span>;
+  <span class="tok-attr">height</span><span class="tok-punc">:</span> <span class="tok-str">2px</span>;
+  <span class="tok-attr">background</span><span class="tok-punc">:</span>
+    <span class="tok-str">linear-gradient(to right, #06b6d4, #6366f1)</span>;
+  <span class="tok-attr">transform</span><span class="tok-punc">:</span> <span class="tok-str">translateX(-50%)</span>;
+  <span class="tok-attr">transition</span><span class="tok-punc">:</span> <span class="tok-str">width 0.3s ease</span>;
+}
+
+<span class="tok-tag">.nav-link:hover::after</span>,
+<span class="tok-tag">.nav-link.active::after</span> {
+  <span class="tok-attr">width</span><span class="tok-punc">:</span> <span class="tok-str">80%</span>;
+}
+
+<span class="tok-comment">/* Mobile menu expand / collapse */</span>
+<span class="tok-tag">#mobile-menu</span> {
+  <span class="tok-attr">max-height</span><span class="tok-punc">:</span> <span class="tok-str">0</span>;
+  <span class="tok-attr">overflow</span><span class="tok-punc">:</span> <span class="tok-str">hidden</span>;
+  <span class="tok-attr">transition</span><span class="tok-punc">:</span> <span class="tok-str">max-height 0.5s ease</span>;
+}
+
+<span class="tok-tag">#mobile-menu.open</span> {
+  <span class="tok-attr">max-height</span><span class="tok-punc">:</span> <span class="tok-str">300px</span>;
+}
+
+<span class="tok-comment">/* Sections fade up when visible */</span>
+<span class="tok-tag">.section-hidden</span> {
+  <span class="tok-attr">opacity</span><span class="tok-punc">:</span> <span class="tok-str">0</span>;
+  <span class="tok-attr">transform</span><span class="tok-punc">:</span> <span class="tok-str">translateY(20px)</span>;
+}
+
+<span class="tok-tag">.section-visible</span> {
+  <span class="tok-attr">opacity</span><span class="tok-punc">:</span> <span class="tok-str">1</span>;
+  <span class="tok-attr">transform</span><span class="tok-punc">:</span> <span class="tok-str">translateY(0)</span>;
+}
+</code></pre>
+          </article>
+
+          <!-- JS fake code -->
+          <article class="code-card">
+            <header class="code-card-head">
+              <span class="badge-js">JavaScript</span>
+              <button class="copy-btn" type="button" data-copy="code-js">
+                <i class="fa-solid fa-copy"></i> Copy
+              </button>
+            </header>
+
+            <pre class="code-pre"><code id="code-js">
+<span class="tok-comment">// premium-navbar.js</span>
+<span class="tok-tag">document</span>.<span class="tok-attr">addEventListener</span>(<span class="tok-str">"DOMContentLoaded"</span>, () =&gt; {
+  <span class="tok-comment">// Cache DOM nodes</span>
+  <span class="tok-key">const</span> navbar           <span class="tok-punc">=</span> <span class="tok-tag">document</span>.<span class="tok-attr">getElementById</span>(<span class="tok-str">"navbar"</span>);
+  <span class="tok-key">const</span> mobileBtn        <span class="tok-punc">=</span> <span class="tok-tag">document</span>.<span class="tok-attr">getElementById</span>(<span class="tok-str">"mobile-menu-button"</span>);
+  <span class="tok-key">const</span> mobileMenu       <span class="tok-punc">=</span> <span class="tok-tag">document</span>.<span class="tok-attr">getElementById</span>(<span class="tok-str">"mobile-menu"</span>);
+  <span class="tok-key">const</span> navLinks         <span class="tok-punc">=</span> <span class="tok-tag">document</span>.<span class="tok-attr">querySelectorAll</span>(<span class="tok-str">".nav-link"</span>);
+  <span class="tok-key">const</span> mobileNavLinks   <span class="tok-punc">=</span> <span class="tok-tag">document</span>.<span class="tok-attr">querySelectorAll</span>(<span class="tok-str">".mobile-nav-link"</span>);
+  <span class="tok-key">const</span> sections         <span class="tok-punc">=</span> <span class="tok-tag">document</span>.<span class="tok-attr">querySelectorAll</span>(<span class="tok-str">"section"</span>);
+
+  <span class="tok-comment">// 1) Mobile hamburger toggle</span>
+  <span class="tok-key">if</span> (mobileBtn <span class="tok-punc">&amp;&amp;</span> mobileMenu) {
+    mobileBtn.<span class="tok-attr">addEventListener</span>(<span class="tok-str">"click"</span>, () =&gt; {
+      mobileBtn.<span class="tok-attr">classList</span>.<span class="tok-attr">toggle</span>(<span class="tok-str">"active"</span>);
+
+      <span class="tok-key">if</span> (mobileMenu.<span class="tok-attr">classList</span>.<span class="tok-attr">contains</span>(<span class="tok-str">"open"</span>)) {
+        mobileMenu.<span class="tok-attr">style</span>.<span class="tok-attr">height</span> <span class="tok-punc">=</span> <span class="tok-str">"0"</span>;
+        mobileMenu.<span class="tok-attr">classList</span>.<span class="tok-attr">remove</span>(<span class="tok-str">"open"</span>);
+      } <span class="tok-key">else</span> {
+        mobileMenu.<span class="tok-attr">classList</span>.<span class="tok-attr">add</span>(<span class="tok-str">"open"</span>);
+        mobileMenu.<span class="tok-attr">style</span>.<span class="tok-attr">height</span> <span class="tok-punc">=</span> <span class="tok-str">`${mobileMenu.scrollHeight}px`</span>;
+      }
+    });
+  }
+
+  <span class="tok-comment">// 2) Close mobile menu when link is clicked</span>
+  mobileNavLinks.<span class="tok-attr">forEach</span>((link) =&gt; {
+    link.<span class="tok-attr">addEventListener</span>(<span class="tok-str">"click"</span>, () =&gt; {
+      <span class="tok-key">if</span> (!mobileBtn <span class="tok-punc">||</span> !mobileMenu) <span class="tok-key">return</span>;
+      mobileBtn.<span class="tok-attr">classList</span>.<span class="tok-attr">remove</span>(<span class="tok-str">"active"</span>);
+      mobileMenu.<span class="tok-attr">style</span>.<span class="tok-attr">height</span> <span class="tok-punc">=</span> <span class="tok-str">"0"</span>;
+      mobileMenu.<span class="tok-attr">classList</span>.<span class="tok-attr">remove</span>(<span class="tok-str">"open"</span>);
+    });
+  });
+
+  <span class="tok-comment">// 3) Navbar scroll shadow + active section highlight</span>
+  <span class="tok-tag">window</span>.<span class="tok-attr">addEventListener</span>(<span class="tok-str">"scroll"</span>, () =&gt; {
+    <span class="tok-key">if</span> (<span class="tok-tag">window</span>.<span class="tok-attr">scrollY</span> <span class="tok-punc">&gt;</span> <span class="tok-str">50</span>) {
+      navbar <span class="tok-punc">&amp;&amp;</span> navbar.<span class="tok-attr">classList</span>.<span class="tok-attr">add</span>(<span class="tok-str">"scrolled"</span>);
+    } <span class="tok-key">else</span> {
+      navbar <span class="tok-punc">&amp;&amp;</span> navbar.<span class="tok-attr">classList</span>.<span class="tok-attr">remove</span>(<span class="tok-str">"scrolled"</span>);
+    }
+    highlightCurrentSection();
+  });
+
+  <span class="tok-comment">// 4) Smooth scroll for nav links</span>
+  navLinks.<span class="tok-attr">forEach</span>((link) =&gt; {
+    link.<span class="tok-attr">addEventListener</span>(<span class="tok-str">"click"</span>, (event) =&gt; {
+      <span class="tok-key">const</span> targetId <span class="tok-punc">=</span> link.<span class="tok-attr">getAttribute</span>(<span class="tok-str">"href"</span>);
+      <span class="tok-key">if</span> (!targetId <span class="tok-punc">||</span> !targetId.<span class="tok-attr">startsWith</span>(<span class="tok-str">"#"</span>)) <span class="tok-key">return</span>;
+
+      event.<span class="tok-attr">preventDefault</span>();
+      <span class="tok-key">const</span> section <span class="tok-punc">=</span> <span class="tok-tag">document</span>.<span class="tok-attr">querySelector</span>(targetId);
+      <span class="tok-key">if</span> (!section) <span class="tok-key">return</span>;
+
+      <span class="tok-key">const</span> offset <span class="tok-punc">=</span> section.<span class="tok-attr">offsetTop</span> <span class="tok-punc">-</span> <span class="tok-str">70</span>;
+      <span class="tok-tag">window</span>.<span class="tok-attr">scrollTo</span>({
+        <span class="tok-attr">top</span><span class="tok-punc">:</span> offset,
+        <span class="tok-attr">behavior</span><span class="tok-punc">:</span> <span class="tok-str">"smooth"</span>,
+      });
+    });
+  });
+
+  <span class="tok-comment">// 5) Determine which section is active</span>
+  <span class="tok-key">function</span> highlightCurrentSection() {
+    <span class="tok-key">let</span> current <span class="tok-punc">=</span> <span class="tok-str">""</span>;
+
+    sections.<span class="tok-attr">forEach</span>((section) =&gt; {
+      <span class="tok-key">const</span> top    <span class="tok-punc">=</span> section.<span class="tok-attr">offsetTop</span> <span class="tok-punc">-</span> <span class="tok-str">100</span>;
+      <span class="tok-key">const</span> height <span class="tok-punc">=</span> section.<span class="tok-attr">offsetHeight</span>;
+
+      <span class="tok-key">if</span> (<span class="tok-tag">window</span>.<span class="tok-attr">scrollY</span> <span class="tok-punc">&gt;=</span> top <span class="tok-punc">&amp;&amp;</span> <span class="tok-tag">window</span>.<span class="tok-attr">scrollY</span> <span class="tok-punc">&lt;</span> top <span class="tok-punc">+</span> height) {
+        current <span class="tok-punc">=</span> section.<span class="tok-attr">id</span>;
+      }
+    });
+
+    navLinks.<span class="tok-attr">forEach</span>((link) =&gt; {
+      link.<span class="tok-attr">classList</span>.<span class="tok-attr">remove</span>(<span class="tok-str">"active"</span>);
+      <span class="tok-key">if</span> (current <span class="tok-punc">&amp;&amp;</span> link.<span class="tok-attr">getAttribute</span>(<span class="tok-str">"href"</span>) <span class="tok-punc">===</span> <span class="tok-str">`#${current}`</span>) {
+        link.<span class="tok-attr">classList</span>.<span class="tok-attr">add</span>(<span class="tok-str">"active"</span>);
+      }
+    });
+
+    mobileNavLinks.<span class="tok-attr">forEach</span>((link) =&gt; {
+      link.<span class="tok-attr">classList</span>.<span class="tok-attr">remove</span>(<span class="tok-str">"active"</span>);
+      <span class="tok-key">if</span> (current <span class="tok-punc">&amp;&amp;</span> link.<span class="tok-attr">getAttribute</span>(<span class="tok-str">"href"</span>) <span class="tok-punc">===</span> <span class="tok-str">`#${current}`</span>) {
+        link.<span class="tok-attr">classList</span>.<span class="tok-attr">add</span>(<span class="tok-str">"active"</span>);
+      }
+    });
+  }
+
+  <span class="tok-comment">// 6) Animate sections on enter</span>
+  <span class="tok-key">const</span> observer <span class="tok-punc">=</span> <span class="tok-key">new</span> <span class="tok-tag">IntersectionObserver</span>((entries) =&gt; {
+    entries.<span class="tok-attr">forEach</span>((entry) =&gt; {
+      <span class="tok-key">if</span> (entry.<span class="tok-attr">isIntersecting</span>) {
+        entry.<span class="tok-attr">target</span>.<span class="tok-attr">classList</span>.<span class="tok-attr">add</span>(<span class="tok-str">"section-visible"</span>);
+      }
+    });
+  }, { <span class="tok-attr">threshold</span><span class="tok-punc">:</span> <span class="tok-str">0.1</span> });
+
+  sections.<span class="tok-attr">forEach</span>((section) =&gt; {
+    section.<span class="tok-attr">classList</span>.<span class="tok-attr">add</span>(<span class="tok-str">"section-hidden"</span>);
+    observer.<span class="tok-attr">observe</span>(section);
+  });
+
+  highlightCurrentSection();
+});
+</code></pre>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+    <p class="links">
+      <a href="/index.html">About</a> •
+      <a href="/portfolio.html">Portfolio</a> •
+      <a href="/resume.html">Resume</a> •
+      <a href="/contact.html">Contact</a>
+    </p>
+  </footer>
+
+  <!-- Your existing JS -->
+  <script src="/js/script.js"></script>
+  <script src="/js/nav.js" defer></script>
+
+  <!-- Toggle + Copy behaviour -->
+  <script>
+    const toggleBtn = document.getElementById("toggleCode");
+    const codeBox = document.getElementById("codeBox");
+
+    toggleBtn.addEventListener("click", () => {
+      const open = codeBox.style.display === "block";
+      codeBox.style.display = open ? "none" : "block";
+      toggleBtn.innerHTML = open
+        ? '<i class="fa-solid fa-code"></i> <span>View Code</span>'
+        : '<i class="fa-solid fa-code"></i> <span>Hide Code</span>';
+    });
+
+    // Copy buttons
+    document.querySelectorAll(".copy-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-copy");
+        const codeEl = document.getElementById(id);
+        if (!codeEl) return;
+
+        const text = codeEl.textContent.replace(/\u00A0/g, " ").trim();
+
+        navigator.clipboard.writeText(text).then(() => {
+          btn.classList.add("copied");
+          btn.innerHTML = "<i class='fa-solid fa-check'></i> Copied";
+          setTimeout(() => {
+            btn.classList.remove("copied");
+            btn.innerHTML = "<i class='fa-solid fa-copy'></i> Copy";
+          }, 1200);
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
