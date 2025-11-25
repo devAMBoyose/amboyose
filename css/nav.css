@@ -28,22 +28,40 @@
     position: relative;
 }
 
-/* Hamburger */
+/* HAMBURGER BUTTON – force visible bars */
 .tb-nav-toggle {
     display: none;
+    /* stays hidden on desktop, shown in media query */
     width: 40px;
     height: 34px;
-    background: transparent;
-    border: none;
+    padding: 4px 6px;
+    border-radius: 10px;
+    border: 1px solid var(--nav-border);
+    background: var(--chip-bg);
+    /* same pill color as other chips */
     cursor: pointer;
+    display: none;
 }
 
+/* make sure global button styles don't kill the bars */
 .tb-nav-toggle .bar {
+    display: block;
     width: 100%;
     height: 2px;
+    margin: 5px 0;
     background: #cfe3ff;
-    margin: 6px 0;
-    transition: .25s ease;
+    /* line color (light cyan) */
+    border-radius: 999px;
+}
+
+/* show hamburger on mobile only */
+@media (max-width: 900px) {
+    .tb-nav-toggle {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 /* Menu chips */
