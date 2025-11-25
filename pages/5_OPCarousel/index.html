@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>OP Carousel | Portfolio</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your Global Styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .page-content {
+            padding: 40px 45px 44px;
+            max-width: 980px;
+            margin: 0 auto;
+            color: #f9fafb;
+        }
+
+        /* Header Row */
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        /* Preview Container */
+        .preview-box {
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: radial-gradient(circle at top, #020617, #020617 55%, #000);
+            padding: 14px;
+            margin-bottom: 24px;
+        }
+
+        .preview-box iframe {
+            width: 100%;
+            height: 460px;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        /* Fake Code Container */
+        #codeBox {
+            display: none;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: #020617;
+            padding: 18px;
+        }
+
+        .code-card {
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: #020617;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 18px;
+        }
+
+        .badge-html,
+        .badge-css,
+        .badge-js {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #e5e7eb;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Fake Syntax Color */
+        .tok-tag {
+            color: #7dd3fc;
+        }
+
+        .tok-attr {
+            color: #a5b4fc;
+        }
+
+        .tok-str {
+            color: #fda4af;
+        }
+
+        .tok-punc {
+            color: #e5e7eb;
+            opacity: 0.75;
+        }
+
+        .tok-comment {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .tok-kwd {
+            color: #c084fc;
+        }
+
+        .code-pre {
+            background: #020617;
+            border-radius: 8px;
+            padding: 12px 14px;
+            white-space: pre;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            float: right;
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: transparent;
+            color: #e5e7eb;
+            cursor: pointer;
+            margin-top: -3px;
+        }
+
+        .copy-btn.copied {
+            color: #22c55e;
+            border-color: #22c55e;
+        }
+
+        /* Floating Button */
+        #super-btn {
+            position: fixed;
+            right: 32px;
+            bottom: 32px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+            z-index: 900;
+        }
+
+        #super-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Top background glow -->
+    <div id="cursor-bg"></div>
+
+    <div class="window">
+
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots">
+                <span class="red"></span>
+                <span class="yellow"></span>
+                <span class="green"></span>
+            </div>
+            <span class="filename">Carousel — Shinchan Carousel</span>
+
+            <div class="tb-right">
+                <button class="chip chip-back" onclick="location.href='/pages/interactive-demo.html'">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="page-content">
+
+            <div class="demo-header">
+                <div>
+                    <h1>Shinchan 3D Carousel</h1> <button id="toggleCode" class="chip">
+                        <i class="fa-solid fa-code"></i> View Code
+                    </button>
+
+                    <p class="demo-sub">
+                        A 3D vertical Shinchan character carousel using CSS perspective and JavaScript card transitions.
+                        Includes swipe
+                        gestures, keyboard controls, and responsive layout.
+
+                    </p>
+
+
+                </div>
+
+
+
+
+            </div>
+
+            <!-- Preview -->
+            <div class="preview-box">
+                <iframe src="opcarousel.html"></iframe>
+            </div>
+
+            <!-- Code Box -->
+            <div id="codeBox">
+
+                <!-- HTML -->
+                <div class="code-card">
+                    <span class="badge-html">HTML</span>
+                    <button class="copy-btn" data-copy="code-html">Copy</button>
+
+                    <pre class="code-pre"><code id="code-html">
+<span class="tok-comment">&lt;!-- Shinchan Carousel Structure --&gt;</span>
+<span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"carousel-track"</span><span class="tok-tag">&gt;</span>
+  <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"card"</span> <span class="tok-attr">data-index</span><span class="tok-punc">=</span><span class="tok-str">"0"</span><span class="tok-tag">&gt;</span>
+    <span class="tok-tag">&lt;img</span> <span class="tok-attr">src</span><span class="tok-punc">=</span><span class="tok-str">"img/shinchan.png"</span> <span class="tok-attr">alt</span><span class="tok-punc">=</span><span class="tok-str">"Shinchan"</span> <span class="tok-tag">/&gt;</span>
+  <span class="tok-tag">&lt;/div&gt;</span>
+
+  <span class="tok-comment">&lt;!-- Hiroshi, Misae, Himawari, Nevado, Kazama follow same structure --&gt;</span>
+
+<span class="tok-tag">&lt;/div&gt;</span>
+</code></pre>
+                </div>
+
+                <!-- CSS -->
+                <div class="code-card">
+                    <span class="badge-css">CSS</span>
+                    <button class="copy-btn" data-copy="code-css">Copy</button>
+
+                    <pre class="code-pre"><code id="code-css">
+<span class="tok-comment">/* Carousel Card Styles */</span>
+<span class="tok-tag">.card</span> <span class="tok-punc">{</span>
+  <span class="tok-attr">width</span><span class="tok-punc">:</span> <span class="tok-str">400px</span><span class="tok-punc">;</span>
+  <span class="tok-attr">height</span><span class="tok-punc">:</span> <span class="tok-str">225px</span><span class="tok-punc">;</span>
+  <span class="tok-attr">border-radius</span><span class="tok-punc">:</span> <span class="tok-str">20px</span><span class="tok-punc">;</span>
+  <span class="tok-attr">overflow</span><span class="tok-punc">:</span> <span class="tok-str">hidden</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span>
+
+<span class="tok-comment">/* Active center card */</span>
+<span class="tok-tag">.card.center</span> <span class="tok-punc">{</span>
+  <span class="tok-attr">transform</span><span class="tok-punc">:</span> <span class="tok-str">scale(1.1)</span><span class="tok-punc">;</span>
+<span class="tok-punc">}</span>
+</code></pre>
+                </div>
+
+                <!-- JS -->
+                <div class="code-card">
+                    <span class="badge-js">JavaScript</span>
+                    <button class="copy-btn" data-copy="code-js">Copy</button>
+
+                    <pre class="code-pre"><code id="code-js">
+<span class="tok-comment">// Team info for Shinchan carousel</span>
+<span class="tok-kwd">const</span> teamMembers <span class="tok-punc">=</span> <span class="tok-punc">[</span>
+  <span class="tok-punc">{</span> <span class="tok-attr">name</span>: <span class="tok-str">"Shinchan"</span>, <span class="tok-attr">role</span>: <span class="tok-str">"Main Character"</span> <span class="tok-punc">},</span>
+  <span class="tok-punc">{</span> <span class="tok-attr">name</span>: <span class="tok-str">"Hiroshi"</span>, <span class="tok-attr">role</span>: <span class="tok-str">"Father"</span> <span class="tok-punc">},</span>
+  <span class="tok-comment">// ...rest of Shinchan team</span>
+<span class="tok-punc">];</span>
+</code></pre>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Button -->
+    <a id="super-btn" href="https://amboyose.onrender.com/" target="_blank">
+        <img src="https://raw.githubusercontent.com/devAMBoyose/amboyose/main/pages/img/mylogo/circlephoto.png" />
+    </a>
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <script>
+        // Toggle Code
+        const toggleBtn = document.getElementById("toggleCode");
+        const codeBox = document.getElementById("codeBox");
+
+        toggleBtn.addEventListener("click", () => {
+            const open = codeBox.style.display === "block";
+            codeBox.style.display = open ? "none" : "block";
+            toggleBtn.innerHTML = open
+                ? '<i class="fa-solid fa-code"></i> View Code'
+                : '<i class="fa-solid fa-code"></i> Hide Code';
+        });
+
+        // Copy Buttons
+        document.querySelectorAll(".copy-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-copy");
+                const codeEl = document.getElementById(id);
+                navigator.clipboard.writeText(codeEl.innerText);
+
+                btn.classList.add("copied");
+                btn.innerHTML = "Copied!";
+                setTimeout(() => {
+                    btn.classList.remove("copied");
+                    btn.innerHTML = "Copy";
+                }, 1000);
+            });
+        });
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+<!-- Your existing JS -->
+<script src="/js/script.js"></script>
+<script src="/js/nav.js" defer></script>
+
+</body>
+
+</html>
