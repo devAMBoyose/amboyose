@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Premium Navbar Slider – Demo</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+    <!-- Slider styles -->
+    <link rel="stylesheet" href="css/premium-navbar.css" />
+</head>
+
+<body>
+
+    <section>
+        <div class="head">
+            <h2>Boost your professional workflow and productivity</h2>
+
+            <div class="controls">
+                <button id="prev" class="nav-btn" aria-label="Prev">‹</button>
+                <button id="next" class="nav-btn" aria-label="Next">›</button>
+            </div>
+        </div>
+
+        <div class="slider">
+            <div class="track" id="track">
+
+                <!-- 1. Developers -->
+                <article class="project-card" active>
+                    <img class="project-card__bg" src="img/tech-bg-designers.jpg"
+                        alt="Developers working with multiple monitors">
+                    <div class="project-card__content">
+                        <img class="project-card__thumb" src="img/tech-thumb-designers.jpg" alt="Developer with laptop">
+                        <div>
+                            <h3 class="project-card__title">Developers</h3>
+                            <p class="project-card__desc">Ship cleaner code with focused navigation.</p>
+                            <button class="project-card__btn">Details</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2. Product Teams -->
+                <article class="project-card">
+                    <img class="project-card__bg" src="img/2tech-bg-marketers.jpg"
+                        alt="Product team collaborating in front of dashboard">
+                    <div class="project-card__content">
+                        <img class="project-card__thumb" src="img/tech-thumb-marketers.jpg"
+                            alt="UI dashboard on laptop">
+                        <div>
+                            <h3 class="project-card__title">Product teams</h3>
+                            <p class="project-card__desc">
+                                See releases, metrics, and alerts in one place.
+                            </p>
+                            <button class="project-card__btn">Details</button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- 3. DevOps & SRE -->
+                <article class="project-card">
+                    <img class="project-card__bg" src="img/tech-bg-filmmakers.jpg"
+                        alt="Server racks and monitoring screens">
+                    <div class="project-card__content">
+                        <img class="project-card__thumb" src="img/tech-thumb-filmmakers.jpg"
+                            alt="Terminal and logs on screen">
+                        <div>
+                            <h3 class="project-card__title">DevOps &amp; SRE</h3>
+                            <p class="project-card__desc">Navigate incidents and logs at lightspeed.</p>
+                            <button class="project-card__btn">Details</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 4. Content creators -->
+                <article class="project-card">
+                    <img class="project-card__bg" src="img/tech-bg-creators.jpg"
+                        alt="Content creator editing on a laptop">
+                    <div class="project-card__content">
+                        <img class="project-card__thumb" src="img/tech-thumb-creators.jpg" alt="Person editing video">
+                        <div>
+                            <h3 class="project-card__title">Content creators</h3>
+                            <p class="project-card__desc">Switch between tools without breaking flow.</p>
+                            <button class="project-card__btn">Details</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 5. Engineering leads -->
+                <article class="project-card">
+                    <img class="project-card__bg" src="img/tech-bg-directors.jpg"
+                        alt="Engineering lead reviewing dashboards">
+                    <div class="project-card__content">
+                        <img class="project-card__thumb" src="img/tech-thumb-directors.jpg"
+                            alt="Tech lead presenting roadmap">
+                        <div>
+                            <h3 class="project-card__title">Engineering leads</h3>
+                            <p class="project-card__desc">Keep priorities, people, and progress aligned.</p>
+                            <button class="project-card__btn">Details</button>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+
+        <div class="dots" id="dots"></div>
+    </section>
+
+    <!-- Slider logic -->
+    <script src="js/premium-navbar.js"></script>
+</body>
+
+</html>

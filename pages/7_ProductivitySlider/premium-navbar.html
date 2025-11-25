@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Premium Navbar Slider | Portfolio</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your global styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .page-content {
+            padding: 40px 45px 44px;
+            max-width: 980px;
+            margin: 0 auto;
+            color: #f9fafb;
+        }
+
+        /* Header row: title + View Code */
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .demo-header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .demo-sub {
+            margin: 0 0 16px;
+            max-width: 640px;
+            opacity: 0.85;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .demo-meta {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .demo-meta ul {
+            margin: 0;
+            padding-left: 18px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* preview box */
+        .preview-box {
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: radial-gradient(circle at top, #020617, #020617 55%, #000);
+            padding: 14px;
+        }
+
+        .preview-box iframe {
+            width: 100%;
+            height: 460px;
+            border: none;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        /* code section container */
+        #codeBox {
+            display: none;
+            margin-top: 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: #020617;
+            padding: 18px 18px 22px;
+        }
+
+        /* code cards */
+        .code-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .code-card {
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: #020617;
+            padding: 8px 10px 10px;
+        }
+
+        .code-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .code-pre {
+            margin: 0;
+            padding: 8px 10px 10px;
+            background: #020617;
+            border-radius: 6px;
+            overflow: auto;
+            max-height: 260px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .code-pre code {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        /* small language badges */
+        .badge-html,
+        .badge-css,
+        .badge-js {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            color: #e5e7eb;
+        }
+
+        /* copy button */
+        .copy-btn {
+            font-size: 12px;
+            padding: 4px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.9);
+            background: #020617;
+            color: #e5e7eb;
+            cursor: pointer;
+        }
+
+        .copy-btn.copied {
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+
+        /* fake syntax colors */
+        .tok-tag {
+            color: #7dd3fc;
+        }
+
+        .tok-attr {
+            color: #a5b4fc;
+        }
+
+        .tok-str {
+            color: #f97373;
+        }
+
+        .tok-punc {
+            color: #e5e7eb;
+            opacity: 0.75;
+        }
+
+        .tok-comment {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding-inline: 20px;
+            }
+
+            .demo-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .demo-meta {
+                justify-content: flex-start;
+            }
+
+            .preview-box iframe {
+                height: 360px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- cursor-follow glow background (from your global CSS) -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">Premium Navbar Slider</span>
+
+            <div class="tb-right">
+                <button class="chip chip-back" onclick="location.href='/pages/interactive-demo.html'">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- header row -->
+            <div class="demo-header">
+                <div>
+                    <h1>Premium Navbar Slider</h1>
+                    <p class="demo-sub">
+                        A center-mode productivity slider that highlights the active card,
+                        keeps navigation accessible (keyboard + dots + arrows), and adapts
+                        from desktop lanes to mobile stacked cards.
+                    </p>
+
+                    <div class="demo-meta">
+                        <ul>
+                            <li>Built with semantic HTML, modern CSS, and vanilla JS</li>
+                            <li>Arrow keys, click, hover, swipe, and dot pagination</li>
+                            <li>Responsive layout: horizontal on desktop, vertical on mobile</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- View Code toggle -->
+                <button id="toggleCode" class="chip">
+                    <i class="fa-solid fa-code"></i>
+                    <span>View Code</span>
+                </button>
+            </div>
+
+            <!-- preview -->
+            <div class="preview-box">
+                <!-- IMPORTANT: this points to the demo file inside the same folder -->
+                <iframe src="premium-navbar-demo.html" title="Premium Navbar Slider Preview"></iframe>
+            </div>
+
+            <!-- code viewer -->
+            <div id="codeBox">
+                <div class="code-grid">
+
+                    <!-- HTML fake code -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-html">HTML</span>
+                            <button class="copy-btn" type="button" data-copy="code-html">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+
+                        <pre class="code-pre"><code id="code-html">
+<span class="tok-comment">&lt;!-- Center-Mode Productivity Slider – Premium Navbar --&gt;</span>
+<span class="tok-comment">&lt;!-- Developer: Anna Marice Eben Boyose (Bamby) – MIT License --&gt;</span>
+
+<span class="tok-tag">&lt;section&gt;</span>
+  <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"head"</span><span class="tok-tag">&gt;</span>
+    <span class="tok-tag">&lt;h2&gt;</span>Boost your professional workflow and productivity<span class="tok-tag">&lt;/h2&gt;</span>
+
+    <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"controls"</span><span class="tok-tag">&gt;</span>
+      <span class="tok-tag">&lt;button</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"prev"</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"nav-btn"</span>
+              <span class="tok-attr">aria-label</span><span class="tok-punc">=</span><span class="tok-str">"Prev"</span><span class="tok-tag">&gt;</span>‹<span class="tok-tag">&lt;/button&gt;</span>
+      <span class="tok-tag">&lt;button</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"next"</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"nav-btn"</span>
+              <span class="tok-attr">aria-label</span><span class="tok-punc">=</span><span class="tok-str">"Next"</span><span class="tok-tag">&gt;</span>›<span class="tok-tag">&lt;/button&gt;</span>
+    <span class="tok-tag">&lt;/div&gt;</span>
+  <span class="tok-tag">&lt;/div&gt;</span>
+
+  <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"slider"</span><span class="tok-tag">&gt;</span>
+    <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"track"</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"track"</span><span class="tok-tag">&gt;</span>
+
+      <span class="tok-comment">&lt;!-- Active Developers card --&gt;</span>
+      <span class="tok-tag">&lt;article</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"project-card"</span> <span class="tok-attr">active</span><span class="tok-tag">&gt;</span>
+        <span class="tok-tag">&lt;img</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"project-card__bg"</span>
+             <span class="tok-attr">src</span><span class="tok-punc">=</span><span class="tok-str">"img/tech-bg-designers.jpg"</span>
+             <span class="tok-attr">alt</span><span class="tok-punc">=</span><span class="tok-str">"Developers working with multiple monitors"</span> <span class="tok-tag">/&gt;</span>
+
+        <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"project-card__content"</span><span class="tok-tag">&gt;</span>
+          <span class="tok-tag">&lt;img</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"project-card__thumb"</span>
+               <span class="tok-attr">src</span><span class="tok-punc">=</span><span class="tok-str">"img/tech-thumb-designers.jpg"</span>
+               <span class="tok-attr">alt</span><span class="tok-punc">=</span><span class="tok-str">"Developer with laptop"</span> <span class="tok-tag">/&gt;</span>
+          <span class="tok-tag">&lt;div&gt;</span>
+            <span class="tok-tag">&lt;h3</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"project-card__title"</span><span class="tok-tag">&gt;</span>Developers<span class="tok-tag">&lt;/h3&gt;</span>
+            <span class="tok-tag">&lt;p</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"project-card__desc"</span><span class="tok-tag">&gt;</span>
+              Ship cleaner code with focused navigation.
+            <span class="tok-tag">&lt;/p&gt;</span>
+            <span class="tok-tag">&lt;button</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"project-card__btn"</span><span class="tok-tag">&gt;</span>
+              Details
+            <span class="tok-tag">&lt;/button&gt;</span>
+          <span class="tok-tag">&lt;/div&gt;</span>
+        <span class="tok-tag">&lt;/div&gt;</span>
+      <span class="tok-tag">&lt;/article&gt;</span>
+
+      <span class="tok-comment">&lt;!-- ...other 4 cards for Product teams, DevOps &amp; SRE, Content creators, Engineering leads... --&gt;</span>
+
+    <span class="tok-tag">&lt;/div&gt;</span>
+  <span class="tok-tag">&lt;/div&gt;</span>
+
+  <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"dots"</span> <span class="tok-attr">id</span><span class="tok-punc">=</span><span class="tok-str">"dots"</span><span class="tok-tag">&gt;&lt;/div&gt;</span>
+<span class="tok-tag">&lt;/section&gt;</span>
+</code></pre>
+                    </article>
+
+                    <!-- CSS fake code -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-css">CSS</span>
+                            <button class="copy-btn" type="button" data-copy="code-css">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+                        <pre class="code-pre"><code id="code-css">
+<span class="tok-tag">:root</span> {
+  <span class="tok-attr">--gap</span>: <span class="tok-str">1.25rem</span>;
+  <span class="tok-attr">--speed</span>: <span class="tok-str">0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)</span>;
+  <span class="tok-attr">--closed</span>: <span class="tok-str">5rem</span>;
+  <span class="tok-attr">--open</span>: <span class="tok-str">30rem</span>;
+  <span class="tok-attr">--accent</span>: <span class="tok-str">#ff6b35</span>;
+}
+
+<span class="tok-tag">*</span> {
+  <span class="tok-attr">margin</span>: <span class="tok-str">0</span>;
+  <span class="tok-attr">padding</span>: <span class="tok-str">0</span>;
+  <span class="tok-attr">box-sizing</span>: <span class="tok-str">border-box</span>;
+}
+
+<span class="tok-tag">body</span> {
+  <span class="tok-attr">font-family</span>: <span class="tok-str">Inter, sans-serif</span>;
+  <span class="tok-attr">background</span>: <span class="tok-str">#07090d</span>;
+  <span class="tok-attr">color</span>: <span class="tok-str">#c5c7ce</span>;
+}
+
+<span class="tok-comment">/* ...full slider layout, hover states, responsive breakpoints... */</span>
+<span class="tok-comment">/* See /pages/6_PremiumNavbar/css/premium-navbar.css for the complete code. */</span>
+</code></pre>
+                    </article>
+
+                    <!-- JS fake code -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-js">JavaScript</span>
+                            <button class="copy-btn" type="button" data-copy="code-js">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </header>
+                        <pre class="code-pre"><code id="code-js">
+<span class="tok-comment">// Premium Navbar slider logic – center-mode &amp; dots</span>
+<span class="tok-tag">(</span><span class="tok-punc">()</span> =&gt; <span class="tok-tag">{</span>
+  <span class="tok-key">const</span> track = document.getElementById(<span class="tok-str">"track"</span>);
+  <span class="tok-key">const</span> wrap  = track.parentElement;
+  <span class="tok-key">const</span> cards = Array.from(track.children);
+  <span class="tok-key">const</span> prev  = document.getElementById(<span class="tok-str">"prev"</span>);
+  <span class="tok-key">const</span> next  = document.getElementById(<span class="tok-str">"next"</span>);
+  <span class="tok-key">const</span> dotsBox = document.getElementById(<span class="tok-str">"dots"</span>);
+
+  <span class="tok-key">const</span> isMobile = () =&gt; matchMedia(<span class="tok-str">"(max-width:767px)"</span>).matches;
+
+  cards.forEach((_, i) =&gt; {
+    <span class="tok-key">const</span> dot = document.createElement(<span class="tok-str">"span"</span>);
+    dot.className = <span class="tok-str">"dot"</span>;
+    dot.onclick   = () =&gt; activate(i, <span class="tok-key">true</span>);
+    dotsBox.appendChild(dot);
+  });
+
+  <span class="tok-key">const</span> dots = Array.from(dotsBox.children);
+  <span class="tok-key">let</span> current = <span class="tok-str">0</span>;
+
+  <span class="tok-key">function</span> center(i) {
+    <span class="tok-key">const</span> card = cards[i];
+    <span class="tok-key">const</span> axis = isMobile() ? <span class="tok-str">"top"</span> : <span class="tok-str">"left"</span>;
+    <span class="tok-key">const</span> size = isMobile() ? <span class="tok-str">"clientHeight"</span> : <span class="tok-str">"clientWidth"</span>;
+    <span class="tok-key">const</span> start = isMobile() ? card.offsetTop : card.offsetLeft;
+
+    wrap.scrollTo({
+      [axis]: start - (wrap[size] / 2 - card[size] / 2),
+      behavior: <span class="tok-str">"smooth"</span>
+    });
+  }
+
+  <span class="tok-key">function</span> toggleUI(i) {
+    cards.forEach((c, k) =&gt; c.toggleAttribute(<span class="tok-str">"active"</span>, k === i));
+    dots.forEach((d, k)  =&gt; d.classList.toggle(<span class="tok-str">"active"</span>, k === i));
+    prev.disabled = i === <span class="tok-str">0</span>;
+    next.disabled = i === cards.length - <span class="tok-str">1</span>;
+  }
+
+  <span class="tok-key">function</span> activate(i, scroll) {
+    <span class="tok-key">if</span> (i === current) <span class="tok-key">return</span>;
+    current = i;
+    toggleUI(i);
+    <span class="tok-key">if</span> (scroll) center(i);
+  }
+
+  <span class="tok-key">function</span> go(step) {
+    activate(
+      Math.min(Math.max(current + step, <span class="tok-str">0</span>), cards.length - <span class="tok-str">1</span>),
+      <span class="tok-key">true</span>
+    );
+  }
+
+  prev.onclick = () =&gt; go(-<span class="tok-str">1</span>);
+  next.onclick = () =&gt; go(<span class="tok-str">1</span>);
+
+  <span class="tok-comment">// keyboard &amp; touch navigation</span>
+  addEventListener(<span class="tok-str">"keydown"</span>, (e) =&gt; {
+    <span class="tok-key">if</span> ([<span class="tok-str">"ArrowRight"</span>, <span class="tok-str">"ArrowDown"</span>].includes(e.key)) go(<span class="tok-str">1</span>);
+    <span class="tok-key">if</span> ([<span class="tok-str">"ArrowLeft"</span>, <span class="tok-str">"ArrowUp"</span>].includes(e.key)) go(-<span class="tok-str">1</span>);
+  }, { passive: <span class="tok-key">true</span> });
+
+  <span class="tok-comment">// ...touchstart / touchend handlers + init...</span>
+
+<span class="tok-tag">})();</span>
+</code></pre>
+                    </article>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS -->
+    <script src="/js/script.js"></script>
+    <script src="/js/nav.js" defer></script>
+
+    <!-- Toggle + Copy behaviour -->
+    <script>
+        const toggleBtn = document.getElementById("toggleCode");
+        const codeBox = document.getElementById("codeBox");
+
+        toggleBtn.addEventListener("click", () => {
+            const open = codeBox.style.display === "block";
+            codeBox.style.display = open ? "none" : "block";
+            toggleBtn.innerHTML = open
+                ? '<i class="fa-solid fa-code"></i> <span>View Code</span>'
+                : '<i class="fa-solid fa-code"></i> <span>Hide Code</span>';
+        });
+
+        // Copy buttons
+        document.querySelectorAll(".copy-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-copy");
+                const codeEl = document.getElementById(id);
+                if (!codeEl) return;
+
+                const text = codeEl.textContent.replace(/\u00A0/g, " ").trim();
+
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.classList.add("copied");
+                    btn.innerHTML = "<i class='fa-solid fa-check'></i> Copied";
+                    setTimeout(() => {
+                        btn.classList.remove("copied");
+                        btn.innerHTML = "<i class='fa-solid fa-copy'></i> Copy";
+                    }, 1200);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
