@@ -1,4 +1,3 @@
-
 (() => {
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
@@ -12,7 +11,7 @@
         arrowIcon.classList.toggle('fa-angle-down', isOpen);
     };
 
-    // Open/close main menu (mobile)
+    // ============ MAIN MENU TOGGLE (MOBILE) ============
     if (navToggle && navMenu) {
         navToggle.addEventListener('click', () => {
             const open = navMenu.classList.toggle('open');
@@ -48,9 +47,10 @@
         });
     }
 
-    // Portfolio accordion on mobile (click)
+    // ============ PORTFOLIO SUBMENU (MOBILE ACCORDION) ============
     if (subToggle && submenu) {
         subToggle.addEventListener('click', (e) => {
+            // Only act like accordion on mobile
             if (window.matchMedia('(max-width: 900px)').matches) {
                 e.preventDefault();
                 const expanded = subToggle.getAttribute('aria-expanded') === 'true';
@@ -60,7 +60,7 @@
             }
         });
 
-        // Desktop: show down arrow while hovered, back to right when leaving
+        // Desktop: arrow down on hover, right on leave
         const parentItem = subToggle.closest('.has-submenu');
         if (parentItem) {
             parentItem.addEventListener('mouseenter', () => {
@@ -71,5 +71,45 @@
             });
         }
     }
-})();
 
+    // ============ ACTIVE LINK HIGHLIGHT (CURRENT PAGE) ============
+    const highlightActiveLink = () => {
+        const currentPath = window.location.pathname.replace(/\/+$/, ""); // remove trailing slash
+        const links = document.querySelectorAll(".tb-menu a");
+        let activeLink = null;
+
+        links.forEach(link => {
+            let href = link.getAttribute("href");
+            if (!href) return;
+
+            // ignore pure #anchors
+            if (href.startsWith("#")) return;
+
+            // make comparable to pathname
+            href = href.replace(window.location.origin, "").replace(/\/+$/, "");
+
+            // match full path or end of path (e.g. /pages/projects.html)
+            if (currentPath === href || currentPath.endsWith(href)) {
+                activeLink = link;
+            }
+        });
+
+        if (activeLink) {
+            // add red active style (CSS: .tb-menu a.is-active)
+            activeLink.classList.add("is-active");
+
+            // if it's inside the Portfolio submenu, also light up the main chip
+            const submenuEl = activeLink.closest(".submenu");
+            if (submenuEl) {
+                const parentToggle = submenuEl.parentElement.querySelector(".submenu-toggle");
+                if (parentToggle) {
+                    parentToggle.classList.add("is-active");
+                }
+            }
+        }
+    };
+
+    // Run immediately (script should be loaded after HTML)
+    highlightActiveLink();
+
+})();

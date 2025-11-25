@@ -1,18 +1,21 @@
-/* One nav, embedded on the RIGHT of .title-bar */
+/* ===========================
+   NAVBAR (RIGHT OF TITLE BAR)
+   =========================== */
 :root {
     --nav-bg: rgba(12, 12, 16, .85);
     --nav-text: #e9f0ff;
     --nav-accent: #7ef6a1;
     --nav-border: rgba(255, 255, 255, .08);
+
+    /* CHIP COLORS */
     --chip-bg: #1b1b2f;
     --chip-hover: #ff5b3d;
     --chip-active: #ff3e1c;
 }
 
-/* Right side container inside title bar */
+/* Sticky top bar */
 .title-bar {
     position: sticky;
-    /* keep your original feel */
     top: 0;
     z-index: 1000;
 }
@@ -23,21 +26,19 @@
     align-items: center;
     gap: 12px;
     position: relative;
-    /* anchor for dropdown/overlay */
 }
 
-/* Hamburger (mobile) */
+/* Hamburger */
 .tb-nav-toggle {
     display: none;
     width: 40px;
     height: 34px;
-    border: 0;
     background: transparent;
+    border: none;
     cursor: pointer;
 }
 
 .tb-nav-toggle .bar {
-    display: block;
     width: 100%;
     height: 2px;
     background: #cfe3ff;
@@ -45,7 +46,7 @@
     transition: .25s ease;
 }
 
-/* Menu chips (desktop row) */
+/* Menu chips */
 .tb-menu {
     list-style: none;
     margin: 0;
@@ -62,23 +63,26 @@
     border: 1px solid var(--nav-border);
     border-radius: 10px;
     padding: 7px 12px;
-    text-decoration: none;
     font-size: 14px;
+    text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: .4rem;
-    transition: background .25s, color .25s, box-shadow .25s, transform .15s;
+    transition: background .25s, color .25s, transform .15s, box-shadow .25s;
     cursor: pointer;
 }
 
+/* Hover */
 .tb-menu a:hover,
 .submenu-toggle:hover {
     background: var(--chip-hover);
     color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(255, 91, 61, .35), 0 0 10px rgba(255, 91, 61, .25) inset;
+    box-shadow: 0 6px 16px rgba(255, 91, 61, .35),
+        0 0 10px rgba(255, 91, 61, .25) inset;
 }
 
+/* Click */
 .tb-menu a:active,
 .submenu-toggle:active {
     background: var(--chip-active);
@@ -86,14 +90,18 @@
     box-shadow: 0 3px 10px rgba(255, 91, 61, .45) inset;
 }
 
-.tb-menu a.is-active {
-    background: rgba(255, 91, 61, .35),
-        0 0 10px rgba(255, 91, 61, .25);
-    color: #ffffff;
+/* ACTIVE PAGE (fixed!) */
+.tb-menu a.is-active,
+.submenu-toggle.is-active {
+    background: var(--chip-active);
+    color: #fff;
     font-weight: 700;
+    box-shadow: 0 6px 16px rgba(255, 91, 61, .35),
+        0 0 12px rgba(255, 91, 61, .25) inset;
 }
 
-/* Dropdown (desktop) */
+
+/* Dropdown */
 .has-submenu {
     position: relative;
 }
@@ -102,15 +110,14 @@
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-    /* align under the chip on the right */
     min-width: 220px;
     padding: 8px;
     margin: 0;
-    list-style: none;
-    display: none;
     background: #0f1320;
     border: 1px solid var(--nav-border);
     border-radius: 12px;
+    list-style: none;
+    display: none;
     box-shadow: 0 12px 30px rgba(0, 0, 0, .45);
 }
 
@@ -119,10 +126,7 @@
     padding: 10px 12px;
     border-radius: 8px;
     color: #e9f0ff;
-    text-decoration: none;
     transition: .25s;
-    background: transparent;
-    border: 0;
 }
 
 .submenu li a:hover {
@@ -130,33 +134,42 @@
     color: var(--nav-accent);
 }
 
+/* Show dropdown on hover */
 .has-submenu:hover>.submenu,
 .has-submenu:focus-within>.submenu {
     display: block;
 }
 
-/* ========= Mobile (≤ 900px) ========= */
-@media (max-width:900px) {
+
+/* ===========================
+   MOBILE (≤900px)
+   =========================== */
+@media (max-width: 900px) {
+
     .tb-nav-toggle {
         display: block;
     }
 
-    /* Turn horizontal row into slide-down panel aligned to right */
     .tb-menu {
-        position: absolute;
-        top: calc(100% + 8px);
-        right: 0;
+        position: fixed;
+        z-index: 2000;
+        top: calc(56px + env(safe-area-inset-top));
+        right: 8px;
+        left: 8px;
         display: grid;
-        gap: 6px;
+        gap: 8px;
         padding: 12px;
         background: #0b0f17;
         border: 1px solid var(--nav-border);
-        border-radius: 12px;
-        transform: translateY(-10px);
+        border-radius: 14px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, .45);
+        max-height: calc(100vh - 72px - env(safe-area-inset-top));
+        overflow: auto;
+
+        transform: translateY(-12px);
         opacity: 0;
         pointer-events: none;
         transition: transform .25s ease, opacity .25s ease;
-        width: min(92vw, 340px);
     }
 
     .tb-menu.open {
@@ -165,12 +178,19 @@
         pointer-events: auto;
     }
 
-    /* Dropdown becomes accordion */
+    .tb-menu a,
+    .submenu-toggle {
+        padding: 12px 14px;
+        font-size: 15px;
+        border-radius: 12px;
+    }
+
+    /* Accordion dropdown */
     .has-submenu .submenu {
         position: static;
         display: none;
         padding: 6px;
-        margin-left: 0;
+        margin: 2px 0 0 0;
         background: #0f1320;
         border: 1px solid var(--nav-border);
         border-radius: 10px;
@@ -182,97 +202,17 @@
 
     .submenu-toggle[aria-expanded="true"] i {
         transform: rotate(180deg);
-        transition: transform .2s ease;
+        transition: .2s ease;
     }
-
-
-    @media (max-width:900px) {
-
-        /* show hamburger */
-        .tb-nav-toggle {
-            display: block;
-        }
-
-        /* FIX: use a fixed overlay so it won't be clipped by the title/window */
-        .tb-menu {
-            position: fixed;
-            z-index: 2000;
-            /* above window & avatar */
-            top: calc(56px + env(safe-area-inset-top));
-            /* just under the bar */
-            right: 8px;
-            left: 8px;
-            display: grid;
-            gap: 8px;
-            padding: 12px;
-            background: #0b0f17;
-            border: 1px solid var(--nav-border);
-            border-radius: 14px;
-            box-shadow: 0 18px 40px rgba(0, 0, 0, .45);
-            max-height: calc(100vh - 72px - env(safe-area-inset-top));
-            overflow: auto;
-
-            transform: translateY(-12px);
-            opacity: 0;
-            pointer-events: none;
-            transition: transform .25s ease, opacity .25s ease;
-        }
-
-        .tb-menu.open {
-            transform: translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* make touch targets comfy */
-        .tb-menu a,
-        .submenu-toggle {
-            padding: 12px 14px;
-            font-size: 15px;
-            border-radius: 12px;
-        }
-
-        /* Dropdown becomes accordion inside the panel */
-        .has-submenu .submenu {
-            position: static;
-            display: none;
-            padding: 6px;
-            margin: 2px 0 0 0;
-            /* no sideways shift so it aligns */
-            background: #0f1320;
-            border: 1px solid var(--nav-border);
-            border-radius: 10px;
-        }
-
-        .has-submenu .submenu.open {
-            display: block;
-        }
-
-        .submenu-toggle[aria-expanded="true"] i {
-            transform: rotate(180deg);
-            transition: transform .2s ease;
-        }
-    }
-
 }
 
-/* Make all form controls inherit the site font */
+
+/* Fix font inheritance */
 :where(button, input, select, textarea) {
     font: inherit;
-    /* family + size + weight */
-    letter-spacing: inherit;
 }
 
-/* Ensure the submenu button explicitly uses your font */
+/* Ensure correct font */
 .submenu-toggle {
-    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-weight: 400;
-}
-
-/* (Optional) normalize all menu items */
-.tb-menu a,
-.tb-menu .submenu a,
-.tb-menu .submenu-toggle {
-    font-family: inherit;
-    /* or repeat the JetBrains stack here */
+    font-family: "JetBrains Mono", ui-monospace, monospace;
 }
