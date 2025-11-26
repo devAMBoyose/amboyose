@@ -19,8 +19,6 @@
     <link rel="stylesheet" href="/css/portfolir.css" />
     <link rel="stylesheet" href="/pages/bamboy/bamboy.css">
 
-    <!-- New: projects grid -->
-
 </head>
 
 <body>
@@ -49,14 +47,16 @@
                     <li><a href="/index.html">About</a></li>
 
                     <li class="has-submenu">
-                        <button class="submenu-toggle" aria-expanded="false" aria-controls="portfolioSubmenu">
+                        <!-- 🔴 make Portfolio chip active on this page -->
+                        <button class="submenu-toggle is-active" aria-expanded="false" aria-controls="portfolioSubmenu">
                             Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
                         </button>
                         <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
                             <li><a href="/pages/website.html">FullStack Projects</a></li>
                             <li><a href="/pages/graphics.html">Graphics / Design</a></li>
                             <li><a href="/pages/api-integration.html">APIs / Integrations</a></li>
-                            <li><a href="/pages/interactive-demo.html">Interactive UI/UX</a></li>
+                            <!-- 🔴 mark current page as active -->
+                            <li><a href="/pages/interactive-demo.html" class="is-active">Interactive UI/UX</a></li>
                         </ul>
                     </li>
                     <li><a href="/resume.html" data-current="resume">Resume</a></li>
@@ -90,7 +90,6 @@
                         </div>
                     </div>
                 </a>
-
 
                 <!-- Card 2 -->
                 <a class="proj-card" href="/pages/2_liquideffect/liquideffect.html">
@@ -155,7 +154,6 @@
                     </div>
                 </a>
 
-
                 <!-- Card 6 -->
                 <a class="proj-card" href="/pages/6_PremiumNavbar/premium-navbar.html">
                     <div class="card-banner" style="--img:url('/assets/portfolio/responsivenavbar.png')"></div>
@@ -202,7 +200,6 @@
                         </div>
                     </div>
                 </a>
-
 
                 <!-- Card 9 -->
                 <a class="proj-card" href="/pages/7_ProductivitySlider/premium-navbar.html">
@@ -301,9 +298,8 @@
     <!-- Your existing JS -->
     <script src="/js/script.js"></script>
     <script defer src="/js/nav.js"></script>
-    <script defer src="/assets/css/main/resume.js"></script>
-
-
+    <!-- 🔴 removed resume.js so it doesn't force Resume to active on this page -->
+    <!-- <script defer src="/assets/css/main/resume.js"></script> -->
 
 </body>
 
