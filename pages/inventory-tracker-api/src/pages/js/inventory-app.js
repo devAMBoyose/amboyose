@@ -2,7 +2,8 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     // ====== CONFIG ======
-    const API_BASE = "http://localhost:5000/api";
+    const API_BASE = "https://amboyose-inventory-api.onrender.com/api";
+
 
     // ⚠️ PASTE YOUR JWT TOKEN HERE (from Thunder Client / login response)
     const JWT_TOKEN =
