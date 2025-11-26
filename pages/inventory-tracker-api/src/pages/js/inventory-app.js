@@ -1,205 +1,251 @@
 // pages/inventory-tracker-api/src/pages/js/inventory-app.js
 
-document.addEventListener("DOMContentLoaded", () => {
-    // ====== CONFIG ======
-    const API_BASE = "https://amboyose-inventory-api.onrender.com/api";
+// ============================
+// CONFIG
+// ============================
 
+// 🔴 CHANGE THIS if your Render URL is different
+const API_BASE = "https://amboyose-inventory-api.onrender.com/api";
 
-    // ⚠️ PASTE YOUR JWT TOKEN HERE (from Thunder Client / login response)
-    const JWT_TOKEN =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Mjc0OTE0OWRiMTVlMjk2YWQ2YTc0YSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2NDE4MjI5MiwiZXhwIjoxNzY0MjY4NjkyfQ.TJBo2pZqkG4CMHHM91CMKUe-t63S-w6EfLQ9bQGvxuE";
+// ⚠️ For now we still hard-code a JWT just for the demo.
+//    Paste the token you get from login/Thunder Client.
+//    In a real app, store this in localStorage or a proper auth flow.
+const JWT_TOKEN = "PASTE_YOUR_JWT_TOKEN_HERE";
 
-    function authHeaders(extra = {}) {
-        if (!JWT_TOKEN) {
-            throw new Error("No token set – please put your JWT in JWT_TOKEN.");
+// Build default headers with Authorization
+function authHeaders(extra = {}) {
+    if (!JWT_TOKEN) {
+        throw new Error("No JWT token set – update JWT_TOKEN in inventory-app.js");
+    }
+    return {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${JWT_TOKEN}`,
+        ...extra,
+    };
+}
+
+// ============================
+// DOM ELEMENTS
+// ============================
+
+const els = {
+    // Items
+    itemsStatus: document.getElementById("items-status"),
+    itemsError: document.getElementById("items-error"),
+    itemsTbody: document.getElementById("items-tbody"),
+    btnRefreshItems: document.getElementById("btn-refresh-items"),
+
+    // Consignments
+    consStatus: document.getElementById("cons-status"),
+    consError: document.getElementById("consignments-error"),
+    consTbody: document.getElementById("consignments-tbody"),
+    btnRefreshCons: document.getElementById("btn-refresh-cons"),
+    btnCreateCons: document.getElementById("btn-create-cons"),
+
+    // Consignment form
+    selectItem: document.getElementById("consignment-item-select"),
+    inputHospital: document.getElementById("consignment-hospital"),
+    inputDoctor: document.getElementById("consignment-doctor"),
+    inputQty: document.getElementById("consignment-qty"),
+};
+
+// ============================
+// HELPERS
+// ============================
+
+function setStatus(el, text, type = "idle") {
+    if (!el) return;
+    el.textContent = text;
+
+    el.classList.remove("inv-pill-ok", "inv-pill-loading", "inv-pill-error");
+
+    if (type === "ok") el.classList.add("inv-pill-ok");
+    if (type === "loading") el.classList.add("inv-pill-loading");
+    if (type === "error") el.classList.add("inv-pill-error");
+}
+
+function statusPill(status) {
+    const s = status || "open";
+    let cls = "inv-status-open";
+    let label = "Open";
+
+    if (s === "closed") {
+        cls = "inv-status-closed";
+        label = "Closed";
+    } else if (s === "partially_closed") {
+        cls = "inv-status-partial";
+        label = "Partially used";
+    }
+
+    return `<span class="inv-status-pill ${cls}">${label}</span>`;
+}
+
+// ============================
+// ITEMS
+// ============================
+
+async function loadItems() {
+    if (!els.itemsError || !els.itemsTbody || !els.selectItem) return;
+
+    setStatus(els.itemsStatus, "Loading…", "loading");
+    els.itemsError.textContent = "";
+    els.itemsTbody.innerHTML = "";
+    els.selectItem.innerHTML = '<option value="">Pick item…</option>';
+
+    try {
+        const res = await fetch(`${API_BASE}/items`, {
+            headers: authHeaders(),
+        });
+
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`HTTP ${res.status}: ${text}`);
         }
-        return {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${JWT_TOKEN}`,
-            ...extra,
-        };
-    }
 
-    // ====== DOM HOOKS (match your HTML IDs) ======
-    const itemsTbody = document.getElementById("itemsTableBody");
-    const itemsStatusEl = document.getElementById("itemsStatus");
-    const itemsErrorEl = document.getElementById("itemsError");
+        const items = await res.json();
+        setStatus(els.itemsStatus, "OK", "ok");
 
-    const consTbody = document.getElementById("consTableBody");
-    const consStatusEl = document.getElementById("consStatus");
-    const consErrorEl = document.getElementById("consError");
-
-    const consItemSelect = document.getElementById("consItemSelect");
-    const consHospitalInput = document.getElementById("consHospital");
-    const consDoctorInput = document.getElementById("consDoctor");
-    const consQtySentInput = document.getElementById("consQtySent");
-
-    const btnRefreshItems = document.getElementById("btnRefreshItems");
-    const btnRefreshCons = document.getElementById("btnRefreshCons");
-    const btnCreateCons = document.getElementById("btnCreateCons");
-
-    // ====== HELPERS ======
-    function setItemsStatus(text) {
-        if (itemsStatusEl) itemsStatusEl.textContent = text || "";
-    }
-    function setItemsError(text) {
-        if (itemsErrorEl) itemsErrorEl.textContent = text || "";
-    }
-    function setConsStatus(text) {
-        if (consStatusEl) consStatusEl.textContent = text || "";
-    }
-    function setConsError(text) {
-        if (consErrorEl) consErrorEl.textContent = text || "";
-    }
-
-    function statusPill(status) {
-        const s = status || "open";
-        let cls = "inv-status-open";
-        let label = "Open";
-
-        if (s === "closed") {
-            cls = "inv-status-closed";
-            label = "Closed";
-        } else if (s === "partially_closed") {
-            cls = "inv-status-partial";
-            label = "Partially used";
-        }
-
-        return `<span class="inv-status-pill ${cls}">${label}</span>`;
-    }
-
-    // ====== ITEMS ======
-    async function loadItems() {
-        setItemsStatus("Loading…");
-        setItemsError("");
-
-        try {
-            const res = await fetch(`${API_BASE}/items`, {
-                headers: authHeaders(),
-            });
-
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(`HTTP ${res.status}: ${text}`);
-            }
-
-            const items = await res.json();
-
-            setItemsStatus("");
-            itemsTbody.innerHTML = "";
-            consItemSelect.innerHTML = '<option value="">Pick item…</option>';
-
-            items.forEach((item) => {
-                // table row
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-          <td>${item.sku}</td>
-          <td>${item.name}</td>
-          <td>${item.category || "-"}</td>
-          <td>${item.quantityOnHand ?? 0}</td>
-          <td>${item.location || "-"}</td>
-        `;
-                itemsTbody.appendChild(tr);
-
-                // dropdown option
-                const opt = document.createElement("option");
-                opt.value = item._id;
-                opt.textContent = `${item.name} (${item.sku})`;
-                consItemSelect.appendChild(opt);
-            });
-        } catch (err) {
-            console.error("loadItems error:", err);
-            setItemsStatus("Error");
-            setItemsError(err.message || "Error loading items");
-        }
-    }
-
-    // ====== CONSIGNMENTS ======
-    async function loadConsignments() {
-        setConsStatus("Loading…");
-        setConsError("");
-
-        try {
-            const res = await fetch(`${API_BASE}/consignments`, {
-                headers: authHeaders(),
-            });
-
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(`HTTP ${res.status}: ${text}`);
-            }
-
-            const list = await res.json();
-
-            setConsStatus("");
-            consTbody.innerHTML = "";
-
-            list.forEach((c) => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-          <td>${c.item?.name || "-"}</td>
-          <td>${c.hospital}</td>
-          <td>${c.qtySent}</td>
-          <td>${c.qtyUsed}</td>
-          <td>${statusPill(c.status)}</td>
-        `;
-                consTbody.appendChild(tr);
-            });
-        } catch (err) {
-            console.error("loadConsignments error:", err);
-            setConsStatus("Error");
-            setConsError(err.message || "Error loading consignments");
-        }
-    }
-
-    // ====== CREATE CONSIGNMENT ======
-    async function createConsignment() {
-        const itemId = consItemSelect.value;
-        const hospital = consHospitalInput.value.trim();
-        const doctor = consDoctorInput.value.trim();
-        const qtySent = Number(consQtySentInput.value || "0");
-
-        if (!itemId || !hospital || qtySent <= 0) {
-            alert("Please pick an item, hospital, and a valid quantity.");
+        if (!Array.isArray(items) || items.length === 0) {
+            els.itemsError.textContent = "No items yet. Create items via the API.";
             return;
         }
 
-        const payload = {
-            item: itemId,
-            hospital,
-            doctor: doctor || undefined,
-            qtySent,
-        };
+        items.forEach((item) => {
+            // Table row
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+        <td>${item.sku || "-"}</td>
+        <td>${item.name || "-"}</td>
+        <td>${item.category || "-"}</td>
+        <td>${item.quantityOnHand ?? 0}</td>
+        <td>${item.location || "-"}</td>
+      `;
+            els.itemsTbody.appendChild(tr);
 
-        try {
-            const res = await fetch(`${API_BASE}/consignments`, {
-                method: "POST",
-                headers: authHeaders(),
-                body: JSON.stringify(payload),
-            });
+            // Select option for consignment form
+            const opt = document.createElement("option");
+            opt.value = item._id;
+            opt.textContent = `${item.name || "Unnamed"} (${item.sku || "no SKU"})`;
+            els.selectItem.appendChild(opt);
+        });
+    } catch (err) {
+        console.error("loadItems error:", err);
+        setStatus(els.itemsStatus, "Error", "error");
+        els.itemsError.textContent =
+            "Error loading items: " + (err.message || "Unknown error");
+    }
+}
 
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(`HTTP ${res.status}: ${text}`);
-            }
+// ============================
+// CONSIGNMENTS
+// ============================
 
-            await res.json();
-            consHospitalInput.value = "";
-            consDoctorInput.value = "";
-            consQtySentInput.value = "";
-            await loadConsignments();
-        } catch (err) {
-            console.error("createConsignment error:", err);
-            alert("Failed to create consignment: " + (err.message || "Unknown"));
+async function loadConsignments() {
+    if (!els.consError || !els.consTbody) return;
+
+    setStatus(els.consStatus, "Loading…", "loading");
+    els.consError.textContent = "";
+    els.consTbody.innerHTML = "";
+
+    try {
+        const res = await fetch(`${API_BASE}/consignments`, {
+            headers: authHeaders(),
+        });
+
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`HTTP ${res.status}: ${text}`);
         }
+
+        const list = await res.json();
+        setStatus(els.consStatus, "OK", "ok");
+
+        if (!Array.isArray(list) || list.length === 0) {
+            els.consError.textContent = "No consignments yet. Create one above.";
+            return;
+        }
+
+        list.forEach((c) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+        <td>${c.item?.name || "-"}</td>
+        <td>${c.hospital || "-"}</td>
+        <td>${c.qtySent ?? 0}</td>
+        <td>${c.qtyUsed ?? 0}</td>
+        <td>${statusPill(c.status)}</td>
+      `;
+            els.consTbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error("loadConsignments error:", err);
+        setStatus(els.consStatus, "Error", "error");
+        els.consError.textContent =
+            "Error loading consignments: " + (err.message || "Unknown error");
+    }
+}
+
+// Create new consignment
+async function createConsignment(evt) {
+    if (evt) evt.preventDefault();
+
+    const itemId = els.selectItem.value;
+    const hospital = els.inputHospital.value.trim();
+    const doctor = els.inputDoctor.value.trim();
+    const qty = Number(els.inputQty.value || "0");
+
+    if (!itemId || !hospital || qty <= 0) {
+        alert("Please pick an item, hospital, and a valid quantity.");
+        return;
     }
 
-    // ====== EVENT WIRING ======
-    if (btnRefreshItems) btnRefreshItems.addEventListener("click", loadItems);
-    if (btnRefreshCons) btnRefreshCons.addEventListener("click", loadConsignments);
-    if (btnCreateCons) btnCreateCons.addEventListener("click", createConsignment);
+    const payload = {
+        item: itemId,
+        hospital,
+        doctor: doctor || undefined,
+        qtySent: qty,
+    };
 
-    // initial load
+    try {
+        els.btnCreateCons.disabled = true;
+        els.btnCreateCons.textContent = "Creating…";
+
+        const res = await fetch(`${API_BASE}/consignments`, {
+            method: "POST",
+            headers: authHeaders(),
+            body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error(`HTTP ${res.status}: ${text}`);
+        }
+
+        await res.json();
+
+        // reset form (hospital & qty, keep item/doctor if you want)
+        els.inputHospital.value = "";
+        els.inputQty.value = "";
+
+        await loadConsignments();
+    } catch (err) {
+        console.error("createConsignment error:", err);
+        alert("Failed to create consignment: " + (err.message || "Unknown error"));
+    } finally {
+        els.btnCreateCons.disabled = false;
+        els.btnCreateCons.textContent = "Create Consignment";
+    }
+}
+
+// ============================
+// WIRE EVENTS
+// ============================
+
+document.addEventListener("DOMContentLoaded", () => {
+    els.btnRefreshItems?.addEventListener("click", loadItems);
+    els.btnRefreshCons?.addEventListener("click", loadConsignments);
+    els.btnCreateCons?.addEventListener("click", createConsignment);
+
+    // Initial load
     loadItems();
     loadConsignments();
 });

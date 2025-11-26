@@ -7,185 +7,96 @@
     <title>Inventory Tracker API | Portfolio</title>
 
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap"
+        rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
-    <!-- Global styles from your main portfolio -->
+    <!-- Your global styles -->
     <link rel="stylesheet" href="/css/footer.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/nav.css" />
 
-    <!-- Page-specific styling -->
     <style>
         body {
             font-family: "JetBrains Mono", monospace;
-            background: radial-gradient(circle at top left, #1a2b4a 0, #050814 55%, #020308 100%);
+        }
+
+        .page-shell {
+            max-width: 1100px;
+            margin: 40px auto 80px;
+            padding: 32px 32px 40px;
+            border-radius: 18px;
+            background: radial-gradient(circle at top left, #181830, #050612 55%, #020309 100%);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
             color: #f9fafb;
-            min-height: 100vh;
+            border: 1px solid rgba(148, 163, 184, 0.2);
         }
 
-        .window {
-            max-width: 1120px;
-            margin: 32px auto 64px;
-            border-radius: 16px;
-            background: radial-gradient(circle at top left, #151b2e 0, #050814 60%);
-            box-shadow:
-                0 0 0 1px rgba(148, 163, 184, 0.08),
-                0 40px 80px rgba(15, 23, 42, 0.9);
-            overflow: hidden;
-        }
-
-        .title-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 18px;
-            background: linear-gradient(90deg, #020617, #020617 48%, #050c1a 100%);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-        }
-
-        .title-bar .dots span {
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            display: inline-block;
-            margin-right: 6px;
-        }
-
-        .title-bar .dots .red {
-            background: #f97373;
-        }
-
-        .title-bar .dots .yellow {
-            background: #fde68a;
-        }
-
-        .title-bar .dots .green {
-            background: #4ade80;
-        }
-
-        .filename {
-            font-size: 13px;
-            color: #e5e7eb;
-            letter-spacing: 0.04em;
-        }
-
-        .tb-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .tb-nav-toggle {
-            display: none;
-        }
-
-        .tb-menu {
-            display: flex;
-            gap: 8px;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .chip-link .chip {
-            border-radius: 999px;
-            padding: 5px 12px;
-            font-size: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.35);
-            background: radial-gradient(circle at top, #111827, #020617);
-            color: #e5e7eb;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: background 160ms ease, transform 120ms ease, border-color 160ms ease;
-        }
-
-        .chip-link .chip:hover {
-            background: radial-gradient(circle at top, #1f2937, #020617);
-            border-color: #22c55e;
-            transform: translateY(-1px);
-        }
-
-        /* PAGE SHELL */
-        .inv-page {
-            padding: 24px 26px 28px;
-        }
-
-        .inv-header-topline {
-            font-size: 14px;
-            letter-spacing: 0.2em;
+        .demo-header-eyebrow {
+            font-size: 11px;
             text-transform: uppercase;
+            letter-spacing: 0.16em;
             color: #9ca3af;
             margin-bottom: 6px;
         }
 
-        .inv-title {
-            font-size: 28px;
+        .demo-title {
+            font-size: 26px;
             font-weight: 800;
-            color: #f9fafb;
-            margin: 0;
+            margin-bottom: 8px;
         }
 
-        .inv-subtitle {
+        .demo-subtitle {
             font-size: 13px;
             color: #9ca3af;
-            margin-top: 6px;
-            max-width: 560px;
+            max-width: 640px;
+            line-height: 1.5;
+            margin-bottom: 18px;
         }
 
-        .inv-badges-row {
+        .badge-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 18px;
+            gap: 10px;
             margin-bottom: 26px;
+            font-size: 11px;
         }
 
-        .inv-badge {
+        .demo-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 4px 11px;
+            padding: 6px 11px;
             border-radius: 999px;
-            font-size: 11px;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(148, 163, 184, 0.45);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: radial-gradient(circle at top, rgba(45, 212, 191, 0.12), rgba(15, 23, 42, 0.9));
             color: #e5e7eb;
+            white-space: nowrap;
         }
 
-        .inv-badge i {
+        .demo-badge i {
             font-size: 11px;
             color: #22c55e;
         }
 
-        .inv-grid {
+        .grid {
             display: grid;
-            grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.05fr);
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
             gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
         }
 
         .inv-card {
             border-radius: 16px;
-            background: radial-gradient(circle at top left, #0b1220 0, #020617 60%);
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
             padding: 18px 18px 16px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .inv-card::before {
-            content: "";
-            position: absolute;
-            inset: -120px;
-            background:
-                radial-gradient(circle at top right, rgba(56, 189, 248, 0.12) 0, transparent 55%),
-                radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.12) 0, transparent 55%);
-            opacity: 0.75;
-            pointer-events: none;
-            z-index: -1;
+            background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.92));
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
         }
 
         .inv-card-header {
@@ -193,227 +104,236 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 10px;
+            gap: 10px;
         }
 
         .inv-card-title {
             font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.09em;
             text-transform: uppercase;
-            letter-spacing: 0.14em;
-            color: #e5e7eb;
         }
 
-        .inv-card-meta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .inv-card-subtitle {
             font-size: 11px;
             color: #9ca3af;
-        }
-
-        .inv-chip-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-size: 11px;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(148, 163, 184, 0.5);
-        }
-
-        .inv-chip-status span[id$="Status"] {
-            color: #e5e7eb;
-        }
-
-        .inv-error {
-            margin-top: 3px;
-            min-height: 16px;
-            font-size: 11px;
-            color: #f97373;
-        }
-
-        .inv-muted {
-            margin-top: 8px;
-            font-size: 11px;
-            color: #9ca3af;
-        }
-
-        .inv-table-wrapper {
-            margin-top: 8px;
-            border-radius: 10px;
-            overflow: auto;
-            border: 1px solid rgba(30, 64, 175, 0.6);
-            background: rgba(15, 23, 42, 0.75);
-            max-height: 260px;
-        }
-
-        table.inv-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-            min-width: 100%;
-        }
-
-        .inv-table thead {
-            background: linear-gradient(90deg, #020617, #020617 40%, #020617 100%);
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-
-        .inv-table th,
-        .inv-table td {
-            padding: 7px 9px;
-            white-space: nowrap;
-            text-align: left;
-        }
-
-        .inv-table th {
-            font-weight: 600;
-            color: #9ca3af;
-            border-bottom: 1px solid rgba(55, 65, 81, 0.9);
-        }
-
-        .inv-table tbody tr:nth-child(odd) {
-            background: rgba(15, 23, 42, 0.8);
-        }
-
-        .inv-table tbody tr:nth-child(even) {
-            background: rgba(15, 23, 42, 0.4);
-        }
-
-        .inv-table tbody tr:hover {
-            background: rgba(30, 64, 175, 0.45);
-        }
-
-        .btn-pill {
-            border-radius: 999px;
-            padding: 4px 11px;
-            font-size: 11px;
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            background: radial-gradient(circle at top, #0b1120, #020617);
-            color: #e5e7eb;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: background 160ms ease, transform 120ms ease, box-shadow 160ms ease, border-color 160ms ease;
-        }
-
-        .btn-pill i {
-            font-size: 10px;
-        }
-
-        .btn-pill:hover {
-            background: radial-gradient(circle at top, #1f2937, #020617);
-            border-color: #22c55e;
-            transform: translateY(-1px);
-            box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.6);
-        }
-
-        .btn-pill-primary {
-            background: linear-gradient(90deg, #22c55e, #14b8a6);
-            border-color: transparent;
-            color: #020617;
-            font-weight: 600;
-        }
-
-        .btn-pill-primary:hover {
-            background: linear-gradient(90deg, #4ade80, #22d3ee);
-            box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.9);
-        }
-
-        /* CONSIGNMENT FORM */
-        .inv-cons-form {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 8px;
             margin-bottom: 10px;
         }
 
-        .inv-select,
-        .inv-input {
-            width: 100%;
-            border-radius: 999px;
-            padding: 6px 12px;
+        .inv-card-controls {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             font-size: 11px;
-            border: 1px solid rgba(148, 163, 184, 0.45);
-            background: rgba(15, 23, 42, 0.95);
-            color: #e5e7eb;
-            outline: none;
-            transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
         }
 
-        .inv-select:focus,
-        .inv-input:focus {
-            border-color: #22c55e;
-            box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.7);
-            background: #020617;
+        .inv-status-label {
+            opacity: 0.75;
         }
 
-        .inv-select::placeholder,
-        .inv-input::placeholder {
-            color: #6b7280;
-        }
-
-        .inv-status-pill {
-            font-size: 10px;
-            padding: 2px 7px;
+        .inv-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 9px;
             border-radius: 999px;
-            border: 1px solid transparent;
+            font-size: 11px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.96));
+            color: #e5e7eb;
         }
 
-        .inv-status-open {
-            background: rgba(22, 163, 74, 0.15);
-            border-color: rgba(34, 197, 94, 0.7);
+        .inv-pill i {
+            font-size: 10px;
+        }
+
+        .inv-pill-ok {
+            border-color: rgba(16, 185, 129, 0.8);
             color: #bbf7d0;
         }
 
-        .inv-status-closed {
-            background: rgba(55, 65, 81, 0.8);
-            border-color: rgba(148, 163, 184, 0.8);
-            color: #e5e7eb;
+        .inv-pill-loading {
+            border-color: rgba(59, 130, 246, 0.9);
+            color: #bfdbfe;
         }
 
-        .inv-status-partial {
-            background: rgba(234, 179, 8, 0.15);
-            border-color: rgba(234, 179, 8, 0.75);
-            color: #facc15;
+        .inv-pill-error {
+            border-color: rgba(248, 113, 113, 0.9);
+            color: #fecaca;
+        }
+
+        .inv-pill-error i {
+            color: #f97373;
+        }
+
+        .btn-chrome {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.96));
+            color: #e5e7eb;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.12s ease;
+        }
+
+        .btn-chrome:hover {
+            background: radial-gradient(circle at top, rgba(30, 64, 175, 0.7), rgba(15, 23, 42, 0.98));
+            transform: translateY(-0.5px);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.8);
+        }
+
+        .btn-primary {
+            border-color: rgba(34, 197, 94, 0.9);
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #022c22;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            box-shadow: 0 10px 28px rgba(16, 185, 129, 0.45);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        thead {
+            text-transform: uppercase;
+            font-size: 10px;
+            color: #9ca3af;
+        }
+
+        th,
+        td {
+            padding: 5px 6px;
+            border-bottom: 1px solid rgba(30, 64, 175, 0.55);
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-scroll {
+            max-height: 220px;
+            overflow: auto;
+            margin-top: 6px;
+            border-radius: 8px;
+        }
+
+        .inv-footer-note {
+            margin-top: 8px;
+            font-size: 10px;
+            color: #6b7280;
+        }
+
+        /* Consignment form row */
+
+        .cons-form-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.7fr) auto;
+            gap: 8px;
+            margin: 6px 0 10px;
+            font-size: 11px;
         }
 
         @media (max-width: 900px) {
-            .inv-grid {
+            .cons-form-row {
                 grid-template-columns: minmax(0, 1fr);
-            }
-
-            .inv-cons-form {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
 
-        @media (max-width: 640px) {
-            .window {
-                margin: 16px auto 48px;
-                border-radius: 12px;
-            }
+        .input-pill {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.45);
+            background: rgba(15, 23, 42, 0.95);
+            color: #e5e7eb;
+            padding: 6px 10px;
+            font-size: 11px;
+            outline: none;
+            appearance: none;
+        }
 
-            .inv-page {
-                padding: 18px 16px 20px;
-            }
+        .input-pill:focus {
+            border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
+        }
 
-            .inv-title {
-                font-size: 22px;
-            }
+        .status-error-text {
+            margin-top: 4px;
+            font-size: 10px;
+            color: #fca5a5;
+            min-height: 14px;
+        }
 
-            .inv-cons-form {
-                grid-template-columns: minmax(0, 1fr);
-            }
+        .inv-status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .inv-status-open {
+            background: rgba(22, 163, 74, 0.18);
+            color: #bbf7d0;
+        }
+
+        .inv-status-partial {
+            background: rgba(234, 179, 8, 0.2);
+            color: #facc15;
+        }
+
+        .inv-status-closed {
+            background: rgba(148, 163, 184, 0.28);
+            color: #e5e7eb;
+        }
+
+        /* Back button */
+
+        .back-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 13px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95));
+            color: #e5e7eb;
+            font-size: 11px;
+            text-decoration: none;
+        }
+
+        .back-btn i {
+            font-size: 10px;
+        }
+
+        .back-btn:hover {
+            background: radial-gradient(circle at top, rgba(30, 64, 175, 0.95), rgba(15, 23, 42, 0.98));
         }
     </style>
 </head>
 
 <body>
-    <!-- (Optional) cursor-follow glow from your portfolio -->
+    <!-- cursor-follow glow background -->
     <div id="cursor-bg" aria-hidden="true"></div>
 
     <div class="window">
@@ -425,14 +345,18 @@
 
             <span class="filename">inventory-tracker.api.js</span>
 
+            <!-- RIGHT-SIDE NAV -->
             <div class="tb-right">
+                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+                    aria-label="Toggle menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+
                 <ul id="navMenu" class="tb-menu">
                     <li class="chip-link">
-                        <a href="/portfolio.html">
-                            <button class="chip chip-back">
-                                <i class="fa-solid fa-arrow-left"></i>
-                                <span>Back to Portfolio</span>
-                            </button>
+                        <a href="/portfolio.html" class="chip chip-back">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Back</span>
                         </a>
                     </li>
                 </ul>
@@ -440,51 +364,63 @@
         </div>
 
         <!-- Page Content -->
-        <div class="inv-page">
-            <div class="inv-header">
-                <div class="inv-header-topline">Full-stack Demo</div>
-                <h1 class="inv-title">Inventory Tracker API / MongoDB Demo</h1>
-                <p class="inv-subtitle">
-                    Simple inventory module Node.js + MongoDB backend.
-                    Uses secured JWT endpoints for items and consignment tracking.
-                </p>
-
-                <div class="inv-badges-row">
-                    <span class="inv-badge">
-                        <i class="fa-solid fa-database"></i>
-                        inventoryDB • items &amp; consignments
-                    </span>
-                    <span class="inv-badge">
-                        <i class="fa-solid fa-server"></i>
-                        Express + Mongoose
-                    </span>
-                    <span class="inv-badge">
-                        <i class="fa-solid fa-lock"></i>
-                        JWT-secured endpoints
-                    </span>
-                </div>
+        <div class="page-shell">
+            <div class="back-bar">
+                <a href="/portfolio.html" class="back-btn">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    Back to Portfolio
+                </a>
             </div>
 
-            <div class="inv-grid">
+            <div class="demo-header-eyebrow">Full-stack demo</div>
+            <h1 class="demo-title">Inventory Tracker API / MongoDB Demo</h1>
+            <p class="demo-subtitle">
+                Simple inventory module wired to your Node.js + MongoDB backend.
+                Uses secured JWT endpoints for items and consignment tracking.
+            </p>
+
+            <div class="badge-row">
+                <span class="demo-badge">
+                    <i class="fa-solid fa-database"></i>
+                    inventoryDB • items &amp; consignments
+                </span>
+                <span class="demo-badge">
+                    <i class="fa-brands fa-node-js"></i>
+                    Express + Mongoose
+                </span>
+                <span class="demo-badge">
+                    <i class="fa-solid fa-lock"></i>
+                    JWT-secured endpoints
+                </span>
+            </div>
+
+            <div class="grid">
                 <!-- ITEMS CARD -->
-                <section class="inv-card" aria-label="Items list">
-                    <header class="inv-card-header">
-                        <h2 class="inv-card-title">Items</h2>
-                        <div class="inv-card-meta">
-                            <span class="inv-chip-status">
-                                <span>Status:</span>
-                                <span id="itemsStatus">Loading…</span>
+                <section class="inv-card">
+                    <div class="inv-card-header">
+                        <div>
+                            <div class="inv-card-title">ITEMS</div>
+                            <div class="inv-card-subtitle">
+                                Items are created via the API (<code>POST /api/items</code>).
+                                This view reads them from <code>GET /api/items</code>.
+                            </div>
+                        </div>
+
+                        <div class="inv-card-controls">
+                            <span class="inv-status-label">Status:</span>
+                            <span id="items-status" class="inv-pill inv-pill-loading">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                Loading…
                             </span>
-                            <button id="btnRefreshItems" class="btn-pill" type="button">
-                                <i class="fa-solid fa-rotate"></i> Refresh
+                            <button id="btn-refresh-items" class="btn-chrome">
+                                <i class="fa-solid fa-rotate"></i>
+                                Refresh
                             </button>
                         </div>
-                    </header>
+                    </div>
 
-                    <p id="itemsError" class="inv-error"></p>
-
-                    <div class="inv-table-wrapper">
-                        <table class="inv-table">
+                    <div class="table-scroll">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>SKU</th>
@@ -494,57 +430,59 @@
                                     <th>Location</th>
                                 </tr>
                             </thead>
-                            <tbody id="itemsTableBody">
-                                <!-- JS fills rows -->
+                            <tbody id="items-tbody">
+                                <!-- Filled by JS -->
                             </tbody>
                         </table>
                     </div>
 
-                    <p class="inv-muted">
-                        Items are created via the API (<code>POST /api/items</code>).
-                        This view reads them from <code>GET /api/items</code>.
-                    </p>
+                    <div id="items-error" class="status-error-text"></div>
                 </section>
 
                 <!-- CONSIGNMENTS CARD -->
-                <section class="inv-card" aria-label="Consignments">
-                    <header class="inv-card-header">
-                        <h2 class="inv-card-title">Consignments</h2>
-                        <div class="inv-card-meta">
-                            <span class="inv-chip-status">
-                                <span>Status:</span>
-                                <span id="consStatus">Loading…</span>
+                <section class="inv-card">
+                    <div class="inv-card-header">
+                        <div>
+                            <div class="inv-card-title">CONSIGNMENTS</div>
+                            <div class="inv-card-subtitle">
+                                Consignments are managed via <code>POST /api/consignments</code>
+                                and read from <code>GET /api/consignments</code>.
+                            </div>
+                        </div>
+
+                        <div class="inv-card-controls">
+                            <span class="inv-status-label">Status:</span>
+                            <span id="cons-status" class="inv-pill inv-pill-loading">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                Loading…
                             </span>
-                            <button id="btnRefreshCons" class="btn-pill" type="button">
-                                <i class="fa-solid fa-rotate"></i> Refresh
+                            <button id="btn-refresh-cons" class="btn-chrome">
+                                <i class="fa-solid fa-rotate"></i>
+                                Refresh
                             </button>
                         </div>
-                    </header>
+                    </div>
 
-                    <!-- Create consignment form row -->
-                    <div class="inv-cons-form" aria-label="Create consignment">
-                        <select id="consItemSelect" class="inv-select">
+                    <!-- Consignment form row -->
+                    <form class="cons-form-row" onsubmit="return false;">
+                        <select id="consignment-item-select" class="input-pill">
                             <option value="">Pick item…</option>
                         </select>
 
-                        <input id="consHospital" class="inv-input" type="text"
-                            placeholder="Hospital (e.g. St. Paul’s)" />
+                        <input id="consignment-hospital" class="input-pill" type="text"
+                            placeholder="Hospital (e.g. St. Paul's)" />
 
-                        <input id="consDoctor" class="inv-input" type="text" placeholder="Doctor (optional)" />
+                        <input id="consignment-doctor" class="input-pill" type="text" placeholder="Doctor (optional)" />
 
-                        <input id="consQtySent" class="inv-input" type="number" min="1" placeholder="Qty sent" />
-                    </div>
+                        <input id="consignment-qty" class="input-pill" type="number" min="1" placeholder="Qty sent" />
 
-                    <div style="margin-bottom: 10px; display:flex; justify-content:flex-end;">
-                        <button id="btnCreateCons" class="btn-pill btn-pill-primary" type="button">
-                            <i class="fa-solid fa-plus"></i> Create Consignment
+                        <button id="btn-create-cons" class="btn-chrome btn-primary" type="button">
+                            + Create Consignment
                         </button>
-                    </div>
+                    </form>
 
-                    <p id="consError" class="inv-error"></p>
-
-                    <div class="inv-table-wrapper">
-                        <table class="inv-table">
+                    <div class="table-scroll">
+                        <table>
                             <thead>
                                 <tr>
                                     <th>Item</th>
@@ -554,18 +492,20 @@
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="consTableBody">
-                                <!-- JS fills rows -->
+                            <tbody id="consignments-tbody">
+                                <!-- Filled by JS -->
                             </tbody>
                         </table>
                     </div>
 
-                    <p class="inv-muted">
-                        Consignments are managed via <code>POST /api/consignments</code>
-                        and read from <code>GET /api/consignments</code>.
-                    </p>
+                    <div id="consignments-error" class="status-error-text"></div>
                 </section>
             </div>
+
+            <p class="inv-footer-note">
+                This page is a demo viewer for your <code>inventory-tracker-api</code> service
+                deployed on Render + MongoDB Atlas.
+            </p>
         </div>
     </div>
 
@@ -580,11 +520,11 @@
         </p>
     </footer>
 
-    <!-- Existing portfolio JS -->
+    <!-- Your existing JS -->
     <script src="/js/script.js"></script>
     <script defer src="/js/nav.js"></script>
 
-    <!-- Inventory app JS (the one we fixed earlier) -->
+    <!-- Inventory app JS (this file we just created) -->
     <script defer src="./js/inventory-app.js"></script>
 </body>
 
