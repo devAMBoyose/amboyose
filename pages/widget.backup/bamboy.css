@@ -1,0 +1,471 @@
+:root {
+    --green: #00ff9d;
+    --green-soft: rgba(0, 255, 157, 0.2);
+    --dark: #020617;
+    --panel: rgba(15, 23, 42, 0.98);
+    --border: rgba(148, 163, 184, 0.5);
+    --text: #e2e8f0;
+}
+
+/* Reset-ish */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* --- Widget root --- */
+.bamboy-widget {
+    font-family: "JetBrains Mono", monospace;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+}
+
+/* Floating robot button */
+.robot-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* floating animation wrapper */
+.robot-floating {
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: floatHead 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 22px rgba(0, 255, 157, 0.6));
+}
+
+@keyframes floatHead {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Antenna */
+.robot-antenna {
+    height: 14px;
+}
+
+.antenna-stem {
+    display: block;
+    width: 2px;
+    height: 10px;
+    background: var(--green);
+    border-radius: 999px;
+    margin: 0 auto;
+}
+
+.antenna-tip {
+    display: block;
+    width: 11px;
+    height: 11px;
+    margin: -4px auto 0;
+    border-radius: 50%;
+    border: 2px solid var(--green);
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.9);
+}
+
+/* Head */
+.robot-head {
+    position: relative;
+    width: 90px;
+    height: 70px;
+}
+
+.robot-head.small {
+    width: 40px;
+    height: 30px;
+}
+
+/* shell */
+.robot-head-shell {
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at 25% 0, #0f766e, transparent 55%),
+        radial-gradient(circle at 80% 20, #22c55e, transparent 55%),
+        #020617;
+    border: 2px solid var(--green);
+    box-shadow:
+        0 0 0 2px #000,
+        0 0 28px rgba(0, 255, 157, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ears */
+.robot-ear {
+    position: absolute;
+    top: 20px;
+    width: 12px;
+    height: 28px;
+    border-radius: 12px;
+    border: 2px solid var(--green);
+    background: #020617;
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.7);
+}
+
+.ear-left {
+    left: -6px;
+}
+
+.ear-right {
+    right: -6px;
+}
+
+.robot-head.small .robot-ear {
+    display: none;
+}
+
+/* face window */
+.robot-face {
+    width: 78%;
+    height: 70%;
+    border-radius: 22px;
+    background: #020617;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    position: relative;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+/* Eyes */
+.eye {
+    width: 15px;
+    height: 15px;
+    border-radius: 999px;
+    background: radial-gradient(circle, #bbf7d0, var(--green));
+    box-shadow: 0 0 14px rgba(0, 255, 157, 0.9);
+    animation: eyeBlink 4s infinite;
+}
+
+.robot-head.small .eye {
+    width: 9px;
+    height: 9px;
+}
+
+@keyframes eyeBlink {
+
+    0%,
+    95%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    96%,
+    98% {
+        transform: scaleY(0.1);
+    }
+}
+
+/* Cheeks */
+.cheek {
+    position: absolute;
+    bottom: 8px;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.7);
+    filter: blur(1px);
+}
+
+.cheek-left {
+    left: 18px;
+}
+
+.cheek-right {
+    right: 18px;
+}
+
+/* Mouth */
+.mouth {
+    position: absolute;
+    bottom: 10px;
+    width: 28px;
+    height: 10px;
+    border-radius: 0 0 16px 16px;
+    border-bottom: 3px solid #a7f3d0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* small face in header */
+.robot-head.small .robot-face {
+    width: 80%;
+    height: 70%;
+}
+
+/* ========== CHAT WINDOW ========== */
+.bamboy-window {
+    width: 330px;
+    background: var(--panel);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    box-shadow:
+        0 26px 60px rgba(15, 23, 42, 0.98),
+        0 0 30px rgba(0, 0, 0, 0.85);
+    position: absolute;
+    bottom: 90px;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.bamboy-window.open {
+    display: flex;
+}
+
+/* header */
+.bamboy-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(circle at 0 0, var(--green-soft), transparent 60%), #020617;
+    gap: 8px;
+}
+
+.header-robot-small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-text h3 {
+    margin: 0;
+    font-size: 13px;
+    color: var(--green);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.header-text p {
+    margin: 0;
+    font-size: 10px;
+    color: var(--text);
+}
+
+/* close button */
+.close-btn {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    width: 22px;
+    height: 22px;
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* messages */
+.bamboy-messages {
+    padding: 12px;
+    height: 260px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bamboy-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.bamboy-messages::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.8);
+    border-radius: 999px;
+}
+
+.msg {
+    padding: 9px 10px;
+    border-radius: 11px;
+    max-width: 85%;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.msg.bot {
+    background: #0b1220;
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.msg.user {
+    background: var(--green);
+    color: #020617;
+    margin-left: auto;
+    font-weight: 600;
+}
+
+/* Input row */
+.bamboy-input {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-top: 1px solid var(--border);
+    background: #020617;
+}
+
+.bamboy-input input {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #0f172a;
+    color: var(--text);
+    font-size: 12px;
+}
+
+.bamboy-input button {
+    border-radius: 999px;
+    border: none;
+    padding: 8px 13px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    background: linear-gradient(135deg, #00ff9d, #22c55e);
+    color: #020617;
+}
+
+/* Suggestions + highlight */
+.bamboy-suggestions {
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.bamboy-chip {
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #0f172a;
+    color: var(--text);
+    font-size: 10px;
+    padding: 3px 8px;
+    cursor: pointer;
+}
+
+.bamboy-chip:hover {
+    border-color: var(--green);
+}
+
+.bamboy-highlight {
+    outline: 2px solid var(--green);
+    outline-offset: 4px;
+    transition: outline 0.3s ease;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .bamboy-window {
+        width: 90vw;
+        right: -4px;
+        bottom: 86px;
+    }
+}
+
+/* BAM BOT typing indicator */
+.msg.bot.typing {
+    opacity: 0.8;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #7bffb7;
+    /* same neon vibe */
+    display: inline-block;
+    animation: bambotTyping 1s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+/* Make BAM BOT window draggable via header */
+.bamboy-header {
+    cursor: grab;
+}
+
+.bamboy-header.dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+@keyframes bambotTyping {
+
+    0%,
+    80%,
+    100% {
+        opacity: 0.2;
+        transform: translateY(0);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+}
+
+:root {
+    --green: #00ff9d;
+    --green-soft: rgba(0, 255, 157, 0.2);
+    --glow: rgba(0, 255, 157, 0.8);
+    /* for the outer glow */
+}
+
+/* floating animation wrapper */
+.robot-floating {
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: floatHead 3s ease-in-out infinite;
+    /* use variable instead of fixed color */
+    filter: drop-shadow(0 0 22px var(--glow));
+    transition: filter 0.6s ease;
+}
+
+/* smooth color transitions when JS changes variables */
+.antenna-stem,
+.antenna-tip,
+.robot-head-shell,
+.robot-ear,
+.eye,
+.msg.user,
+.bamboy-input button,
+.bamboy-header {
+    transition:
+        border-color 0.6s ease,
+        box-shadow 0.6s ease,
+        background 0.6s ease,
+        color 0.6s ease;
+}

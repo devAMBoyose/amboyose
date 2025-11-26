@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>BAM BOT Assistant Widget</title>
+</head>
+
+<body>
+    <!-- BAM BOT Widget -->
+    <div class="bamboy-widget">
+
+        <!-- FLOATING ROBOT HEAD BUTTON -->
+        <button id="bamboyToggle" class="robot-button" aria-label="Open BAM BOT assistant">
+            <div class="robot-head-only robot-floating">
+                <!-- Antenna -->
+                <div class="robot-antenna">
+                    <span class="antenna-stem"></span>
+                    <span class="antenna-tip"></span>
+                </div>
+
+                <!-- Head -->
+                <div class="robot-head">
+                    <div class="robot-head-shell">
+                        <div class="robot-face">
+                            <span class="eye eye-left"></span>
+                            <span class="eye eye-right"></span>
+                            <span class="cheek cheek-left"></span>
+                            <span class="cheek cheek-right"></span>
+                            <span class="mouth"></span>
+                        </div>
+                    </div>
+                    <div class="robot-ear ear-left"></div>
+                    <div class="robot-ear ear-right"></div>
+                </div>
+            </div>
+        </button>
+
+        <!-- CHAT WINDOW -->
+        <div class="bamboy-window" id="bamboyWindow">
+
+            <div class="bamboy-header">
+                <div class="header-robot-small">
+                    <div class="robot-head small">
+                        <div class="robot-head-shell">
+                            <div class="robot-face">
+                                <span class="eye eye-left"></span>
+                                <span class="eye eye-right"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-text">
+                    <h3>BAM BOT</h3>
+                    <p>Online • Portfolio Assistant</p>
+                </div>
+                <button id="bamboyClose" class="close-btn" aria-label="Close BAM BOT">×</button>
+            </div>
+
+            <div class="bamboy-messages" id="bamboyMessages">
+                <!-- JS will insert messages here -->
+            </div>
+
+            <form id="bamboyForm" class="bamboy-input">
+                <input id="bamboyInput" type="text" placeholder="Ask something…" autocomplete="off" />
+                <button type="submit">Send</button>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
