@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>3D Interactive Cards | Portfolio</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your global styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .page-content {
+            padding: 40px 45px 44px;
+            max-width: 980px;
+            margin: 0 auto;
+            color: #f9fafb;
+        }
+
+        /* Header row: title + View Code */
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .demo-header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .demo-sub {
+            margin: 0 0 16px;
+            max-width: 640px;
+            opacity: 0.85;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .demo-meta {
+            margin: 0 0 20px;
+            font-size: 0.9rem;
+        }
+
+        .demo-meta ul {
+            margin: 0;
+            padding-left: 18px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* preview box */
+        .preview-box {
+            border-radius: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: radial-gradient(circle at top, #020617, #020617 55%, #000);
+            padding: 14px;
+        }
+
+        .preview-box iframe {
+            width: 100%;
+            height: 460px;
+            border: none;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        /* code section container */
+        #codeBox {
+            display: none;
+            margin-top: 28px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            background: #020617;
+            padding: 18px 18px 22px;
+        }
+
+        /* code cards */
+        .code-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .code-card {
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: #020617;
+            padding: 8px 10px 10px;
+        }
+
+        .code-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .code-pre {
+            margin: 0;
+            padding: 8px 10px 10px;
+            background: #020617;
+            border-radius: 6px;
+            overflow: auto;
+            max-height: 260px;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        .code-pre code {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        /* small language badges */
+        .badge-html,
+        .badge-css,
+        .badge-js {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 3px 9px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            color: #e5e7eb;
+        }
+
+        /* copy button */
+        .copy-btn {
+            font-size: 12px;
+            padding: 4px 11px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.9);
+            background: #020617;
+            color: #e5e7eb;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .copy-btn.copied {
+            border-color: #22c55e;
+            color: #22c55e;
+        }
+
+        /* fake syntax colors */
+        .tok-tag {
+            color: #7dd3fc;
+        }
+
+        .tok-attr {
+            color: #a5b4fc;
+        }
+
+        .tok-str {
+            color: #f97373;
+        }
+
+        .tok-punc {
+            color: #e5e7eb;
+            opacity: 0.75;
+        }
+
+        .tok-comment {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding-inline: 20px;
+            }
+
+            .demo-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .preview-box iframe {
+                height: 360px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- cursor-follow glow background (from your global CSS) -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">3D Interactive Cards</span>
+
+            <div class="tb-right">
+                <button class="chip chip-back" onclick="location.href='/pages/interactive-demo.html'">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- header row -->
+            <div class="demo-header">
+                <div>
+                    <h1>3D Interactive Cards</h1>
+                    <p class="demo-sub">
+                        A grid of tilt-on-hover, click-to-flip product cards with neon
+                        backdrops, call-to-action buttons, and smooth 3D transforms.
+                    </p>
+
+                    <div class="demo-meta">
+                        <ul>
+                            <li>Built with HTML, CSS, and vanilla JavaScript</li>
+                            <li>3D flip animation + pointer-based tilt</li>
+                            <li>Responsive grid using <code>auto-fit</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- View Code toggle -->
+                <button id="toggleCode" class="chip">
+                    <i class="fa-solid fa-code"></i>
+                    <span>View Code</span>
+                </button>
+            </div>
+
+            <!-- preview -->
+            <div class="preview-box">
+                <!-- This points to the demo file in the same folder -->
+                <iframe src="sample.html" title="3D Interactive Cards Preview"></iframe>
+            </div>
+
+            <!-- code viewer -->
+            <div id="codeBox">
+                <div class="code-grid">
+
+                    <!-- HTML fake code -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-html">HTML</span>
+                            <button class="copy-btn" type="button" data-copy="code-html">
+                                <i class="fa-solid fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                        </header>
+
+                        <pre class="code-pre"><code id="code-html">
+<span class="tok-comment">&lt;!-- 3D card grid wrapper --&gt;</span>
+<span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"card-grid"</span><span class="tok-tag">&gt;</span>
+  <span class="tok-comment">&lt;!-- Card 1 --&gt;</span>
+  <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"card"</span><span class="tok-tag">&gt;</span>
+    <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"card-inner"</span><span class="tok-tag">&gt;</span>
+      <span class="tok-tag">&lt;div</span> 
+        <span class="tok-attr">class</span><span class="tok-punc">=</span>
+        <span class="tok-str">"card-face card-front one"</span>
+      <span class="tok-tag">&gt;</span>
+        <span class="tok-tag">&lt;div&gt;</span>
+          <span class="tok-tag">&lt;h2&gt;</span>Quantum UI<span class="tok-tag">&lt;/h2&gt;</span>
+          <span class="tok-tag">&lt;p&gt;</span>
+            Next-gen UI framework designed for speed, interactivity,
+            and effortless scalability.
+          <span class="tok-tag">&lt;/p&gt;</span>
+        <span class="tok-tag">&lt;/div&gt;</span>
+        <span class="tok-tag">&lt;p&gt;</span>Tap or click to flip<span class="tok-tag">&lt;/p&gt;</span>
+      <span class="tok-tag">&lt;/div&gt;</span>
+
+      <span class="tok-comment">&lt;!-- back face --&gt;</span>
+      <span class="tok-tag">&lt;div</span> 
+        <span class="tok-attr">class</span><span class="tok-punc">=</span>
+        <span class="tok-str">"card-face card-back"</span>
+      <span class="tok-tag">&gt;</span>
+        <span class="tok-tag">&lt;h3&gt;</span>Features<span class="tok-tag">&lt;/h3&gt;</span>
+        <span class="tok-tag">&lt;ul</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"features"</span><span class="tok-tag">&gt;</span>
+          <span class="tok-tag">&lt;li&gt;</span>Lightning-fast rendering<span class="tok-tag">&lt;/li&gt;</span>
+          <span class="tok-tag">&lt;li&gt;</span>Modular component system<span class="tok-tag">&lt;/li&gt;</span>
+        <span class="tok-tag">&lt;/ul&gt;</span>
+        <span class="tok-tag">&lt;div</span> <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"cta-buttons"</span><span class="tok-tag">&gt;</span>
+          <span class="tok-tag">&lt;a</span> <span class="tok-attr">href</span><span class="tok-punc">=</span><span class="tok-str">"#"</span> 
+             <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"primary"</span><span class="tok-tag">&gt;</span>
+             Get Started
+          <span class="tok-tag">&lt;/a&gt;</span>
+          <span class="tok-tag">&lt;a</span> <span class="tok-attr">href</span><span class="tok-punc">=</span><span class="tok-str">"#"</span> 
+             <span class="tok-attr">class</span><span class="tok-punc">=</span><span class="tok-str">"secondary"</span><span class="tok-tag">&gt;</span>
+             Learn More
+          <span class="tok-tag">&lt;/a&gt;</span>
+        <span class="tok-tag">&lt;/div&gt;</span>
+      <span class="tok-tag">&lt;/div&gt;</span>
+    <span class="tok-tag">&lt;/div&gt;</span>
+  <span class="tok-tag">&lt;/div&gt;</span>
+
+  <span class="tok-comment">&lt;!-- Cards 2–4 follow the same pattern --&gt;</span>
+<span class="tok-tag">&lt;/div&gt;</span>
+</code></pre>
+                    </article>
+
+                    <!-- CSS fake code -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-css">CSS</span>
+                            <button class="copy-btn" type="button" data-copy="code-css">
+                                <i class="fa-solid fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                        </header>
+
+                        <pre class="code-pre"><code id="code-css">
+@import url(<span class="tok-str">"https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&amp;family=Inter:wght@400;600&amp;display=swap"</span>);
+
+<span class="tok-tag">:root</span> {
+  --bg: <span class="tok-str">#0a0c10</span>;
+  --card-bg: <span class="tok-str">rgba(20,25,35,0.9)</span>;
+  --accent: <span class="tok-str">#00f5ff</span>;
+  --text: <span class="tok-str">#fafbfd</span>;
+}
+
+<span class="tok-tag">body</span> {
+  background: var(<span class="tok-str">--bg</span>);
+  color: var(<span class="tok-str">--text</span>);
+  font-family: <span class="tok-str">"Inter"</span>, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px;
+}
+
+<span class="tok-tag">.card-grid</span> {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+<span class="tok-tag">.card</span> {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+<span class="tok-tag">.card-inner</span> {
+  position: relative;
+  min-height: 360px;
+  transform-style: preserve-3d;
+  border-radius: 20px;
+  transition: transform .7s cubic-bezier(.4,.2,.2,1);
+}
+
+<span class="tok-tag">.card-face</span> {
+  position: absolute;
+  inset: 0;
+  padding: 24px;
+  border-radius: 20px;
+  background: var(<span class="tok-str">--card-bg</span>);
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+<span class="tok-tag">.card-back</span> {
+  transform: rotateY(<span class="tok-str">180deg</span>);
+}
+
+<span class="tok-tag">.one</span> {
+  background-image: url(<span class="tok-str">"https://iili.io/KSTN6ps.png"</span>);
+  background-size: cover;
+}
+<span class="tok-comment">/* .two, .three, .four use your other neon assets */</span>
+</code></pre>
+                    </article>
+
+                    <!-- JS fake code -->
+                    <article class="code-card">
+                        <header class="code-card-head">
+                            <span class="badge-js">JavaScript</span>
+                            <button class="copy-btn" type="button" data-copy="code-js">
+                                <i class="fa-solid fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                        </header>
+
+                        <pre class="code-pre"><code id="code-js">
+<span class="tok-comment">// Basic 3D flip + hover tilt (no duplicates)</span>
+<span class="tok-key">const</span> isTouch = <span class="tok-str">"ontouchstart"</span> <span class="tok-key">in</span> window;
+
+document.querySelectorAll(<span class="tok-str">".card"</span>).forEach((card) =&gt; {
+  <span class="tok-key">const</span> inner = card.querySelector(<span class="tok-str">".card-inner"</span>);
+
+  <span class="tok-comment">// Tap / click: flip with small bounce</span>
+  card.addEventListener(<span class="tok-str">"click"</span>, () =&gt; {
+    <span class="tok-key">const</span> isFlipped = card.classList.contains(<span class="tok-str">"flipped"</span>);
+    <span class="tok-key">const</span> targetFlip = isFlipped ? <span class="tok-num">0</span> : <span class="tok-num">180</span>;
+
+    inner.style.transition = <span class="tok-str">"transform 0.15s ease-out"</span>;
+    inner.style.transform = <span class="tok-str">`rotateY(${targetFlip}deg) scale(1.05)`</span>;
+
+    setTimeout(() =&gt; {
+      inner.style.transition = <span class="tok-str">
+        "transform 0.7s cubic-bezier(.4,.2,.2,1)"
+      </span>;
+      inner.style.transform = <span class="tok-str">`rotateY(${targetFlip}deg) scale(1)`</span>;
+      card.classList.toggle(<span class="tok-str">"flipped"</span>);
+    }, <span class="tok-num">150</span>);
+  });
+
+  <span class="tok-comment">// Mouse-move tilt only on non-touch devices</span>
+  <span class="tok-key">if</span> (!isTouch) {
+    card.addEventListener(<span class="tok-str">"mousemove"</span>, (e) =&gt; {
+      <span class="tok-key">const</span> rect = card.getBoundingClientRect();
+      <span class="tok-key">const</span> x = e.clientX - rect.left;
+      <span class="tok-key">const</span> y = e.clientY - rect.top;
+      <span class="tok-key">const</span> centerX = rect.width / <span class="tok-num">2</span>;
+      <span class="tok-key">const</span> centerY = rect.height / <span class="tok-num">2</span>;
+
+      <span class="tok-key">const</span> tiltX = ((y - centerY) / centerY) * -<span class="tok-num">10</span>;
+      <span class="tok-key">const</span> tiltY = ((x - centerX) / centerX) * <span class="tok-num">10</span>;
+      <span class="tok-key">const</span> flipY = card.classList.contains(<span class="tok-str">"flipped"</span>) ? <span class="tok-num">180</span> : <span class="tok-num">0</span>;
+
+      inner.style.transform =
+        <span class="tok-str">`rotateX(${tiltX}deg) rotateY(${flipY + tiltY}deg)`</span>;
+    });
+
+    card.addEventListener(<span class="tok-str">"mouseleave"</span>, () =&gt; {
+      <span class="tok-key">const</span> flipY = card.classList.contains(<span class="tok-str">"flipped"</span>) ? <span class="tok-num">180</span> : <span class="tok-num">0</span>;
+      inner.style.transform = <span class="tok-str">`rotateY(${flipY}deg)`</span>;
+    });
+  }
+});
+</code></pre>
+                    </article>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS -->
+    <script src="/js/script.js"></script>
+    <script src="/js/nav.js" defer></script>
+
+    <!-- Toggle + Copy behaviour -->
+    <script>
+        const toggleBtn = document.getElementById("toggleCode");
+        const codeBox = document.getElementById("codeBox");
+
+        toggleBtn.addEventListener("click", () => {
+            const open = codeBox.style.display === "block";
+            codeBox.style.display = open ? "none" : "block";
+            toggleBtn.innerHTML = open
+                ? '<i class="fa-solid fa-code"></i> <span>View Code</span>'
+                : '<i class="fa-solid fa-code"></i> <span>Hide Code</span>';
+        });
+
+        // Copy buttons
+        document.querySelectorAll(".copy-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const id = btn.getAttribute("data-copy");
+                const codeEl = document.getElementById(id);
+                if (!codeEl) return;
+
+                const text = codeEl.textContent.replace(/\u00A0/g, " ").trim();
+
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.classList.add("copied");
+                    btn.innerHTML = "<i class='fa-solid fa-check'></i> Copied";
+                    setTimeout(() => {
+                        btn.classList.remove("copied");
+                        btn.innerHTML = "<i class='fa-solid fa-copy'></i> Copy";
+                    }, 1200);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
