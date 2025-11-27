@@ -6,13 +6,12 @@ import Item from "../models/Item.js";
  * POST /api/consignments
  * Create consignment record
  * - Validates stock
- * - Deducts qtySent from Item.onHand (real inventory behavior)
+ * - Deducts qtySent from Item.quantityOnHand (real inventory behavior)
  */
 export const createConsignment = async (req, res) => {
     try {
         const { item: itemId, hospital, doctor, qtySent, unitPrice } = req.body;
 
-        // Basic validation
         if (!itemId || qtySent === undefined) {
             return res.status(400).json({
                 message: "Missing required fields: item and qtySent are required.",
@@ -25,17 +24,20 @@ export const createConsignment = async (req, res) => {
             return res.status(404).json({ message: "Item not found" });
         }
 
-        // 2. Validate qtySent vs onHand
-        let sent = Number(qtySent);
+        // Use quantityOnHand as your stock field
+        const currentQty = Number(item.quantityOnHand || 0);
+        const sent = Number(qtySent);
+
         if (!Number.isFinite(sent) || sent <= 0) {
             return res.status(400).json({
                 message: "qtySent must be a positive number.",
             });
         }
 
-        if (sent > item.onHand) {
+        // 2. Validate quantity vs stock
+        if (sent > currentQty) {
             return res.status(400).json({
-                message: `Not enough stock. On hand: ${item.onHand}, requested: ${sent}`,
+                message: `Not enough stock. On hand: ${currentQty}, requested: ${sent}`,
             });
         }
 
@@ -45,16 +47,16 @@ export const createConsignment = async (req, res) => {
             hospital,
             doctor,
             qtySent: sent,
-            qtyUsed: 0,           // starts with nothing used
+            qtyUsed: 0, // start with nothing used
             unitPrice,
-            // status: "open"      // optional: if your schema has default, you can omit this
+            // let status default from schema (e.g. "open")
         });
 
-        // 4. Deduct from item stock (real inventory behavior)
-        item.onHand = item.onHand - sent;
+        // 4. Deduct from item stock
+        item.quantityOnHand = currentQty - sent;
         await item.save();
 
-        // 5. Return populated consignment (so UI still shows item info)
+        // 5. Return populated consignment
         const populated = await consignment.populate("item");
         return res.status(201).json(populated);
     } catch (err) {
@@ -65,7 +67,6 @@ export const createConsignment = async (req, res) => {
 
 /**
  * GET /api/consignments
- * List consignments (with populated item)
  */
 export const getConsignments = async (req, res) => {
     try {
@@ -82,7 +83,6 @@ export const getConsignments = async (req, res) => {
 
 /**
  * GET /api/consignments/:id
- * Get single consignment
  */
 export const getConsignmentById = async (req, res) => {
     try {
@@ -101,7 +101,6 @@ export const getConsignmentById = async (req, res) => {
 /**
  * PATCH /api/consignments/:id/usage
  * Update usage (qtyUsed + status)
- * Called by portfolio UI "Edit" button
  */
 export const updateConsignmentUsage = async (req, res) => {
     try {
@@ -113,7 +112,6 @@ export const updateConsignmentUsage = async (req, res) => {
         }
 
         if (qtyUsed !== undefined) {
-            // Clamp between 0 and qtySent
             let safeUsed = Number(qtyUsed);
             if (!Number.isFinite(safeUsed) || safeUsed < 0) safeUsed = 0;
             if (safeUsed > consignment.qtySent) {
