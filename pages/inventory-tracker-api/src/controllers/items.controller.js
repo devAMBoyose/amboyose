@@ -17,7 +17,7 @@ export const createItem = async (req, res) => {
 
 /**
  * GET /api/items
- * Get all items
+ * List all items
  */
 export const getItems = async (req, res) => {
     try {
@@ -25,13 +25,13 @@ export const getItems = async (req, res) => {
         return res.json(items);
     } catch (err) {
         console.error("getItems error:", err);
-        return res.status(500).json({ message: "Server error" });
+        return res.status(500).json({ message: "Failed to load items" });
     }
 };
 
 /**
  * GET /api/items/:id
- * Get single item by ID
+ * Get one item by ID
  */
 export const getItemById = async (req, res) => {
     try {
@@ -50,11 +50,10 @@ export const getItemById = async (req, res) => {
  */
 export const updateItem = async (req, res) => {
     try {
-        const item = await Item.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true, runValidators: true }
-        );
+        const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        });
         if (!item) return res.status(404).json({ message: "Item not found" });
         return res.json(item);
     } catch (err) {

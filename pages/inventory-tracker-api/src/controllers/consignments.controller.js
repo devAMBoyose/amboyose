@@ -18,30 +18,33 @@ export const createConsignment = async (req, res) => {
 
 /**
  * GET /api/consignments
- * List all consignments (with item populated)
+ * List consignments (with populated item)
  */
 export const getConsignments = async (req, res) => {
     try {
-        const list = await Consignment.find()
+        const consignments = await Consignment.find()
             .populate("item")
             .sort({ createdAt: -1 });
-        return res.json(list);
+
+        return res.json(consignments);
     } catch (err) {
         console.error("getConsignments error:", err);
-        return res.status(500).json({ message: "Server error" });
+        return res.status(500).json({ message: "Failed to load consignments" });
     }
 };
 
 /**
  * GET /api/consignments/:id
+ * Get single consignment
  */
 export const getConsignmentById = async (req, res) => {
     try {
-        const record = await Consignment.findById(req.params.id).populate("item");
-        if (!record) {
+        const consignment = await Consignment.findById(req.params.id).populate(
+            "item"
+        );
+        if (!consignment)
             return res.status(404).json({ message: "Consignment not found" });
-        }
-        return res.json(record);
+        return res.json(consignment);
     } catch (err) {
         console.error("getConsignmentById error:", err);
         return res.status(400).json({ message: "Invalid ID" });
@@ -50,7 +53,8 @@ export const getConsignmentById = async (req, res) => {
 
 /**
  * PATCH /api/consignments/:id/usage
- * Update qtyUsed and status + adjust Item.quantityOnHand if you want
+ * Update usage (qtyUsed + status)
+ * Called by portfolio UI "Edit" button
  */
 export const updateConsignmentUsage = async (req, res) => {
     try {
@@ -61,11 +65,34 @@ export const updateConsignmentUsage = async (req, res) => {
             return res.status(404).json({ message: "Consignment not found" });
         }
 
-        if (qtyUsed !== undefined) consignment.qtyUsed = qtyUsed;
-        if (status) consignment.status = status;
+        if (qtyUsed !== undefined) {
+            // Clamp between 0 and qtySent
+            let safeUsed = Number(qtyUsed);
+            if (!Number.isFinite(safeUsed) || safeUsed < 0) safeUsed = 0;
+            if (safeUsed > consignment.qtySent) {
+                safeUsed = consignment.qtySent;
+            }
+            consignment.qtyUsed = safeUsed;
+
+            // Derive status if not explicitly passed
+            if (!status) {
+                if (consignment.qtyUsed === 0) {
+                    consignment.status = "open";
+                } else if (consignment.qtyUsed < consignment.qtySent) {
+                    consignment.status = "partially_closed";
+                } else {
+                    consignment.status = "closed";
+                }
+            }
+        }
+
+        if (status) {
+            consignment.status = status;
+        }
 
         await consignment.save();
-        return res.json(consignment);
+        const populated = await consignment.populate("item");
+        return res.json(populated);
     } catch (err) {
         console.error("updateConsignmentUsage error:", err);
         return res.status(400).json({ message: err.message });
