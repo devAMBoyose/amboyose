@@ -6,15 +6,15 @@ export const connectDB = async () => {
         const uri = process.env.MONGO_URI;
 
         console.log("🔌 Connecting to MongoDB...");
-        // Small debug to check format (only first part, so you don't leak secrets)
-        console.log("MONGO_URI starts with:", uri?.slice(0, 20));
+        console.log("MONGO_URI starts with:", uri ? uri.slice(0, 20) : "undefined");
 
+        // if MONGO_URI is missing, THEN throw
         if (!uri) {
             throw new Error("MONGO_URI is missing in environment variables");
         }
 
         await mongoose.connect(uri, {
-            // options mostly optional on mongoose 8, but safe:
+            // these options are optional on mongoose 8, but safe:
             // useNewUrlParser: true,
             // useUnifiedTopology: true,
         });
@@ -22,6 +22,7 @@ export const connectDB = async () => {
         console.log("✅ MongoDB connected");
     } catch (err) {
         console.error("❌ MongoDB error:", err.message);
+        // make the app crash so Render logs clearly show the problem
         process.exit(1);
     }
 };
