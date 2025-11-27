@@ -2,12 +2,52 @@
 import Item from "../models/Item.js";
 
 /**
+ * Helper: normalize request body so we always use `quantityOnHand`
+ * in the database, but allow the client to send either `onHand`
+ * or `quantityOnHand`.
+ */
+function normalizeItemBody(body = {}) {
+    const {
+        sku,
+        name,
+        category,
+        location,
+        expiryDate,
+        minStock,
+        quantityOnHand,
+        onHand,
+        ...rest
+    } = body;
+
+    // Prefer explicit quantityOnHand, else fall back to onHand, else 0
+    const qty =
+        quantityOnHand !== undefined
+            ? quantityOnHand
+            : onHand !== undefined
+                ? onHand
+                : 0;
+
+    return {
+        sku,
+        name,
+        category,
+        location,
+        expiryDate,
+        minStock: minStock !== undefined ? Number(minStock) : undefined,
+        quantityOnHand: Number(qty) || 0,
+        // keep any extra fields you might add later (e.g. notes)
+        ...rest,
+    };
+}
+
+/**
  * POST /api/items
  * Create new inventory item
  */
 export const createItem = async (req, res) => {
     try {
-        const item = await Item.create(req.body);
+        const payload = normalizeItemBody(req.body);
+        const item = await Item.create(payload);
         return res.status(201).json(item);
     } catch (err) {
         console.error("createItem error:", err);
@@ -50,7 +90,10 @@ export const getItemById = async (req, res) => {
  */
 export const updateItem = async (req, res) => {
     try {
-        const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
+        // Normalize body so `onHand` updates still go into quantityOnHand
+        const payload = normalizeItemBody(req.body);
+
+        const item = await Item.findByIdAndUpdate(req.params.id, payload, {
             new: true,
             runValidators: true,
         });
