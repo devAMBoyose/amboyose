@@ -107,6 +107,17 @@ function setStatus(el, text, type = "idle") {
     if (type === "error") el.classList.add("inv-pill-error");
 }
 
+// Derive sensible status if backend didn’t set one
+function deriveStatus(c) {
+    const sent = c.qtySent ?? 0;
+    const used = c.qtyUsed ?? 0;
+
+    if (sent <= 0) return "open";
+    if (used <= 0) return "open";
+    if (used < sent) return "partially_closed";
+    return "closed";
+}
+
 function statusPill(status) {
     const s = status || "open";
     let cls = "inv-status-open";
@@ -207,23 +218,47 @@ async function loadConsignments() {
             throw new Error(`HTTP ${res.status}: ${text}`);
         }
 
-        const list = await res.json();
+        let list = await res.json();
+        if (!Array.isArray(list)) list = [];
+
+        // Newest first if createdAt exists
+        list.sort((a, b) => {
+            const da = new Date(a.createdAt || 0).getTime();
+            const db = new Date(b.createdAt || 0).getTime();
+            return db - da;
+        });
+
         setStatus(els.consStatus, "OK", "ok");
 
-        if (!Array.isArray(list) || list.length === 0) {
+        if (list.length === 0) {
             els.consError.textContent =
                 "No consignments yet. Create one with the form above.";
             return;
         }
 
         list.forEach((c) => {
+            const sent = c.qtySent ?? 0;
+            const used = c.qtyUsed ?? 0;
+            const remaining = Math.max(sent - used, 0);
+            const effectiveStatus = c.status || deriveStatus(c);
+
             const tr = document.createElement("tr");
+
+            // Style rows depending on remaining qty / status
+            if (effectiveStatus === "closed" || remaining === 0) {
+                tr.classList.add("cons-row-closed");
+            } else if (remaining > 0 && remaining <= 5) {
+                // tweak threshold for "low remaining" here
+                tr.classList.add("cons-row-low");
+            }
+
             tr.innerHTML = `
         <td>${c.item?.name || "-"}</td>
         <td>${c.hospital || "-"}</td>
-        <td>${c.qtySent ?? 0}</td>
-        <td>${c.qtyUsed ?? 0}</td>
-        <td>${statusPill(c.status)}</td>
+        <td>${sent}</td>
+        <td>${used}</td>
+        <td>${remaining}</td>
+        <td>${statusPill(effectiveStatus)}</td>
       `;
             els.consTbody.appendChild(tr);
         });
@@ -246,8 +281,20 @@ async function createConsignment(evt) {
     const doctor = els.inputDoctor.value.trim();
     const qty = Number(els.inputQty.value || "0");
 
-    if (!itemId || !hospital || qty <= 0) {
-        alert("Please pick an item, set hospital, and enter a valid quantity.");
+    // friendlier validation
+    if (!itemId) {
+        alert("Please pick an item.");
+        els.selectItem.focus();
+        return;
+    }
+    if (!hospital) {
+        alert("Please enter the hospital name.");
+        els.inputHospital.focus();
+        return;
+    }
+    if (!Number.isFinite(qty) || qty <= 0) {
+        alert("Quantity must be greater than 0.");
+        els.inputQty.focus();
         return;
     }
 
@@ -277,6 +324,7 @@ async function createConsignment(evt) {
 
         // reset hospital & qty (keep selected item)
         els.inputHospital.value = "";
+        els.inputDoctor.value = "";
         els.inputQty.value = "";
 
         await loadConsignments();

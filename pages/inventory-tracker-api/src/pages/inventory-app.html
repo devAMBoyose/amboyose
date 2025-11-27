@@ -85,6 +85,17 @@
             gap: 20px;
         }
 
+        /* Consignment row highlights */
+        .cons-row-low td {
+            background: rgba(234, 179, 8, 0.06);
+        }
+
+        .cons-row-closed td {
+            background: rgba(15, 23, 42, 0.9);
+            color: #9ca3af;
+        }
+
+
         @media (max-width: 900px) {
             .grid {
                 grid-template-columns: minmax(0, 1fr);
@@ -489,9 +500,11 @@
                                     <th>Hospital</th>
                                     <th>Sent</th>
                                     <th>Used</th>
+                                    <th>Remaining</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
+
                             <tbody id="consignments-tbody">
                                 <!-- Filled by JS -->
                             </tbody>
