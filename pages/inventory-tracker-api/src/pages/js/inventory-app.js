@@ -1,27 +1,70 @@
-// pages/inventory-tracker-api/src/pages/js/inventory-app.js
+// pages/inventory-tracker-api/src/js/inventory-app.js
 
 // ============================
 // CONFIG
 // ============================
 
-// 🔴 CHANGE THIS if your Render URL is different
-const API_BASE = "https://amboyose-inventory-api.onrender.com/api";
+// Base URL of your Render API (NO /api at the end)
+const API_BASE = "https://amboyose-inventory-api.onrender.com";
 
-// ⚠️ For now we still hard-code a JWT just for the demo.
-//    Paste the token you get from login/Thunder Client.
-//    In a real app, store this in localStorage or a proper auth flow.
-const JWT_TOKEN = "PASTE_YOUR_JWT_TOKEN_HERE";
+// Demo credentials (the admin user you already registered)
+const DEMO_EMAIL = "bamby@example.com";
+const DEMO_PASSWORD = "password123";
 
-// Build default headers with Authorization
+// JWT token (loaded/saved to localStorage so it survives refresh)
+let authToken = localStorage.getItem("inventory_jwt") || null;
+
+// Build default headers with Authorization when we have a token
 function authHeaders(extra = {}) {
-    if (!JWT_TOKEN) {
-        throw new Error("No JWT token set – update JWT_TOKEN in inventory-app.js");
-    }
-    return {
+    const headers = {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${JWT_TOKEN}`,
         ...extra,
     };
+
+    if (authToken) {
+        headers["Authorization"] = `Bearer ${authToken}`;
+    }
+
+    return headers;
+}
+
+// Make sure we are logged in (if not, call /api/auth/login)
+async function ensureLoggedIn() {
+    if (authToken) {
+        return;
+    }
+
+    try {
+        console.log("Logging in to inventory API…");
+
+        const res = await fetch(`${API_BASE}/api/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: DEMO_EMAIL,
+                password: DEMO_PASSWORD,
+            }),
+        });
+
+        if (!res.ok) {
+            const text = await res.text();
+            console.error("Login failed:", text);
+            alert("Inventory demo login failed. Check API logs.");
+            return;
+        }
+
+        const data = await res.json();
+        authToken = data.token;
+        localStorage.setItem("inventory_jwt", authToken);
+
+        console.log(
+            "✅ Logged in. Token:",
+            authToken ? authToken.slice(0, 20) + "…" : "(missing)"
+        );
+    } catch (err) {
+        console.error("Login error:", err);
+        alert("Inventory demo login error: " + err.message);
+    }
 }
 
 // ============================
@@ -50,13 +93,13 @@ const els = {
 };
 
 // ============================
-// HELPERS
+// SMALL HELPERS
 // ============================
 
 function setStatus(el, text, type = "idle") {
     if (!el) return;
-    el.textContent = text;
 
+    el.textContent = text;
     el.classList.remove("inv-pill-ok", "inv-pill-loading", "inv-pill-error");
 
     if (type === "ok") el.classList.add("inv-pill-ok");
@@ -87,13 +130,16 @@ function statusPill(status) {
 async function loadItems() {
     if (!els.itemsError || !els.itemsTbody || !els.selectItem) return;
 
+    await ensureLoggedIn();
+
     setStatus(els.itemsStatus, "Loading…", "loading");
     els.itemsError.textContent = "";
     els.itemsTbody.innerHTML = "";
     els.selectItem.innerHTML = '<option value="">Pick item…</option>';
 
     try {
-        const res = await fetch(`${API_BASE}/items`, {
+        const res = await fetch(`${API_BASE}/api/items`, {
+            method: "GET",
             headers: authHeaders(),
         });
 
@@ -106,7 +152,8 @@ async function loadItems() {
         setStatus(els.itemsStatus, "OK", "ok");
 
         if (!Array.isArray(items) || items.length === 0) {
-            els.itemsError.textContent = "No items yet. Create items via the API.";
+            els.itemsError.textContent =
+                "No items yet. Create items via the API or Postman.";
             return;
         }
 
@@ -143,12 +190,15 @@ async function loadItems() {
 async function loadConsignments() {
     if (!els.consError || !els.consTbody) return;
 
+    await ensureLoggedIn();
+
     setStatus(els.consStatus, "Loading…", "loading");
     els.consError.textContent = "";
     els.consTbody.innerHTML = "";
 
     try {
-        const res = await fetch(`${API_BASE}/consignments`, {
+        const res = await fetch(`${API_BASE}/api/consignments`, {
+            method: "GET",
             headers: authHeaders(),
         });
 
@@ -161,7 +211,8 @@ async function loadConsignments() {
         setStatus(els.consStatus, "OK", "ok");
 
         if (!Array.isArray(list) || list.length === 0) {
-            els.consError.textContent = "No consignments yet. Create one above.";
+            els.consError.textContent =
+                "No consignments yet. Create one with the form above.";
             return;
         }
 
@@ -184,9 +235,11 @@ async function loadConsignments() {
     }
 }
 
-// Create new consignment
+// Create new consignment from the form
 async function createConsignment(evt) {
     if (evt) evt.preventDefault();
+
+    await ensureLoggedIn();
 
     const itemId = els.selectItem.value;
     const hospital = els.inputHospital.value.trim();
@@ -194,7 +247,7 @@ async function createConsignment(evt) {
     const qty = Number(els.inputQty.value || "0");
 
     if (!itemId || !hospital || qty <= 0) {
-        alert("Please pick an item, hospital, and a valid quantity.");
+        alert("Please pick an item, set hospital, and enter a valid quantity.");
         return;
     }
 
@@ -209,7 +262,7 @@ async function createConsignment(evt) {
         els.btnCreateCons.disabled = true;
         els.btnCreateCons.textContent = "Creating…";
 
-        const res = await fetch(`${API_BASE}/consignments`, {
+        const res = await fetch(`${API_BASE}/api/consignments`, {
             method: "POST",
             headers: authHeaders(),
             body: JSON.stringify(payload),
@@ -222,7 +275,7 @@ async function createConsignment(evt) {
 
         await res.json();
 
-        // reset form (hospital & qty, keep item/doctor if you want)
+        // reset hospital & qty (keep selected item)
         els.inputHospital.value = "";
         els.inputQty.value = "";
 
@@ -237,15 +290,16 @@ async function createConsignment(evt) {
 }
 
 // ============================
-// WIRE EVENTS
+// INIT
 // ============================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    // Hook up buttons
     els.btnRefreshItems?.addEventListener("click", loadItems);
     els.btnRefreshCons?.addEventListener("click", loadConsignments);
     els.btnCreateCons?.addEventListener("click", createConsignment);
 
-    // Initial load
-    loadItems();
-    loadConsignments();
+    // First load: login + fetch data
+    await ensureLoggedIn();
+    await Promise.all([loadItems(), loadConsignments()]);
 });
