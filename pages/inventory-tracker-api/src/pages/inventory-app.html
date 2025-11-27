@@ -408,20 +408,32 @@
                 background: white;
             }
 
-            /* Hide footer + cursor, but KEEP the main window */
+            /* Hide footer / cursor for print */
             .site-footer,
             #cursor-bg {
                 display: none !important;
             }
 
-            /* Inside the window, hide everything EXCEPT #print-area */
+            /* Only show the main print area wrapper */
             .window>*:not(#print-area) {
                 display: none !important;
             }
 
-            /* Make sure the dashboard shell prints cleanly */
             #print-area {
                 display: block !important;
+            }
+
+            /* NEW: inside print-area, hide all cards EXCEPT Activity Logs */
+            #print-area section:not(#activity-card),
+            #print-area div.inv-card:not(#activity-card) {
+                display: none !important;
+            }
+
+            /* Make the Activity Logs card fill the page nicely */
+            #activity-card {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
             }
 
             .page-shell {
@@ -429,6 +441,7 @@
                 border-radius: 0;
             }
         }
+
 
 
         /* IMPORTANT: show content by default */
@@ -706,7 +719,7 @@
             </section>
 
             <p class="inv-footer-note">
-                This page is a demo viewer for your <code>inventory-tracker-api</code> service deployed on Render +
+                This page is a demo viewer my Portfolio <code>inventory-tracker-api</code> service deployed on Render +
                 MongoDB
                 Atlas.
             </p>
