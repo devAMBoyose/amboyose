@@ -85,23 +85,6 @@
             gap: 20px;
         }
 
-        /* Consignment row highlights */
-        .cons-row-low td {
-            background: rgba(234, 179, 8, 0.06);
-        }
-
-        .cons-row-closed td {
-            background: rgba(15, 23, 42, 0.9);
-            color: #9ca3af;
-        }
-
-
-        @media (max-width: 900px) {
-            .grid {
-                grid-template-columns: minmax(0, 1fr);
-            }
-        }
-
         .inv-card {
             border-radius: 16px;
             padding: 18px 18px 16px;
@@ -209,6 +192,20 @@
             box-shadow: 0 10px 28px rgba(16, 185, 129, 0.45);
         }
 
+        .btn-mini {
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: rgba(15, 23, 42, 0.95);
+            color: #e5e7eb;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .btn-mini:hover {
+            background: rgba(30, 64, 175, 0.9);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -247,7 +244,6 @@
         }
 
         /* Consignment form row */
-
         .cons-form-row {
             display: grid;
             grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.7fr) auto;
@@ -257,6 +253,10 @@
         }
 
         @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
             .cons-form-row {
                 grid-template-columns: minmax(0, 1fr);
             }
@@ -312,8 +312,17 @@
             color: #e5e7eb;
         }
 
-        /* Back button */
+        /* Consignment row highlights */
+        .cons-row-low td {
+            background: rgba(234, 179, 8, 0.06);
+        }
 
+        .cons-row-closed td {
+            background: rgba(15, 23, 42, 0.9);
+            color: #9ca3af;
+        }
+
+        /* Back button */
         .back-bar {
             display: flex;
             justify-content: flex-end;
@@ -340,6 +349,88 @@
         .back-btn:hover {
             background: radial-gradient(circle at top, rgba(30, 64, 175, 0.95), rgba(15, 23, 42, 0.98));
         }
+
+        /* Activity log + tags */
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0 0;
+            font-size: 10px;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+
+        .activity-list li {
+            padding: 4px 0;
+            border-bottom: 1px dashed rgba(31, 41, 55, 0.7);
+        }
+
+        .activity-meta {
+            opacity: 0.7;
+            font-size: 9px;
+        }
+
+        .inv-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.8);
+            font-size: 9px;
+            margin-right: 4px;
+        }
+
+        .inv-card-wide {
+            margin-top: 22px;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .report-title {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .report-sub {
+            font-size: 10px;
+            color: #9ca3af;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .window,
+            .site-footer,
+            #cursor-bg {
+                display: none !important;
+            }
+
+            #print-area {
+                display: block !important;
+            }
+
+            .page-shell {
+                box-shadow: none;
+                border-radius: 0;
+                margin: 0;
+                padding: 16px;
+                max-width: 100%;
+            }
+        }
+
+        /* IMPORTANT: show content by default */
+        #print-area {
+            display: block;
+        }
     </style>
 </head>
 
@@ -353,7 +444,6 @@
             <div class="dots" aria-hidden="true">
                 <span class="red"></span><span class="yellow"></span><span class="green"></span>
             </div>
-
             <span class="filename">Inventory Tracker API | Portfolio</span>
 
             <!-- RIGHT-SIDE NAV -->
@@ -362,49 +452,41 @@
                     aria-label="Toggle menu">
                     <span class="bar"></span><span class="bar"></span><span class="bar"></span>
                 </button>
-
                 <ul id="navMenu" class="tb-menu">
-                    <!-- <a href="https://amboyose.onrender.com/" class="chip-link">
-                        <button class="chip chip-back">
-                            <i class="fa-solid fa-house"></i>
-                            <span>Home</span>
-                        </button>
-                    </a> -->
+                    <!-- nav injected globally -->
                 </ul>
             </div>
         </div>
 
         <!-- Page Content -->
-        <div class="page-shell">
+        <div class="page-shell" id="print-area">
             <div class="back-bar">
                 <a href="/pages/api-integration.html" class="back-btn">
-                    <i class="fa-solid fa-chevron-left"></i>
-                    Back to Portfolio
+                    <i class="fa-solid fa-chevron-left"></i> Back to Portfolio
                 </a>
             </div>
 
             <div class="demo-header-eyebrow">Full-stack demo</div>
             <h1 class="demo-title">Inventory Tracker API / MongoDB Demo</h1>
             <p class="demo-subtitle">
-                Simple inventory module wired to your Node.js + MongoDB backend.
-                Uses secured JWT endpoints for items and consignment tracking.
+                Simple inventory module wired to your Node.js + MongoDB backend. Uses secured JWT endpoints for items
+                and
+                consignment tracking.
             </p>
 
             <div class="badge-row">
                 <span class="demo-badge">
-                    <i class="fa-solid fa-database"></i>
-                    inventoryDB • items &amp; consignments
+                    <i class="fa-solid fa-database"></i> inventoryDB • items &amp; consignments
                 </span>
                 <span class="demo-badge">
-                    <i class="fa-brands fa-node-js"></i>
-                    Express + Mongoose
+                    <i class="fa-brands fa-node-js"></i> Express + Mongoose
                 </span>
                 <span class="demo-badge">
-                    <i class="fa-solid fa-lock"></i>
-                    JWT-secured endpoints
+                    <i class="fa-solid fa-lock"></i> JWT-secured endpoints
                 </span>
             </div>
 
+            <!-- FIRST ROW: ITEMS + CONSIGNMENTS -->
             <div class="grid">
                 <!-- ITEMS CARD -->
                 <section class="inv-card">
@@ -412,20 +494,17 @@
                         <div>
                             <div class="inv-card-title">ITEMS</div>
                             <div class="inv-card-subtitle">
-                                Items are created via the API (<code>POST /api/items</code>).
-                                This view reads them from <code>GET /api/items</code>.
+                                Items are created via the API (<code>POST /api/items</code>). This view reads them from
+                                <code>GET /api/items</code>.
                             </div>
                         </div>
-
                         <div class="inv-card-controls">
                             <span class="inv-status-label">Status:</span>
                             <span id="items-status" class="inv-pill inv-pill-loading">
-                                <i class="fa-solid fa-circle-notch fa-spin"></i>
-                                Loading…
+                                <i class="fa-solid fa-circle-notch fa-spin"></i> Loading…
                             </span>
                             <button id="btn-refresh-items" class="btn-chrome">
-                                <i class="fa-solid fa-rotate"></i>
-                                Refresh
+                                <i class="fa-solid fa-rotate"></i> Refresh
                             </button>
                         </div>
                     </div>
@@ -446,7 +525,6 @@
                             </tbody>
                         </table>
                     </div>
-
                     <div id="items-error" class="status-error-text"></div>
                 </section>
 
@@ -456,20 +534,17 @@
                         <div>
                             <div class="inv-card-title">CONSIGNMENTS</div>
                             <div class="inv-card-subtitle">
-                                Consignments are managed via <code>POST /api/consignments</code>
-                                and read from <code>GET /api/consignments</code>.
+                                Consignments are managed via <code>POST /api/consignments</code> and read from
+                                <code>GET /api/consignments</code>.
                             </div>
                         </div>
-
                         <div class="inv-card-controls">
                             <span class="inv-status-label">Status:</span>
                             <span id="cons-status" class="inv-pill inv-pill-loading">
-                                <i class="fa-solid fa-circle-notch fa-spin"></i>
-                                Loading…
+                                <i class="fa-solid fa-circle-notch fa-spin"></i> Loading…
                             </span>
                             <button id="btn-refresh-cons" class="btn-chrome">
-                                <i class="fa-solid fa-rotate"></i>
-                                Refresh
+                                <i class="fa-solid fa-rotate"></i> Refresh
                             </button>
                         </div>
                     </div>
@@ -479,14 +554,10 @@
                         <select id="consignment-item-select" class="input-pill">
                             <option value="">Pick item…</option>
                         </select>
-
                         <input id="consignment-hospital" class="input-pill" type="text"
                             placeholder="Hospital (e.g. St. Paul's)" />
-
                         <input id="consignment-doctor" class="input-pill" type="text" placeholder="Doctor (optional)" />
-
                         <input id="consignment-qty" class="input-pill" type="number" min="1" placeholder="Qty sent" />
-
                         <button id="btn-create-cons" class="btn-chrome btn-primary" type="button">
                             + Create Consignment
                         </button>
@@ -502,22 +573,138 @@
                                     <th>Used</th>
                                     <th>Remaining</th>
                                     <th>Status</th>
+                                    <th>Usage</th>
                                 </tr>
                             </thead>
-
                             <tbody id="consignments-tbody">
                                 <!-- Filled by JS -->
                             </tbody>
                         </table>
                     </div>
-
                     <div id="consignments-error" class="status-error-text"></div>
                 </section>
             </div>
 
+            <!-- SECOND ROW: EXPIRY / RESTOCK + HOSPITAL BALANCE -->
+            <div class="grid" style="margin-top: 22px;">
+                <!-- EXPIRY + RESTOCK -->
+                <section class="inv-card">
+                    <div class="inv-card-header">
+                        <div>
+                            <div class="inv-card-title">Expiry &amp; Restock Radar</div>
+                            <div class="inv-card-subtitle">
+                                Highlights soon-to-expire consignment items and low-stock products from
+                                <code>GET /api/items</code>.
+                            </div>
+                        </div>
+                        <div class="inv-card-controls">
+                            <span class="inv-status-label">Alerts:</span>
+                            <span id="alerts-status" class="inv-pill inv-pill-ok">
+                                <i class="fa-solid fa-bell"></i> Live
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="table-scroll" style="max-height: 100px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Expiry</th>
+                                    <th>Days left</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expiry-tbody">
+                                <!-- JS: near-expiry rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="expiry-empty" class="status-error-text"></div>
+
+                    <div class="table-scroll" style="max-height: 100px; margin-top: 12px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>On hand</th>
+                                    <th>Threshold</th>
+                                </tr>
+                            </thead>
+                            <tbody id="restock-tbody">
+                                <!-- JS: low-stock rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="restock-empty" class="status-error-text"></div>
+                </section>
+
+                <!-- HOSPITAL BALANCE (BILLING VIEW) -->
+                <section class="inv-card">
+                    <div class="inv-card-header">
+                        <div>
+                            <div class="inv-card-title">Hospital Balance</div>
+                            <div class="inv-card-subtitle">
+                                Aggregated consignment usage per hospital. Billing is demo-calculated on the fly.
+                            </div>
+                        </div>
+                        <div class="inv-card-controls">
+                            <span class="inv-status-label">Billing:</span>
+                            <span id="billing-status" class="inv-pill inv-pill-ok">
+                                <i class="fa-solid fa-receipt"></i> Snapshot
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hospital</th>
+                                    <th>Cases</th>
+                                    <th>Units used</th>
+                                    <th>Est. bill (₱)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hospital-balance-tbody">
+                                <!-- JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="hospital-balance-empty" class="status-error-text"></div>
+                </section>
+            </div>
+
+            <!-- ACTIVITY LOG + PRINT -->
+            <section class="inv-card inv-card-wide" style="margin-top: 22px;">
+                <div class="report-header">
+                    <div>
+                        <div class="report-title">Activity Logs &amp; Reporting</div>
+                        <div class="report-sub">
+                            Frontend log of key inventory actions plus browser-based PDF export.
+                        </div>
+                    </div>
+                    <div>
+                        <button id="btn-print-report" class="btn-chrome">
+                            <i class="fa-solid fa-file-pdf"></i> Print / Save as PDF
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="inv-tag"><i class="fa-solid fa-circle"></i> API calls</span>
+                    <span class="inv-tag"><i class="fa-solid fa-pen"></i> Usage updates</span>
+                    <span class="inv-tag"><i class="fa-solid fa-plus"></i> New consignments</span>
+                </div>
+
+                <ul id="activity-list" class="activity-list">
+                    <!-- JS -->
+                </ul>
+            </section>
+
             <p class="inv-footer-note">
-                This page is a demo viewer for your <code>inventory-tracker-api</code> service
-                deployed on Render + MongoDB Atlas.
+                This page is a demo viewer for your <code>inventory-tracker-api</code> service deployed on Render +
+                MongoDB
+                Atlas.
             </p>
         </div>
     </div>
@@ -537,8 +724,8 @@
     <script src="/js/script.js"></script>
     <script defer src="/js/nav.js"></script>
 
-    <!-- Inventory app JS (this file we just created) -->
-    <script defer src="./js/inventory-app.js"></script>
+    <!-- Inventory app JS (NOTE: path is from /src/pages/ to /src/js/) -->
+    <script defer src="../js/inventory-app.js"></script>
 </body>
 
 </html>
