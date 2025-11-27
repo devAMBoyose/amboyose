@@ -408,12 +408,18 @@
                 background: white;
             }
 
-            .window,
+            /* Hide footer + cursor, but KEEP the main window */
             .site-footer,
             #cursor-bg {
                 display: none !important;
             }
 
+            /* Inside the window, hide everything EXCEPT #print-area */
+            .window>*:not(#print-area) {
+                display: none !important;
+            }
+
+            /* Make sure the dashboard shell prints cleanly */
             #print-area {
                 display: block !important;
             }
@@ -421,11 +427,9 @@
             .page-shell {
                 box-shadow: none;
                 border-radius: 0;
-                margin: 0;
-                padding: 16px;
-                max-width: 100%;
             }
         }
+
 
         /* IMPORTANT: show content by default */
         #print-area {
@@ -469,7 +473,7 @@
             <div class="demo-header-eyebrow">Full-stack demo</div>
             <h1 class="demo-title">Inventory Tracker API / MongoDB Demo</h1>
             <p class="demo-subtitle">
-                Simple inventory module wired to your Node.js + MongoDB backend. Uses secured JWT endpoints for items
+                Simple inventory module wired my Node.js + MongoDB backend. Uses secured JWT endpoints for items
                 and
                 consignment tracking.
             </p>
