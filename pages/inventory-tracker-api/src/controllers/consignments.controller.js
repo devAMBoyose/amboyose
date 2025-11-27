@@ -5,11 +5,58 @@ import Item from "../models/Item.js";
 /**
  * POST /api/consignments
  * Create consignment record
+ * - Validates stock
+ * - Deducts qtySent from Item.onHand (real inventory behavior)
  */
 export const createConsignment = async (req, res) => {
     try {
-        const consignment = await Consignment.create(req.body);
-        return res.status(201).json(consignment);
+        const { item: itemId, hospital, doctor, qtySent, unitPrice } = req.body;
+
+        // Basic validation
+        if (!itemId || qtySent === undefined) {
+            return res.status(400).json({
+                message: "Missing required fields: item and qtySent are required.",
+            });
+        }
+
+        // 1. Find the item being consigned
+        const item = await Item.findById(itemId);
+        if (!item) {
+            return res.status(404).json({ message: "Item not found" });
+        }
+
+        // 2. Validate qtySent vs onHand
+        let sent = Number(qtySent);
+        if (!Number.isFinite(sent) || sent <= 0) {
+            return res.status(400).json({
+                message: "qtySent must be a positive number.",
+            });
+        }
+
+        if (sent > item.onHand) {
+            return res.status(400).json({
+                message: `Not enough stock. On hand: ${item.onHand}, requested: ${sent}`,
+            });
+        }
+
+        // 3. Create consignment
+        const consignment = await Consignment.create({
+            item: itemId,
+            hospital,
+            doctor,
+            qtySent: sent,
+            qtyUsed: 0,           // starts with nothing used
+            unitPrice,
+            // status: "open"      // optional: if your schema has default, you can omit this
+        });
+
+        // 4. Deduct from item stock (real inventory behavior)
+        item.onHand = item.onHand - sent;
+        await item.save();
+
+        // 5. Return populated consignment (so UI still shows item info)
+        const populated = await consignment.populate("item");
+        return res.status(201).json(populated);
     } catch (err) {
         console.error("createConsignment error:", err);
         return res.status(400).json({ message: err.message });
