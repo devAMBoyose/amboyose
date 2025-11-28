@@ -1,3 +1,4 @@
+// client/src/App.jsx
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { PortfolioShell } from "./components/PortfolioShell";
@@ -5,7 +6,7 @@ import { Navbar } from "./components/Navbar";
 import { BooksPage } from "./pages/BooksPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
-import { BookDetailsPage } from "./pages/BookDetailsPage";
+import { BookDetailsPage } from "./pages/BookDetailsPage"; // <-- named import
 import { NotFound } from "./pages/NotFound";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
