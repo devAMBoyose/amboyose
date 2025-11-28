@@ -85,7 +85,6 @@ public class BamBankingController {
         model.addAttribute("balance", acc.getBalance());
 
         // add transactions list for the table in bank-dashboard.html
-        // (for now you can use an empty list)
         model.addAttribute("transactions",
                 txService.getRecentTransactions(acc.getUsername(), 10));
         // later, when ready: txService.getRecentTransactions(acc.getUsername(), 10);
@@ -93,9 +92,6 @@ public class BamBankingController {
         return "bank-dashboard";
     }
 
-    // --------------------------
-    // WITHDRAW – detailed result page
-    // --------------------------
     // --------------------------
     // WITHDRAW – detailed result page
     // --------------------------
