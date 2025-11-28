@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>BamBanking Demo</name>
-    <description>BamBanking Spring Boot Demo with PostgreSQL and JPA</description>
+    <description>BamBanking Spring Boot Demo with MongoDB</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -26,13 +26,6 @@
 
     <dependencies>
         <!-- Web / REST -->
-
-        <!-- MongoDB (for persistent BamBanking accounts & transactions) -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-data-mongodb</artifactId>
-</dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -44,23 +37,16 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <!-- Bean validation -->
+        <!-- Bean validation (for @NotBlank, @Email, etc.) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- JPA / Hibernate -->
+        <!-- MongoDB (ONLY database for BamBanking now) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
-        <!-- PostgreSQL driver (version comes from Spring Boot BOM) -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
 
         <!-- Optional: DevTools for local development -->
