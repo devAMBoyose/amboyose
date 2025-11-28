@@ -449,21 +449,26 @@
             display: block;
         }
 
-
+        /* Warming Up Start modal */
         /* Cold-start modal */
         .coldstart-backdrop {
             position: fixed;
             inset: 0;
             background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(3, 7, 18, 0.98));
             backdrop-filter: blur(4px);
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
+
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.26s ease;
         }
 
         .coldstart-backdrop.show {
-            display: flex;
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .coldstart-dialog {
@@ -476,6 +481,15 @@
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
             color: #e5e7eb;
             font-size: 12px;
+
+            transform: translateY(8px) scale(0.98);
+            opacity: 0;
+            transition: opacity 0.26s ease, transform 0.26s ease;
+        }
+
+        .coldstart-backdrop.show .coldstart-dialog {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
 
         .coldstart-title-row {
@@ -527,14 +541,96 @@
             color: #bfdbfe;
         }
 
-        .coldstart-status i {
+        .coldstart-status-icon {
             font-size: 11px;
+        }
+
+        /* LOADING DOTS */
+        .loading-dots {
+            display: inline-flex;
+            gap: 3px;
+        }
+
+        .loading-dots span {
+            width: 4px;
+            height: 4px;
+            border-radius: 999px;
+            background: #bfdbfe;
+            opacity: 0.4;
+            animation: coldstart-dot 1s infinite ease-in-out;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.16s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.32s;
+        }
+
+        @keyframes coldstart-dot {
+            0% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+
+            25% {
+                transform: translateY(-3px);
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateY(0);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
         }
 
         .coldstart-btn {
             margin-top: 14px;
             width: 100%;
             justify-content: center;
+        }
+
+        /* SUCCESS / "SERVER WARMED UP" STATE */
+        .coldstart-backdrop.ready .coldstart-dialog {
+            animation: coldstart-ready-pop 0.45s ease-out;
+            border-color: rgba(34, 197, 94, 0.9);
+            box-shadow: 0 28px 70px rgba(22, 163, 74, 0.5);
+        }
+
+        .coldstart-backdrop.ready .coldstart-status {
+            border-color: rgba(34, 197, 94, 0.9);
+            color: #bbf7d0;
+        }
+
+        .coldstart-backdrop.ready .loading-dots {
+            opacity: 0;
+        }
+
+        .coldstart-backdrop.ready .coldstart-status-icon {
+            color: #4ade80;
+        }
+
+        @keyframes coldstart-ready-pop {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: scale(1.02);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         @media (max-width: 480px) {
@@ -552,8 +648,9 @@
 <body>
 
     <body>
+
         <!-- Cold-start modal -->
-        <div id="coldstart-modal" class="coldstart-backdrop show">
+        <div id="coldstart-modal" class="coldstart-backdrop">
             <div class="coldstart-dialog">
                 <div class="coldstart-title-row">
                     <span class="coldstart-pill">
@@ -573,8 +670,11 @@
                 </p>
 
                 <div class="coldstart-status">
-                    <i class="fa-solid fa-circle-notch fa-spin"></i>
-                    <span>Contacting inventory API…</span>
+                    <i class="fa-solid fa-circle-notch fa-spin coldstart-status-icon"></i>
+                    <span class="loading-dots" aria-hidden="true">
+                        <span></span><span></span><span></span>
+                    </span>
+                    <span class="coldstart-status-text">Contacting inventory API…</span>
                 </div>
 
                 <button id="coldstart-dismiss" class="btn-chrome coldstart-btn">
@@ -582,6 +682,7 @@
                 </button>
             </div>
         </div>
+
 
         <!-- cursor-follow glow background -->
         <div id="cursor-bg" aria-hidden="true"></div>
@@ -881,7 +982,7 @@
         <script defer src="/js/nav.js"></script>
 
         <!-- Inventory app JS -->
-        <!-- Inventory app JS -->
+
         <script defer src="/pages/inventory-tracker-api/src/pages/js/inventory-app.js"></script>
 
         <!-- Cold-start modal helpers -->
@@ -890,22 +991,60 @@
                 const modal = document.getElementById("coldstart-modal");
                 const dismissBtn = document.getElementById("coldstart-dismiss");
 
+                const statusText = modal?.querySelector(".coldstart-status-text");
+                const statusIcon = modal?.querySelector(".coldstart-status-icon");
+
+                // Safety: if HTML is missing, don't break anything
                 if (!modal) {
-                    return { show() { }, hide() { } };
+                    return {
+                        show() { },
+                        hide() { },
+                        ready() { }
+                    };
                 }
 
-                const show = () => modal.classList.add("show");
-                const hide = () => modal.classList.remove("show");
+                // --- core helpers ---
+                const show = () => {
+                    modal.classList.add("show"); // fade-in handled by CSS
+                };
 
-                // allow user to dismiss manually
+                const hide = () => {
+                    modal.classList.remove("show", "ready");
+                };
+
+                // Called when server is warmed up / first successful API load
+                const ready = () => {
+                    modal.classList.add("ready");
+
+                    if (statusText) {
+                        statusText.textContent = "Server is awake. Loading data…";
+                    }
+
+                    if (statusIcon) {
+                        statusIcon.classList.remove("fa-circle-notch", "fa-spin");
+                        statusIcon.classList.add("fa-circle-check");
+                    }
+
+                    // Let the green success animation play, then fade out
+                    setTimeout(() => {
+                        hide();
+                    }, 900);
+                };
+
+                // Allow user to dismiss manually
                 if (dismissBtn) {
                     dismissBtn.addEventListener("click", hide);
                 }
 
-                // as a fallback, auto-hide after ~45s even if API is still sleepy
-                setTimeout(hide, 45000);
+                // ✅ IMPORTANT: auto-show as soon as this script runs
+                show();
 
-                return { show, hide };
+                // Fallback: auto-hide after ~45s even if something goes wrong
+                setTimeout(() => {
+                    hide();
+                }, 45000);
+
+                return { show, hide, ready };
             })();
         </script>
 
