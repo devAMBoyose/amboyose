@@ -448,304 +448,468 @@
         #print-area {
             display: block;
         }
+
+
+        /* Cold-start modal */
+        .coldstart-backdrop {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(3, 7, 18, 0.98));
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .coldstart-backdrop.show {
+            display: flex;
+        }
+
+        .coldstart-dialog {
+            max-width: 440px;
+            width: 90%;
+            padding: 20px 22px 18px;
+            border-radius: 18px;
+            background: radial-gradient(circle at top left, #020617, #020617 60%, #020617 100%);
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+            color: #e5e7eb;
+            font-size: 12px;
+        }
+
+        .coldstart-title-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+
+        .coldstart-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.8);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a5f3fc;
+        }
+
+        .coldstart-pill i {
+            font-size: 10px;
+            color: #22c55e;
+        }
+
+        .coldstart-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 4px 0 8px;
+        }
+
+        .coldstart-text {
+            font-size: 11px;
+            color: #9ca3af;
+            margin: 4px 0;
+        }
+
+        .coldstart-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(96, 165, 250, 0.9);
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
+            font-size: 11px;
+            color: #bfdbfe;
+        }
+
+        .coldstart-status i {
+            font-size: 11px;
+        }
+
+        .coldstart-btn {
+            margin-top: 14px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        @media (max-width: 480px) {
+            .coldstart-dialog {
+                padding: 16px 16px 14px;
+            }
+
+            .coldstart-title {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- cursor-follow glow background -->
-    <div id="cursor-bg" aria-hidden="true"></div>
 
-    <div class="window">
-        <!-- Title Bar -->
-        <div class="title-bar">
-            <div class="dots" aria-hidden="true">
-                <span class="red"></span><span class="yellow"></span><span class="green"></span>
-            </div>
-            <span class="filename">Inventory Tracker API | Portfolio</span>
+    <body>
+        <!-- Cold-start modal -->
+        <div id="coldstart-modal" class="coldstart-backdrop show">
+            <div class="coldstart-dialog">
+                <div class="coldstart-title-row">
+                    <span class="coldstart-pill">
+                        <i class="fa-solid fa-snowflake"></i> Free-tier cold start
+                    </span>
+                </div>
 
-            <!-- RIGHT-SIDE NAV -->
-            <div class="tb-right">
-                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
-                    aria-label="Toggle menu">
-                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                <h2 class="coldstart-title">Warming up the API…</h2>
+                <p class="coldstart-text">
+                    This demo runs on <strong>free Render + MongoDB Atlas tiers</strong>.
+                    When the service has been idle, it needs a few seconds to “wake up”
+                    (usually 20–60 seconds). While that happens, the tables below will show
+                    <code>Loading…</code>.
+                </p>
+                <p class="coldstart-text">
+                    Thanks for waiting while the server spins up 💚
+                </p>
+
+                <div class="coldstart-status">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <span>Contacting inventory API…</span>
+                </div>
+
+                <button id="coldstart-dismiss" class="btn-chrome coldstart-btn">
+                    <i class="fa-solid fa-check"></i> Got it, keep loading
                 </button>
-                <ul id="navMenu" class="tb-menu">
-                    <!-- nav injected globally -->
-                </ul>
             </div>
         </div>
 
-        <!-- Page Content -->
-        <div class="page-shell" id="print-area">
-            <div class="back-bar">
-                <a href="/pages/api-integration.html" class="back-btn">
-                    <i class="fa-solid fa-chevron-left"></i> Back to Portfolio
-                </a>
+        <!-- cursor-follow glow background -->
+        <div id="cursor-bg" aria-hidden="true"></div>
+
+        <!-- cursor-follow glow background -->
+        <div id="cursor-bg" aria-hidden="true"></div>
+
+        <div class="window">
+            <!-- Title Bar -->
+            <div class="title-bar">
+                <div class="dots" aria-hidden="true">
+                    <span class="red"></span><span class="yellow"></span><span class="green"></span>
+                </div>
+                <span class="filename">Inventory Tracker API | Portfolio</span>
+
+                <!-- RIGHT-SIDE NAV -->
+                <div class="tb-right">
+                    <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+                        aria-label="Toggle menu">
+                        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                    </button>
+                    <ul id="navMenu" class="tb-menu">
+                        <!-- nav injected globally -->
+                    </ul>
+                </div>
             </div>
 
-            <div class="demo-header-eyebrow">Full-stack demo</div>
-            <h1 class="demo-title">Inventory Tracker API / MongoDB Demo</h1>
-            <p class="demo-subtitle">
-                Simple inventory module wired my Node.js + MongoDB backend. Uses secured JWT endpoints for items
-                and
-                consignment tracking.
-            </p>
+            <!-- Page Content -->
+            <div class="page-shell" id="print-area">
+                <div class="back-bar">
+                    <a href="/pages/api-integration.html" class="back-btn">
+                        <i class="fa-solid fa-chevron-left"></i> Back to Portfolio
+                    </a>
+                </div>
 
-            <div class="badge-row">
-                <span class="demo-badge">
-                    <i class="fa-solid fa-database"></i> inventoryDB • items &amp; consignments
-                </span>
-                <span class="demo-badge">
-                    <i class="fa-brands fa-node-js"></i> Express + Mongoose
-                </span>
-                <span class="demo-badge">
-                    <i class="fa-solid fa-lock"></i> JWT-secured endpoints
-                </span>
-            </div>
+                <div class="demo-header-eyebrow">Full-stack demo</div>
+                <h1 class="demo-title">Inventory Tracker API / MongoDB Demo</h1>
+                <p class="demo-subtitle">
+                    Simple inventory module wired my Node.js + MongoDB backend. Uses secured JWT endpoints for items
+                    and
+                    consignment tracking.
+                </p>
 
-            <!-- FIRST ROW: ITEMS + CONSIGNMENTS -->
-            <div class="grid">
-                <!-- ITEMS CARD -->
-                <section class="inv-card">
-                    <div class="inv-card-header">
-                        <div>
-                            <div class="inv-card-title">ITEMS</div>
-                            <div class="inv-card-subtitle">
-                                Items are created via the API (<code>POST /api/items</code>). This view reads them from
-                                <code>GET /api/items</code>.
+                <div class="badge-row">
+                    <span class="demo-badge">
+                        <i class="fa-solid fa-database"></i> inventoryDB • items &amp; consignments
+                    </span>
+                    <span class="demo-badge">
+                        <i class="fa-brands fa-node-js"></i> Express + Mongoose
+                    </span>
+                    <span class="demo-badge">
+                        <i class="fa-solid fa-lock"></i> JWT-secured endpoints
+                    </span>
+                </div>
+
+                <!-- FIRST ROW: ITEMS + CONSIGNMENTS -->
+                <div class="grid">
+                    <!-- ITEMS CARD -->
+                    <section class="inv-card">
+                        <div class="inv-card-header">
+                            <div>
+                                <div class="inv-card-title">ITEMS</div>
+                                <div class="inv-card-subtitle">
+                                    Items are created via the API (<code>POST /api/items</code>). This view reads them
+                                    from
+                                    <code>GET /api/items</code>.
+                                </div>
+                            </div>
+                            <div class="inv-card-controls">
+                                <span class="inv-status-label">Status:</span>
+                                <span id="items-status" class="inv-pill inv-pill-loading">
+                                    <i class="fa-solid fa-circle-notch fa-spin"></i> Loading…
+                                </span>
+                                <button id="btn-refresh-items" class="btn-chrome">
+                                    <i class="fa-solid fa-rotate"></i> Refresh
+                                </button>
                             </div>
                         </div>
-                        <div class="inv-card-controls">
-                            <span class="inv-status-label">Status:</span>
-                            <span id="items-status" class="inv-pill inv-pill-loading">
-                                <i class="fa-solid fa-circle-notch fa-spin"></i> Loading…
-                            </span>
-                            <button id="btn-refresh-items" class="btn-chrome">
-                                <i class="fa-solid fa-rotate"></i> Refresh
+
+                        <div class="table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>SKU</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>On hand</th>
+                                        <th>Location</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="items-tbody">
+                                    <!-- Filled by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="items-error" class="status-error-text"></div>
+                    </section>
+
+                    <!-- CONSIGNMENTS CARD -->
+                    <section class="inv-card">
+                        <div class="inv-card-header">
+                            <div>
+                                <div class="inv-card-title">CONSIGNMENTS</div>
+                                <div class="inv-card-subtitle">
+                                    Consignments are managed via <code>POST /api/consignments</code> and read from
+                                    <code>GET /api/consignments</code>.
+                                </div>
+                            </div>
+                            <div class="inv-card-controls">
+                                <span class="inv-status-label">Status:</span>
+                                <span id="cons-status" class="inv-pill inv-pill-loading">
+                                    <i class="fa-solid fa-circle-notch fa-spin"></i> Loading…
+                                </span>
+                                <button id="btn-refresh-cons" class="btn-chrome">
+                                    <i class="fa-solid fa-rotate"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Consignment form row -->
+                        <form class="cons-form-row" onsubmit="return false;">
+                            <select id="consignment-item-select" class="input-pill">
+                                <option value="">Pick item…</option>
+                            </select>
+                            <input id="consignment-hospital" class="input-pill" type="text"
+                                placeholder="Hospital (e.g. St. Paul's)" />
+                            <input id="consignment-doctor" class="input-pill" type="text"
+                                placeholder="Doctor (optional)" />
+                            <input id="consignment-qty" class="input-pill" type="number" min="1"
+                                placeholder="Qty sent" />
+                            <button id="btn-create-cons" class="btn-chrome btn-primary" type="button">
+                                + Create Consignment
+                            </button>
+                        </form>
+
+                        <div class="table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Hospital</th>
+                                        <th>Sent</th>
+                                        <th>Used</th>
+                                        <th>Remaining</th>
+                                        <th>Status</th>
+                                        <th>Usage</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="consignments-tbody">
+                                    <!-- Filled by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="consignments-error" class="status-error-text"></div>
+                    </section>
+                </div>
+
+                <!-- SECOND ROW: EXPIRY / RESTOCK + HOSPITAL BALANCE -->
+                <div class="grid" style="margin-top: 22px;">
+                    <!-- EXPIRY + RESTOCK -->
+                    <section class="inv-card">
+                        <div class="inv-card-header">
+                            <div>
+                                <div class="inv-card-title">Expiry &amp; Restock Radar</div>
+                                <div class="inv-card-subtitle">
+                                    Highlights soon-to-expire consignment items and low-stock products from
+                                    <code>GET /api/items</code>.
+                                </div>
+                            </div>
+                            <div class="inv-card-controls">
+                                <span class="inv-status-label">Alerts:</span>
+                                <span id="alerts-status" class="inv-pill inv-pill-ok">
+                                    <i class="fa-solid fa-bell"></i> Live
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="table-scroll" style="max-height: 100px;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Expiry</th>
+                                        <th>Days left</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expiry-tbody">
+                                    <!-- JS: near-expiry rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="expiry-empty" class="status-error-text"></div>
+
+                        <div class="table-scroll" style="max-height: 100px; margin-top: 12px;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>On hand</th>
+                                        <th>Threshold</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="restock-tbody">
+                                    <!-- JS: low-stock rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="restock-empty" class="status-error-text"></div>
+                    </section>
+
+                    <!-- HOSPITAL BALANCE (BILLING VIEW) -->
+                    <section class="inv-card">
+                        <div class="inv-card-header">
+                            <div>
+                                <div class="inv-card-title">Hospital Balance</div>
+                                <div class="inv-card-subtitle">
+                                    Aggregated consignment usage per hospital. Billing is demo-calculated on the fly.
+                                </div>
+                            </div>
+                            <div class="inv-card-controls">
+                                <span class="inv-status-label">Billing:</span>
+                                <span id="billing-status" class="inv-pill inv-pill-ok">
+                                    <i class="fa-solid fa-receipt"></i> Snapshot
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="table-scroll">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Hospital</th>
+                                        <th>Cases</th>
+                                        <th>Units used</th>
+                                        <th>Est. bill (₱)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hospital-balance-tbody">
+                                    <!-- JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="hospital-balance-empty" class="status-error-text"></div>
+                    </section>
+                </div>
+
+                <!-- ACTIVITY LOG + PRINT -->
+                <section class="inv-card inv-card-wide" style="margin-top: 22px;">
+                    <div class="report-header">
+                        <div>
+                            <div class="report-title">Activity Logs &amp; Reporting</div>
+                            <div class="report-sub">
+                                Frontend log of key inventory actions plus browser-based PDF export.
+                            </div>
+                        </div>
+                        <div>
+                            <button id="btn-print-report" class="btn-chrome">
+                                <i class="fa-solid fa-file-pdf"></i> Print / Save as PDF
                             </button>
                         </div>
                     </div>
 
-                    <div class="table-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>SKU</th>
-                                    <th>Name</th>
-                                    <th>Category</th>
-                                    <th>On hand</th>
-                                    <th>Location</th>
-                                </tr>
-                            </thead>
-                            <tbody id="items-tbody">
-                                <!-- Filled by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="items-error" class="status-error-text"></div>
-                </section>
-
-                <!-- CONSIGNMENTS CARD -->
-                <section class="inv-card">
-                    <div class="inv-card-header">
-                        <div>
-                            <div class="inv-card-title">CONSIGNMENTS</div>
-                            <div class="inv-card-subtitle">
-                                Consignments are managed via <code>POST /api/consignments</code> and read from
-                                <code>GET /api/consignments</code>.
-                            </div>
-                        </div>
-                        <div class="inv-card-controls">
-                            <span class="inv-status-label">Status:</span>
-                            <span id="cons-status" class="inv-pill inv-pill-loading">
-                                <i class="fa-solid fa-circle-notch fa-spin"></i> Loading…
-                            </span>
-                            <button id="btn-refresh-cons" class="btn-chrome">
-                                <i class="fa-solid fa-rotate"></i> Refresh
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Consignment form row -->
-                    <form class="cons-form-row" onsubmit="return false;">
-                        <select id="consignment-item-select" class="input-pill">
-                            <option value="">Pick item…</option>
-                        </select>
-                        <input id="consignment-hospital" class="input-pill" type="text"
-                            placeholder="Hospital (e.g. St. Paul's)" />
-                        <input id="consignment-doctor" class="input-pill" type="text" placeholder="Doctor (optional)" />
-                        <input id="consignment-qty" class="input-pill" type="number" min="1" placeholder="Qty sent" />
-                        <button id="btn-create-cons" class="btn-chrome btn-primary" type="button">
-                            + Create Consignment
-                        </button>
-                    </form>
-
-                    <div class="table-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Hospital</th>
-                                    <th>Sent</th>
-                                    <th>Used</th>
-                                    <th>Remaining</th>
-                                    <th>Status</th>
-                                    <th>Usage</th>
-                                </tr>
-                            </thead>
-                            <tbody id="consignments-tbody">
-                                <!-- Filled by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="consignments-error" class="status-error-text"></div>
-                </section>
-            </div>
-
-            <!-- SECOND ROW: EXPIRY / RESTOCK + HOSPITAL BALANCE -->
-            <div class="grid" style="margin-top: 22px;">
-                <!-- EXPIRY + RESTOCK -->
-                <section class="inv-card">
-                    <div class="inv-card-header">
-                        <div>
-                            <div class="inv-card-title">Expiry &amp; Restock Radar</div>
-                            <div class="inv-card-subtitle">
-                                Highlights soon-to-expire consignment items and low-stock products from
-                                <code>GET /api/items</code>.
-                            </div>
-                        </div>
-                        <div class="inv-card-controls">
-                            <span class="inv-status-label">Alerts:</span>
-                            <span id="alerts-status" class="inv-pill inv-pill-ok">
-                                <i class="fa-solid fa-bell"></i> Live
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="table-scroll" style="max-height: 100px;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Expiry</th>
-                                    <th>Days left</th>
-                                </tr>
-                            </thead>
-                            <tbody id="expiry-tbody">
-                                <!-- JS: near-expiry rows -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="expiry-empty" class="status-error-text"></div>
-
-                    <div class="table-scroll" style="max-height: 100px; margin-top: 12px;">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>On hand</th>
-                                    <th>Threshold</th>
-                                </tr>
-                            </thead>
-                            <tbody id="restock-tbody">
-                                <!-- JS: low-stock rows -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="restock-empty" class="status-error-text"></div>
-                </section>
-
-                <!-- HOSPITAL BALANCE (BILLING VIEW) -->
-                <section class="inv-card">
-                    <div class="inv-card-header">
-                        <div>
-                            <div class="inv-card-title">Hospital Balance</div>
-                            <div class="inv-card-subtitle">
-                                Aggregated consignment usage per hospital. Billing is demo-calculated on the fly.
-                            </div>
-                        </div>
-                        <div class="inv-card-controls">
-                            <span class="inv-status-label">Billing:</span>
-                            <span id="billing-status" class="inv-pill inv-pill-ok">
-                                <i class="fa-solid fa-receipt"></i> Snapshot
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="table-scroll">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Hospital</th>
-                                    <th>Cases</th>
-                                    <th>Units used</th>
-                                    <th>Est. bill (₱)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="hospital-balance-tbody">
-                                <!-- JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="hospital-balance-empty" class="status-error-text"></div>
-                </section>
-            </div>
-
-            <!-- ACTIVITY LOG + PRINT -->
-            <section class="inv-card inv-card-wide" style="margin-top: 22px;">
-                <div class="report-header">
                     <div>
-                        <div class="report-title">Activity Logs &amp; Reporting</div>
-                        <div class="report-sub">
-                            Frontend log of key inventory actions plus browser-based PDF export.
-                        </div>
+                        <span class="inv-tag"><i class="fa-solid fa-circle"></i> API calls</span>
+                        <span class="inv-tag"><i class="fa-solid fa-pen"></i> Usage updates</span>
+                        <span class="inv-tag"><i class="fa-solid fa-plus"></i> New consignments</span>
                     </div>
-                    <div>
-                        <button id="btn-print-report" class="btn-chrome">
-                            <i class="fa-solid fa-file-pdf"></i> Print / Save as PDF
-                        </button>
-                    </div>
-                </div>
 
-                <div>
-                    <span class="inv-tag"><i class="fa-solid fa-circle"></i> API calls</span>
-                    <span class="inv-tag"><i class="fa-solid fa-pen"></i> Usage updates</span>
-                    <span class="inv-tag"><i class="fa-solid fa-plus"></i> New consignments</span>
-                </div>
+                    <ul id="activity-list" class="activity-list">
+                        <!-- JS -->
+                    </ul>
+                </section>
 
-                <ul id="activity-list" class="activity-list">
-                    <!-- JS -->
-                </ul>
-            </section>
-
-            <p class="inv-footer-note">
-                This page is a demo viewer my Portfolio <code>inventory-tracker-api</code> service deployed on Render +
-                MongoDB
-                Atlas.
-            </p>
+                <p class="inv-footer-note">
+                    This page is a demo viewer my Portfolio <code>inventory-tracker-api</code> service deployed on
+                    Render +
+                    MongoDB
+                    Atlas.
+                </p>
+            </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
-        <p class="links">
-            <a href="/index.html">About</a> •
-            <a href="/portfolio.html">Portfolio</a> •
-            <a href="/resume.html">Resume</a> •
-            <a href="/contact.html">Contact</a>
-        </p>
-    </footer>
+        <!-- Footer -->
+        <footer class="site-footer">
+            <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+            <p class="links">
+                <a href="/index.html">About</a> •
+                <a href="/portfolio.html">Portfolio</a> •
+                <a href="/resume.html">Resume</a> •
+                <a href="/contact.html">Contact</a>
+            </p>
+        </footer>
 
-    <!-- Your existing JS -->
+        <!-- Your existing JS -->
 
-    <script src="/js/script.js"></script>
-    <script defer src="/js/nav.js"></script>
+        <script src="/js/script.js"></script>
+        <script defer src="/js/nav.js"></script>
 
-    <!-- Inventory app JS -->
-    <!-- Inventory app JS -->
-    <script defer src="/pages/inventory-tracker-api/src/pages/js/inventory-app.js"></script>
+        <!-- Inventory app JS -->
+        <!-- Inventory app JS -->
+        <script defer src="/pages/inventory-tracker-api/src/pages/js/inventory-app.js"></script>
 
-</body>
+        <!-- Cold-start modal helpers -->
+        <script>
+            window.InventoryColdStartModal = (function () {
+                const modal = document.getElementById("coldstart-modal");
+                const dismissBtn = document.getElementById("coldstart-dismiss");
+
+                if (!modal) {
+                    return { show() { }, hide() { } };
+                }
+
+                const show = () => modal.classList.add("show");
+                const hide = () => modal.classList.remove("show");
+
+                // allow user to dismiss manually
+                if (dismissBtn) {
+                    dismissBtn.addEventListener("click", hide);
+                }
+
+                // as a fallback, auto-hide after ~45s even if API is still sleepy
+                setTimeout(hide, 45000);
+
+                return { show, hide };
+            })();
+        </script>
+
+
+    </body>
 
 </html>
