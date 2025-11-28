@@ -20,11 +20,12 @@ public class DebugController {
     @GetMapping("/db-check")
     public String checkDb() {
         try {
-            long count = accountRepo.count();
+            long count = accountRepo.count(); // try real DB call
             return "DB OK. URI=" + mongoUri + " | accounts.count=" + count;
         } catch (Exception e) {
             e.printStackTrace();
-            return "DB ERROR: " + e.getClass().getSimpleName() + " - " + e.getMessage();
+            return "DB ERROR: " + e.getClass().getSimpleName()
+                    + " - " + e.getMessage();
         }
     }
 }
