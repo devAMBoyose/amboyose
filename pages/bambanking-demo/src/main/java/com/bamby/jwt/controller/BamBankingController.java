@@ -2,10 +2,8 @@ package com.bamby.jwt.controller;
 
 import com.bamby.jwt.model.Account;
 import com.bamby.jwt.service.AuthService;
-import com.bamby.jwt.service.DataStore;
 import com.bamby.jwt.service.MaintenanceService;
 import com.bamby.jwt.service.TransactionService;
-
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,10 +47,11 @@ public class BamBankingController {
 
     @PostMapping("/login")
     public String doLogin(@RequestParam String username,
-            @RequestParam int pin,
+            @RequestParam String pin,
             HttpSession session,
             Model model) {
 
+        // Uses MongoDB via AuthService; PIN is 4-digit string
         Account acc = authService.authenticateCustomer(username, pin);
         if (acc == null) {
             model.addAttribute("error", "Invalid username or PIN.");
@@ -84,10 +83,8 @@ public class BamBankingController {
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("balance", acc.getBalance());
 
-        // add transactions list for the table in bank-dashboard.html
         model.addAttribute("transactions",
                 txService.getRecentTransactions(acc.getUsername(), 10));
-        // later, when ready: txService.getRecentTransactions(acc.getUsername(), 10);
 
         return "bank-dashboard";
     }
@@ -107,14 +104,10 @@ public class BamBankingController {
 
         double oldBalance = acc.getBalance();
 
-        // reuse service logic (returns string with <br> and <strong>)
         String resultMessage = txService.withdraw(acc, amount);
-
         boolean success = resultMessage != null && resultMessage.startsWith("✅");
-
         double newBalance = acc.getBalance();
 
-        // record in history
         txService.record(
                 acc.getUsername(),
                 "Withdrawal",
@@ -122,7 +115,6 @@ public class BamBankingController {
                 newBalance,
                 success);
 
-        // strip emojis, keep HTML tags
         String cleanMessage = resultMessage
                 .replace("✅ ", "")
                 .replace("❌ ", "");
@@ -138,8 +130,7 @@ public class BamBankingController {
                 java.time.LocalDateTime.now().toString().replace('T', ' '));
         model.addAttribute("txMessage", cleanMessage);
 
-        // use the same nice UI as deposit (your unified result template)
-        return "transaction-result"; // or "withdraw-result" if you have a separate file
+        return "transaction-result";
     }
 
     // --------------------------
@@ -160,7 +151,6 @@ public class BamBankingController {
         String result = txService.deposit(acc, amount);
         boolean success = result != null && result.startsWith("✅");
 
-        // ONE source of truth for history + reference
         String txRef = txService.record(
                 acc.getUsername(),
                 "Deposit",
@@ -188,7 +178,7 @@ public class BamBankingController {
     }
 
     // --------------------------
-    // TRANSACTIONS (simple text page)
+    // CHECK BALANCE – result page
     // --------------------------
     @PostMapping("/check-balance")
     public String checkBalance(HttpSession session, Model model) {
@@ -199,10 +189,8 @@ public class BamBankingController {
 
         double balance = acc.getBalance();
 
-        // nice structured data for the UI
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("balance", balance);
-
         model.addAttribute("txType", "Balance Inquiry");
         model.addAttribute("success", true);
         model.addAttribute("txRef", "BB-" + System.currentTimeMillis());
@@ -234,15 +222,12 @@ public class BamBankingController {
         String result = txService.transfer(acc, toUser, amount);
         boolean success = result != null && result.startsWith("✅");
 
-        // record for sender – capture reference
         String txRef = txService.record(
                 acc.getUsername(),
                 "Transfer",
                 amount,
-                acc.getBalance(), // balance after tx (unchanged if failed)
+                acc.getBalance(),
                 success);
-
-        // record for receiver (doesn't need same ref shown in THIS page)
 
         if (success) {
             Account toAcc = authService.findByUsername(toUser);
@@ -303,6 +288,9 @@ public class BamBankingController {
         return "bank-transaction";
     }
 
+    // --------------------------
+    // SIGNUP
+    // --------------------------
     @PostMapping("/signup")
     public String handleSignup(@RequestParam String fullName,
             @RequestParam String email,
@@ -313,15 +301,14 @@ public class BamBankingController {
         Account acc = authService.register(fullName, email, pin);
 
         if (acc == null) {
-            model.addAttribute("signupError", "Sign up failed. Email already used or invalid PIN.");
-            return "bank-login"; // balik sa login page, same UI
+            model.addAttribute("signupError",
+                    "Sign up failed. Email already used, invalid PIN, or database error.");
+            return "bank-login";
         }
 
-        // auto-login – ilagay sa session
+        // auto-login
         session.setAttribute("username", acc.getUsername());
 
-        // redirect sa existing dashboard mo (hindi gagalawin yung logic doon)
         return "redirect:/bambanking/dashboard";
     }
-
 }
