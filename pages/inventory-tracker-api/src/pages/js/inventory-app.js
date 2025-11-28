@@ -670,6 +670,10 @@ function handlePrintReport() {
 // INIT
 // ============================
 
+// ============================
+// INIT
+// ============================
+
 document.addEventListener("DOMContentLoaded", async () => {
     // Hook up buttons
     els.btnRefreshItems?.addEventListener("click", loadItems);
@@ -678,8 +682,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     els.consTbody?.addEventListener("click", handleConsTableClick);
     els.btnPrintReport?.addEventListener("click", handlePrintReport);
 
-    // First load: login + fetch data
-    await ensureLoggedIn();
-    await Promise.all([loadItems(), loadConsignments()]);
-    renderActivityLog();
+    // If the cold-start modal helper exists, show it right away
+    if (window.InventoryColdStartModal && typeof window.InventoryColdStartModal.show === "function") {
+        window.InventoryColdStartModal.show();
+    }
+
+    try {
+        // First load: login + fetch data
+        await ensureLoggedIn();
+        await Promise.all([loadItems(), loadConsignments()]);
+        renderActivityLog();
+
+        // ✅ Both status pills are now "OK" (or error handled inside).
+        // If all went fine, play "server warmed up" animation + auto-close.
+        if (window.InventoryColdStartModal && typeof window.InventoryColdStartModal.ready === "function") {
+            window.InventoryColdStartModal.ready();
+        }
+    } catch (err) {
+        console.error("Error during initial inventory load:", err);
+
+        // On error we just hide the modal (no green success animation)
+        if (window.InventoryColdStartModal && typeof window.InventoryColdStartModal.hide === "function") {
+            window.InventoryColdStartModal.hide();
+        }
+    }
 });
+
+
+
+// document.addEventListener("DOMContentLoaded", async () => {
+// Hook up buttons
+// els.btnRefreshItems?.addEventListener("click", loadItems);
+// els.btnRefreshCons?.addEventListener("click", loadConsignments);
+// els.btnCreateCons?.addEventListener("click", createConsignment);
+// els.consTbody?.addEventListener("click", handleConsTableClick);
+// els.btnPrintReport?.addEventListener("click", handlePrintReport);
+
+// First load: login + fetch data
+//     await ensureLoggedIn();
+//     await Promise.all([loadItems(), loadConsignments()]);
+//     renderActivityLog();
+// });
