@@ -1,0 +1,273 @@
+{
+    "info": {
+        "_postman_id": "9e4b5c1d-1234-4cde-9abc-bookstorecrud",
+        "name": "Bookstore CRUD API (Portfolio)",
+        "description": "Bookstore CRUD API with auth, JWT, and MongoDB. Uses {{baseUrl}} + {{token}} + {{bookId}} variables.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Bamby\",\n  \"email\": \"bamby@portfolio.com\",\n  \"password\": \"password123\"\n}\n"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/register",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "register"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"bamby@portfolio.com\",\n  \"password\": \"password123\"\n}\n"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Login succeeded\", function () {",
+                                    "  pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "let data;",
+                                    "try {",
+                                    "  data = pm.response.json();",
+                                    "} catch (e) {",
+                                    "  data = null;",
+                                    "}",
+                                    "",
+                                    "if (data && data.token) {",
+                                    "  pm.environment.set(\"token\", data.token);",
+                                    "  console.log(\"Token saved to environment\");",
+                                    "} else {",
+                                    "  console.warn(\"No token found in response\");",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Books",
+            "item": [
+                {
+                    "name": "Get All Books (paginated)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/books?page=1&limit=8",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "books"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "8"
+                                }
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Book",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Bamby Portfolio Book\",\n  \"author\": \"Anna Marice Eben Boyose\",\n  \"genre\": \"Tech\",\n  \"publishedYear\": 2025,\n  \"description\": \"Sample book created from Postman for the Bookstore CRUD API demo.\"\n}\n"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/books",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "books"
+                            ]
+                        }
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Book created\", function () {",
+                                    "  pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "let data;",
+                                    "try {",
+                                    "  data = pm.response.json();",
+                                    "} catch (e) {",
+                                    "  data = null;",
+                                    "}",
+                                    "",
+                                    "if (data && data._id) {",
+                                    "  pm.environment.set(\"bookId\", data._id);",
+                                    "  console.log(\"bookId saved to environment: \" + data._id);",
+                                    "} else {",
+                                    "  console.warn(\"No _id in book create response\");",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Book by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/books/{{bookId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "books",
+                                "{{bookId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Book",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Updated Bamby Portfolio Book\",\n  \"author\": \"Anna M. Boyose\",\n  \"genre\": \"Updated Tech\",\n  \"publishedYear\": 2026,\n  \"description\": \"Updated via Postman for the Bookstore CRUD API demo.\"\n}\n"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/books/{{bookId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "books",
+                                "{{bookId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Book",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/books/{{bookId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "books",
+                                "{{bookId}}"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ],
+    "event": []
+}
