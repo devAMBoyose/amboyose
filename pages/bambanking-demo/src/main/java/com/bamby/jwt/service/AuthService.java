@@ -16,36 +16,9 @@ public class AuthService {
         this.db = db;
     }
 
-    // =============================
-    // LOGIN
-    // =============================
-    public Account authenticateCustomer(String username, int pin) {
-        if (username == null || username.isBlank()) {
-            return null;
-        }
-
-        String normalized = username.toLowerCase();
-
-        try {
-            return accountRepo.findByUsernameIgnoreCase(normalized)
-                    .filter(acc -> acc.getPin() == pin)
-                    .map(acc -> {
-                        db.log("AUTH OK for user " + acc.getUsername());
-                        return acc;
-                    })
-                    .orElseGet(() -> {
-                        db.log("AUTH FAIL for user " + normalized);
-                        return null;
-                    });
-        } catch (DataAccessException ex) {
-            db.log("AUTH ERROR (DB) for user " + normalized + ": " + ex.getMessage());
-            return null;
-        }
-    }
-
-    // =============================
-    // SIGNUP – used by HTML + Postman
-    // =============================
+    // ====================================
+    // SIGNUP (used by Postman + HTML form)
+    // ====================================
     public Account register(String fullName, String email, String pinRaw) {
 
         String name = fullName == null ? "" : fullName.trim();
@@ -73,7 +46,7 @@ public class AuthService {
         }
 
         try {
-            // check duplicate
+            // duplicate check
             if (accountRepo.existsByUsernameIgnoreCase(mail)) {
                 db.log("REGISTER FAIL (duplicate user) " + mail);
                 return null;
@@ -81,28 +54,68 @@ public class AuthService {
 
             Account acc = new Account(mail, pinInt, 0.0);
 
-            // save to MongoDB
+            // 1) save to MongoDB
             Account saved = accountRepo.save(acc);
 
-            // also mirror in the in-memory store for the demo/API
+            // 2) ALSO save in DataStore so the existing login/demo logic can see it
             db.save(saved);
 
             db.log("REGISTER OK for user " + mail + " (" + name + ")");
             return saved;
 
         } catch (DataAccessException ex) {
-            // this is where connection / auth errors to MongoDB will show up
             db.log("REGISTER ERROR (DB) for " + mail + ": " + ex.getMessage());
             return null;
         }
     }
 
-    // Helper for controller / API
-    public Account findByUsername(String username) {
-        if (username == null || username.isBlank())
-            return null;
+    // ====================================
+    // LOGIN (used by /bambanking/login)
+    // ====================================
+    public Account authenticateCustomer(String username, String pinRaw) {
 
-        String normalized = username.toLowerCase();
+        if (username == null || username.isBlank()) {
+            return null;
+        }
+        if (pinRaw == null || !pinRaw.matches("\\d{4}")) {
+            return null;
+        }
+
+        String normalized = username.trim().toLowerCase();
+        int pin;
+        try {
+            pin = Integer.parseInt(pinRaw);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+
+        try {
+            // Read from Mongo as the main source of truth
+            return accountRepo.findByUsernameIgnoreCase(normalized)
+                    .filter(acc -> acc.getPin() == pin)
+                    .map(acc -> {
+                        db.log("AUTH OK for user " + normalized);
+                        // keep DataStore in sync
+                        db.save(acc);
+                        return acc;
+                    })
+                    .orElseGet(() -> {
+                        db.log("AUTH FAIL for user " + normalized);
+                        return null;
+                    });
+
+        } catch (DataAccessException ex) {
+            db.log("AUTH ERROR (DB) for user " + normalized + ": " + ex.getMessage());
+            return null;
+        }
+    }
+
+    // Helper
+    public Account findByUsername(String username) {
+        if (username == null || username.isBlank()) {
+            return null;
+        }
+        String normalized = username.trim().toLowerCase();
         try {
             return accountRepo.findByUsernameIgnoreCase(normalized).orElse(null);
         } catch (DataAccessException ex) {
