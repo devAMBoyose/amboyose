@@ -1,5 +1,6 @@
 com\bamby\jwt\repository\AccountRepository.class
 com\bamby\jwt\api\DemoInfoController.class
+com\bamby\jwt\controller\DebugController.class
 com\bamby\jwt\repository\TransactionRepository.class
 com\bamby\jwt\controller\BamBankingController.class
 com\bamby\jwt\JwtDemoApplication.class
