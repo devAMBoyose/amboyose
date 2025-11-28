@@ -4,7 +4,10 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// @route GET /api/books?page=&limit=
+/**
+ * @route GET /api/books?page=&limit=
+ * @desc  Public: list books with pagination
+ */
 router.get("/", async (req, res) => {
     try {
         const page = Number(req.query.page) || 1;
@@ -13,14 +16,14 @@ router.get("/", async (req, res) => {
 
         const [books, total] = await Promise.all([
             Book.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
-            Book.countDocuments()
+            Book.countDocuments(),
         ]);
 
         res.json({
             data: books,
             page,
             totalPages: Math.ceil(total / limit),
-            total
+            total,
         });
     } catch (err) {
         console.error("Get books error:", err);
@@ -28,7 +31,10 @@ router.get("/", async (req, res) => {
     }
 });
 
-// @route GET /api/books/:id
+/**
+ * @route GET /api/books/:id
+ * @desc  Public: get single book
+ */
 router.get("/:id", async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
@@ -39,18 +45,23 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// @route POST /api/books
+/**
+ * @route POST /api/books
+ * @desc  Protected: create new book
+ */
 router.post("/", protect, async (req, res) => {
     try {
         const { title, author, description, publishedYear, genre } = req.body;
+
         const book = await Book.create({
             title,
             author,
             description,
             publishedYear,
             genre,
-            createdBy: req.user._id
+            createdBy: req.user._id,
         });
+
         res.status(201).json(book);
     } catch (err) {
         console.error("Create book error:", err);
@@ -58,12 +69,16 @@ router.post("/", protect, async (req, res) => {
     }
 });
 
-// @route PUT /api/books/:id
+/**
+ * @route PUT /api/books/:id
+ * @desc  Protected: update book
+ */
 router.put("/:id", protect, async (req, res) => {
     try {
         const updated = await Book.findByIdAndUpdate(req.params.id, req.body, {
-            new: true
+            new: true,
         });
+
         if (!updated) return res.status(404).json({ message: "Book not found" });
         res.json(updated);
     } catch {
@@ -71,7 +86,10 @@ router.put("/:id", protect, async (req, res) => {
     }
 });
 
-// @route DELETE /api/books/:id
+/**
+ * @route DELETE /api/books/:id
+ * @desc  Protected: delete book
+ */
 router.delete("/:id", protect, async (req, res) => {
     try {
         const deleted = await Book.findByIdAndDelete(req.params.id);

@@ -2,38 +2,45 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
-import { connectDB } from "./config/db.js";
 
 import authRoutes from "./routes/auth.routes.js";
 import bookRoutes from "./routes/books.routes.js";
-import reviewRoutes from "./routes/reviews.routes.js";
+import { connectDB } from "./config/db.js";
 
 dotenv.config();
+
 const app = express();
 
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
-
-app.use(
-    cors({
-        origin: CLIENT_URL,
-        credentials: true
-    })
-);
+// ---------- MIDDLEWARE ----------
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.get("/", (req, res) => {
-    res.json({ message: "Bookstore CRUD API is running..." });
-});
+const allowedOrigins = [
+    process.env.CLIENT_URL,        // https://bookstore-crud-ui.onrender.com
+    "https://bookstore-crud-ui.onrender.com"       // for local dev http://localhost:5173
+];
 
+app.use(
+    cors({
+        origin: allowedOrigins,
+        credentials: true,
+    })
+);
+
+// ---------- ROUTES ----------
 app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
-app.use("/api/reviews", reviewRoutes);
 
+// health check
+app.get("/api/health", (req, res) => {
+    res.json({ status: "ok" });
+});
+
+// ---------- START ----------
 const PORT = process.env.PORT || 5000;
 
 connectDB().then(() => {
-    app.listen(PORT, () =>
-        console.log(`🚀 API running on port ${PORT}`)
-    );
+    app.listen(PORT, () => {
+        console.log(`🚀 API running on port ${PORT}`);
+    });
 });
