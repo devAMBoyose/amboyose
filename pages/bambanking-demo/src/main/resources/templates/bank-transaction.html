@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title th:text="${txType} + ' – Transaction Result'">Transaction Result</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your existing global styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+    <!-- Your BamBanking dashboard styles -->
+    <link rel="stylesheet" href="/css/dashboard.css" />
+    <link rel="stylesheet" href="/css/bb-theme-toggle.css" />
+
+    <!-- NEW: tx-result specific styles -->
+    <link rel="stylesheet" href="/css/tx-result.css" />
+</head>
+
+<body class="bb-tx-body">
+    <div class="window">
+        <!-- Title bar (same vibe as dashboard) -->
+        <div class="title-bar">
+            <div class="tb-left">
+                <span class="bb-tx-title">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span>BamBanking – Transaction Result</span>
+                </span>
+            </div>
+            <div class="tb-right">
+                <a th:href="@{/bambanking/dashboard}" class="chip-link">
+                    <button class="chip chip-back">
+                        <i class="fa-solid fa-gauge"></i>
+                        <span>Back to Dashboard</span>
+                    </button>
+                </a>
+                <a th:href="@{/bambanking/logout}" class="chip-link">
+                    <button class="chip chip-logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Logout</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="bb-tx-main-panel">
+            <div class="bb-tx-card">
+                <div class="bb-tx-header">
+                    <div th:class="'bb-tx-icon ' + (${success} ? 'ok' : 'fail')">
+                        <i th:class="${success} ? 'fa-solid fa-check' : 'fa-solid fa-xmark'"></i>
+                    </div>
+                    <div>
+                        <div class="bb-tx-heading">
+                            <span th:text="${txType} + ' Result'">Transaction Result</span>
+                        </div>
+                        <div class="bb-tx-subtitle">
+                            <span th:if="${username != null}">
+                                Account:
+                                <strong th:text="${username}">user</strong>
+                            </span>
+                            <span class="bb-tx-status-pill" th:classappend="${success} ? ' ok' : ' fail'">
+                                <i class="fa-solid fa-circle-dot"></i>
+                                <span th:text="${success} ? 'Successful' : 'Failed'">Successful</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- message -->
+                <p class="bb-tx-message" th:text="${txMessage}">
+                    Your transaction has been processed.
+                </p>
+
+                <!-- details grid -->
+                <div class="bb-tx-grid">
+                    <div class="bb-tx-row">
+                        <div class="bb-tx-label">Transaction type</div>
+                        <div class="bb-tx-value" th:text="${txType}">Transfer</div>
+                    </div>
+
+                    <div class="bb-tx-row">
+                        <div class="bb-tx-label">Amount</div>
+                        <div class="bb-tx-value"
+                            th:text="'PHP ' + ${#numbers.formatDecimal(amount, 1, 'COMMA', 2, 'POINT')}">
+                            PHP 0.00
+                        </div>
+                    </div>
+
+                    <div class="bb-tx-row">
+                        <div class="bb-tx-label">Old balance</div>
+                        <div class="bb-tx-value"
+                            th:text="'PHP ' + ${#numbers.formatDecimal(oldBalance, 1, 'COMMA', 2, 'POINT')}">
+                            PHP 0.00
+                        </div>
+                    </div>
+
+                    <div class="bb-tx-row">
+                        <div class="bb-tx-label">New balance</div>
+                        <div class="bb-tx-value"
+                            th:text="'PHP ' + ${#numbers.formatDecimal(newBalance, 1, 'COMMA', 2, 'POINT')}">
+                            PHP 0.00
+                        </div>
+                    </div>
+
+                    <!-- Optional: transfer counterparty -->
+                    <div class="bb-tx-row" th:if="${txCounterparty != null}">
+                        <div class="bb-tx-label">Counterparty</div>
+                        <div class="bb-tx-value" th:text="${txCounterparty}">bamby</div>
+                    </div>
+
+                    <div class="bb-tx-row">
+                        <div class="bb-tx-label">Reference</div>
+                        <div class="bb-tx-value bb-tx-ref">
+                            <span id="bbTxRef" th:text="${txRef}">BB-000000</span>
+                            <button type="button" id="bbCopyRef" class="bb-tx-copy-btn">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bb-tx-row">
+                        <div class="bb-tx-label">Date &amp; time</div>
+                        <div class="bb-tx-value" th:text="${txDateTime}">
+                            2025-01-01 12:00
+                        </div>
+                    </div>
+                </div>
+
+                <!-- footer actions -->
+                <div class="bb-tx-footer">
+                    <a class="bb-tx-link-main" th:href="@{/bambanking/dashboard}">
+                        <i class="fa-solid fa-gauge"></i>
+                        <span>View Dashboard &amp; History</span>
+                    </a>
+                    <a class="bb-tx-link-alt" th:href="@{/bambanking/dashboard}#recent-transactions">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Go to Recent Transactions</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <!-- your existing footer here if needed -->
+        </footer>
+    </div>
+
+    <script src="/js/tx-result.js"></script>
+</body>
+
+</html>
