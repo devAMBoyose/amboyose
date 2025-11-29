@@ -26,14 +26,17 @@ public class EmailJsService {
     @Value("${emailjs.public-key}")
     private String publicKey;
 
-    @Value("${emailjs.app-name:BamBanking Demo}")
+    @Value("${emailjs.app-name}")
     private String appName;
 
-    @Value("${emailjs.support-email:bamby.dev@gmail.com}")
+    @Value("${emailjs.support-email}")
     private String supportEmail;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    // ------------------------------
+    // Internal helper
+    // ------------------------------
     private void sendTemplate(String templateId,
             String toEmail,
             String fullName,
@@ -63,23 +66,32 @@ public class EmailJsService {
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
             System.out.println("EmailJS response: " + response.getStatusCode());
+            System.out.println("EmailJS body: " + response.getBody());
         } catch (Exception ex) {
-            // Don't crash the app if email fails – just log
             System.err.println("Failed to send EmailJS message: " + ex.getMessage());
         }
     }
 
-    /**
-     * Send registration OTP email.
-     */
+    // ------------------------------
+    // Public API used by controller
+    // ------------------------------
+
+    /** Registration OTP */
     public void sendOtp(String toEmail, String fullName, String otp) {
         sendTemplate(templateOtp, toEmail, fullName, otp);
     }
 
+    /** PIN reset OTP (new name) */
+    public void sendPinReset(String toEmail, String fullName, String otp) {
+        sendTemplate(templatePinReset, toEmail, fullName, otp);
+    }
+
     /**
-     * Send PIN reset OTP email.
+     * PIN reset OTP (old name, kept for compatibility with existing controller
+     * code)
      */
     public void sendPinResetLink(String toEmail, String fullName, String otp) {
-        sendTemplate(templatePinReset, toEmail, fullName, otp);
+        // Just delegate to the actual implementation
+        sendPinReset(toEmail, fullName, otp);
     }
 }

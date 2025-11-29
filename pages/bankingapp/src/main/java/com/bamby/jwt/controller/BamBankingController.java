@@ -38,16 +38,18 @@ public class BamBankingController {
     // Helpers
     // --------------------------
 
+    private String generateOtp() {
+        SecureRandom random = new SecureRandom();
+        int code = 100000 + random.nextInt(900000); // 6-digit
+        return String.valueOf(code);
+    }
+
     private Account getSessionAccount(HttpSession session) {
         Object u = session.getAttribute("username");
         if (u == null) {
             return null;
         }
         return authService.findByUsername(u.toString()).orElse(null);
-    }
-
-    private String generateOtp() {
-        return String.format("%06d", random.nextInt(1_000_000));
     }
 
     // --------------------------
@@ -93,28 +95,92 @@ public class BamBankingController {
             @RequestParam("pin") String pin,
             HttpSession session,
             Model model) {
+
         try {
-            // You can adjust this to match your existing AuthService register method.
-            Account acc = authService.registerDemoAccount(firstName, lastName, email, pin);
+            // 1. Check if email already exists
+            Optional<Account> existing = authService.findByEmail(email);
+            if (existing.isPresent()) {
+                model.addAttribute("error", "An account with this email already exists. Please log in instead.");
+                model.addAttribute("openSignup", true);
+                return "bank-login";
+            }
 
-            String fullName = firstName + " " + lastName;
+            // 2. Generate OTP and send email
             String otp = generateOtp();
+            String fullName = (firstName + " " + lastName).trim();
 
-            // Store OTP in session for demo; in real app, store in DB with expiry.
-            session.setAttribute("signupEmail", email);
-            session.setAttribute("signupOtp", otp);
+            // Store pending registration in session
+            session.setAttribute("pending_firstName", firstName);
+            session.setAttribute("pending_lastName", lastName);
+            session.setAttribute("pending_email", email);
+            session.setAttribute("pending_pin", pin);
+            session.setAttribute("pending_otp", otp);
 
+            // Send OTP email
             emailJsService.sendOtp(email, fullName, otp);
 
-            model.addAttribute("tab", "login");
-            model.addAttribute("success",
-                    "Account created. We sent a verification code to " + email + ".");
-            return "bank-login";
+            // 3. Show OTP page
+            model.addAttribute("email", email);
+            return "bank-verify-otp";
+
         } catch (IllegalStateException ex) {
-            model.addAttribute("tab", "signup");
+            model.addAttribute("error", ex.getMessage());
+            model.addAttribute("openSignup", true);
+            return "bank-login";
+        }
+    }
+
+    @GetMapping("/verify-otp")
+    public String showVerifyOtp(HttpSession session, Model model) {
+        String email = (String) session.getAttribute("pending_email");
+        if (email == null) {
+            model.addAttribute("error", "No pending registration found. Please sign up first.");
+            return "bank-login";
+        }
+        model.addAttribute("email", email);
+        return "bank-verify-otp";
+    }
+
+    @PostMapping("/verify-otp")
+    public String handleVerifyOtp(
+            @RequestParam("otp") String otpInput,
+            HttpSession session,
+            Model model) {
+
+        String expectedOtp = (String) session.getAttribute("pending_otp");
+        String firstName = (String) session.getAttribute("pending_firstName");
+        String lastName = (String) session.getAttribute("pending_lastName");
+        String email = (String) session.getAttribute("pending_email");
+        String pin = (String) session.getAttribute("pending_pin");
+
+        if (expectedOtp == null || email == null) {
+            model.addAttribute("error", "Your registration session expired. Please sign up again.");
+            return "bank-login";
+        }
+
+        if (!expectedOtp.equals(otpInput)) {
+            model.addAttribute("email", email);
+            model.addAttribute("error", "Invalid code. Please try again.");
+            return "bank-verify-otp";
+        }
+
+        // OTP is correct → create account
+        try {
+            authService.registerDemoAccount(firstName, lastName, email, pin);
+        } catch (IllegalStateException ex) {
             model.addAttribute("error", ex.getMessage());
             return "bank-login";
         }
+
+        // Clean up session
+        session.removeAttribute("pending_firstName");
+        session.removeAttribute("pending_lastName");
+        session.removeAttribute("pending_email");
+        session.removeAttribute("pending_pin");
+        session.removeAttribute("pending_otp");
+
+        model.addAttribute("success", "Your account is verified. You can now log in.");
+        return "bank-login";
     }
 
     // --------------------------
