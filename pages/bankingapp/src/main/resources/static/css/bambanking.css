@@ -290,3 +290,74 @@
     padding: 0.35rem !important;
     font-size: 0.75rem !important;
 }
+
+/* =========================================
+   MOBILE LAYOUT – make everything fit nicely
+   ========================================= */
+@media (max-width: 640px) {
+
+    /* 1. Body: less padding, no over-centering */
+    body {
+        padding: 8px 0 16px;
+        /* smaller top/bottom padding */
+        align-items: stretch;
+        /* stop hard centering; let content use full width */
+    }
+
+    /* 2. Main window fills width on mobile */
+    .window {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+        /* optional – makes it feel more like a full-screen app */
+    }
+
+    /* 3. Title bar: full-width, a bit thinner */
+    .title-bar {
+        border-radius: 0;
+        padding-inline: 0.75rem;
+    }
+
+    /* 4. Login wrapper: bring card closer to footer */
+    .login-wrapper {
+        padding-top: 0.75rem;
+        padding-bottom: 1.25rem;
+        /* was much bigger before */
+    }
+
+    /* 5. Card: already compact, just ensure it uses width nicely */
+    .login-flip-inner {
+        max-width: 100%;
+        min-height: 380px;
+        /* a bit shorter so screen doesn’t scroll too much */
+    }
+
+    .login-card {
+        padding: 1rem 0.85rem 1.7rem;
+        border-radius: 16px;
+    }
+
+    /* 6. Footer: closer to card, full width, no giant gap */
+    .site-footer {
+        width: 100%;
+        max-width: 100%;
+        margin-top: 0.75rem;
+        padding: 0.75rem 1rem 1.1rem;
+        border-radius: 18px 18px 0 0;
+        /* nice docked feel at bottom */
+    }
+
+    /* 7. Slightly soften neon on mobile to avoid lag but keep look */
+    .login-card::before {
+        box-shadow:
+            0 0 8px rgba(0, 150, 255, 0.32),
+            0 0 10px rgba(255, 0, 60, 0.24);
+    }
+
+    .login-card::after {
+        box-shadow:
+            0 0 4px rgba(0, 255, 255, 0.14) inset,
+            0 0 5px rgba(255, 0, 255, 0.12) inset;
+    }
+}

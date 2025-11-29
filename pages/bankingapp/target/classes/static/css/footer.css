@@ -9,7 +9,7 @@
 
   /* Flattened gradient to avoid curve illusion */
   background: linear-gradient(180deg, #121428 0%, #18102b 100%);
-  border-top: 2px solid #ff4b2b;
+  border-top: 2px solid #911600;
   border-radius: 10px;
 
   /* Keep soft glow but flatten bottom shadow */
@@ -30,7 +30,7 @@
 
 /* Slight hover glow */
 .site-footer:hover {
-  border-color: #ff6b45;
+  border-color: #881b00;
   box-shadow:
     0 -4px 16px rgba(255, 75, 43, 0.25),
     0 0 24px rgba(255, 75, 43, 0.15),
@@ -51,8 +51,8 @@
 }
 
 .site-footer .links a:hover {
-  color: #ff4b2b;
-  text-shadow: 0 0 8px rgba(255, 75, 43, 0.5);
+  color: #a11901;
+  text-shadow: 0 0 8px rgba(199, 41, 13, 0.5);
 }
 
 /* Maintain even line layout (no bullet stacking) */
