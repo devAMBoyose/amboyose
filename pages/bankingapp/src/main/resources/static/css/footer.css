@@ -24,8 +24,8 @@
   font-size: 13px;
   letter-spacing: 0.25px;
 
-  backdrop-filter: blur(8px);
-  transition: box-shadow 0.3s ease, transform 0.25s ease, border-color 0.25s ease;
+  /* backdrop-filter: blur(8px);
+  transition: box-shadow 0.3s ease, transform 0.25s ease, border-color 0.25s ease; */
 }
 
 /* Slight hover glow */

@@ -51,6 +51,26 @@
     pointer-events: auto;
 }
 
+.login-meta {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+}
+
+.forgot-link {
+    background: none;
+    border: none;
+    color: #00eaff;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.forgot-link:hover {
+    color: #00ff9c;
+}
+
 /* =========================
    Tabs
    ========================= */
@@ -83,6 +103,35 @@
     background: linear-gradient(120deg, #04864a, #00bcd4);
     color: #020b06;
     border-color: transparent;
+}
+
+.login-meta {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+}
+
+.forgot-link {
+    font-size: 0.8rem;
+    color: #00eaff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.forgot-link:hover {
+    color: #00ff9c;
+}
+
+.forgot-card .login-helper {
+    font-size: 0.9rem;
+    color: #cbd5f5;
+    margin-bottom: 1rem;
+}
+
+.forgot-card .login-subtext {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
 }
 
 /* =========================
@@ -319,6 +368,28 @@
         padding-inline: 0.75rem;
     }
 
+    /* FORCE small navbar chip for Forgot PIN page */
+    .title-bar .tb-right .chip-back {
+        font-size: 10px !important;
+        padding: 4px 10px !important;
+        border-radius: 8px !important;
+        height: auto !important;
+        line-height: 1 !important;
+    }
+
+    /* Make icon smaller */
+    .title-bar .tb-right .chip-back i {
+        font-size: 8px !important;
+        margin-right: 4px !important;
+    }
+
+    /* Make the text smaller */
+    .title-bar .tb-right .chip-back span {
+        font-size: 8px !important;
+    }
+
+
+
     /* 4. Login wrapper: bring card closer to footer */
     .login-wrapper {
         padding-top: 0.75rem;
@@ -359,5 +430,171 @@
         box-shadow:
             0 0 4px rgba(0, 255, 255, 0.14) inset,
             0 0 5px rgba(255, 0, 255, 0.12) inset;
+    }
+}
+
+
+/* ---------- OTP CARD SMALL TWEAK ---------- */
+.otp-card-inner {
+    transform: none !important;
+    /* no flip on OTP page */
+}
+
+/* ---------- Info lines on OTP screen ---------- */
+.info-line {
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.8rem;
+    margin-bottom: 0.15rem;
+    color: #9ca3af;
+}
+
+.info-line .label {
+    opacity: 0.75;
+}
+
+.info-line .value {
+    color: #e5e7eb;
+}
+
+/* tiny note */
+.tiny-note {
+    margin-top: 0.75rem;
+    font-size: 0.7rem;
+    color: #6b7280;
+}
+
+/* === COMPACT NEON-GREEN MODAL (LOGIN + OTP) === */
+.bank-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 999999;
+}
+
+.bank-modal.show {
+    display: flex;
+}
+
+.bank-modal-box {
+    background: #0a0e17;
+    padding: 1.2rem 1.4rem;
+    border-radius: 14px;
+    text-align: center;
+
+    /* Neon green border & glow */
+    border: 2px solid #00ff9c;
+    box-shadow:
+        0 0 10px rgba(0, 255, 156, 0.6),
+        0 0 25px rgba(0, 255, 156, 0.4),
+        0 0 50px rgba(0, 255, 156, 0.2);
+
+    max-width: 300px;
+    width: 88%;
+    /* mobile friendly */
+    animation: modalPop 0.23s ease-out;
+}
+
+@keyframes modalPop {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.bank-modal-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.bank-modal-message {
+    color: #dcdcdc;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.bank-modal-close {
+    background: linear-gradient(135deg, #00ffaa, #00e1ff);
+    border: none;
+    padding: 0.45rem 1.4rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #000;
+    box-shadow: 0 0 12px rgba(0, 255, 156, 0.6);
+    transition: 0.2s;
+}
+
+.bank-modal-close:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 18px rgba(0, 255, 156, 0.8);
+}
+
+/* Mobile optimization */
+@media (max-width: 500px) {
+    .bank-modal-box {
+        padding: 1rem 1.2rem;
+        max-width: 260px;
+    }
+
+    .bank-modal-message {
+        font-size: 0.85rem;
+    }
+}
+
+.login-field-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.login-field-row div {
+    flex: 1;
+}
+
+/* 2-column name row, reusing login-field styles */
+.login-field-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* halves stay inside card width */
+.login-field-row .field-half {
+    flex: 1;
+}
+
+/* inputs fill their half, same look as other fields */
+.login-field-row .field-half input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* mobile: stack vertically */
+@media (max-width: 600px) {
+    .login-field-row {
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .login-field-row {
+        flex-direction: column;
+        gap: 0.6rem;
     }
 }

@@ -3,10 +3,15 @@ F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jw
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\controller\DebugController.java
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\JwtDemoApplication.java
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\model\Account.java
+F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\model\PinResetToken.java
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\model\Transaction.java
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\repository\AccountRepository.java
+F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\repository\PinResetTokenRepository.java
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\repository\TransactionRepository.java
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\service\AuthService.java
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\service\DataStore.java
+F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\service\EmailJsService.java
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\service\MaintenanceService.java
+F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\service\OtpService.java
+F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\service\PinResetService.java
 F:\Repository\portfolio2025\amboyose\pages\bankingapp\src\main\java\com\bamby\jwt\service\TransactionService.java

@@ -7,25 +7,26 @@
     <title>BamBanking Login | Projects</title>
 
     <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap"
+        rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
     <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" href="/css/footer.css" th:href="@{/css/footer.css}" />
-    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}" />
-    <link rel="stylesheet" href="/css/nav.css" th:href="@{/css/nav.css}" />
+    <link rel="stylesheet" th:href="@{/css/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/nav.css}" />
 
-    <!-- PAGE-SPECIFIC LOGIN + GLOW STYLES -->
-    <link rel="stylesheet" href="/css/bambanking.css" th:href="@{/css/bambanking.css}" />
+    <!-- PAGE STYLES -->
+    <link rel="stylesheet" th:href="@{/css/bambanking.css}" />
 </head>
 
-<body>
+<!-- server messages go into data-* so JS can show modal -->
 
-    <!-- cursor background (from your portfolio) -->
+<body th:attr="data-error=${error},data-success=${success},data-open-signup=${openSignup}">
+
     <div id="cursor-bg" aria-hidden="true"></div>
 
     <div class="window">
-
         <!-- Title Bar -->
         <div class="title-bar">
             <div class="dots">
@@ -38,7 +39,7 @@
                 <a href="https://amboyose.onrender.com/" class="chip-link">
                     <button class="chip chip-back" type="button">
                         <i class="fa-solid fa-house"></i>
-                        <span>Home</span>
+                        <span style="font-size: small;">Home</span>
                     </button>
                 </a>
             </div>
@@ -66,23 +67,28 @@
                                 Login() <span class="login-sub">// BamBanking demo</span>
                             </h1>
 
-                            <p th:if="${error}" th:text="${error}" style="color:#ff6b6b; margin-bottom: .6rem;"></p>
-
-                            <form th:action="@{/bambanking/login}" method="post">
-                                <div class="login-field">
+                            <!-- LOGIN FORM -->
+                            <form th:action="@{/bambanking/login}" method="post" id="loginForm" novalidate>
+                                <div class="form-row form-row-inline">
                                     <label for="username">username</label>
-                                    <input type="text" id="username" name="username" required
-                                        placeholder="anna@gmail.com / bam@gmail.com / guest" />
+                                    <input type="text" id="username" name="username"
+                                        placeholder="your username or email" required />
                                 </div>
 
-                                <div class="login-field">
-                                    <label for="login-pin">PIN</label>
-                                    <input type="password" id="login-pin" name="pin" maxlength="4" required
-                                        placeholder="1234 / 4321 / 1111" />
+                                <div class="form-row form-row-inline">
+                                    <label for="pin">pin</label>
+                                    <input type="password" id="pin" name="pin" minlength="4" maxlength="4"
+                                        inputmode="numeric" pattern="\d{4}" placeholder="1234 / 4321 / 1111" required />
                                 </div>
 
                                 <div class="login-actions">
-                                    <button type="submit" class="btn-login">Login</button>
+                                    <button type="submit" class="btn-login">
+                                        Login
+                                    </button>
+                                </div>
+
+                                <div class="forgot-pin-row">
+                                    <a href="/bambanking/forgot-pin" class="forgot-pin-link">Forgot PIN?</a>
                                 </div>
                             </form>
 
@@ -103,27 +109,41 @@
                             </div>
 
                             <h1 class="login-title">
-                                Signup() <span class="login-sub">// Backend Enabled</span>
+                                Signup() <span class="login-sub">// OTP via Email</span>
                             </h1>
 
-                            <form th:action="@{/bambanking/signup}" method="post">
+                            <!-- SIGNUP FORM -->
+                            <form th:action="@{/bambanking/signup}" method="post" id="signupForm" novalidate>
+
+                                <!-- First + Last name row (2 columns) -->
+                                <div class="login-field login-field-row">
+                                    <div class="field-half">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" id="firstName" name="firstName" placeholder="Anna"
+                                            required />
+                                    </div>
+
+                                    <div class="field-half">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" id="lastName" name="lastName" placeholder="Boyose"
+                                            required />
+                                    </div>
+                                </div>
+
+                                <!-- Optional: full name for JS only (backend uses firstName/lastName) -->
+                                <input type="hidden" id="fullName" name="fullName" />
 
                                 <div class="login-field">
-                                    <label for="fullName">Full Name</label>
-                                    <input type="text" id="fullName" name="fullName" required
-                                        placeholder="Bamby Demo User" />
+                                    <label for="email">email</label>
+                                    <input type="email" id="email" name="email" placeholder="bamby@example.com" required
+                                        pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+                                        title="Please enter a valid email like name@example.com" />
                                 </div>
 
                                 <div class="login-field">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" required
-                                        placeholder="bamby@example.com" />
-                                </div>
-
-                                <div class="login-field">
-                                    <label for="signup-pin">Choose PIN</label>
-                                    <input type="password" id="signup-pin" name="pin" maxlength="4" required
-                                        placeholder="****" />
+                                    <label for="signup-pin">choose pin</label>
+                                    <input type="password" id="signup-pin" name="pin" maxlength="4" inputmode="numeric"
+                                        pattern="\d{4}" placeholder="****" required />
                                 </div>
 
                                 <div class="login-actions">
@@ -142,7 +162,7 @@
 
     <!-- FOOTER -->
     <footer class="site-footer">
-        <p>© 2025 <strong>BAMBY</strong> | Designed & Coded with ❤️</p>
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
         <p class="links">
             <a href="/index.html">About</a> •
             <a href="/portfolio.html">Portfolio</a> •
@@ -151,49 +171,19 @@
         </p>
     </footer>
 
-    <!-- GLOBAL JS -->
-    <script src="/js/script.js" th:src="@{/js/script.js}"></script>
-    <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
+    <!-- MODAL -->
+    <div id="errorModal" class="bank-modal">
+        <div class="bank-modal-box">
+            <h2 class="bank-modal-title" id="modalTitle">Notice</h2>
+            <p class="bank-modal-message" id="errorModalMessage">Message.</p>
+            <button type="button" class="bank-modal-close" id="errorModalClose">OK</button>
+        </div>
+    </div>
 
-    <!-- FLIP CARD JS -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const flip = document.getElementById("authFlip");
-
-            const tabLogin = document.getElementById("tabLogin");
-            const tabSignup = document.getElementById("tabSignup");
-            const tabLoginBack = document.getElementById("tabLoginBack");
-            const tabSignupBack = document.getElementById("tabSignupBack");
-
-            function activate(isLogin) {
-                tabLogin.classList.toggle("active", isLogin);
-                tabLoginBack.classList.toggle("active", isLogin);
-                tabSignup.classList.toggle("active", !isLogin);
-                tabSignupBack.classList.toggle("active", !isLogin);
-            }
-
-            tabSignup.addEventListener("click", () => {
-                flip.classList.add("is-flipped");
-                activate(false);
-            });
-
-            tabSignupBack.addEventListener("click", () => {
-                flip.classList.add("is-flipped");
-                activate(false);
-            });
-
-            tabLogin.addEventListener("click", () => {
-                flip.classList.remove("is-flipped");
-                activate(true);
-            });
-
-            tabLoginBack.addEventListener("click", () => {
-                flip.classList.remove("is-flipped");
-                activate(true);
-            });
-        });
-    </script>
-
+    <!-- JS -->
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/nav.js}" defer></script>
+    <script th:src="@{/js/bambanking-auth.js}"></script>
 </body>
 
 </html>

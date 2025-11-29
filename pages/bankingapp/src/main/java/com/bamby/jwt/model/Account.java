@@ -9,7 +9,15 @@ public class Account {
     @Id
     private String id;
 
+    // login name (you are using email-like usernames)
     private String username;
+
+    // real email column so Spring Data "findByEmail" works
+    private String email;
+
+    // for nicer emails ("Anna Boyose")
+    private String fullName;
+
     private int pin;
     private double balance;
 
@@ -18,9 +26,13 @@ public class Account {
 
     public Account(String username, int pin, double balance) {
         this.username = username.toLowerCase();
+        this.email = username.toLowerCase();
+        this.fullName = username;
         this.pin = pin;
         this.balance = balance;
     }
+
+    // ---------------- getters / setters ----------------
 
     public String getId() {
         return id;
@@ -36,6 +48,22 @@ public class Account {
 
     public void setUsername(String username) {
         this.username = username.toLowerCase();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email != null ? email.toLowerCase() : null;
+    }
+
+    public String getFullName() {
+        return fullName != null ? fullName : username;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public int getPin() {
