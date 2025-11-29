@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/bambanking")
 public class BamBankingController {
 
     private final AuthService authService;
@@ -40,12 +39,12 @@ public class BamBankingController {
     // LOGIN / LOGOUT
     // --------------------------
 
-    @GetMapping("/login")
+    @GetMapping("/bambanking/login")
     public String showLogin() {
         return "bank-login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/bambanking/login")
     public String doLogin(@RequestParam String username,
             @RequestParam String pin,
             HttpSession session,
@@ -64,7 +63,7 @@ public class BamBankingController {
         return "redirect:/bambanking/dashboard";
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/bambanking/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/bambanking/login";
@@ -73,7 +72,7 @@ public class BamBankingController {
     // --------------------------
     // DASHBOARD
     // --------------------------
-    @GetMapping("/dashboard")
+    @GetMapping("/bambanking/dashboard")
     public String dashboard(HttpSession session, Model model) {
         Account acc = getSessionAccount(session);
         if (acc == null) {
@@ -92,7 +91,7 @@ public class BamBankingController {
     // --------------------------
     // WITHDRAW – detailed result page
     // --------------------------
-    @PostMapping("/withdraw")
+    @PostMapping("/bambanking/withdraw")
     public String handleWithdraw(@RequestParam double amount,
             HttpSession session,
             Model model) {
@@ -136,7 +135,7 @@ public class BamBankingController {
     // --------------------------
     // DEPOSIT – detailed result page
     // --------------------------
-    @PostMapping("/deposit")
+    @PostMapping("/bambanking/deposit")
     public String handleDeposit(@RequestParam double amount,
             HttpSession session,
             Model model) {
@@ -180,7 +179,7 @@ public class BamBankingController {
     // --------------------------
     // CHECK BALANCE – result page
     // --------------------------
-    @PostMapping("/check-balance")
+    @PostMapping("/bambanking/check-balance")
     public String checkBalance(HttpSession session, Model model) {
         Account acc = getSessionAccount(session);
         if (acc == null) {
@@ -206,7 +205,7 @@ public class BamBankingController {
     // --------------------------
     // TRANSFER – detailed result page + history
     // --------------------------
-    @PostMapping("/transfer")
+    @PostMapping("/bambanking/transfer")
     public String handleTransfer(@RequestParam String toUser,
             @RequestParam double amount,
             HttpSession session,
@@ -264,7 +263,7 @@ public class BamBankingController {
         return "transaction-result";
     }
 
-    @GetMapping("/help")
+    @GetMapping("/bambanking/help")
     public String help(Model model) {
         String result = txService.helpText();
         model.addAttribute("message", result);
@@ -274,14 +273,14 @@ public class BamBankingController {
     // --------------------------
     // MAINTENANCE
     // --------------------------
-    @GetMapping("/maintenance/diagnostics")
+    @GetMapping("/bambanking/maintenance/diagnostics")
     public String diagnostics(Model model) {
         String result = maintenanceService.diagnostics();
         model.addAttribute("message", result);
         return "bank-transaction";
     }
 
-    @GetMapping("/maintenance/update")
+    @GetMapping("/bambanking/maintenance/update")
     public String softwareUpdate(Model model) {
         String result = maintenanceService.softwareUpdates();
         model.addAttribute("message", result);
@@ -291,7 +290,7 @@ public class BamBankingController {
     // --------------------------
     // SIGNUP
     // --------------------------
-    @PostMapping("/signup")
+    @PostMapping("/bambanking/signup")
     public String handleSignup(@RequestParam String fullName,
             @RequestParam String email,
             @RequestParam String pin,
