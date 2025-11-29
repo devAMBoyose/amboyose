@@ -1,0 +1,197 @@
+/* ================================
+   BamBanking Login / Signup Styles
+   ================================ */
+
+/* Layout from your old inline CSS */
+.login-wrapper {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 320px;
+    margin-bottom: 2.5rem;
+}
+
+.login-flip-scene {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    perspective: 1400px;
+}
+
+.login-flip-inner {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    min-height: 360px;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.login-flip-inner.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.login-flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+}
+
+.login-flip-face.back {
+    transform: rotateY(180deg);
+    pointer-events: none;
+}
+
+.login-flip-inner.is-flipped .front {
+    pointer-events: none;
+}
+
+.login-flip-inner.is-flipped .back {
+    pointer-events: auto;
+}
+
+.login-tabs {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 1.4rem;
+}
+
+.login-tab {
+    flex: 1;
+    padding: 0.45rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(5, 5, 5, 0.9);
+    color: #e0fdf2;
+    font-size: 0.8rem;
+    font-family: "JetBrains Mono", monospace;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+
+.login-tab.active {
+    background: linear-gradient(120deg, #04864a, #00bcd4);
+    color: #020b06;
+    border-color: transparent;
+    font-weight: 600;
+}
+
+/* ================
+   GLOW CARD MAGIC
+   ================ */
+
+.login-card {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    border-radius: 18px;
+    padding: 2rem;
+    background: rgba(10, 10, 10, 0.92);
+    /* inner dark card */
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.8);
+    border: none;
+    overflow: hidden;
+}
+
+/* Outer animated gradient border */
+.login-card::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(135deg,
+            #00f5a0,
+            #00bcd4,
+            #ff00f5,
+            #ff6bcb,
+            #00f5a0);
+    background-size: 300% 300%;
+    z-index: -2;
+    animation: bambyBorderGlow 8s linear infinite;
+}
+
+/* Solid dark fill so the middle stays readable */
+.login-card::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: inherit;
+    background: rgba(10, 10, 10, 0.96);
+    z-index: -1;
+}
+
+/* subtle pulsing blur around the card */
+.login-card:hover::before {
+    filter: blur(3px);
+}
+
+/* Premium animated gradient like your “old” version */
+@keyframes bambyBorderGlow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* ===============
+   Inputs & buttons
+   =============== */
+
+.login-field {
+    margin-bottom: 1rem;
+}
+
+.login-field input {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(5, 5, 5, 0.9);
+    color: #fff;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+}
+
+.login-actions {
+    margin-top: 0.75rem;
+}
+
+.btn-login,
+.btn-signup {
+    padding: 0.55rem 1.4rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: "JetBrains Mono", monospace;
+    background: linear-gradient(120deg, #04864a, #00bcd4);
+    color: #020b06;
+    font-weight: 600;
+}
+
+/* =======
+   Mobile
+   ======= */
+
+@media (max-width: 640px) {
+    .login-wrapper {
+        padding: 1.5rem 1rem;
+    }
+
+    .login-card {
+        padding: 1.5rem;
+    }
+}

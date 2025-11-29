@@ -10,158 +10,18 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
-    <!-- GLOBAL STYLES (Spring Boot from /static/css/) -->
+    <!-- GLOBAL STYLES -->
     <link rel="stylesheet" href="/css/footer.css" th:href="@{/css/footer.css}" />
     <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}" />
     <link rel="stylesheet" href="/css/nav.css" th:href="@{/css/nav.css}" />
 
-    <!-- If you have responsive.css, keep this -->
-    <!-- <link rel="stylesheet" href="/css/responsive.css" th:href="@{/css/responsive.css}" /> -->
-
-    <!-- 🔥 Removed WRONG paths:
-        /assets/css/responsive.css
-        /springboot/assets/sp.base.css
-        /springboot/assets/sp.responsive.css
-    -->
-
-    <!-- Your original inline styles -->
-    <style>
-        .login-wrapper {
-            padding: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 320px;
-            margin-bottom: 2.5rem;
-        }
-
-        .login-flip-scene {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            perspective: 1400px;
-        }
-
-        .login-flip-inner {
-            position: relative;
-            width: 100%;
-            max-width: 420px;
-            min-height: 360px;
-            transform-style: preserve-3d;
-            transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        .login-flip-inner.is-flipped {
-            transform: rotateY(180deg);
-        }
-
-        .login-flip-face {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-        }
-
-        .login-flip-face.back {
-            transform: rotateY(180deg);
-            pointer-events: none;
-        }
-
-        .login-flip-inner.is-flipped .front {
-            pointer-events: none;
-        }
-
-        .login-flip-inner.is-flipped .back {
-            pointer-events: auto;
-        }
-
-        .login-tabs {
-            display: flex;
-            justify-content: space-between;
-            gap: 0.5rem;
-            margin-bottom: 1.4rem;
-        }
-
-        .login-tab {
-            flex: 1;
-            padding: 0.45rem 0.6rem;
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(5, 5, 5, 0.9);
-            color: #e0fdf2;
-            font-size: 0.8rem;
-            font-family: "JetBrains Mono", monospace;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.35rem;
-            transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
-        }
-
-        .login-tab.active {
-            background: linear-gradient(120deg, #04864a, #00bcd4);
-            color: #020b06;
-            border-color: transparent;
-            font-weight: 600;
-        }
-
-        .login-card {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            border-radius: 16px;
-            padding: 2rem;
-            background: rgba(10, 10, 10, 0.92);
-            box-shadow: 0 0 24px rgba(0, 0, 0, 0.8);
-            border: none;
-        }
-
-        .login-field {
-            margin-bottom: 1rem;
-        }
-
-        .login-field input {
-            width: 100%;
-            padding: 0.55rem 0.7rem;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(5, 5, 5, 0.9);
-            color: #fff;
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.85rem;
-        }
-
-        .login-actions {
-            margin-top: 0.75rem;
-        }
-
-        .btn-login,
-        .btn-signup {
-            padding: 0.55rem 1.4rem;
-            border-radius: 999px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-family: "JetBrains Mono", monospace;
-            background: linear-gradient(120deg, #04864a, #00bcd4);
-            color: #020b06;
-            font-weight: 600;
-        }
-
-        @media (max-width: 640px) {
-            .login-wrapper {
-                padding: 1.5rem 1rem;
-            }
-
-            .login-card {
-                padding: 1.5rem;
-            }
-        }
-    </style>
+    <!-- PAGE-SPECIFIC LOGIN + GLOW STYLES -->
+    <link rel="stylesheet" href="/css/bambanking.css" th:href="@{/css/bambanking.css}" />
 </head>
 
 <body>
 
+    <!-- cursor background (from your portfolio) -->
     <div id="cursor-bg" aria-hidden="true"></div>
 
     <div class="window">
@@ -172,7 +32,7 @@
                 <span class="red"></span><span class="yellow"></span><span class="green"></span>
             </div>
 
-            <span class="filename">Banking App with Spring Boot</span>
+            <span class="filename">Banking App with Springboot JAVA</span>
 
             <div class="tb-right">
                 <a href="https://amboyose.onrender.com/" class="chip-link">
@@ -202,9 +62,11 @@
                                 </button>
                             </div>
 
-                            <h1>Login() <span style="font-size:0.8rem; opacity:0.7;">// BamBanking demo</span></h1>
+                            <h1 class="login-title">
+                                Login() <span class="login-sub">// BamBanking demo</span>
+                            </h1>
 
-                            <p th:if="${error}" th:text="${error}" style="color:#ff6b6b;"></p>
+                            <p th:if="${error}" th:text="${error}" style="color:#ff6b6b; margin-bottom: .6rem;"></p>
 
                             <form th:action="@{/bambanking/login}" method="post">
                                 <div class="login-field">
@@ -240,7 +102,9 @@
                                 </button>
                             </div>
 
-                            <h1>Signup() <span style="font-size:0.8rem; opacity:0.7;">// Backend Enabled</span></h1>
+                            <h1 class="login-title">
+                                Signup() <span class="login-sub">// Backend Enabled</span>
+                            </h1>
 
                             <form th:action="@{/bambanking/signup}" method="post">
 
@@ -287,7 +151,7 @@
         </p>
     </footer>
 
-    <!-- JS -->
+    <!-- GLOBAL JS -->
     <script src="/js/script.js" th:src="@{/js/script.js}"></script>
     <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
 
