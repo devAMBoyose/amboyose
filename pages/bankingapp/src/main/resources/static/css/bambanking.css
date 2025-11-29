@@ -111,11 +111,11 @@
 
     background: linear-gradient(135deg,
             #00eaff,
-            #2f6bff,
-            #a542ff,
-            #ff2dfc,
-            #ff6db7,
-            #00eaff);
+            #02d452,
+            #149dec,
+            #b30101,
+            #530303,
+            #1692b8);
     background-size: 320% 320%;
     animation: bbBorderMove 6s ease infinite;
 
@@ -232,4 +232,61 @@
     .login-card {
         padding: 2rem 1.5rem 4.5rem;
     }
+}
+
+/* ============================
+   VERY SMALL DESKTOP CARD SIZE
+   ============================ */
+
+.login-flip-inner {
+    max-width: 360px !important;
+    /* VERY small width */
+    min-height: 320px !important;
+    /* shorter height */
+}
+
+.login-card {
+    padding: 1.2rem 1.1rem 1.8rem !important;
+    /* compact padding */
+    border-radius: 18px !important;
+}
+
+.login-card::before {
+    inset: -3px !important;
+    /* thinner frame but still glowing */
+}
+
+.login-card::after {
+    inset: 6px !important;
+    /* thinner inner mask for smaller border appearance */
+}
+
+/* Titles smaller */
+.login-title {
+    font-size: 1.2rem !important;
+}
+
+.login-sub {
+    font-size: 0.7rem !important;
+}
+
+/* Smaller inputs + buttons */
+.login-field input {
+    padding: 0.45rem 0.6rem !important;
+    font-size: 0.75rem !important;
+}
+
+.btn-login,
+.btn-signup {
+    padding: 0.45rem 1rem !important;
+    font-size: 0.8rem !important;
+}
+
+.login-tabs {
+    margin-bottom: 1rem !important;
+}
+
+.login-tab {
+    padding: 0.35rem !important;
+    font-size: 0.75rem !important;
 }
