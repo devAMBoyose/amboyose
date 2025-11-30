@@ -16,190 +16,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="stylesheet" th:href="@{/css/nav.css}" />
 
-    <!-- <style>
-        .window {
-            max-width: 960px;
-            margin: 4rem auto;
-            border-radius: 18px;
-            background: radial-gradient(circle at top, #111827 0, #020617 45%, #020617 100%);
-            box-shadow: 0 0 40px rgba(0, 255, 150, 0.15);
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            overflow: hidden;
-        }
-
-        .title-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 1.5rem;
-            background: #020617;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-        }
-
-        .dots {
-            display: flex;
-            gap: 0.4rem;
-        }
-
-        .dots span {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .dots span:nth-child(1) {
-            background: #f97373;
-        }
-
-        .dots span:nth-child(2) {
-            background: #facc15;
-        }
-
-        .dots span:nth-child(3) {
-            background: #22c55e;
-        }
-
-        .filename {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.8rem;
-            color: #e5e7eb;
-        }
-
-        .chip-link {
-            text-decoration: none;
-        }
-
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 7px 12px;
-            border-radius: 999px;
-            border: 1px solid var(--pill-bd, #1f2937);
-            background: var(--pill, #020617);
-            color: #e5e7eb;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.15s;
-        }
-
-        .chip-back {
-            --pill: #020617;
-            --pill-bd: #1f2937;
-        }
-
-        .chip-back:hover {
-            --pill: #0f172a;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-            transform: translateY(-1px);
-        }
-
-        .chip-back i {
-            margin-right: 0.25rem;
-        }
-
-        .login-wrapper {
-            padding: 2.5rem 2.5rem 2.25rem;
-        }
-
-        .card-shell {
-            border-radius: 22px;
-            padding: 1.75rem 2rem 1.75rem;
-            background: radial-gradient(circle at top, #020617 0, #020617 50%, #020617 100%);
-            box-shadow:
-                0 0 40px rgba(0, 255, 150, 0.15),
-                0 0 0 1px rgba(148, 163, 184, 0.25);
-        }
-
-        .card-title {
-            font-family: "JetBrains Mono", monospace;
-            color: #e5e7eb;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-title h1 {
-            margin: 0;
-            font-size: 1.4rem;
-        }
-
-        .card-title small {
-            font-size: 0.8rem;
-            color: #9ca3af;
-        }
-
-        .form-row {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-row label {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.8rem;
-            color: #9ca3af;
-        }
-
-        .form-row input {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.9rem;
-            padding: 0.55rem 0.75rem;
-            border-radius: 8px;
-            border: 1px solid #1f2937;
-            background: #020617;
-            color: #e5e7eb;
-        }
-
-        .form-row input:focus {
-            outline: none;
-            border-color: #22c55e;
-            box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
-        }
-
-        .helper-text {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.8rem;
-            color: #9ca3af;
-            margin-top: 1.25rem;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.9rem;
-            border-radius: 999px;
-            border: none;
-            padding: 0.6rem 1.6rem;
-            cursor: pointer;
-            background: linear-gradient(135deg, #22c55e, #22d3ee);
-            color: #020617;
-            font-weight: 600;
-            box-shadow: 0 0 18px rgba(45, 212, 191, 0.6);
-            margin-top: 0.5rem;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 0 24px rgba(45, 212, 191, 0.9);
-        }
-
-        @media (max-width: 640px) {
-            .window {
-                margin: 2rem 1rem;
-            }
-
-            .login-wrapper {
-                padding: 1.75rem 1.5rem 1.5rem;
-            }
-
-            .card-shell {
-                padding: 1.5rem 1.5rem 1.4rem;
-            }
-        }
-    </style> -->
+    <!-- (your inline styles kept as-is) -->
 </head>
 
 <body>
@@ -226,6 +43,12 @@
                 <div class="card-title">
                     <h1>ForgotPIN() <span style="color:#22c55e;">// BamBanking demo</span></h1>
                     <small>Enter the email you used to register. We’ll send a one-time PIN reset code.</small>
+
+                    <!-- NEW: show error / success -->
+                    <p th:if="${error}" style="color:#f97373; font-size:0.85rem; margin:0.75rem 0 0.25rem;"
+                        th:text="${error}"></p>
+                    <p th:if="${success}" style="color:#4ade80; font-size:0.85rem; margin:0.75rem 0 0.25rem;"
+                        th:text="${success}"></p>
                 </div>
 
                 <form action="/bambanking/forgot-pin" method="post">

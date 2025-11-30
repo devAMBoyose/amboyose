@@ -39,7 +39,6 @@ public class BamBankingController {
     // --------------------------
 
     private String generateOtp() {
-        SecureRandom random = new SecureRandom();
         int code = 100000 + random.nextInt(900000); // 6-digit
         return String.valueOf(code);
     }
@@ -61,10 +60,13 @@ public class BamBankingController {
             @RequestParam(value = "tab", required = false, defaultValue = "login") String tab,
             @RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "success", required = false) String success,
+            @RequestParam(value = "openSignup", required = false) Boolean openSignup,
             Model model) {
+
         model.addAttribute("tab", tab);
         model.addAttribute("error", error);
         model.addAttribute("success", success);
+        model.addAttribute("openSignup", openSignup != null ? openSignup : false);
         return "bank-login";
     }
 
@@ -74,11 +76,13 @@ public class BamBankingController {
             @RequestParam("pin") String pin,
             HttpSession session,
             Model model) {
+
         Optional<Account> accountOpt = authService.login(username, pin);
 
         if (accountOpt.isEmpty()) {
             model.addAttribute("tab", "login");
             model.addAttribute("error", "Invalid username or PIN.");
+            model.addAttribute("openSignup", false);
             return "bank-login";
         }
 
@@ -180,11 +184,12 @@ public class BamBankingController {
         session.removeAttribute("pending_otp");
 
         model.addAttribute("success", "Your account is verified. You can now log in.");
+        model.addAttribute("openSignup", false);
         return "bank-login";
     }
 
     // --------------------------
-    // Dashboard (unchanged)
+    // Dashboard
     // --------------------------
 
     @GetMapping("/dashboard")
@@ -195,6 +200,7 @@ public class BamBankingController {
         }
 
         model.addAttribute("account", acc);
+        model.addAttribute("username", acc.getUsername()); // for convenience
         model.addAttribute("balance", acc.getBalance());
         model.addAttribute("recentTx", txService.getRecentTransactions(acc.getUsername(), 10));
 
@@ -220,6 +226,7 @@ public class BamBankingController {
             @RequestParam("email") String email,
             HttpSession session,
             Model model) {
+
         Optional<Account> accOpt = authService.findByEmail(email);
 
         if (accOpt.isEmpty()) {
@@ -240,5 +247,15 @@ public class BamBankingController {
         model.addAttribute("success",
                 "We sent a PIN reset code to " + email + ". Please check your inbox.");
         return "forgot-pin";
+    }
+
+    // --------------------------
+    // Maintenance helper (if you still use it)
+    // --------------------------
+
+    @GetMapping("/help")
+    public String showHelp(Model model) {
+        model.addAttribute("helpText", txService.helpText());
+        return "bank-dashboard"; // or a separate help page if you have one
     }
 }

@@ -114,37 +114,38 @@
                             </h1>
 
                             <!-- SIGNUP FORM -->
+                            <!-- SIGNUP FORM -->
                             <form th:action="@{/bambanking/signup}" method="post" id="signupForm" novalidate>
 
                                 <!-- First + Last name row (2 columns) -->
                                 <div class="login-field login-field-row">
                                     <div class="field-half">
-                                        <label for="firstName">first name</label>
+                                        <label for="firstName">First Name</label>
                                         <input type="text" id="firstName" name="firstName" placeholder="Anna"
                                             required />
                                     </div>
 
                                     <div class="field-half">
-                                        <label for="lastName">last name</label>
+                                        <label for="lastName">Last Name</label>
                                         <input type="text" id="lastName" name="lastName" placeholder="Boyose"
                                             required />
                                     </div>
                                 </div>
 
-                                <!-- Optional: full name for JS only (backend combines first+last itself) -->
+                                <!-- Optional: full name for JS only (backend uses firstName/lastName) -->
                                 <input type="hidden" id="fullName" name="fullName" />
 
                                 <div class="login-field">
                                     <label for="email">email</label>
-                                    <input type="email" id="email" name="email" placeholder="bamby@gmail.com" required
-                                        pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$" title="Please enter a valid email" />
-
+                                    <!-- ✅ keep type="email", REMOVE pattern attribute -->
+                                    <input type="email" id="email" name="email" placeholder="bamby@example.com" required
+                                        title="Please enter a valid email like name@example.com" />
                                 </div>
 
                                 <div class="login-field">
                                     <label for="signup-pin">choose pin</label>
                                     <input type="password" id="signup-pin" name="pin" maxlength="4" inputmode="numeric"
-                                        pattern="\\d{4}" placeholder="****" required />
+                                        pattern="\d{4}" placeholder="****" required />
                                 </div>
 
                                 <div class="login-actions">

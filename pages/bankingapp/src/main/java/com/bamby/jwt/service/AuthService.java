@@ -35,9 +35,7 @@ public class AuthService {
     // Lookups
     // ==========================
 
-    /**
-     * Find account by username (case-insensitive).
-     */
+    /** Find account by username (case-insensitive). */
     public Optional<Account> findByUsername(String username) {
         if (username == null) {
             return Optional.empty();
@@ -45,9 +43,7 @@ public class AuthService {
         return accountRepo.findByUsernameIgnoreCase(username.toLowerCase());
     }
 
-    /**
-     * Find account by email (case-insensitive).
-     */
+    /** Find account by email (case-insensitive). */
     public Optional<Account> findByEmail(String email) {
         if (email == null) {
             return Optional.empty();
@@ -80,7 +76,7 @@ public class AuthService {
     }
 
     // ==========================
-    // Demo registration
+    // Demo registration (OTP signup)
     // ==========================
 
     /**
@@ -93,9 +89,12 @@ public class AuthService {
             String email,
             String pinStr) {
 
-        int pin = parsePin(pinStr);
+        if (email == null || email.isBlank()) {
+            throw new IllegalStateException("Email is required.");
+        }
 
-        String username = email != null ? email.toLowerCase() : null;
+        int pin = parsePin(pinStr);
+        String username = email.toLowerCase();
 
         // If account already exists, treat as error – controller will show message.
         Optional<Account> existing = accountRepo.findByUsernameIgnoreCase(username);
