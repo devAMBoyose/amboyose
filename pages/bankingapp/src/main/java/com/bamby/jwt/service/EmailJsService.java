@@ -51,25 +51,38 @@ public class EmailJsService {
         Map<String, Object> body = new HashMap<>();
         body.put("service_id", serviceId);
         body.put("template_id", templateId);
-        body.put("user_id", publicKey);
+        body.put("user_id", publicKey); // this is the PUBLIC key
 
         // only add accessToken if you actually set emailjs.private-key
         if (privateKey != null && !privateKey.isBlank()) {
             body.put("accessToken", privateKey);
         }
 
+        // ---------- TEMPLATE PARAMS ----------
         Map<String, String> params = new HashMap<>();
+
+        // These are for the "To email" field in EmailJS.
+        // You can set the template's "To" to {{email}} or {{to_email}},
+        // both will work with this:
+        params.put("email", toEmail);
         params.put("to_email", toEmail);
-        params.put("to_name", fullName);
+
+        // Name placeholder
+        params.put("to_name", fullName != null ? fullName : "");
+
+        // OTP placeholders – support both {{otp}} and {{otp_code}}
         params.put("otp", otp);
-        params.put("app_name", appName);
-        params.put("support_email", supportEmail);
+        params.put("otp_code", otp);
+
+        // App/support info
+        params.put("app_name", appName != null ? appName : "BamBanking");
+        params.put("support_email", supportEmail != null ? supportEmail : "");
 
         body.put("template_params", params);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        // some setups like to see an origin header:
+        // for server-side EmailJS calls, an Origin header is recommended
         headers.add("Origin", "http://localhost");
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
