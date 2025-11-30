@@ -26,7 +26,7 @@ public class EmailJsService {
     @Value("${emailjs.public-key}")
     private String publicKey;
 
-    // Optional: only used if you later turn on "Use Private Key"
+    // Optional: only used if you ever enable “Use Private Key” in EmailJS
     @Value("${emailjs.private-key:}")
     private String privateKey;
 
@@ -38,10 +38,11 @@ public class EmailJsService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // ------------------------------
-    // Internal helper
-    // ------------------------------
-    private void sendTemplate(String templateId,
+    // =====================================================
+    // Internal helper to call EmailJS REST API
+    // =====================================================
+    private void sendTemplate(
+            String templateId,
             String toEmail,
             String fullName,
             String otp) {
@@ -51,39 +52,30 @@ public class EmailJsService {
         Map<String, Object> body = new HashMap<>();
         body.put("service_id", serviceId);
         body.put("template_id", templateId);
-        body.put("user_id", publicKey); // this is the PUBLIC key
+        body.put("user_id", publicKey); // EmailJS public key
 
-        // only add accessToken if you actually set emailjs.private-key
+        // Only send accessToken if you actually configured a private key
         if (privateKey != null && !privateKey.isBlank()) {
             body.put("accessToken", privateKey);
         }
 
-        // ---------- TEMPLATE PARAMS ----------
+        // -------------- IMPORTANT --------------
+        // These keys MUST match your EmailJS template variables:
+        // {{email}}, {{to_name}}, {{otp}}, {{app_name}}, {{support_email}}
+        // ---------------------------------------
         Map<String, String> params = new HashMap<>();
-
-        // These are for the "To email" field in EmailJS.
-        // You can set the template's "To" to {{email}} or {{to_email}},
-        // both will work with this:
-        params.put("email", toEmail);
-        params.put("to_email", toEmail);
-
-        // Name placeholder
-        params.put("to_name", fullName != null ? fullName : "");
-
-        // OTP placeholders – support both {{otp}} and {{otp_code}}
-        params.put("otp", otp);
-        params.put("otp_code", otp);
-
-        // App/support info
-        params.put("app_name", appName != null ? appName : "BamBanking");
-        params.put("support_email", supportEmail != null ? supportEmail : "");
+        params.put("email", toEmail); // <- matches {{email}} in “To Email” field
+        params.put("to_name", fullName); // <- {{to_name}}
+        params.put("otp", otp); // <- {{otp}}
+        params.put("app_name", appName); // <- {{app_name}} (if you use it)
+        params.put("support_email", supportEmail); // <- {{support_email}}
 
         body.put("template_params", params);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        // for server-side EmailJS calls, an Origin header is recommended
-        headers.add("Origin", "http://localhost");
+        // Not strictly required, but EmailJS docs often show an Origin
+        headers.add("Origin", "https://bankingapp-portfolio.onrender.com");
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
@@ -104,11 +96,11 @@ public class EmailJsService {
         }
     }
 
-    // ------------------------------
-    // Public methods used by controller
-    // ------------------------------
+    // =====================================================
+    // Public methods called from your controller/services
+    // =====================================================
 
-    /** Registration OTP */
+    /** Registration OTP (signup flow) */
     public void sendOtp(String toEmail, String fullName, String otp) {
         sendTemplate(templateOtp, toEmail, fullName, otp);
     }
@@ -119,7 +111,8 @@ public class EmailJsService {
     }
 
     /**
-     * PIN reset OTP (old name, kept so your existing controller code still works)
+     * PIN reset OTP (old method name, kept for compatibility
+     * with any existing controller code that still calls it).
      */
     public void sendPinResetLink(String toEmail, String fullName, String otp) {
         sendPinReset(toEmail, fullName, otp);
