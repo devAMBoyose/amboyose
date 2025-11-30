@@ -26,6 +26,10 @@ public class EmailJsService {
     @Value("${emailjs.public-key}")
     private String publicKey;
 
+    // Optional: only used if you later turn on "Use Private Key"
+    @Value("${emailjs.private-key:}")
+    private String privateKey;
+
     @Value("${emailjs.app-name}")
     private String appName;
 
@@ -49,6 +53,11 @@ public class EmailJsService {
         body.put("template_id", templateId);
         body.put("user_id", publicKey);
 
+        // only add accessToken if you actually set emailjs.private-key
+        if (privateKey != null && !privateKey.isBlank()) {
+            body.put("accessToken", privateKey);
+        }
+
         Map<String, String> params = new HashMap<>();
         params.put("to_email", toEmail);
         params.put("to_name", fullName);
@@ -60,20 +69,30 @@ public class EmailJsService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        // some setups like to see an origin header:
+        headers.add("Origin", "http://localhost");
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
         try {
+            System.out.println("=== EmailJS SEND START ===");
+            System.out.println("Service: " + serviceId +
+                    " | Template: " + templateId +
+                    " | To: " + toEmail);
+
             ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-            System.out.println("EmailJS response: " + response.getStatusCode());
-            System.out.println("EmailJS body: " + response.getBody());
+
+            System.out.println("EmailJS HTTP status: " + response.getStatusCode());
+            System.out.println("EmailJS response body: " + response.getBody());
+            System.out.println("=== EmailJS SEND END ===");
         } catch (Exception ex) {
-            System.err.println("Failed to send EmailJS message: " + ex.getMessage());
+            System.err.println("EmailJS ERROR: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
     // ------------------------------
-    // Public API used by controller
+    // Public methods used by controller
     // ------------------------------
 
     /** Registration OTP */
@@ -87,11 +106,9 @@ public class EmailJsService {
     }
 
     /**
-     * PIN reset OTP (old name, kept for compatibility with existing controller
-     * code)
+     * PIN reset OTP (old name, kept so your existing controller code still works)
      */
     public void sendPinResetLink(String toEmail, String fullName, String otp) {
-        // Just delegate to the actual implementation
         sendPinReset(toEmail, fullName, otp);
     }
 }
