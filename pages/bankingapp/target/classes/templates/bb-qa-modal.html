@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="qaModal">
+        <!-- QUICK ACTIONS MODAL -->
+        <div class="bb-modal" id="bbQaModal">
+            <div class="bb-modal-backdrop" onclick="closeQaModal()"></div>
+
+            <div class="bb-modal-dialog">
+                <div class="bb-modal-header">
+                    <h3 id="bbQaModalTitle">Quick action</h3>
+                    <button type="button" class="bb-modal-close" onclick="closeQaModal()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="bb-modal-body">
+                    <!-- ACCOUNT INFO -->
+                    <div class="bb-modal-section" data-action="account">
+                        <p>Account: <strong th:text="${username}">user</strong></p>
+                        <p>Current balance:
+                            <strong>₱<span th:text="${balance}">0.00</span></strong>
+                        </p>
+                        <form th:action="@{/bambanking/check-balance}" method="post">
+                            <button type="submit" class="bb-modal-btn">
+                                <i class="fa-solid fa-magnifying-glass-dollar"></i>
+                                Check balance now
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- DEPOSIT -->
+                    <form class="bb-modal-section" data-action="deposit" th:action="@{/bambanking/deposit}"
+                        method="post" style="display:none;">
+                        <div class="bb-modal-field">
+                            <label for="qaDepositAmount">Deposit amount</label>
+                            <input type="number" id="qaDepositAmount" name="amount" step="0.01" placeholder="Amount"
+                                required>
+                        </div>
+                        <div class="bb-modal-footer">
+                            <button type="button" class="bb-modal-btn ghost" onclick="closeQaModal()">Cancel</button>
+                            <button type="submit" class="bb-modal-btn">
+                                <i class="fa-solid fa-circle-arrow-down"></i>
+                                Deposit
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- WITHDRAW -->
+                    <form class="bb-modal-section" data-action="withdraw" th:action="@{/bambanking/withdraw}"
+                        method="post" style="display:none;">
+                        <div class="bb-modal-field">
+                            <label for="qaWithdrawAmount">Withdraw amount</label>
+                            <input type="number" id="qaWithdrawAmount" name="amount" step="0.01" placeholder="Amount"
+                                required>
+                        </div>
+                        <div class="bb-modal-footer">
+                            <button type="button" class="bb-modal-btn ghost" onclick="closeQaModal()">Cancel</button>
+                            <button type="submit" class="bb-modal-btn">
+                                <i class="fa-solid fa-circle-arrow-up"></i>
+                                Withdraw
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- TRANSFER -->
+                    <form class="bb-modal-section" data-action="transfer" th:action="@{/bambanking/transfer}"
+                        method="post" style="display:none;">
+                        <div class="bb-modal-field">
+                            <label for="qaToUser">To username</label>
+                            <input type="text" id="qaToUser" name="toUser" placeholder="To username" required>
+                        </div>
+                        <div class="bb-modal-field">
+                            <label for="qaTransferAmount">Amount</label>
+                            <input type="number" id="qaTransferAmount" name="amount" step="0.01" placeholder="Amount"
+                                required>
+                        </div>
+                        <div class="bb-modal-footer">
+                            <button type="button" class="bb-modal-btn ghost" onclick="closeQaModal()">Cancel</button>
+                            <button type="submit" class="bb-modal-btn">
+                                <i class="fa-solid fa-right-left"></i>
+                                Transfer
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- FX / MONEY CHANGERS -->
+                    <div class="bb-modal-section" data-action="fx" style="display:none;">
+                        <div class="bb-modal-field">
+                            <label class="bb-label">Amount</label>
+                            <input type="number" id="fxAmount" class="bb-input" value="1" min="0" step="0.01" />
+                        </div>
+
+                        <div class="bb-modal-field">
+                            <label class="bb-label">From / To</label>
+                            <div class="bb-fx-row">
+                                <div class="bb-fx-col">
+                                    <select id="fxFrom" class="bb-select">
+                                        <option value="USD" selected>USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="PHP">PHP</option>
+                                        <option value="JPY">JPY</option>
+                                    </select>
+                                </div>
+
+                                <button type="button" class="bb-fx-swap" id="fxSwap" aria-label="Swap currencies">
+                                    <i class="fa-solid fa-right-left"></i>
+                                </button>
+
+                                <div class="bb-fx-col">
+                                    <select id="fxTo" class="bb-select">
+                                        <option value="PHP" selected>PHP</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="JPY">JPY</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bb-modal-footer">
+                            <button type="button" class="bb-modal-btn ghost" onclick="closeQaModal()">Close</button>
+                            <button type="button" class="bb-modal-btn" id="fxConvert">
+                                Convert
+                            </button>
+                        </div>
+
+                        <p class="bb-fx-result" id="fxResult">1 USD = ? PHP</p>
+                    </div>
+
+                    <!-- GENERIC INFO / COMING SOON -->
+                    <div class="bb-modal-section" data-action="info" style="display:none;">
+                        <p>Feature coming soon in the full BamBanking app.</p>
+                        <div class="bb-modal-footer">
+                            <button type="button" class="bb-modal-btn" onclick="closeQaModal()">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END QUICK ACTIONS MODAL -->
+    </div>
+</body>
+
+</html>

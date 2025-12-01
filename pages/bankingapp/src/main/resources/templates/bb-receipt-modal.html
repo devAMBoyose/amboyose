@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="receiptModal">
+        <!-- TRANSACTION RECEIPT MODAL -->
+        <div class="bb-modal" id="bbReceiptModal" th:if="${txRef != null}">
+            <div class="bb-modal-backdrop" onclick="closeReceiptModal()"></div>
+
+            <div class="bb-modal-dialog bb-receipt-dialog" role="dialog" aria-modal="true">
+                <div class="bb-modal-header">
+                    <h3>Transaction receipt</h3>
+                    <button type="button" class="bb-modal-close" onclick="closeReceiptModal()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="bb-modal-body bb-receipt-body">
+                    <div class="bb-receipt-status">
+                        <div class="bb-receipt-pill ok" th:if="${success}">
+                            <i class="fa-solid fa-check"></i>
+                            <span th:text="${txMessage}">Transaction successful!</span>
+                        </div>
+                        <div class="bb-receipt-pill fail" th:if="${success == false}">
+                            <i class="fa-solid fa-xmark"></i>
+                            <span th:text="${txMessage}">Transaction failed. Please try again.</span>
+                        </div>
+                    </div>
+
+                    <div class="bb-receipt-grid">
+                        <div class="bb-receipt-item">
+                            <div class="bb-receipt-label">Transaction type</div>
+                            <div class="bb-receipt-value" th:text="${txType}">Deposit</div>
+                        </div>
+
+                        <div class="bb-receipt-item">
+                            <div class="bb-receipt-label">Reference</div>
+                            <div class="bb-receipt-value" th:text="${txRef}">BB-DEP-000001</div>
+                        </div>
+
+                        <div class="bb-receipt-item">
+                            <div class="bb-receipt-label">Amount</div>
+                            <div class="bb-receipt-value accent"
+                                th:text="'PHP ' + ${#numbers.formatDecimal(amount, 1, 'COMMA', 2, 'POINT')}">
+                                PHP 0.00
+                            </div>
+                        </div>
+
+                        <div class="bb-receipt-item">
+                            <div class="bb-receipt-label">Date &amp; time</div>
+                            <div class="bb-receipt-value" th:text="${txDateTime}">
+                                2025-01-01 12:00
+                            </div>
+                        </div>
+
+                        <div class="bb-receipt-item">
+                            <div class="bb-receipt-label">Account</div>
+                            <div class="bb-receipt-value" th:text="${username}">user</div>
+                        </div>
+
+                        <div class="bb-receipt-item">
+                            <div class="bb-receipt-label">Balance after</div>
+                            <div class="bb-receipt-value"
+                                th:text="'PHP ' + ${#numbers.formatDecimal(balance, 1, 'COMMA', 2, 'POINT')}">
+                                PHP 0.00
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="bb-receipt-tip">
+                        Tip: You can always review your history in the
+                        <a href="#recent-transactions">Recent Transactions</a> section.
+                    </p>
+
+                    <div class="bb-modal-footer bb-receipt-footer">
+                        <a th:href="@{/bambanking/dashboard}" class="bb-modal-btn ghost">
+                            <i class="fa-solid fa-gauge-high"></i>
+                            Back to dashboard
+                        </a>
+                        <button type="button" class="bb-modal-btn" onclick="closeReceiptModal()">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END RECEIPT MODAL -->
+    </div>
+</body>
+
+</html>
