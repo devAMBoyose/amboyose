@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Withdrawal Result</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bb-bg: #050608;
+            --bb-card-bg: rgba(10, 12, 16, 0.9);
+            --bb-border: rgba(0, 255, 128, 0.4);
+            --bb-accent: #00ff99;
+            --bb-text-main: #f5f5f5;
+            --bb-text-muted: #9ca3af;
+        }
+
+        body {
+            margin: 0;
+            padding: 1.5rem;
+            background: radial-gradient(circle at top, #111827 0, #020617 45%, #000000 100%);
+            font-family: "JetBrains Mono", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--bb-text-main);
+        }
+
+        .tx-card {
+            width: 100%;
+            max-width: 560px;
+            padding: 2rem 2.4rem;
+            background: var(--bb-card-bg);
+            border: 1px solid var(--bb-border);
+            border-radius: 18px;
+            backdrop-filter: blur(18px);
+            box-shadow: 0 0 0 1px rgba(0, 255, 128, 0.15),
+                0 25px 50px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tx-card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background:
+                radial-gradient(circle at top left, rgba(0, 255, 160, 0.12), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.16), transparent 55%);
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .tx-card-inner {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header */
+        .tx-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.4rem;
+        }
+
+        .tx-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .tx-pill {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            color: var(--bb-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Success / error pills */
+        .tx-status {
+            margin-bottom: 1.6rem;
+            padding: 0.9rem 1.2rem;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .tx-status.ok {
+            border: 1px solid #22c55e;
+            background: radial-gradient(circle at left,
+                    rgba(34, 197, 94, 0.28), transparent 65%);
+            color: #bbf7d0;
+        }
+
+        .tx-status.fail {
+            border: 1px solid #f97373;
+            background: radial-gradient(circle at left,
+                    rgba(248, 113, 113, 0.28), transparent 65%);
+            color: #fecaca;
+        }
+
+        .tx-status-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        /* Grid */
+        .tx-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem 1.6rem;
+        }
+
+        .tx-item-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: var(--bb-text-muted);
+        }
+
+        .tx-item-value {
+            margin-top: 0.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .tx-main-amount {
+            font-size: 1.3rem;
+            color: var(--bb-accent);
+            font-weight: 800;
+        }
+
+        /* Actions */
+        .tx-actions {
+            margin-top: 1.8rem;
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-link {
+            padding: 0.55rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 255, 128, 0.55);
+            background: rgba(15, 23, 42, 0.85);
+            text-decoration: none;
+            color: var(--bb-accent);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            transition: 0.2s ease;
+        }
+
+        .btn-link:hover {
+            transform: translateY(-2px);
+            background: rgba(0, 255, 128, 0.08);
+        }
+
+        .btn-link.secondary {
+            border-color: rgba(160, 160, 160, 0.6);
+            color: #d1d5db;
+        }
+
+        @media (max-width: 520px) {
+            .tx-card {
+                padding: 1.6rem 1.2rem;
+            }
+
+            .tx-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="tx-card">
+        <div class="tx-card-inner">
+
+            <!-- Header -->
+            <header class="tx-header">
+                <h1 class="tx-title">Transaction Result</h1>
+                <div class="tx-pill">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span th:text="${username}">guest_user</span>
+                </div>
+            </header>
+
+            <!-- Success pill -->
+            <div class="tx-status ok" th:if="${success}">
+                <div class="tx-status-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <span th:text="${txMessage}">Withdrawal successful!</span>
+            </div>
+
+            <!-- Error pill -->
+            <div class="tx-status fail" th:if="${success == false}">
+                <div class="tx-status-icon">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+                <span th:text="${txMessage}">Transaction failed. Please try again.</span>
+            </div>
+
+            <!-- Summary grid -->
+            <div class="tx-summary">
+                <div>
+                    <div class="tx-item-label">Transaction type</div>
+                    <div class="tx-item-value" th:text="${txType}">Withdrawal</div>
+                </div>
+
+                <div>
+                    <div class="tx-item-label">Reference</div>
+                    <div class="tx-item-value" th:text="${txRef}">BB-WD-000001</div>
+                </div>
+
+                <div>
+                    <div class="tx-item-label">Withdrawn amount</div>
+                    <div class="tx-main-amount">
+                        PHP
+                        <span th:text="${#numbers.formatDecimal(amount, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="tx-item-label">Date &amp; time</div>
+                    <div class="tx-item-value" th:text="${txDateTime}">2025-01-01 12:00</div>
+                </div>
+
+                <div>
+                    <div class="tx-item-label">Account</div>
+                    <div class="tx-item-value" th:text="${username}">guest_user</div>
+                </div>
+
+                <div>
+                    <div class="tx-item-label">Balance after</div>
+                    <div class="tx-item-value">
+                        PHP
+                        <span th:text="${#numbers.formatDecimal(balance, 1, 'COMMA', 2, 'POINT')}">0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="tx-actions">
+                <a class="btn-link" th:href="@{/bambanking/dashboard}">
+                    <i class="fa-solid fa-gauge"></i>
+                    Back to dashboard
+                </a>
+
+                <a class="btn-link secondary" th:href="@{/bambanking/dashboard}">
+                    <i class="fa-solid fa-circle-minus"></i>
+                    New withdrawal
+                </a>
+            </div>
+
+        </div>
+    </section>
+</body>
+
+</html>

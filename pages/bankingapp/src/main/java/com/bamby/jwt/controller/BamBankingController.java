@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/bambanking")
@@ -286,58 +288,158 @@ public class BamBankingController {
     public String handleDeposit(
             @RequestParam("amount") double amount,
             HttpSession session,
+            Model model,
             RedirectAttributes redirect) {
 
-        Account acc = getLoggedAccount(session);
+        // 1) Check logged-in account
+        Account acc = getLoggedAccount(session); // use your existing helper
         if (acc == null) {
-            return "redirect:/bambanking/login?error=Please%20log%20in";
+            redirect.addFlashAttribute("error", "Session expired. Please log in again.");
+            return "redirect:/bambanking/login";
         }
 
+        // 2) Basic validation
         if (amount <= 0) {
             redirect.addFlashAttribute("txMessage", "Amount must be greater than zero.");
-            redirect.addFlashAttribute("showBalanceCard", true);
+            redirect.addFlashAttribute("success", false);
             return "redirect:/bambanking/dashboard";
         }
 
+        boolean success = true;
+        String txMessage;
+
         try {
-            // Pass Account + amount (matches TransactionService)
+            // 3) Your existing business logic – this should update DB + balance
             txService.deposit(acc, amount);
-            redirect.addFlashAttribute("txMessage", "Deposit successful: ₱" + amount);
-        } catch (IllegalStateException ex) {
-            redirect.addFlashAttribute("txMessage", ex.getMessage());
+            txMessage = "Deposit successful!";
+        } catch (Exception ex) {
+            success = false;
+            txMessage = (ex.getMessage() != null) ? ex.getMessage() : "Deposit failed.";
         }
 
-        redirect.addFlashAttribute("showBalanceCard", true);
-        return "redirect:/bambanking/dashboard";
+        // 4) Build receipt info (for now we generate a simple reference + current
+        // datetime)
+        String txType = "Deposit";
+        String txRef = "BB-DEP-" + System.currentTimeMillis();
+        String txDateTime = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+        // 5) Put everything in the model for deposit-result.html
+        model.addAttribute("username", acc.getUsername());
+        model.addAttribute("success", success);
+        model.addAttribute("txMessage", txMessage);
+        model.addAttribute("txType", txType);
+        model.addAttribute("txRef", txRef);
+        model.addAttribute("amount", amount);
+        model.addAttribute("txDateTime", txDateTime);
+
+        // (optional) if later you still want dashboard modal receipt,
+        // you can also set redirect attributes here.
+
+        // 6) Show your receipt page
+        return "deposit-result";
     }
 
-    @PostMapping("/withdraw")
-    public String handleWithdraw(
+    @PostMapping("/withdraw/receipt")
+    public String handleWithdrawWithReceipt(
             @RequestParam("amount") double amount,
             HttpSession session,
-            RedirectAttributes redirect) {
+            Model model) {
 
         Account acc = getLoggedAccount(session);
         if (acc == null) {
             return "redirect:/bambanking/login?error=Please%20log%20in";
         }
 
+        // Always show username on the page
+        model.addAttribute("username", acc.getUsername());
+
+        // Common helper for timestamp string
+        String nowStr = java.time.LocalDateTime.now()
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+        // If invalid amount – go straight to error view
         if (amount <= 0) {
-            redirect.addFlashAttribute("txMessage", "Amount must be greater than zero.");
-            redirect.addFlashAttribute("showBalanceCard", true);
-            return "redirect:/bambanking/dashboard";
+            model.addAttribute("success", false);
+            model.addAttribute("txMessage", "Amount must be greater than zero.");
+            model.addAttribute("txType", "Withdrawal");
+            model.addAttribute("txRef", "—");
+            model.addAttribute("amount", 0.00);
+            model.addAttribute("txDateTime", nowStr);
+            model.addAttribute("balance", acc.getBalance());
+            return "withdraw-result";
         }
 
         try {
+            // Perform the actual withdraw (this also writes to transactions table)
             txService.withdraw(acc, amount);
-            redirect.addFlashAttribute("txMessage", "Withdraw successful: ₱" + amount);
+
+            // Get the latest transaction for this user (real data from DB)
+            var recent = txService.getRecentTransactions(acc.getUsername(), 1);
+            if (!recent.isEmpty()) {
+                var tx = recent.get(0);
+
+                model.addAttribute("txType", tx.getType()); // e.g. "WITHDRAW"
+                model.addAttribute("txRef", tx.getReference()); // e.g. BB-2025-0001
+                model.addAttribute("amount", tx.getAmount()); // numeric
+                model.addAttribute("txDateTime",
+                        tx.getTimestamp().format(
+                                java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                model.addAttribute("balance", tx.getBalanceAfter()); // balance after tx
+                model.addAttribute("txStatus", tx.getStatus()); // OK / FAILED, etc.
+            } else {
+                // Fallback if no transaction returned (should rarely happen)
+                model.addAttribute("txType", "Withdrawal");
+                model.addAttribute("txRef", "BB-WD-" + System.currentTimeMillis());
+                model.addAttribute("amount", amount);
+                model.addAttribute("txDateTime", nowStr);
+                model.addAttribute("balance", acc.getBalance() - amount);
+            }
+
+            model.addAttribute("success", true);
+            model.addAttribute("txMessage", "Withdrawal successful!");
+
         } catch (IllegalStateException ex) {
-            redirect.addFlashAttribute("txMessage", ex.getMessage());
+            // e.g. insufficient balance
+            model.addAttribute("success", false);
+            model.addAttribute("txMessage", ex.getMessage());
+            model.addAttribute("txType", "Withdrawal");
+            model.addAttribute("txRef", "—");
+            model.addAttribute("amount", amount);
+            model.addAttribute("txDateTime", nowStr);
+            model.addAttribute("balance", acc.getBalance());
         }
 
-        redirect.addFlashAttribute("showBalanceCard", true);
-        return "redirect:/bambanking/dashboard";
+        return "withdraw-result"; // <-- this is the Thymeleaf template below
     }
+
+    // @PostMapping("/withdraw")
+    // public String handleWithdraw(
+    // @RequestParam("amount") double amount,
+    // HttpSession session,
+    // RedirectAttributes redirect) {
+
+    // Account acc = getLoggedAccount(session);
+    // if (acc == null) {
+    // return "redirect:/bambanking/login?error=Please%20log%20in";
+    // }
+
+    // if (amount <= 0) {
+    // redirect.addFlashAttribute("txMessage", "Amount must be greater than zero.");
+    // redirect.addFlashAttribute("showBalanceCard", true);
+    // return "redirect:/bambanking/dashboard";
+    // }
+
+    // try {
+    // txService.withdraw(acc, amount);
+    // redirect.addFlashAttribute("txMessage", "Withdraw successful: ₱" + amount);
+    // } catch (IllegalStateException ex) {
+    // redirect.addFlashAttribute("txMessage", ex.getMessage());
+    // }
+
+    // redirect.addFlashAttribute("showBalanceCard", true);
+    // return "redirect:/bambanking/dashboard";
+    // }
 
     @PostMapping("/transfer")
     public String handleTransfer(
