@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -28,28 +29,35 @@ public class EmailJsService {
     @Value("${emailjs.public-key}")
     private String publicKey;
 
-    // optional
+    // optional – but you already have it
     @Value("${emailjs.private-key:}")
     private String privateKey;
 
-    // just metadata; we give defaults so the app still runs even if missing
+    // metadata (with defaults so app still runs if missing)
     @Value("${emailjs.app-name:BAMBY Portfolio Bank}")
     private String appName;
 
     @Value("${emailjs.support-email:bamby.dev@gmail.com}")
     private String supportEmail;
 
+    private static final String EMAILJS_URL = "https://api.emailjs.com/api/v1.0/email/send";
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     // ==========================
-    // Core sender
+    // Core reusable sender
     // ==========================
 
-    private void sendTemplate(String templateId,
+    private boolean sendTemplate(String templateId,
             String toEmail,
             String fullName,
             String otp) {
 
+        // basic safety checks
+        if (toEmail == null || toEmail.isBlank()) {
+            System.err.println("[EmailJsService] toEmail is empty. Email NOT sent.");
+            return false;
+        }
         if (serviceId == null || serviceId.isBlank()
                 || templateId == null || templateId.isBlank()
                 || publicKey == null || publicKey.isBlank()) {
@@ -58,46 +66,63 @@ public class EmailJsService {
             System.err.println("  serviceId=" + serviceId
                     + " templateId=" + templateId
                     + " publicKey=" + publicKey);
-            return;
+            return false;
         }
 
         try {
-            Map<String, Object> payload = new HashMap<>();
-            payload.put("service_id", serviceId);
-            payload.put("template_id", templateId);
-            payload.put("user_id", publicKey);
-
-            // these names must match your EmailJS template variables
+            // ----------------------------
+            // Template parameters
+            // To Email field: {{email}}
+            // Body variables: {{to_name}}, {{otp}}, {{support_email}}
             Map<String, Object> params = new HashMap<>();
-            params.put("to_email", toEmail);
+            params.put("email", toEmail); // matches {{email}} in “To Email”
             params.put("to_name", fullName != null ? fullName : "");
-            params.put("otp_code", otp); // change if your template variable name is different
+            params.put("otp", otp); // matches {{otp}} in subject/body
             params.put("app_name", appName);
             params.put("support_email", supportEmail);
 
-            payload.put("template_params", params);
+            // ----------------------------
+            // Request payload
+            // ----------------------------
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("service_id", serviceId);
+            payload.put("template_id", templateId);
+            payload.put("user_id", publicKey); // public key
 
             if (privateKey != null && !privateKey.isBlank()) {
-                payload.put("accessToken", privateKey);
+                payload.put("accessToken", privateKey); // private key (if enabled)
             }
+
+            payload.put("template_params", params);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(payload, headers);
 
-            System.out.println("[EmailJsService] Sending EmailJS request...");
+            System.out.println("[EmailJsService] Sending EmailJS request…");
             ResponseEntity<String> res = restTemplate.postForEntity(
-                    "https://api.emailjs.com/api/v1.0/email/send",
+                    EMAILJS_URL,
                     entity,
                     String.class);
 
             System.out.println("[EmailJsService] EmailJS HTTP status: " + res.getStatusCode());
             System.out.println("[EmailJsService] EmailJS response body: " + res.getBody());
 
+            return res.getStatusCode().is2xxSuccessful();
+
+        } catch (HttpClientErrorException.Forbidden ex) {
+            System.err.println("[EmailJsService] 403 Forbidden – check 'API for non-browser apps' in EmailJS.");
+            System.err.println(ex.getResponseBodyAsString());
+            return false;
+        } catch (HttpClientErrorException.UnprocessableEntity ex) {
+            System.err.println("[EmailJsService] 422 Unprocessable Entity – often means recipient is empty.");
+            System.err.println(ex.getResponseBodyAsString());
+            return false;
         } catch (Exception e) {
             System.err.println("[EmailJsService] Error sending EmailJS message: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -106,17 +131,17 @@ public class EmailJsService {
     // ==========================
 
     /** Signup / verification OTP */
-    public void sendOtp(String toEmail, String fullName, String otp) {
-        sendTemplate(templateOtp, toEmail, fullName, otp);
+    public boolean sendOtp(String toEmail, String fullName, String otp) {
+        return sendTemplate(templateOtp, toEmail, fullName, otp);
     }
 
     /** PIN reset OTP */
-    public void sendPinReset(String toEmail, String fullName, String otp) {
-        sendTemplate(templatePinReset, toEmail, fullName, otp);
+    public boolean sendPinReset(String toEmail, String fullName, String otp) {
+        return sendTemplate(templatePinReset, toEmail, fullName, otp);
     }
 
-    /** Old method kept for compatibility with existing controller code */
-    public void sendPinResetLink(String toEmail, String fullName, String otp) {
-        sendPinReset(toEmail, fullName, otp);
+    /** Old name kept for compatibility with any existing controller code */
+    public boolean sendPinResetLink(String toEmail, String fullName, String otp) {
+        return sendPinReset(toEmail, fullName, otp);
     }
 }
