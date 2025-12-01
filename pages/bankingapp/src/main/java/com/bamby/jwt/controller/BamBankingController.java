@@ -65,17 +65,19 @@ public class BamBankingController {
     }
 
     /** Populate standard dashboard attributes. */
-    /** Populate standard dashboard attributes. */
+
     private void populateDashboardModel(Model model, Account acc) {
+        // base info
         model.addAttribute("account", acc);
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("balance", acc.getBalance());
 
-        // Cardholder info for UI
+        // card holder name
         model.addAttribute("cardHolderName", acc.getFullName());
         model.addAttribute("cardNumber", acc.getFormattedCardNumber());
         model.addAttribute("cardCvv", acc.getCvv());
 
+        // recent transactions (for the table)
         var recent = txService.getRecentTransactions(acc.getUsername(), 10);
         model.addAttribute("transactions", recent);
         model.addAttribute("recentTx", recent);
@@ -91,14 +93,13 @@ public class BamBankingController {
             @RequestParam(value = "error", required = false) String errorParam,
             @RequestParam(value = "success", required = false) String successParam,
             @RequestParam(value = "openSignup", required = false) Boolean openSignup,
-            HttpSession session, // <-- added
+            HttpSession session,
             Model model) {
 
-        // ---- RESET FORGOT-PIN STATE WHENEVER USER OPENS LOGIN PAGE ----
+        // reset forgot-pin state whenever user opens login page
         session.removeAttribute("pinResetEmail");
         session.removeAttribute("pinResetOtp");
         session.removeAttribute("pinResetAwaitingOtp");
-        // ----------------------------------------------------------------
 
         // keep flash "success" if present (e.g. after reset-pin)
         Object flashSuccess = model.asMap().get("success");
@@ -243,17 +244,16 @@ public class BamBankingController {
             return "redirect:/bambanking/login?error=Please%20log%20in";
         }
 
-        // keep your existing helper
         populateDashboardModel(model, acc);
 
-        // 🔹 NEW: welcome name from real full name
-        String display = acc.getFullName(); // uses helper we added
+        // Welcome name from real full name
+        String display = acc.getFullName();
         if (display == null || display.isBlank()) {
-            display = acc.getUsername(); // safety fallback
+            display = acc.getUsername();
         }
-        model.addAttribute("displayName", display.toUpperCase()); // CAPS like design
+        model.addAttribute("displayName", display.toUpperCase());
 
-        // flash attributes from tx endpoints (unchanged)
+        // flash attributes from tx endpoints
         Object showBalance = model.asMap().get("showBalanceCard");
         Object txMsg = model.asMap().get("txMessage");
         if (showBalance != null) {
@@ -300,7 +300,7 @@ public class BamBankingController {
         }
 
         try {
-            // FIX: pass Account, not username String
+            // Pass Account + amount (matches TransactionService)
             txService.deposit(acc, amount);
             redirect.addFlashAttribute("txMessage", "Deposit successful: ₱" + amount);
         } catch (IllegalStateException ex) {
@@ -329,7 +329,6 @@ public class BamBankingController {
         }
 
         try {
-            // FIX: pass Account, not username String
             txService.withdraw(acc, amount);
             redirect.addFlashAttribute("txMessage", "Withdraw successful: ₱" + amount);
         } catch (IllegalStateException ex) {
@@ -359,7 +358,6 @@ public class BamBankingController {
         }
 
         try {
-            // FIX: pass Account, not username String
             txService.transfer(acc, toUser, amount);
             redirect.addFlashAttribute(
                     "txMessage",
