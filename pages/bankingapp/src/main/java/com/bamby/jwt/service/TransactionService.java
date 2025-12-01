@@ -33,6 +33,15 @@ public class TransactionService {
             return "No active account.<br>Please log in again.";
         }
         db.log("BALANCE checked for " + acc.getUsername());
+
+        // NEW: record balance check as a transaction row
+        record(
+                acc.getUsername().toLowerCase(),
+                "Balance check",
+                0.0,
+                acc.getBalance(),
+                true);
+
         return "Hello, <strong>" + acc.getUsername() + "</strong>!<br>"
                 + "Your current balance is <strong>"
                 + DataStore.php(acc.getBalance()) + "</strong>.<br>";
@@ -54,6 +63,14 @@ public class TransactionService {
         accountRepo.save(acc);
 
         db.log("DEPOSIT " + DataStore.php(amount) + " to " + acc.getUsername());
+
+        // NEW: save transaction row for deposit
+        record(
+                acc.getUsername().toLowerCase(),
+                "Deposit",
+                amount,
+                acc.getBalance(),
+                true);
 
         return "✅ Deposit successful!<br>"
                 + "Old balance: " + DataStore.php(old) + "<br>"
@@ -82,6 +99,14 @@ public class TransactionService {
         accountRepo.save(acc);
 
         db.log("WITHDRAW " + DataStore.php(amount) + " from " + acc.getUsername());
+
+        // NEW: save transaction row for withdrawal
+        record(
+                acc.getUsername().toLowerCase(),
+                "Withdraw",
+                amount,
+                acc.getBalance(),
+                true);
 
         return "✅ Withdrawal successful!<br>"
                 + "Old balance: " + DataStore.php(old) + "<br>"
@@ -127,6 +152,22 @@ public class TransactionService {
 
         db.log("TRANSFER " + DataStore.php(amount) + " from "
                 + from.getUsername() + " to " + to.getUsername());
+
+        // NEW: sender transaction
+        record(
+                from.getUsername().toLowerCase(),
+                "Transfer to " + to.getUsername(),
+                amount,
+                from.getBalance(),
+                true);
+
+        // NEW: receiver transaction
+        record(
+                to.getUsername().toLowerCase(),
+                "Transfer from " + from.getUsername(),
+                amount,
+                to.getBalance(),
+                true);
 
         return "✅ Transfer successful!<br>"
                 + "From: " + from.getUsername() + " (old " + DataStore.php(fromOld) + ")<br>"

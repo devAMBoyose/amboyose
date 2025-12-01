@@ -4,26 +4,35 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>BamBanking | Verify OTP</title>
+    <title>Verify OTP – BamBanking</title>
 
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap"
         rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
+    <!-- GLOBAL STYLES -->
     <link rel="stylesheet" th:href="@{/css/footer.css}" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="stylesheet" th:href="@{/css/nav.css}" />
+
+    <!-- PAGE STYLES -->
     <link rel="stylesheet" th:href="@{/css/bambanking.css}" />
 </head>
 
-<body>
+<body th:attr="data-error=${error},data-success=${success}">
+    <!-- same glow background as login -->
+    <div id="cursor-bg" aria-hidden="true"></div>
 
     <div class="window">
+        <!-- Title Bar -->
         <div class="title-bar">
             <div class="dots">
                 <span class="red"></span><span class="yellow"></span><span class="green"></span>
             </div>
+
             <span class="filename">BankingApp</span>
+
             <div class="tb-right">
                 <a href="https://amboyose.onrender.com/" class="chip-link">
                     <button class="chip chip-back" type="button">
@@ -34,40 +43,81 @@
             </div>
         </div>
 
+        <!-- CARD: same layout as login/signup -->
         <div class="login-wrapper">
-            <div class="login-card" style="max-width: 420px; margin: 4rem auto;">
-                <h1 class="login-title">
-                    VerifyOTP() <span class="login-sub">// BamBanking demo</span>
-                </h1>
+            <div class="login-flip-scene">
+                <div class="login-flip-inner otp-card-inner">
+                    <div class="login-card">
 
-                <p class="login-help">
-                    We sent a verification code to
-                    <strong th:text="${email}">your email</strong>. Enter the 6-digit code below.
-                </p>
+                        <h1 class="login-title">
+                            VerifyOTP() <span class="login-sub">// BamBanking demo</span>
+                        </h1>
 
-                <div class="alert" th:if="${error}" th:text="${error}"></div>
+                        <!-- messages from backend -->
+                        <div th:if="${error}" class="alert error" th:text="${error}"></div>
+                        <div th:if="${success}" class="alert success" th:text="${success}"></div>
 
-                <form th:action="@{/bambanking/verify-otp}" method="post" class="auth-form">
-                    <label for="otp">OTP code</label>
-                    <input id="otp" name="otp" type="text" maxlength="6" minlength="6" inputmode="numeric"
-                        pattern="\d{6}" placeholder="123456" required />
+                        <p class="login-helper">
+                            We sent a verification code to
+                            <strong th:text="${email}">you@example.com</strong>.
+                            Enter the 6-digit code below.
+                        </p>
 
-                    <button type="submit" class="btn-signup" style="margin-top: 1.5rem;">
-                        Verify &amp; Create Account
-                    </button>
-                </form>
+                        <!-- IMPORTANT: no comments inside this tag -->
+                        <form th:action="@{/bambanking/verify-otp}" method="post" id="verifyOtpForm" novalidate>
 
-                <p class="login-help" style="margin-top: 1rem;">
-                    Wrong email? <a th:href="@{/bambanking/login}" class="forgot-pin-link">Go back to sign up.</a>
-                </p>
+                            <!-- keep the field name "otp" so it matches your controller -->
+                            <div class="login-field">
+                                <label for="otp">OTP code</label>
+                                <input id="otp" name="otp" type="text" maxlength="6" minlength="6" inputmode="numeric"
+                                    pattern="\d{6}" placeholder="123456" required />
+                            </div>
+
+                            <div class="login-actions">
+                                <button type="submit" class="btn-signup">
+                                    Verify &amp; Create Account
+                                </button>
+                            </div>
+                        </form>
+
+                        <p class="login-subtext">
+                            Wrong email?
+                            <!-- openSignup=true so login page opens on Sign up side -->
+                            <a th:href="@{/bambanking/login(openSignup=true)}" class="forgot-pin-link">
+                                Go back to sign up.
+                            </a>
+                        </p>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- FOOTER: same as login -->
     <footer class="site-footer">
         <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
     </footer>
 
+    <!-- shared modal (same as login) -->
+    <div id="bb-error-modal" class="bank-modal">
+        <div class="bank-modal-box">
+            <h2 class="bank-modal-title bb-error-title">Notice</h2>
+            <p class="bank-modal-message bb-error-message">Message.</p>
+            <button type="button" class="bank-modal-close" id="bb-error-ok">OK</button>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script th:src="@{/js/script.js}"></script>
+    <script th:src="@{/js/nav.js}" defer></script>
+    <script th:src="@{/js/bambanking-auth.js}" defer></script>
 </body>
 
 </html>
