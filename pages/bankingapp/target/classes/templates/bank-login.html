@@ -18,11 +18,106 @@
 
     <!-- PAGE STYLES -->
     <link rel="stylesheet" th:href="@{/css/bambanking.css}" />
+    <link rel="stylesheet" th:href="@{/css/bb-modal.css}" />
 </head>
 
-<!-- server messages go into data-* so JS can show modal -->
+
 
 <body th:attr="data-error=${error},data-success=${success},data-open-signup=${openSignup}">
+
+    <!-- BamBanking warm-up modal -->
+    <div id="bb-warmup" class="bb-warmup-backdrop">
+        <div class="bb-warmup-dialog">
+            <div class="bb-warmup-pill">
+                <i class="fa-solid fa-snowflake"></i>
+                Render free-tier warm-up
+            </div>
+
+            <h2 class="bb-warmup-title">Warming up BamBanking…</h2>
+
+            <p class="bb-warmup-text">
+                This Java demo runs on <strong>Spring Boot + Render free tier</strong>.
+                When the service has been idle, it needs a few seconds to wake up
+                (usually 20–60 seconds). While the server starts, you can check what
+                this mini-bank can do 👇
+            </p>
+
+            <div class="bb-warmup-folder">
+                <div class="bb-warmup-folder-header">
+                    <i class="fa-solid fa-folder-closed"></i> BamBanking.java
+                </div>
+
+                <div class="bb-warmup-folder-body">
+                    <!-- Typing Status Bar -->
+                    <div class="bb-typing-line">
+                        <span id="bbTyping"></span><span class="bb-cursor">▌</span>
+                    </div>
+
+                    <!-- Section 1: Auth -->
+                    <section class="bb-section" data-step="1">
+                        <h3>🧑‍💻 Auth</h3>
+                        <ul>
+                            <li>Email-based login with 4-digit PIN</li>
+                            <li>Signup verification via OTP sent to your email</li>
+                            <li>Forgot PIN recovery with OTP confirmation</li>
+                        </ul>
+                    </section>
+
+                    <!-- Section 2: Transactions -->
+                    <section class="bb-section" data-step="2">
+                        <h3>💸 Transactions</h3>
+                        <ul>
+                            <li>Demo deposit &amp; withdrawal modules</li>
+                            <li>Balance inquiry with mask toggle</li>
+                            <li>Transfer between sandbox accounts</li>
+                        </ul>
+                    </section>
+
+                    <!-- Section 4: Tech Stack -->
+                    <section class="bb-section" data-step="4">
+                        <h3>🧩 Tech Stack</h3>
+                        <ul>
+                            <li>Backend: Spring Boot (Java 17)</li>
+                            <li>Hosting: Render free tier (cold start)</li>
+                            <li>Database: MongoDB Atlas</li>
+                            <li>Frontend: Vanilla HTML / CSS / JS</li>
+                        </ul>
+                    </section>
+
+
+
+                </div>
+
+                <!-- Progress bar -->
+                <div class="bb-progress-shell">
+                    <div class="bb-progress-track">
+                        <div class="bb-progress-fill" id="bbProgressFill"></div>
+                    </div>
+                    <div class="bb-progress-meta">
+                        <span id="bbProgressPct">0%</span>
+                        <span id="bbProgressLabel">Initializing…</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="bb-warmup-status">
+                <i class="fa-solid fa-circle-notch fa-spin bb-warmup-icon"></i>
+                <span class="bb-warmup-dots" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </span>
+                <span class="bb-warmup-status-text">
+                    Connecting to BamBanking API…
+                </span>
+            </div>
+
+            <button id="bb-warmup-dismiss" class="bb-warmup-btn">
+                <i class="fa-solid fa-check"></i>
+                Got it, keep loading
+            </button>
+        </div>
+    </div>
+
 
     <div id="cursor-bg" aria-hidden="true"></div>
 
@@ -187,6 +282,193 @@
     <script th:src="@{/js/script.js}"></script>
     <script th:src="@{/js/nav.js}" defer></script>
     <script th:src="@{/js/bambanking-auth.js}" defer></script>
+
+    <script>
+        // BamBanking warm-up helper (uses #bb-warmup)
+        window.BamBankingColdStart = (function () {
+            const overlay = document.getElementById("bb-warmup");
+            if (!overlay) {
+                return { show() { }, hide() { }, ready() { } };
+            }
+
+            const dismissBtn = document.getElementById("bb-warmup-dismiss");
+            const statusText = overlay.querySelector(".bb-warmup-status-text");
+            const icon = overlay.querySelector(".bb-warmup-icon");
+            const progressFill = overlay.querySelector("#bbProgressFill");
+            const progressPctEl = overlay.querySelector("#bbProgressPct");
+            const progressLabel = overlay.querySelector("#bbProgressLabel");
+
+            // Progress phases: drives % bar + status messages
+            const phases = [
+                { pct: 10, label: "Connecting to BamBanking API…" },
+                { pct: 35, label: "Spinning up Spring Boot context…" },
+                { pct: 60, label: "Checking MongoDB Atlas connection…" },
+                { pct: 85, label: "Preparing demo accounts & balances…" },
+                { pct: 95, label: "Rendering BamBanking dashboard shell…" }
+            ];
+
+            let phaseIndex = 0;
+            let phaseTimer = null;
+
+            function applyPhase(phase) {
+                if (progressFill) {
+                    progressFill.style.width = phase.pct + "%";
+                }
+                if (progressPctEl) {
+                    progressPctEl.textContent = phase.pct + "%";
+                }
+                if (statusText) {
+                    statusText.textContent = phase.label;
+                }
+                if (progressLabel) {
+                    progressLabel.textContent = phase.label;
+                }
+            }
+
+            function startPhases() {
+                if (!phases.length) return;
+                phaseIndex = 0;
+                applyPhase(phases[phaseIndex]);
+
+                phaseTimer = setInterval(() => {
+                    phaseIndex++;
+                    if (phaseIndex >= phases.length) {
+                        clearInterval(phaseTimer);
+                        phaseTimer = null;
+                        return;
+                    }
+                    applyPhase(phases[phaseIndex]);
+                }, 2000);
+            }
+
+            function stopPhases() {
+                if (phaseTimer) {
+                    clearInterval(phaseTimer);
+                    phaseTimer = null;
+                }
+            }
+
+            function show() {
+                overlay.classList.add("show");
+                startPhases();
+            }
+
+            function hide() {
+                stopPhases();
+                overlay.classList.remove("show", "ready");
+            }
+
+            function ready() {
+                // Call this after your first successful API hit
+                overlay.classList.add("ready");
+                stopPhases();
+
+                // Lock progress at 100%
+                if (progressFill) {
+                    progressFill.style.width = "100%";
+                }
+                if (progressPctEl) {
+                    progressPctEl.textContent = "100%";
+                }
+
+                const doneMsg = "Server is awake. Loading your account…";
+                if (statusText) {
+                    statusText.textContent = doneMsg;
+                }
+                if (progressLabel) {
+                    progressLabel.textContent = doneMsg;
+                }
+
+                if (icon) {
+                    icon.classList.remove("fa-circle-notch", "fa-spin");
+                    icon.classList.add("fa-circle-check");
+                }
+
+                setTimeout(hide, 900); // let the green flash play
+            }
+
+            if (dismissBtn) {
+                dismissBtn.addEventListener("click", hide);
+            }
+
+            // Auto-show when page finishes loading (so it runs on localhost too)
+            window.addEventListener("load", show);
+
+            // Safety: auto-hide after 45s in worst case
+            setTimeout(hide, 45000);
+
+            return { show, hide, ready };
+        })();
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const overlay = document.getElementById("bb-warmup");
+            const typingEl = document.getElementById("bbTyping");
+            const sections = document.querySelectorAll(".bb-section");
+
+            if (!overlay || !typingEl || sections.length === 0) return;
+
+            let started = false;
+
+            function startAnimations() {
+                if (started) return;
+                started = true;
+
+                // ---- slower, more visible typing effect ----
+                const text = "▶ Loading BamBanking services";
+                let i = 0;
+                function typeWriter() {
+                    if (i < text.length) {
+                        typingEl.textContent += text.charAt(i);
+                        i++;
+                        // 100 ms per character so the user really sees it
+                        setTimeout(typeWriter, 100);
+                    }
+                }
+
+                // ... (rest of revealNext etc stays the same)
+            }
+
+
+            // ---- reveal sections one by one ----
+            let step = 0;
+            function revealNext() {
+                if (step < sections.length) {
+                    sections[step].classList.add("active");
+                    step++;
+                    // slightly slower so the highlight is noticeable
+                    setTimeout(revealNext, 900);
+                }
+            }
+
+            // start both after a short delay so the dialog is fully visible
+            setTimeout(() => {
+                typeWriter();
+                setTimeout(revealNext, 700);
+            }, 500);
+        }
+
+            // watch for the overlay becoming visible (class "show")
+            const observer = new MutationObserver(() => {
+            if (overlay.classList.contains("show")) {
+                startAnimations();
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(overlay, { attributes: true });
+
+        // if already visible for some reason, start immediately
+        if (overlay.classList.contains("show")) {
+            startAnimations();
+            observer.disconnect();
+        }
+        });
+    </script>
+
+
 </body>
 
 </html>
