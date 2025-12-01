@@ -35,7 +35,9 @@ public class AuthService {
     // Lookups
     // ==========================
 
-    /** Find account by username (case-insensitive). */
+    /**
+     * Find account by username (case-insensitive).
+     */
     public Optional<Account> findByUsername(String username) {
         if (username == null) {
             return Optional.empty();
@@ -43,7 +45,9 @@ public class AuthService {
         return accountRepo.findByUsernameIgnoreCase(username.toLowerCase());
     }
 
-    /** Find account by email (case-insensitive). */
+    /**
+     * Find account by email (case-insensitive).
+     */
     public Optional<Account> findByEmail(String email) {
         if (email == null) {
             return Optional.empty();
@@ -52,17 +56,32 @@ public class AuthService {
     }
 
     // ==========================
-    // Login
+    // Login (username OR email)
     // ==========================
 
     /**
-     * Login using username + PIN.
-     * Returns Optional.empty() if not found or PIN mismatch.
+     * Login using username OR email + PIN.
+     * The login field can be either:
+     * - stored username
+     * - or stored email
      */
-    public Optional<Account> login(String username, String pinStr) {
+    public Optional<Account> login(String loginValue, String pinStr) {
         int pin = parsePin(pinStr);
 
-        Optional<Account> opt = findByUsername(username);
+        if (loginValue == null || loginValue.isBlank()) {
+            return Optional.empty();
+        }
+
+        String v = loginValue.trim().toLowerCase();
+
+        // 1) Try username
+        Optional<Account> opt = accountRepo.findByUsernameIgnoreCase(v);
+
+        // 2) If not found, try email
+        if (opt.isEmpty()) {
+            opt = accountRepo.findByEmailIgnoreCase(v);
+        }
+
         if (opt.isEmpty()) {
             return Optional.empty();
         }
@@ -81,7 +100,7 @@ public class AuthService {
 
     /**
      * Register a demo account using firstName, lastName, email, and PIN.
-     * Username is the lowercase email.
+     * Username is the lowercase email for consistency.
      */
     public Account registerDemoAccount(
             String firstName,

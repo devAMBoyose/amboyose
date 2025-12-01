@@ -68,18 +68,18 @@
                             </h1>
 
                             <!-- LOGIN FORM -->
-                            <form th:action="@{/bambanking/login}" method="post" id="loginForm" novalidate>
+                            <form th:action="@{/bambanking/login}" method="post" id="bb-login-form" novalidate
+                                onsubmit="return validateLogin(event)">
                                 <div class="form-row form-row-inline">
                                     <label for="username">username</label>
                                     <input type="text" id="username" name="username"
-                                        placeholder="your username or email" required />
+                                        placeholder="your username or email" />
                                 </div>
 
                                 <div class="form-row form-row-inline">
                                     <label for="pin">pin</label>
                                     <input type="password" id="pin" name="pin" minlength="4" maxlength="4"
-                                        inputmode="numeric" pattern="\\d{4}" placeholder="1234 / 4321 / 1111"
-                                        required />
+                                        inputmode="numeric" pattern="\d{4}" placeholder="1234 / 4321 / 1111" />
                                 </div>
 
                                 <div class="login-actions">
@@ -114,7 +114,6 @@
                             </h1>
 
                             <!-- SIGNUP FORM -->
-                            <!-- SIGNUP FORM -->
                             <form th:action="@{/bambanking/signup}" method="post" id="signupForm" novalidate>
 
                                 <!-- First + Last name row (2 columns) -->
@@ -137,7 +136,6 @@
 
                                 <div class="login-field">
                                     <label for="email">email</label>
-                                    <!-- ✅ keep type="email", REMOVE pattern attribute -->
                                     <input type="email" id="email" name="email" placeholder="bamby@example.com" required
                                         title="Please enter a valid email like name@example.com" />
                                 </div>
@@ -149,7 +147,9 @@
                                 </div>
 
                                 <div class="login-actions">
-                                    <button type="submit" class="btn-signup">Create Demo Account</button>
+                                    <button type="submit" class="btn-signup">
+                                        Create Demo Account
+                                    </button>
                                 </div>
                             </form>
 
@@ -173,19 +173,19 @@
         </p>
     </footer>
 
-    <!-- MODAL -->
-    <div id="errorModal" class="bank-modal">
+    <!-- ERROR MODAL (aligned with new bambanking-auth.js) -->
+    <div id="bb-error-modal" class="bank-modal">
         <div class="bank-modal-box">
-            <h2 class="bank-modal-title" id="modalTitle">Notice</h2>
-            <p class="bank-modal-message" id="errorModalMessage">Message.</p>
-            <button type="button" class="bank-modal-close" id="errorModalClose">OK</button>
+            <h2 class="bank-modal-title bb-error-title">Notice</h2>
+            <p class="bank-modal-message bb-error-message">Message.</p>
+            <button type="button" class="bank-modal-close" id="bb-error-ok">OK</button>
         </div>
     </div>
 
     <!-- JS -->
     <script th:src="@{/js/script.js}"></script>
     <script th:src="@{/js/nav.js}" defer></script>
-    <script th:src="@{/js/bambanking-auth.js}"></script>
+    <script th:src="@{/js/bambanking-auth.js}" defer></script>
 </body>
 
 </html>
