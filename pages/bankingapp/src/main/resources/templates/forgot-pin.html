@@ -2,13 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>BankingApp :: ForgotPIN</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <title>Forgot PIN – BamBanking</title>
 
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
     <!-- GLOBAL STYLES -->
@@ -16,67 +14,106 @@
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="stylesheet" th:href="@{/css/nav.css}" />
 
-    <!-- (your inline styles kept as-is) -->
+    <!-- PAGE STYLES -->
+    <link rel="stylesheet" th:href="@{/css/bambanking.css}" />
 </head>
 
-<body>
+<body class="forgot-pin-body">
+
     <div class="window">
-
-        <!-- Title bar -->
         <div class="title-bar">
-            <div class="dots">
-                <span></span><span></span><span></span>
-            </div>
+            <div class="dots"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
             <span class="filename">BankingApp :: ForgotPIN</span>
-
-            <a href="/bambanking/login" class="chip-link">
-                <button class="chip chip-back" type="button">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    <span>Back to Login</span>
-                </button>
-            </a>
+            <div class="tb-right">
+                <a th:href="@{/bambanking/login}" class="chip-link">
+                    <button class="chip chip-back" type="button">
+                        <i class="fa-solid fa-house"></i>
+                        <span style="font-size: small;">Back to Login</span>
+                    </button>
+                </a>
+            </div>
         </div>
 
-        <!-- Content -->
-        <div class="login-wrapper">
-            <div class="card-shell">
-                <div class="card-title">
-                    <h1>ForgotPIN() <span style="color:#22c55e;">// BamBanking demo</span></h1>
-                    <small>Enter the email you used to register. We’ll send a one-time PIN reset code.</small>
+        <div class="content forgot-pin-content">
 
-                    <!-- NEW: show error / success -->
-                    <p th:if="${error}" style="color:#f97373; font-size:0.85rem; margin:0.75rem 0 0.25rem;"
-                        th:text="${error}"></p>
-                    <p th:if="${success}" style="color:#4ade80; font-size:0.85rem; margin:0.75rem 0 0.25rem;"
-                        th:text="${success}"></p>
-                </div>
+            <h1>ForgotPIN()</h1>
 
-                <form action="/bambanking/forgot-pin" method="post">
-                    <div class="form-row">
-                        <label for="email">email</label>
-                        <input type="email" id="email" name="email" placeholder="you@example.com" required />
-                    </div>
+            <!-- Messages -->
+            <div th:if="${error}" class="alert error" th:text="${error}"></div>
+            <div th:if="${success}" class="alert success" th:text="${success}"></div>
 
-                    <button type="submit" class="btn-primary">
-                        Send Reset Link
+            <!-- STEP 1: Enter email -->
+            <div th:if="${!awaitingOtp}">
+                <p>Enter the email you used to register. We’ll send a one-time PIN reset code.</p>
+
+                <form th:action="@{/bambanking/forgot-pin}" method="post" class="bb-form">
+
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" placeholder="you@example.com" required />
+
+                    <button type="submit" class="bb-btn-main">
+                        <i class="fa-solid fa-envelope"></i>
+                        Send Reset Code
                     </button>
                 </form>
-
-                <p class="helper-text">
-                    For portfolio demo, you may still log in using the sample credentials on the main login page.
-                </p>
             </div>
+
+            <!-- STEP 2: Enter OTP + new PIN -->
+            <div th:if="${awaitingOtp}">
+                <p>
+                    We sent a reset code to
+                    <strong th:text="${email}">your@email.com</strong>.
+                </p>
+
+                <form th:action="@{/bambanking/reset-pin}" method="post" class="bb-form">
+
+                    <div class="bb-field">
+                        <label for="otp">Reset Code (OTP)</label>
+                        <input id="otp" name="otp" type="text" maxlength="6" minlength="6" inputmode="numeric"
+                            pattern="\d{6}" placeholder="123456" required />
+                    </div>
+
+                    <div class="bb-field">
+                        <label for="newPin">New PIN</label>
+                        <input id="newPin" name="newPin" type="password" maxlength="4" minlength="4" inputmode="numeric"
+                            pattern="\d{4}" placeholder="••••" required />
+                    </div>
+
+                    <div class="bb-field">
+                        <label for="confirmPin">Confirm New PIN</label>
+                        <input id="confirmPin" name="confirmPin" type="password" maxlength="4" minlength="4"
+                            inputmode="numeric" pattern="\d{4}" placeholder="••••" required />
+                    </div>
+
+                    <button type="submit" class="bb-btn-main">
+                        <i class="fa-solid fa-key"></i>
+                        Update PIN
+                    </button>
+                </form>
+            </div>
+
+            <div id="bb-error-modal" class="bank-modal">
+                <div class="bank-modal-box">
+                    <h2 class="bank-modal-title bb-error-title">Notice</h2>
+                    <p class="bank-modal-message bb-error-message">Message.</p>
+                    <button type="button" class="bank-modal-close" id="bb-error-ok">OK</button>
+                </div>
+            </div>
+
+            <p class="bb-note">
+                For portfolio demo, you may still log in using the sample credentials on the main login page.
+            </p>
+
         </div>
 
-        <footer class="site-footer">
-            <!-- your shared footer markup here, or reuse from bank-login -->
-        </footer>
     </div>
 
-    <!-- JS -->
     <script th:src="@{/js/script.js}"></script>
     <script th:src="@{/js/nav.js}" defer></script>
-    <script th:src="@{/js/bambanking-auth.js}"></script>
+
+    <script th:src="@{/js/bambanking-auth.js}" defer></script>
+    <script th:src="@{/js/bb-reset-modal.js}" defer></script>
+
 </body>
 
 </html>

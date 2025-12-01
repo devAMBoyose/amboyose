@@ -178,6 +178,15 @@
     box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.4);
 }
 
+.bank-modal {
+    display: none;
+
+}
+
+.bank-modal.show {
+    display: flex;
+}
+
 /* Small screens */
 @media (max-width: 640px) {
     .bb-modal-dialog {

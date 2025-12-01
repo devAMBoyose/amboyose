@@ -131,4 +131,31 @@ public class AuthService {
 
         return accountRepo.save(acc);
     }
+
+    /**
+     * Update the PIN for the account with the given email.
+     * Used by the Forgot PIN + OTP flow.
+     */
+    public void updatePinByEmail(String email, String newPin) {
+        if (email == null || newPin == null) {
+            throw new IllegalArgumentException("Email and new PIN must not be null.");
+        }
+
+        // Convert the PIN to int – your Account.pin field is int
+        int pinInt;
+        try {
+            pinInt = Integer.parseInt(newPin.trim());
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("PIN must be numeric (e.g. 1234).");
+        }
+
+        // Look up the account by email (case-insensitive)
+        Account acc = accountRepo.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new IllegalStateException("No account found for email: " + email));
+
+        // Update and save
+        acc.setPin(pinInt);
+        accountRepo.save(acc);
+    }
+
 }

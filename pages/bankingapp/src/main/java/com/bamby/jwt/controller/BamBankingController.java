@@ -2,13 +2,14 @@ package com.bamby.jwt.controller;
 
 import com.bamby.jwt.model.Account;
 import com.bamby.jwt.service.AuthService;
+import com.bamby.jwt.service.EmailJsService;
 import com.bamby.jwt.service.MaintenanceService;
 import com.bamby.jwt.service.TransactionService;
-import com.bamby.jwt.service.EmailJsService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.SecureRandom;
 import java.util.Optional;
@@ -16,6 +17,10 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/bambanking")
 public class BamBankingController {
+
+    // ---------------------------------------------------------------------
+    // Dependencies
+    // ---------------------------------------------------------------------
 
     private final AuthService authService;
     private final TransactionService txService;
@@ -34,39 +39,74 @@ public class BamBankingController {
         this.emailJsService = emailJsService;
     }
 
-    // --------------------------
-    // Helpers
-    // --------------------------
+    // ---------------------------------------------------------------------
+    // Helper methods
+    // ---------------------------------------------------------------------
 
+    /** Generate a 6-digit OTP as String. */
     private String generateOtp() {
-        int code = 100000 + random.nextInt(900000); // 6-digit
+        int code = 100_000 + random.nextInt(900_000);
         return String.valueOf(code);
     }
 
-    private Account getSessionAccount(HttpSession session) {
+    /** Get logged-in username from session, or null if not logged in. */
+    private String getLoggedUsername(HttpSession session) {
         Object u = session.getAttribute("username");
-        if (u == null) {
-            return null;
-        }
-        return authService.findByUsername(u.toString()).orElse(null);
+        return (u == null) ? null : u.toString();
     }
 
-    // --------------------------
-    // Login / signup
-    // --------------------------
+    /** Load Account for logged in user, or null if not logged in or missing. */
+    private Account getLoggedAccount(HttpSession session) {
+        String username = getLoggedUsername(session);
+        if (username == null) {
+            return null;
+        }
+        return authService.findByUsername(username).orElse(null);
+    }
+
+    /** Populate standard dashboard attributes. */
+    private void populateDashboardModel(Model model, Account acc) {
+        model.addAttribute("account", acc);
+        model.addAttribute("username", acc.getUsername());
+        model.addAttribute("balance", acc.getBalance());
+
+        var recent = txService.getRecentTransactions(acc.getUsername(), 10);
+        model.addAttribute("transactions", recent);
+        model.addAttribute("recentTx", recent);
+    }
+
+    // ---------------------------------------------------------------------
+    // LOGIN / SIGNUP
+    // ---------------------------------------------------------------------
 
     @GetMapping("/login")
     public String showLoginPage(
             @RequestParam(value = "tab", required = false, defaultValue = "login") String tab,
-            @RequestParam(value = "error", required = false) String error,
-            @RequestParam(value = "success", required = false) String success,
+            @RequestParam(value = "error", required = false) String errorParam,
+            @RequestParam(value = "success", required = false) String successParam,
             @RequestParam(value = "openSignup", required = false) Boolean openSignup,
+            HttpSession session, // <-- added
             Model model) {
 
+        // ---- RESET FORGOT-PIN STATE WHENEVER USER OPENS LOGIN PAGE ----
+        session.removeAttribute("pinResetEmail");
+        session.removeAttribute("pinResetOtp");
+        session.removeAttribute("pinResetAwaitingOtp");
+        // ----------------------------------------------------------------
+
+        // keep flash "success" if present (e.g. after reset-pin)
+        Object flashSuccess = model.asMap().get("success");
+        String success = flashSuccess != null ? flashSuccess.toString() : successParam;
+
         model.addAttribute("tab", tab);
-        model.addAttribute("error", error);
-        model.addAttribute("success", success);
-        model.addAttribute("openSignup", openSignup != null ? openSignup : false);
+        if (errorParam != null) {
+            model.addAttribute("error", errorParam);
+        }
+        if (success != null) {
+            model.addAttribute("success", success);
+        }
+        model.addAttribute("openSignup", openSignup != null && openSignup);
+
         return "bank-login";
     }
 
@@ -104,26 +144,25 @@ public class BamBankingController {
             // 1. Check if email already exists
             Optional<Account> existing = authService.findByEmail(email);
             if (existing.isPresent()) {
-                model.addAttribute("error", "An account with this email already exists. Please log in instead.");
+                model.addAttribute("error",
+                        "An account with this email already exists. Please log in instead.");
                 model.addAttribute("openSignup", true);
                 return "bank-login";
             }
 
-            // 2. Generate OTP and send email
+            // 2. Generate OTP and store pending registration in session
             String otp = generateOtp();
             String fullName = (firstName + " " + lastName).trim();
 
-            // Store pending registration in session
             session.setAttribute("pending_firstName", firstName);
             session.setAttribute("pending_lastName", lastName);
             session.setAttribute("pending_email", email);
             session.setAttribute("pending_pin", pin);
             session.setAttribute("pending_otp", otp);
 
-            // Send OTP email
+            // 3. Send OTP email
             emailJsService.sendOtp(email, fullName, otp);
 
-            // 3. Show OTP page
             model.addAttribute("email", email);
             return "bank-verify-otp";
 
@@ -168,7 +207,6 @@ public class BamBankingController {
             return "bank-verify-otp";
         }
 
-        // OTP is correct → create account
         try {
             authService.registerDemoAccount(firstName, lastName, email, pin);
         } catch (IllegalStateException ex) {
@@ -176,7 +214,7 @@ public class BamBankingController {
             return "bank-login";
         }
 
-        // Clean up session
+        // Clean session
         session.removeAttribute("pending_firstName");
         session.removeAttribute("pending_lastName");
         session.removeAttribute("pending_email");
@@ -188,36 +226,168 @@ public class BamBankingController {
         return "bank-login";
     }
 
-    // --------------------------
-    // Dashboard
-    // --------------------------
+    // ---------------------------------------------------------------------
+    // DASHBOARD
+    // ---------------------------------------------------------------------
 
     @GetMapping("/dashboard")
     public String showDashboard(HttpSession session, Model model) {
-        Account acc = getSessionAccount(session);
+        Account acc = getLoggedAccount(session);
         if (acc == null) {
             return "redirect:/bambanking/login?error=Please%20log%20in";
         }
 
-        model.addAttribute("account", acc);
-        model.addAttribute("username", acc.getUsername()); // for convenience
-        model.addAttribute("balance", acc.getBalance());
-        model.addAttribute("recentTx", txService.getRecentTransactions(acc.getUsername(), 10));
+        populateDashboardModel(model, acc);
+
+        // flash attributes from tx endpoints
+        Object showBalance = model.asMap().get("showBalanceCard");
+        Object txMsg = model.asMap().get("txMessage");
+        if (showBalance != null) {
+            model.addAttribute("showBalanceCard", showBalance);
+        }
+        if (txMsg != null) {
+            model.addAttribute("txMessage", txMsg);
+        }
 
         return "bank-dashboard";
     }
 
-    // --------------------------
-    // Forgot PIN flow
-    // --------------------------
+    // ---------------------------------------------------------------------
+    // TRANSACTIONS
+    // ---------------------------------------------------------------------
+
+    @PostMapping("/check-balance")
+    public String handleCheckBalance(HttpSession session, RedirectAttributes redirect) {
+        Account acc = getLoggedAccount(session);
+        if (acc == null) {
+            return "redirect:/bambanking/login?error=Please%20log%20in";
+        }
+
+        redirect.addFlashAttribute("showBalanceCard", true);
+        redirect.addFlashAttribute("txMessage", "Balance checked successfully.");
+        return "redirect:/bambanking/dashboard";
+    }
+
+    @PostMapping("/deposit")
+    public String handleDeposit(
+            @RequestParam("amount") double amount,
+            HttpSession session,
+            RedirectAttributes redirect) {
+
+        Account acc = getLoggedAccount(session);
+        if (acc == null) {
+            return "redirect:/bambanking/login?error=Please%20log%20in";
+        }
+
+        if (amount <= 0) {
+            redirect.addFlashAttribute("txMessage", "Amount must be greater than zero.");
+            redirect.addFlashAttribute("showBalanceCard", true);
+            return "redirect:/bambanking/dashboard";
+        }
+
+        try {
+            // FIX: pass Account, not username String
+            txService.deposit(acc, amount);
+            redirect.addFlashAttribute("txMessage", "Deposit successful: ₱" + amount);
+        } catch (IllegalStateException ex) {
+            redirect.addFlashAttribute("txMessage", ex.getMessage());
+        }
+
+        redirect.addFlashAttribute("showBalanceCard", true);
+        return "redirect:/bambanking/dashboard";
+    }
+
+    @PostMapping("/withdraw")
+    public String handleWithdraw(
+            @RequestParam("amount") double amount,
+            HttpSession session,
+            RedirectAttributes redirect) {
+
+        Account acc = getLoggedAccount(session);
+        if (acc == null) {
+            return "redirect:/bambanking/login?error=Please%20log%20in";
+        }
+
+        if (amount <= 0) {
+            redirect.addFlashAttribute("txMessage", "Amount must be greater than zero.");
+            redirect.addFlashAttribute("showBalanceCard", true);
+            return "redirect:/bambanking/dashboard";
+        }
+
+        try {
+            // FIX: pass Account, not username String
+            txService.withdraw(acc, amount);
+            redirect.addFlashAttribute("txMessage", "Withdraw successful: ₱" + amount);
+        } catch (IllegalStateException ex) {
+            redirect.addFlashAttribute("txMessage", ex.getMessage());
+        }
+
+        redirect.addFlashAttribute("showBalanceCard", true);
+        return "redirect:/bambanking/dashboard";
+    }
+
+    @PostMapping("/transfer")
+    public String handleTransfer(
+            @RequestParam("toUser") String toUser,
+            @RequestParam("amount") double amount,
+            HttpSession session,
+            RedirectAttributes redirect) {
+
+        Account acc = getLoggedAccount(session);
+        if (acc == null) {
+            return "redirect:/bambanking/login?error=Please%20log%20in";
+        }
+
+        if (amount <= 0) {
+            redirect.addFlashAttribute("txMessage", "Amount must be greater than zero.");
+            redirect.addFlashAttribute("showBalanceCard", true);
+            return "redirect:/bambanking/dashboard";
+        }
+
+        try {
+            // FIX: pass Account, not username String
+            txService.transfer(acc, toUser, amount);
+            redirect.addFlashAttribute(
+                    "txMessage",
+                    "Transfer successful: ₱" + amount + " to " + toUser);
+        } catch (IllegalStateException ex) {
+            redirect.addFlashAttribute("txMessage", ex.getMessage());
+        }
+
+        redirect.addFlashAttribute("showBalanceCard", true);
+        return "redirect:/bambanking/dashboard";
+    }
+
+    // ---------------------------------------------------------------------
+    // FORGOT PIN (OTP + 4-digit new PIN)
+    // ---------------------------------------------------------------------
 
     @GetMapping("/forgot-pin")
     public String showForgotPinPage(
-            @RequestParam(value = "error", required = false) String error,
-            @RequestParam(value = "success", required = false) String success,
-            Model model) {
-        model.addAttribute("error", error);
-        model.addAttribute("success", success);
+            @RequestParam(value = "error", required = false) String errorParam,
+            @RequestParam(value = "success", required = false) String successParam,
+            Model model,
+            HttpSession session) {
+
+        if (errorParam != null) {
+            model.addAttribute("error", errorParam);
+        }
+        if (successParam != null) {
+            model.addAttribute("success", successParam);
+        }
+
+        Boolean awaitingOtp = (Boolean) session.getAttribute("pinResetAwaitingOtp");
+        String email = (String) session.getAttribute("pinResetEmail");
+
+        if (awaitingOtp == null) {
+            awaitingOtp = false;
+        }
+
+        model.addAttribute("awaitingOtp", awaitingOtp);
+        if (awaitingOtp && email != null) {
+            model.addAttribute("email", email);
+        }
+
         return "forgot-pin";
     }
 
@@ -225,37 +395,95 @@ public class BamBankingController {
     public String handleForgotPin(
             @RequestParam("email") String email,
             HttpSession session,
-            Model model) {
+            RedirectAttributes redirect) {
 
         Optional<Account> accOpt = authService.findByEmail(email);
 
         if (accOpt.isEmpty()) {
-            model.addAttribute("error", "We couldn't find an account with that email.");
-            return "forgot-pin";
+            redirect.addFlashAttribute("error", "We couldn't find an account with that email.");
+            return "redirect:/bambanking/forgot-pin";
         }
 
         Account acc = accOpt.get();
         String fullName = acc.getFullName();
         String otp = generateOtp();
 
-        // For demo, track in session; in a real app this belongs in DB.
         session.setAttribute("pinResetEmail", email);
         session.setAttribute("pinResetOtp", otp);
+        session.setAttribute("pinResetAwaitingOtp", true);
 
         emailJsService.sendPinResetLink(email, fullName, otp);
 
-        model.addAttribute("success",
+        redirect.addFlashAttribute("success",
                 "We sent a PIN reset code to " + email + ". Please check your inbox.");
-        return "forgot-pin";
+        return "redirect:/bambanking/forgot-pin";
     }
 
-    // --------------------------
-    // Maintenance helper (if you still use it)
-    // --------------------------
+    @PostMapping("/reset-pin")
+    public String handleResetPin(
+            @RequestParam("otp") String otpInput,
+            @RequestParam("newPin") String newPin,
+            @RequestParam("confirmPin") String confirmPin,
+            HttpSession session,
+            RedirectAttributes redirect) {
+
+        String email = (String) session.getAttribute("pinResetEmail");
+        String expectedOtp = (String) session.getAttribute("pinResetOtp");
+
+        if (email == null || expectedOtp == null) {
+            redirect.addFlashAttribute("error", "Your reset session expired. Please start again.");
+            return "redirect:/bambanking/forgot-pin";
+        }
+
+        if (!expectedOtp.equals(otpInput)) {
+            redirect.addFlashAttribute("error", "Invalid reset code. Please try again.");
+            session.setAttribute("pinResetAwaitingOtp", true);
+            return "redirect:/bambanking/forgot-pin";
+        }
+
+        if (!newPin.matches("\\d{4}")) {
+            redirect.addFlashAttribute("error", "PIN must be exactly 4 digits (0–9).");
+            session.setAttribute("pinResetAwaitingOtp", true);
+            return "redirect:/bambanking/forgot-pin";
+        }
+
+        if (!newPin.equals(confirmPin)) {
+            redirect.addFlashAttribute("error", "New PIN and confirmation do not match.");
+            session.setAttribute("pinResetAwaitingOtp", true);
+            return "redirect:/bambanking/forgot-pin";
+        }
+
+        authService.updatePinByEmail(email, newPin);
+
+        session.removeAttribute("pinResetEmail");
+        session.removeAttribute("pinResetOtp");
+        session.removeAttribute("pinResetAwaitingOtp");
+
+        redirect.addFlashAttribute("success",
+                "Your PIN has been updated. You can now log in with your new 4-digit PIN.");
+
+        return "redirect:/bambanking/login";
+    }
+
+    // ---------------------------------------------------------------------
+    // LOGOUT + HELP
+    // ---------------------------------------------------------------------
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/bambanking/login?success=You%20have%20logged%20out.";
+    }
 
     @GetMapping("/help")
-    public String showHelp(Model model) {
+    public String showHelp(HttpSession session, Model model) {
+        Account acc = getLoggedAccount(session);
+        if (acc == null) {
+            return "redirect:/bambanking/login?error=Please%20log%20in";
+        }
+
+        populateDashboardModel(model, acc);
         model.addAttribute("helpText", txService.helpText());
-        return "bank-dashboard"; // or a separate help page if you have one
+        return "bank-dashboard";
     }
 }
