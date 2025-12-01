@@ -4,12 +4,16 @@ import com.bamby.jwt.model.Account;
 import com.bamby.jwt.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.Optional;
 
 @Service
 public class AuthService {
 
     private final AccountRepository accountRepo;
+
+    // 🔹 Random generator for card number & CVV
+    private final SecureRandom random = new SecureRandom();
 
     public AuthService(AccountRepository accountRepo) {
         this.accountRepo = accountRepo;
@@ -29,6 +33,21 @@ public class AuthService {
         } catch (NumberFormatException ex) {
             throw new IllegalStateException("PIN must contain only digits.");
         }
+    }
+
+    // 🔹 NEW: generate a random 16-digit card number
+    public String generateCardNumber() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            sb.append(random.nextInt(10));
+        }
+        return sb.toString();
+    }
+
+    // 🔹 NEW: generate a random 3-digit CVV (100–999)
+    public String generateCvv() {
+        int n = random.nextInt(900) + 100; // 100–999
+        return Integer.toString(n);
     }
 
     // ==========================
@@ -101,6 +120,7 @@ public class AuthService {
     /**
      * Register a demo account using firstName, lastName, email, and PIN.
      * Username is the lowercase email for consistency.
+     * This now ALSO assigns a cardNumber + CVV.
      */
     public Account registerDemoAccount(
             String firstName,
@@ -124,10 +144,15 @@ public class AuthService {
         // Initial demo balance – adjust if you want
         double initialBalance = 10_000;
 
+        // Create base account (same as before)
         Account acc = new Account(username, pin, initialBalance);
         acc.setEmail(email);
         String fullName = (firstName + " " + lastName).trim();
         acc.setFullName(fullName);
+
+        // 🔹 NEW: assign card number & CVV for this account
+        acc.setCardNumber(generateCardNumber());
+        acc.setCvv(generateCvv());
 
         return accountRepo.save(acc);
     }
@@ -157,5 +182,4 @@ public class AuthService {
         acc.setPin(pinInt);
         accountRepo.save(acc);
     }
-
 }

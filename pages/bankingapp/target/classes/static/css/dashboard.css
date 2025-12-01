@@ -37,7 +37,7 @@
 .bb-tiles-panel {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1 rem;
 }
 
 /* right main column */
@@ -777,4 +777,141 @@
         padding: 0.35rem 0.3rem;
         font-size: 0.7rem;
     }
+}
+
+/* =========================
+   Last Transaction mini-receipt
+   ========================= */
+
+.bb-last-tx-card {
+    background: rgba(15, 23, 42, 0.96);
+    border-radius: var(--bb-radius-md);
+    border: 1px solid rgba(56, 189, 248, 0.7);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.85);
+    padding: 0.9rem 1rem 1.1rem;
+    margin-bottom: 0.6rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.bb-last-tx-card::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.22), transparent 55%);
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.bb-last-tx-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.7rem;
+}
+
+.bb-last-tx-header h3 {
+    margin: 0 0 0.2rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.bb-last-tx-sub {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--bb-text-muted);
+}
+
+.bb-last-tx-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--bb-radius-pill);
+    font-size: 0.72rem;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    background: rgba(15, 23, 42, 0.96);
+    color: var(--bb-text-muted);
+    white-space: nowrap;
+}
+
+.bb-last-tx-pill.ok {
+    border-color: rgba(34, 197, 94, 0.9);
+    background: rgba(22, 163, 74, 0.15);
+    color: #bbf7d0;
+}
+
+.bb-last-tx-pill.fail {
+    border-color: rgba(248, 113, 113, 0.9);
+    background: rgba(248, 113, 113, 0.18);
+    color: #fecaca;
+}
+
+.bb-last-tx-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem 1.4rem;
+    font-size: 0.8rem;
+}
+
+.bb-last-tx-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bb-text-muted);
+    margin-bottom: 0.1rem;
+}
+
+.bb-last-tx-value {
+    font-weight: 600;
+}
+
+.bb-last-tx-amount {
+    font-size: 1rem;
+    color: var(--bb-accent);
+    letter-spacing: 0.05em;
+}
+
+/* responsive for mini-receipt */
+@media (max-width: 768px) {
+    .bb-last-tx-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Slightly smaller UI inside dashboard (like 90% zoom) */
+.bb-dashboard {
+    font-size: 0.9rem;
+}
+
+/* amount + eye icon in one row */
+.bb-balance-row {
+    display: flex;
+    align-items: baseline;
+    /* align icon with number baseline */
+    gap: 0.5rem;
+}
+
+/* button style (you can reuse what you already added) */
+.bb-balance-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #00ffb7;
+    padding: 0;
+    line-height: 1;
+    transition: 0.2s ease;
+}
+
+.bb-balance-toggle:hover {
+    opacity: 0.7;
 }

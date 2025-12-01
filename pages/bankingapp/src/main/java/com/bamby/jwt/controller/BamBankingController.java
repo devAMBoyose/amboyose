@@ -65,10 +65,16 @@ public class BamBankingController {
     }
 
     /** Populate standard dashboard attributes. */
+    /** Populate standard dashboard attributes. */
     private void populateDashboardModel(Model model, Account acc) {
         model.addAttribute("account", acc);
         model.addAttribute("username", acc.getUsername());
         model.addAttribute("balance", acc.getBalance());
+
+        // Cardholder info for UI
+        model.addAttribute("cardHolderName", acc.getFullName());
+        model.addAttribute("cardNumber", acc.getFormattedCardNumber());
+        model.addAttribute("cardCvv", acc.getCvv());
 
         var recent = txService.getRecentTransactions(acc.getUsername(), 10);
         model.addAttribute("transactions", recent);
@@ -237,9 +243,17 @@ public class BamBankingController {
             return "redirect:/bambanking/login?error=Please%20log%20in";
         }
 
+        // keep your existing helper
         populateDashboardModel(model, acc);
 
-        // flash attributes from tx endpoints
+        // 🔹 NEW: welcome name from real full name
+        String display = acc.getFullName(); // uses helper we added
+        if (display == null || display.isBlank()) {
+            display = acc.getUsername(); // safety fallback
+        }
+        model.addAttribute("displayName", display.toUpperCase()); // CAPS like design
+
+        // flash attributes from tx endpoints (unchanged)
         Object showBalance = model.asMap().get("showBalanceCard");
         Object txMsg = model.asMap().get("txMessage");
         if (showBalance != null) {

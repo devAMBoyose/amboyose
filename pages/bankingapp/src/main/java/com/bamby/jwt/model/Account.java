@@ -21,6 +21,10 @@ public class Account {
     private int pin;
     private double balance;
 
+    // 🔹 NEW: 16-digit card number and 3-digit CVV
+    private String cardNumber; // 16 digits
+    private String cvv; // 3 digits
+
     public Account() {
     }
 
@@ -80,5 +84,50 @@ public class Account {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    // ---------- card number / CVV ----------
+
+    /** Full raw 16-digit card number stored in DB. */
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    /** 3-digit CVV code (string so we keep leading zeros). */
+    public String getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
+    }
+
+    /**
+     * Card number grouped for UI: 1234 5678 9012 3456
+     */
+    public String getFormattedCardNumber() {
+        if (cardNumber == null || cardNumber.length() != 16) {
+            return "0000 0000 0000 0000";
+        }
+        return cardNumber.substring(0, 4) + " "
+                + cardNumber.substring(4, 8) + " "
+                + cardNumber.substring(8, 12) + " "
+                + cardNumber.substring(12);
+    }
+
+    /**
+     * Masked version if you still need it somewhere else.
+     */
+    public String getMaskedCardNumber() {
+        if (cardNumber == null || cardNumber.length() != 16) {
+            return "0000 **** **** 0000";
+        }
+        String first4 = cardNumber.substring(0, 4);
+        String last4 = cardNumber.substring(12);
+        return first4 + " **** **** " + last4;
     }
 }

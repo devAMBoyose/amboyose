@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/css/dashboard.css" />
     <link rel="stylesheet" href="/css/quickactions.css" />
     <link rel="stylesheet" href="/css/bb-theme-toggle.css" />
-    <!-- Modal styles (make sure this file exists) -->
+    <!-- Modal styles -->
     <link rel="stylesheet" href="/css/bb-modal.css" />
 </head>
 
@@ -31,7 +31,6 @@
             </div>
             <span class="filename">Bam Banking Dashboard</span>
             <div class="tb-right">
-                <!-- LOGOUT beside HOME -->
                 <a th:href="@{/bambanking/logout}" class="chip-link">
                     <button class="chip chip-logout">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -43,111 +42,79 @@
 
         <!-- MAIN DASHBOARD -->
         <div class="bb-dashboard">
-            <!-- LEFT: TILES -->
+            <!-- LEFT COLUMN: TILES (for actions) -->
             <div class="bb-tiles-panel">
+
+                <div class="bb-balance-card">
+                    <h3>Current Available Balance</h3>
+
+                    <!-- AMOUNT + EYE ICON ON SAME LINE -->
+                    <div class="bb-balance-row">
+                        <div class="bb-balance-amount">
+                            ₱<span id="balanceValue" th:text="${balance}">0.00</span>
+                        </div>
+
+                        <button type="button" class="bb-balance-toggle" onclick="toggleBalance()">
+                            <i id="balanceEye" class="fa-solid fa-eye-slash"></i>
+                        </button>
+                    </div>
+
+                    <div class="bb-balance-meta">
+                        <span th:text="${txMessage}">Balance checked successfully.</span>
+                    </div>
+                </div>
+
                 <!-- Check Balance -->
-                <form th:action="@{/bambanking/check-balance}" method="post" class="bb-tile">
-                    <div>
-                        <h2>Check Balance</h2>
-                        <div class="bb-tile-sub"></div>
-                    </div>
-                    <button type="submit">
-                        <i class="fa-solid fa-magnifying-glass-dollar"></i> Check
-                    </button>
-                </form>
+                <div class="bb-card-flip" data-card="visa">
+                    <div class="bb-card-inner">
+                        <!-- FRONT -->
+                        <div class="bb-card-face front">
+                            <div class="bb-card-row-top">
+                                <span class="bb-card-type">VISA</span>
+                                <span class="bb-card-bank">BAM BANKING</span>
+                            </div>
+                            <div class="bb-card-chip"></div>
+                            <div class="bb-card-globe"></div>
 
-                <!-- Deposit -->
-                <form th:action="@{/bambanking/deposit}" method="post" class="bb-tile">
-                    <div>
-                        <h2>Deposit Cash</h2>
-                        <div class="bb-tile-sub"></div>
-                    </div>
-                    <div>
-                        <input type="number" step="0.01" name="amount" placeholder="Amount" required />
-                        <button type="submit">
-                            <i class="fa-solid fa-circle-arrow-down"></i> Deposit
-                        </button>
-                    </div>
-                </form>
+                            <!-- FULL card number -->
+                            <div class="bb-card-number" th:text="${cardNumber}">
+                                0000 0000 0000 0000
+                            </div>
 
-                <!-- Withdraw -->
-                <form th:action="@{/bambanking/withdraw}" method="post" class="bb-tile">
-                    <div>
-                        <h2>Withdraw Cash</h2>
-                        <div class="bb-tile-sub"></div>
-                    </div>
-                    <div>
-                        <input type="number" step="0.01" name="amount" placeholder="Amount" required />
-                        <button type="submit">
-                            <i class="fa-solid fa-circle-arrow-up"></i> Withdraw
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Transfer -->
-                <form th:action="@{/bambanking/transfer}" method="post" class="bb-tile">
-                    <div>
-                        <h2>Transfer Funds</h2>
-                        <div class="bb-tile-sub"></div>
-                    </div>
-                    <div>
-                        <input type="text" name="toUser" placeholder="To username" required />
-                        <input type="number" step="0.01" name="amount" placeholder="Amount" required />
-                        <button type="submit">
-                            <i class="fa-solid fa-right-left"></i> Transfer
-                        </button>
-                    </div>
-                </form>
-
-                <!-- QUICK ACTIONS (now open modal) -->
-                <section class="bb-quick-actions">
-                    <header class="qa-head">
-                        <h3>Quick Actions</h3>
-                    </header>
-                    <br>
-
-                    <div class="qa-grid">
-                        <div class="qa-item" onclick="openQaModal('account')">
-                            <i class="fa-solid fa-id-card"></i>
-                            <span>Account info</span>
+                            <div class="bb-card-row-bottom">
+                                <div>
+                                    <span class="bb-card-label">CARDHOLDER</span>
+                                    <span class="bb-card-name" th:text="${cardHolderName}">
+                                        ANNA BOYOSE
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="bb-card-label">VALID THRU</span>
+                                    <span class="bb-card-valid">06/30</span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="qa-item" onclick="openQaModal('transfer')">
-                            <i class="fa-solid fa-right-left"></i>
-                            <span>Transfer</span>
-                        </div>
-
-                        <div class="qa-item" onclick="openQaModal('deposit')">
-                            <i class="fa-solid fa-wallet"></i>
-                            <span>Top up</span>
-                        </div>
-
-                        <div class="qa-item" onclick="openQaModal('info')">
-                            <i class="fa-solid fa-rotate"></i>
-                            <span>Auto debit</span>
-                        </div>
-
-                        <div class="qa-item" onclick="openQaModal('info')">
-                            <i class="fa-solid fa-money-bill-transfer"></i>
-                            <span>Pay / E-Wallet</span>
-                        </div>
-
-                        <div class="qa-item" onclick="openQaModal('info')">
-                            <i class="fa-solid fa-building-columns"></i>
-                            <span>Other bank</span>
-                        </div>
-
-                        <div class="qa-item" onclick="openQaModal('info')">
-                            <i class="fa-solid fa-coins"></i>
-                            <span>Money Changers</span>
-                        </div>
-
-                        <div class="qa-item" onclick="openQaModal('info')">
-                            <i class="fa-solid fa-ellipsis"></i>
-                            <span>More</span>
+                        <!-- BACK -->
+                        <div class="bb-card-face back">
+                            <div class="bb-card-strip"></div>
+                            <div class="bb-card-signature">
+                                <span class="bb-card-sign-label">Authorized Signature</span>
+                                <span class="bb-card-cvv-label">CVV</span>
+                                <!-- dynamic CVV -->
+                                <span class="bb-card-cvv" th:text="${cardCvv}">***</span>
+                            </div>
+                            <p class="bb-card-back-text">
+                                BamBanking virtual card for demo use only. Not a real payment
+                                instrument.
+                            </p>
+                            <span class="bb-card-brand">BAMBY BANKING</span>
                         </div>
                     </div>
-                </section>
+                </div>
+
+
+                <br>
 
                 <!-- Help -->
                 <a th:href="@{/bambanking/help}" class="bb-tile app-transaction tile-link">
@@ -161,211 +128,154 @@
                 </a>
             </div>
 
-            <!-- RIGHT: MAIN PANEL -->
+            <!-- RIGHT SIDE: MAIN PANEL (like sample screenshot) -->
             <div class="bb-main-panel">
                 <h2>Welcome to BAMBY Banking App</h2>
+
+                <!-- meta row + view receipt button -->
                 <div class="bb-main-meta">
-                    <span>Welcome, <strong th:text="${username}">User</strong></span>
-                    <span>Current balance:
-                        <strong>₱<span th:text="${balance}">0.00</span></strong>
-                    </span>
+                    <span>Welcome, <strong th:text="${displayName}">User</strong></span>
+
+                    <button type="button" class="bb-meta-receipt-btn" id="bbOpenReceiptBtn" th:if="${txRef != null}">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>View last receipt</span>
+                    </button>
                 </div>
 
-                <!-- THEME TOGGLE INSIDE DASHBOARD -->
+                <!-- THEME TOGGLE in top-right -->
                 <div class="bb-theme-toggle-holder">
                     <div class="bb-theme-toggle" id="bbThemeToggle">
-                        <button type="button" data-theme="light" class="is-active">
+                        <button type="button" data-theme="light">
                             <i class="fa-regular fa-sun"></i>
                         </button>
-                        <button type="button" data-theme="dark">
+                        <button type="button" data-theme="dark" class="is-active">
                             <i class="fa-regular fa-moon"></i>
                         </button>
                     </div>
                 </div>
 
                 <div class="bb-main-content">
+                    <!-- GRID: LEFT = BALANCE + CARD, RIGHT = QUICK ACTIONS + TRANSACTIONS -->
 
-                    <!-- TOP GRID -->
-                    <div class="bb-main-grid">
-                        <!-- LEFT COLUMN: BALANCE + VIRTUAL CARD -->
-                        <div class="bb-main-left">
-                            <!-- BIG BALANCE RESULT CARD -->
-                            <div class="bb-balance-card" th:if="${showBalanceCard}">
-                                <h3>Current Available Balance</h3>
-                                <div class="bb-balance-amount">
-                                    ₱<span th:text="${balance}">0.00</span>
+
+
+
+                    <!-- RIGHT: QUICK ACTIONS + RECENT TRANSACTIONS -->
+                    <div class="bb-main-right">
+
+                        <!-- QUICK ACTIONS CARD (now on the RIGHT, like sample) -->
+                        <section class="bb-quick-actions">
+                            <header class="qa-head">
+                                <h3>Quick Actions</h3><br>
+
+                            </header>
+
+                            <div class="qa-grid">
+                                <div class="qa-item" onclick="openQaModal('account')">
+                                    <i class="fa-solid fa-id-card"></i>
+                                    <span>Account info</span>
                                 </div>
-                                <div class="bb-balance-meta">
-                                    <span th:text="${txMessage}">You have successfully checked your balance.</span>
+
+                                <div class="qa-item" onclick="openQaModal('transfer')">
+                                    <i class="fa-solid fa-right-left"></i>
+                                    <span>Transfer</span>
+                                </div>
+
+                                <div class="qa-item" onclick="openQaModal('deposit')">
+                                    <i class="fa-solid fa-wallet"></i>
+                                    <span>Deposit</span>
+                                </div>
+
+                                <div class="qa-item" onclick="openQaModal('withdraw')">
+                                    <i class="fa-solid fa-circle-arrow-up"></i>
+                                    <span>Withdraw</span>
+                                </div>
+
+                                <div class="qa-item" onclick="openQaModal('info')">
+                                    <i class="fa-solid fa-rotate"></i>
+                                    <span>Auto debit</span>
+                                </div>
+
+                                <div class="qa-item" onclick="openQaModal('info')">
+                                    <i class="fa-solid fa-money-bill-transfer"></i>
+                                    <span>Pay / E-Wallet</span>
+                                </div>
+
+                                <!-- MONEY CHANGERS uses FX MODAL -->
+                                <div class="qa-item" onclick="openQaModal('fx')">
+                                    <i class="fa-solid fa-coins"></i>
+                                    <span>Money Changers</span>
+                                </div>
+
+                                <div class="qa-item" onclick="openQaModal('info')">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                    <span>More</span>
                                 </div>
                             </div>
+                        </section>
 
-                            <!-- VIRTUAL CARD WIDGET (SEPARATE BOX) -->
-                            <section class="bb-widget-card bb-cards-widget">
-                                <header class="bb-widget-head">
-                                    <div>
-                                        <h3>Virtual Card</h3>
-                                        <p>Flip the card to view front and back details.</p>
-                                    </div>
-                                </header>
+                        <!-- RECENT TRANSACTIONS CARD (under Quick Actions, same column) -->
+                        <div class="bb-transactions-card" id="recent-transactions" th:if="${transactions != null}">
+                            <div class="bb-transactions-header">
+                                <div>Recent Transactions</div>
+                                <span th:text="'Last ' + ${transactions.size()} + ' records'">Last
+                                    transactions</span>
+                            </div>
 
-                                <div class="bb-card-flip" data-card="visa">
-                                    <div class="bb-card-inner">
-                                        <!-- FRONT -->
-                                        <div class="bb-card-face front">
-                                            <div class="bb-card-row-top">
-                                                <span class="bb-card-type">VISA</span>
-                                                <span class="bb-card-bank">BAM BANKING</span>
-                                            </div>
-                                            <div class="bb-card-chip"></div>
-                                            <div class="bb-card-globe"></div>
+                            <div class="bb-transactions-table-wrapper">
+                                <table class="bb-transactions-table">
+                                    <thead>
+                                        <tr>
+                                            <th>DATE</th>
+                                            <th>TYPE</th>
+                                            <th>METHOD</th>
+                                            <th>AMOUNT</th>
+                                            <th>BALANCE</th>
+                                            <th>REFERENCE</th>
+                                            <th>STATUS</th>
+                                        </tr>
+                                    </thead>
 
-                                            <div class="bb-card-number">
-                                                4321&nbsp;****&nbsp;****&nbsp;9876
-                                            </div>
+                                    <tbody>
+                                        <tr th:each="tx : ${transactions}">
+                                            <td th:text="${#temporals.format(tx.timestamp, 'yyyy-MM-dd HH:mm')}">
+                                                2025-01-01 12:00
+                                            </td>
+                                            <td th:text="${tx.type}">Deposit</td>
+                                            <td th:text="${tx.method}">APP</td>
+                                            <td>
+                                                <span
+                                                    th:classappend="${tx.type == 'Deposit'} ? ' bb-tx-amount-credit' : ' bb-tx-amount-debit'"
+                                                    th:text="${tx.type == 'Deposit' ? '+' : '-'} + '₱' + ${tx.amount}">
+                                                    +₱1,000.00
+                                                </span>
+                                            </td>
+                                            <td th:text="'₱' + ${tx.balanceAfter}">₱1,500.00</td>
+                                            <td th:text="${tx.reference}">BB-0000000000000</td>
+                                            <td>
+                                                <span class="bb-tx-status"
+                                                    th:classappend="${tx.status == 'OK'} ? ' ok' : (${tx.status == 'PENDING'} ? ' pending' : ' failed')"
+                                                    th:text="${tx.status}">
+                                                    OK
+                                                </span>
+                                            </td>
+                                        </tr>
 
-                                            <div class="bb-card-row-bottom">
-                                                <div>
-                                                    <span class="bb-card-label">CARDHOLDER</span>
-                                                    <span class="bb-card-name">ANNA MARICE</span>
-                                                </div>
-                                                <div>
-                                                    <span class="bb-card-label">VALID THRU</span>
-                                                    <span class="bb-card-valid">06/30</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- BACK -->
-                                        <div class="bb-card-face back">
-                                            <div class="bb-card-strip"></div>
-                                            <div class="bb-card-signature">
-                                                <span class="bb-card-sign-label">Authorized Signature</span>
-                                                <span class="bb-card-cvv-label">CVV</span>
-                                                <span class="bb-card-cvv">***</span>
-                                            </div>
-                                            <p class="bb-card-back-text">
-                                                BamBanking virtual card for demo use only. Not a real payment
-                                                instrument.
-                                            </p>
-                                            <span class="bb-card-brand">BAMBY BANKING</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
+                                        <tr th:if="${#lists.isEmpty(transactions)}">
+                                            <td colspan="7">No transactions yet.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
-                        <!-- RIGHT COLUMN: CURRENCY CONVERTER WIDGET -->
-                        <div class="bb-main-right">
-                            <section class="bb-widget-card bb-fx-widget">
-                                <header class="bb-widget-head">
-                                    <div>
-                                        <h3>Currency Converter</h3>
-                                        <p>Quick FX with swap and live-style display.</p>
-                                    </div>
-                                </header>
+                    </div> <!-- end right column -->
 
-                                <div class="bb-fx-body">
-                                    <label class="bb-label">Amount</label>
-                                    <input type="number" id="fxAmount" class="bb-input" value="1" min="0" step="0.01" />
+                </div> <!-- end main content -->
 
-                                    <div class="bb-fx-row">
-                                        <div class="bb-fx-col">
-                                            <label class="bb-label">From</label>
-                                            <select id="fxFrom" class="bb-select">
-                                                <option value="USD" selected>USD</option>
-                                                <option value="EUR">EUR</option>
-                                                <option value="PHP">PHP</option>
-                                                <option value="JPY">JPY</option>
-                                            </select>
-                                        </div>
-
-                                        <button type="button" class="bb-fx-swap" id="fxSwap"
-                                            aria-label="Swap currencies">
-                                            <i class="fa-solid fa-right-left"></i>
-                                        </button>
-
-                                        <div class="bb-fx-col">
-                                            <label class="bb-label">To</label>
-                                            <select id="fxTo" class="bb-select">
-                                                <option value="PHP" selected>PHP</option>
-                                                <option value="USD">USD</option>
-                                                <option value="EUR">EUR</option>
-                                                <option value="JPY">JPY</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <button type="button" class="bb-btn-main" id="fxConvert">
-                                        Convert
-                                    </button>
-
-                                    <p class="bb-fx-result" id="fxResult">1 USD = ? PHP</p>
-                                </div>
-                            </section>
-                        </div>
-                    </div>
-
-                    <!-- RECENT TRANSACTIONS CARD -->
-                    <div class="bb-transactions-card" th:if="${transactions != null}">
-                        <div class="bb-transactions-header">
-                            <div>Recent Transactions</div>
-                            <span th:text="'Last ' + ${transactions.size()} + ' records'">Last transactions</span>
-                        </div>
-
-                        <div class="bb-transactions-table-wrapper">
-                            <table class="bb-transactions-table">
-                                <thead>
-                                    <tr>
-                                        <th>DATE</th>
-                                        <th>TYPE</th>
-                                        <th>METHOD</th>
-                                        <th>AMOUNT</th>
-                                        <th>BALANCE</th>
-                                        <th>REFERENCE</th>
-                                        <th>STATUS</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <tr th:each="tx : ${transactions}">
-                                        <td th:text="${#temporals.format(tx.timestamp, 'yyyy-MM-dd HH:mm')}">
-                                            2025-01-01 12:00
-                                        </td>
-                                        <td th:text="${tx.type}">Deposit</td>
-                                        <td th:text="${tx.method}">APP</td>
-                                        <td>
-                                            <span
-                                                th:classappend="${tx.type == 'Deposit'} ? ' bb-tx-amount-credit' : ' bb-tx-amount-debit'"
-                                                th:text="${tx.type == 'Deposit' ? '+' : '-'} + '₱' + ${tx.amount}">
-                                                +₱1,000.00
-                                            </span>
-                                        </td>
-                                        <td th:text="'₱' + ${tx.balanceAfter}">₱1,500.00</td>
-
-                                        <td th:text="${tx.reference}">BB-0000000000000</td>
-
-                                        <td>
-                                            <span class="bb-tx-status"
-                                                th:classappend="${tx.status == 'OK'} ? ' ok' : (${tx.status == 'PENDING'} ? ' pending' : ' failed')"
-                                                th:text="${tx.status}">
-                                                OK
-                                            </span>
-                                        </td>
-                                    </tr>
-
-                                    <tr th:if="${#lists.isEmpty(transactions)}">
-                                        <td colspan="7">No transactions yet.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
+            </div> <!-- end main panel -->
+        </div> <!-- end bb-dashboard -->
+    </div> <!-- end window -->
 
     <footer class="site-footer">
         <p>© 2025 <strong>BAMBY Banking App with Spring Boot</strong> | Designed &amp; Coded with ❤️</p>
@@ -453,6 +363,50 @@
                     </div>
                 </form>
 
+                <!-- FX / MONEY CHANGERS: reusing your FX logic INSIDE the modal -->
+                <div class="bb-modal-section" data-action="fx" style="display:none;">
+                    <div class="bb-modal-field">
+                        <label class="bb-label">Amount</label>
+                        <input type="number" id="fxAmount" class="bb-input" value="1" min="0" step="0.01" />
+                    </div>
+
+                    <div class="bb-modal-field">
+                        <label class="bb-label">From / To</label>
+                        <div class="bb-fx-row">
+                            <div class="bb-fx-col">
+                                <select id="fxFrom" class="bb-select">
+                                    <option value="USD" selected>USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="PHP">PHP</option>
+                                    <option value="JPY">JPY</option>
+                                </select>
+                            </div>
+
+                            <button type="button" class="bb-fx-swap" id="fxSwap" aria-label="Swap currencies">
+                                <i class="fa-solid fa-right-left"></i>
+                            </button>
+
+                            <div class="bb-fx-col">
+                                <select id="fxTo" class="bb-select">
+                                    <option value="PHP" selected>PHP</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="JPY">JPY</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bb-modal-footer">
+                        <button type="button" class="bb-modal-btn ghost" onclick="closeQaModal()">Close</button>
+                        <button type="button" class="bb-modal-btn" id="fxConvert">
+                            Convert
+                        </button>
+                    </div>
+
+                    <p class="bb-fx-result" id="fxResult">1 USD = ? PHP</p>
+                </div>
+
                 <!-- GENERIC INFO / COMING SOON -->
                 <div class="bb-modal-section" data-action="info" style="display:none;">
                     <p>Feature coming soon in the full BamBanking app.</p>
@@ -460,62 +414,130 @@
                         <button type="button" class="bb-modal-btn" onclick="closeQaModal()">OK</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-    <!-- END MODAL -->
+    <!-- END QUICK ACTIONS MODAL -->
 
-    <!-- Your existing scripts -->
+    <!-- TRANSACTION RECEIPT MODAL -->
+    <div class="bb-modal" id="bbReceiptModal" th:if="${txRef != null}">
+        <div class="bb-modal-backdrop" onclick="closeReceiptModal()"></div>
+
+        <div class="bb-modal-dialog bb-receipt-dialog" role="dialog" aria-modal="true">
+            <div class="bb-modal-header">
+                <h3>Transaction receipt</h3>
+                <button type="button" class="bb-modal-close" onclick="closeReceiptModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="bb-modal-body bb-receipt-body">
+                <div class="bb-receipt-status">
+                    <div class="bb-receipt-pill ok" th:if="${success}">
+                        <i class="fa-solid fa-check"></i>
+                        <span th:text="${txMessage}">Transaction successful!</span>
+                    </div>
+                    <div class="bb-receipt-pill fail" th:if="${success == false}">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span th:text="${txMessage}">Transaction failed. Please try again.</span>
+                    </div>
+                </div>
+
+                <div class="bb-receipt-grid">
+                    <div class="bb-receipt-item">
+                        <div class="bb-receipt-label">Transaction type</div>
+                        <div class="bb-receipt-value" th:text="${txType}">Deposit</div>
+                    </div>
+
+                    <div class="bb-receipt-item">
+                        <div class="bb-receipt-label">Reference</div>
+                        <div class="bb-receipt-value" th:text="${txRef}">BB-DEP-000001</div>
+                    </div>
+
+                    <div class="bb-receipt-item">
+                        <div class="bb-receipt-label">Amount</div>
+                        <div class="bb-receipt-value accent"
+                            th:text="'PHP ' + ${#numbers.formatDecimal(amount, 1, 'COMMA', 2, 'POINT')}">
+                            PHP 0.00
+                        </div>
+                    </div>
+
+                    <div class="bb-receipt-item">
+                        <div class="bb-receipt-label">Date &amp; time</div>
+                        <div class="bb-receipt-value" th:text="${txDateTime}">
+                            2025-01-01 12:00
+                        </div>
+                    </div>
+
+                    <div class="bb-receipt-item">
+                        <div class="bb-receipt-label">Account</div>
+                        <div class="bb-receipt-value" th:text="${username}">user</div>
+                    </div>
+
+                    <div class="bb-receipt-item">
+                        <div class="bb-receipt-label">Balance after</div>
+                        <div class="bb-receipt-value"
+                            th:text="'PHP ' + ${#numbers.formatDecimal(balance, 1, 'COMMA', 2, 'POINT')}">
+                            PHP 0.00
+                        </div>
+                    </div>
+                </div>
+
+                <p class="bb-receipt-tip">
+                    Tip: You can always review your history in the
+                    <a href="#recent-transactions">Recent Transactions</a> section.
+                </p>
+
+                <div class="bb-modal-footer bb-receipt-footer">
+                    <a th:href="@{/bambanking/dashboard}" class="bb-modal-btn ghost">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        Back to dashboard
+                    </a>
+                    <button type="button" class="bb-modal-btn" onclick="closeReceiptModal()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END RECEIPT MODAL -->
+
+    <!-- Scripts -->
+    <script src="/js/balance-toggle.js"></script>
     <script src="/js/script.js" th:src="@{/js/script.js}"></script>
     <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
     <script src="/js/dashboard.js" defer th:src="@{/js/dashboard.js}"></script>
     <script src="/js/bb-theme-toggle.js" defer th:src="@{/js/bb-theme-toggle.js}"></script>
 
-    <!-- Inline JS for the modal (no need to edit dashboard.js) -->
-    <script>
-        function openQaModal(actionKey) {
-            const modal = document.getElementById("bbQaModal");
-            if (!modal) return;
+    <!-- Receipt modal helper -->
+    <script th:inline="javascript">
+        function closeReceiptModal() {
+            const modal = document.getElementById("bbReceiptModal");
+            if (modal) modal.style.display = "none";
+        }
 
-            const sections = modal.querySelectorAll(".bb-modal-section");
-            const titleEl = document.getElementById("bbQaModalTitle");
+        function openReceiptModal() {
+            const modal = document.getElementById("bbReceiptModal");
+            if (modal) modal.style.display = "flex";
+        }
 
-            const titles = {
-                account: "Account info",
-                deposit: "Deposit Cash",
-                withdraw: "Withdraw Cash",
-                transfer: "Transfer Funds",
-                info: "Quick action"
-            };
+        (function () {
+            const btn = document.getElementById("bbOpenReceiptBtn");
+            if (btn) {
+                btn.addEventListener("click", openReceiptModal);
+            }
 
-            sections.forEach(sec => {
-                if (sec.dataset.action === actionKey) {
-                    sec.style.display = "block";
-                } else {
-                    sec.style.display = "none";
+            const hasReceipt = /*[[${txRef != null}]]*/ false;
+            if (hasReceipt) {
+                openReceiptModal();
+            }
+
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") {
+                    closeReceiptModal();
                 }
             });
-
-            if (titleEl) {
-                titleEl.textContent = titles[actionKey] || "Quick action";
-            }
-
-            modal.style.display = "flex";
-        }
-
-        function closeQaModal() {
-            const modal = document.getElementById("bbQaModal");
-            if (!modal) return;
-            modal.style.display = "none";
-        }
-
-        // ESC key closes modal
-        document.addEventListener("keydown", function (e) {
-            if (e.key === "Escape") {
-                closeQaModal();
-            }
-        });
+        })();
     </script>
 </body>
 
