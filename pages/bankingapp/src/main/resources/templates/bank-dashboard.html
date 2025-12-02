@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="/css/bd-modal.css" />
     <!-- Existing modal styles used by receipt modal -->
     <link rel="stylesheet" href="/css/bb-modal.css" />
+    <!-- Recent transactions helper styles -->
+    <link rel="stylesheet" href="/css/bb-transactions.css" />
 </head>
 
 <body>
@@ -115,7 +117,6 @@
                     </div>
                 </div>
 
-
                 <br>
 
                 <!-- Help -->
@@ -130,7 +131,7 @@
                 </a>
             </div>
 
-            <!-- RIGHT SIDE: MAIN PANEL (like sample screenshot) -->
+            <!-- RIGHT SIDE: MAIN PANEL -->
             <div class="bb-main-panel">
                 <h2>Welcome to BAMBY Banking App</h2>
 
@@ -157,16 +158,13 @@
                 </div>
 
                 <div class="bb-main-content">
-                    <!-- GRID: LEFT = BALANCE + CARD, RIGHT = QUICK ACTIONS + TRANSACTIONS -->
-
                     <!-- RIGHT: QUICK ACTIONS + RECENT TRANSACTIONS -->
                     <div class="bb-main-right">
 
-                        <!-- QUICK ACTIONS CARD (now on the RIGHT, like sample) -->
+                        <!-- QUICK ACTIONS CARD -->
                         <section class="bb-quick-actions">
                             <header class="qa-head">
                                 <h3>Quick Actions</h3><br>
-
                             </header>
 
                             <div class="qa-grid">
@@ -213,14 +211,23 @@
                             </div>
                         </section>
 
-                        <!-- RECENT TRANSACTIONS CARD (under Quick Actions, same column) -->
+                        <!-- RECENT TRANSACTIONS CARD -->
                         <div class="bb-transactions-card" id="recent-transactions" th:if="${transactions != null}">
                             <div class="bb-transactions-header">
                                 <div>Recent Transactions</div>
-                                <span th:text="'Last ' + ${transactions.size()} + ' records'">Last
-                                    transactions</span>
+                                <span th:text="'Last ' + ${transactions.size()} + ' records'">Last transactions</span>
                             </div>
 
+                            <!-- FILTER PILLS -->
+                            <div class="bb-transactions-filters">
+                                <button type="button" class="bb-tx-filter is-active" data-filter="all">All</button>
+                                <button type="button" class="bb-tx-filter" data-filter="deposit">Deposit</button>
+                                <button type="button" class="bb-tx-filter" data-filter="withdraw">Withdraw</button>
+                                <button type="button" class="bb-tx-filter" data-filter="transfer">Transfer</button>
+                                <button type="button" class="bb-tx-filter" data-filter="failed">Failed</button>
+                            </div>
+
+                            <!-- SCROLL WRAPPER -->
                             <div class="bb-transactions-table-wrapper">
                                 <table class="bb-transactions-table">
                                     <thead>
@@ -236,12 +243,21 @@
                                     </thead>
 
                                     <tbody>
-                                        <tr th:each="tx : ${transactions}">
+                                        <tr th:each="tx : ${transactions}"
+                                            th:attr="data-type=${tx.type}, data-status=${tx.status}, data-ref=${tx.reference}">
                                             <td th:text="${#temporals.format(tx.timestamp, 'yyyy-MM-dd HH:mm')}">
                                                 2025-01-01 12:00
                                             </td>
-                                            <td th:text="${tx.type}">Deposit</td>
+
+                                            <!-- TYPE = clickable, wraps if long -->
+                                            <td class="bb-col-type">
+                                                <a th:href="@{/bambanking/tx/{id}(id=${tx.id})}">
+                                                    <span th:text="${tx.type}">TYPE</span>
+                                                </a>
+                                            </td>
+
                                             <td th:text="${tx.method}">APP</td>
+
                                             <td>
                                                 <span
                                                     th:classappend="${tx.type == 'Deposit'} ? ' bb-tx-amount-credit' : ' bb-tx-amount-debit'"
@@ -249,8 +265,10 @@
                                                     +₱1,000.00
                                                 </span>
                                             </td>
+
                                             <td th:text="'₱' + ${tx.balanceAfter}">₱1,500.00</td>
                                             <td th:text="${tx.reference}">BB-0000000000000</td>
+
                                             <td>
                                                 <span class="bb-tx-status"
                                                     th:classappend="${tx.status == 'OK'} ? ' ok' : (${tx.status == 'PENDING'} ? ' pending' : ' failed')"
@@ -268,11 +286,11 @@
                             </div>
                         </div>
 
-                    </div> <!-- end right column -->
+                    </div> <!-- end bb-main-right -->
 
-                </div> <!-- end main content -->
+                </div> <!-- end bb-main-content -->
 
-            </div> <!-- end main panel -->
+            </div> <!-- end bb-main-panel -->
         </div> <!-- end bb-dashboard -->
     </div> <!-- end window -->
 
@@ -280,7 +298,7 @@
         <p>© 2025 <strong>BAMBY Banking App with Spring Boot</strong> | Designed &amp; Coded with ❤️</p>
     </footer>
 
-    <!-- QUICK ACTIONS MODAL (now using bd-modal wrapper) -->
+    <!-- QUICK ACTIONS MODAL (bd-modal wrapper) -->
     <div class="bd-modal" id="bbQaModal">
         <div class="bd-modal-backdrop" onclick="closeQaModal()"></div>
 
@@ -307,7 +325,7 @@
                     </form>
                 </div>
 
-                <!-- DEPOSIT (uses EXISTING BamBanking styling) -->
+                <!-- DEPOSIT -->
                 <form class="bb-modal-section" data-action="deposit" th:action="@{/bambanking/deposit}" method="post"
                     style="display:none;">
 
@@ -337,11 +355,10 @@
                             </button>
                         </div>
 
-                        <!-- Hidden field if you want to save deposit source -->
                         <input type="hidden" name="channel" id="depositChannel" value="CASH">
                     </div>
 
-                    <!-- AMOUNT FIELD (uses existing beautiful styles) -->
+                    <!-- AMOUNT FIELD -->
                     <div class="bb-modal-field">
                         <label for="qaDepositAmount">DEPOSIT AMOUNT</label>
                         <input type="number" id="qaDepositAmount" name="amount" step="0.01" min="0" placeholder="Amount"
@@ -355,17 +372,12 @@
                             Deposit
                         </button>
                     </div>
-
                 </form>
 
-                <!-- WITHDRAW -->
-
-                <!-- WITHDRAW -->
                 <!-- WITHDRAW -->
                 <form class="bb-modal-section" data-action="withdraw" th:action="@{/bambanking/withdraw}" method="post"
                     style="display:none;">
 
-                    <!-- WITHDRAW FROM (same layout as DEPOSIT FROM) -->
                     <div class="bb-modal-field"><br>
                         <label style="letter-spacing:0.12em; color:#9ca3af;">WITHDRAW FROM</label>
 
@@ -391,18 +403,15 @@
                             </button>
                         </div>
 
-                        <!-- Hidden field for backend logging of withdraw source -->
                         <input type="hidden" name="channel" id="withdrawChannel" value="CASH">
                     </div>
 
-                    <!-- WITHDRAW AMOUNT (same styling as deposit amount) -->
                     <div class="bb-modal-field">
                         <label for="qaWithdrawAmount">WITHDRAW AMOUNT</label>
                         <input type="number" id="qaWithdrawAmount" name="amount" step="0.01" min="0"
                             placeholder="Amount" required>
                     </div>
 
-                    <!-- FOOTER BUTTONS -->
                     <div class="bb-modal-footer">
                         <button type="button" class="bb-modal-btn ghost" onclick="closeQaModal()">
                             Cancel
@@ -414,7 +423,6 @@
                         </button>
                     </div>
                 </form>
-
 
                 <!-- TRANSFER -->
                 <form class="bb-modal-section" data-action="transfer" th:action="@{/bambanking/transfer}" method="post"
@@ -437,7 +445,7 @@
                     </div>
                 </form>
 
-                <!-- FX / MONEY CHANGERS: reusing your FX logic INSIDE the modal -->
+                <!-- FX / MONEY CHANGERS -->
                 <div class="bb-modal-section" data-action="fx" style="display:none;">
                     <div class="bb-modal-field">
                         <label class="bb-label">Amount</label>
@@ -493,7 +501,7 @@
     </div>
     <!-- END QUICK ACTIONS MODAL -->
 
-    <!-- TRANSACTION RECEIPT MODAL (still using bb-modal system) -->
+    <!-- TRANSACTION RECEIPT MODAL -->
     <div class="bb-modal" id="bbReceiptModal" th:if="${txRef != null}">
         <div class="bb-modal-backdrop" onclick="closeReceiptModal()"></div>
 
@@ -567,10 +575,17 @@
                         <i class="fa-solid fa-gauge-high"></i>
                         Back to dashboard
                     </a>
+
+                    <button type="button" class="bb-modal-btn ghost" onclick="printReceipt()">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        Export PDF
+                    </button>
+
                     <button type="button" class="bb-modal-btn" onclick="closeReceiptModal()">
                         Close
                     </button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -580,41 +595,12 @@
     <script src="/js/balance-toggle.js"></script>
     <script src="/js/script.js" th:src="@{/js/script.js}"></script>
     <script src="/js/nav.js" defer th:src="@{/js/nav.js}"></script>
-    <!-- NEW: bd-modal helpers (if you add any generic functions there) -->
     <script src="/js/bd-modal.js" defer></script>
     <script src="/js/dashboard.js" defer th:src="@{/js/dashboard.js}"></script>
     <script src="/js/bb-theme-toggle.js" defer th:src="@{/js/bb-theme-toggle.js}"></script>
+    <!-- Recent transactions behaviour -->
+    <script src="/js/bb-transactions.js" defer></script>
 
-    <!-- Receipt modal helper -->
-    <script th:inline="javascript">
-        function closeReceiptModal() {
-            const modal = document.getElementById("bbReceiptModal");
-            if (modal) modal.style.display = "none";
-        }
-
-        function openReceiptModal() {
-            const modal = document.getElementById("bbReceiptModal");
-            if (modal) modal.style.display = "flex";
-        }
-
-        (function () {
-            const btn = document.getElementById("bbOpenReceiptBtn");
-            if (btn) {
-                btn.addEventListener("click", openReceiptModal);
-            }
-
-            const hasReceipt = /*[[${txRef != null}]]*/ false;
-            if (hasReceipt) {
-                openReceiptModal();
-            }
-
-            document.addEventListener("keydown", function (e) {
-                if (e.key === "Escape") {
-                    closeReceiptModal();
-                }
-            });
-        })();
-    </script>
 </body>
 
 </html>

@@ -915,3 +915,104 @@
 .bb-balance-toggle:hover {
     opacity: 0.7;
 }
+
+
+/* ======================================================
+   Recent transactions – TYPE column + highlight styling
+   ====================================================== */
+
+/* TYPE column text (2nd column) */
+.bb-transactions-table td:nth-child(2) {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    opacity: 0.9;
+    white-space: nowrap;
+}
+
+/* Row hover */
+.bb-transactions-table tbody tr {
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.bb-transactions-table tbody tr:hover {
+    background: rgba(15, 23, 42, 0.75);
+    transform: translateY(-1px);
+}
+
+/* When a row is the one linked from a receipt (?ref=...) */
+.bb-transactions-table tbody tr.bb-tx-latest {
+    outline: 1px solid rgba(45, 212, 191, 0.85);
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+}
+
+
+/* ============================
+   BamBanking – TYPE column
+   ============================ */
+
+.bb-transactions-table td.bb-col-type {
+    max-width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bb-transactions-table td.bb-col-type a {
+    display: inline-block;
+    max-width: 100%;
+    text-decoration: none;
+    color: #e5e7eb;
+}
+
+.bb-transactions-table td.bb-col-type a:hover {
+    text-decoration: underline;
+    color: #a5f3fc;
+}
+
+
+/* ============================
+   BamBanking – Tx Filters
+   ============================ */
+
+.bb-transactions-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+}
+
+.bb-tx-filter {
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.bb-tx-filter:hover {
+    border-color: #22c55e;
+}
+
+.bb-tx-filter.is-active {
+    background: radial-gradient(circle at top, #22c55e, #16a34a 45%, #064e3b 100%);
+    color: #0f172a;
+    border-color: transparent;
+}
+
+
+.bb-tx-type {
+    white-space: normal;
+    /* allow line wrap */
+    word-break: break-word;
+    /* break long words if needed */
+    cursor: pointer;
+    /* hand cursor like a link */
+    text-decoration: underline;
+    /* looks clickable */
+}

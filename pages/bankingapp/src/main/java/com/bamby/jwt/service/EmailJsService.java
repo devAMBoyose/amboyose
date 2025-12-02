@@ -29,11 +29,10 @@ public class EmailJsService {
     @Value("${emailjs.public-key}")
     private String publicKey;
 
-    // optional – but you already have it
     @Value("${emailjs.private-key:}")
     private String privateKey;
 
-    // metadata (with defaults so app still runs if missing)
+    // metadata (with default)
     @Value("${emailjs.app-name:BAMBY Portfolio Bank}")
     private String appName;
 

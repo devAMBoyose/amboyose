@@ -9,7 +9,6 @@ import java.util.*;
 @Component
 public class DataStore {
 
-    // In-memory map kept only so DemoInfoController / API can still read something
     public final Map<String, Account> accounts = new HashMap<>();
 
     // Logs

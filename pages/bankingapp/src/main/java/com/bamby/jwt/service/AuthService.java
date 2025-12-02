@@ -114,14 +114,9 @@ public class AuthService {
     }
 
     // ==========================
-    // Demo registration (OTP signup)
+    // Signup registration (OTP signup)
     // ==========================
 
-    /**
-     * Register a demo account using firstName, lastName, email, and PIN.
-     * Username is the lowercase email for consistency.
-     * This now ALSO assigns a cardNumber + CVV.
-     */
     public Account registerDemoAccount(
             String firstName,
             String lastName,

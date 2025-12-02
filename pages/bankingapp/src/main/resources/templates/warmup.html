@@ -1,0 +1,91 @@
+<!-- BamBanking warm-up modal -->
+<div id="bb-warmup" class="bb-warmup-backdrop">
+    <div class="bb-warmup-dialog">
+        <div class="bb-warmup-pill">
+            <i class="fa-solid fa-snowflake"></i>
+            Render free-tier warm-up
+        </div>
+
+        <h2 class="bb-warmup-title">Warming up BamBanking…</h2>
+
+        <p class="bb-warmup-text">
+            This Java demo runs on <strong>Spring Boot + Render free tier</strong>.
+            When the service has been idle, it needs a few seconds to wake up
+            (usually 20–60 seconds). While the server starts, you can check what
+            this mini-bank can do 👇
+        </p>
+
+        <div class="bb-warmup-folder">
+            <div class="bb-warmup-folder-header">
+                <i class="fa-solid fa-folder-closed"></i> BamBanking.java
+            </div>
+
+            <div class="bb-warmup-folder-body">
+                <!-- Typing Status Bar -->
+                <div class="bb-typing-line">
+                    <span id="bbTyping"></span><span class="bb-cursor">▌</span>
+                </div>
+
+                <!-- Section 1: Auth -->
+                <section class="bb-section" data-step="1">
+                    <h3>🧑‍💻 Auth</h3>
+                    <ul>
+                        <li>Email-based login with 4-digit PIN</li>
+                        <li>Signup verification via OTP sent to your email</li>
+                        <li>Forgot PIN recovery with OTP confirmation</li>
+                    </ul>
+                </section>
+
+                <!-- Section 2: Transactions -->
+                <section class="bb-section" data-step="2">
+                    <h3>💸 Transactions</h3>
+                    <ul>
+                        <li>Demo deposit &amp; withdrawal modules</li>
+                        <li>Balance inquiry with mask toggle</li>
+                        <li>Transfer between sandbox accounts</li>
+                    </ul>
+                </section>
+
+                <!-- Section 4: Tech Stack -->
+                <section class="bb-section" data-step="4">
+                    <h3>🧩 Tech Stack</h3>
+                    <ul>
+                        <li>Backend: Spring Boot (Java 17)</li>
+                        <li>Database: MongoDB Atlas</li>
+                        <li>Frontend: Vanilla HTML / CSS / JS</li>
+                    </ul>
+                </section>
+
+
+
+            </div>
+
+            <!-- Progress bar -->
+            <div class="bb-progress-shell">
+                <div class="bb-progress-track">
+                    <div class="bb-progress-fill" id="bbProgressFill"></div>
+                </div>
+                <div class="bb-progress-meta">
+                    <span id="bbProgressPct">0%</span>
+                    <span id="bbProgressLabel">Initializing…</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="bb-warmup-status">
+            <i class="fa-solid fa-circle-notch fa-spin bb-warmup-icon"></i>
+            <span class="bb-warmup-dots" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </span>
+            <span class="bb-warmup-status-text">
+                Connecting to BamBanking API…
+            </span>
+        </div>
+
+        <button id="bb-warmup-dismiss" class="bb-warmup-btn">
+            <i class="fa-solid fa-check"></i>
+            Got it, keep loading
+        </button>
+    </div>
+</div>

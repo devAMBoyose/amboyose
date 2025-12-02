@@ -1,0 +1,103 @@
+/* ===========================================
+   BamBanking – Recent Transactions helpers
+   =========================================== */
+
+/* Wrapper: vertical + horizontal scroll */
+.bb-transactions-table-wrapper {
+    max-height: 260px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* TYPE column: WRAP text + clickable */
+.bb-transactions-table td.bb-col-type {
+    max-width: 220px;
+    white-space: normal;
+    /* allow wrapping */
+    word-break: break-word;
+    /* long words wrap */
+    font-size: 0.68rem;
+}
+
+.bb-transactions-table td.bb-col-type a {
+    display: inline-block;
+    max-width: 100%;
+    text-decoration: none;
+    color: #e5e7eb;
+    cursor: pointer;
+    /* looks clickable */
+}
+
+.bb-transactions-table td.bb-col-type a:hover {
+    text-decoration: underline;
+    color: #a5f3fc;
+}
+
+/* Row highlight when opened from ?ref=... */
+.bb-transactions-table tbody tr.bb-tx-latest {
+    outline: 1px solid rgba(45, 212, 191, 0.9);
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+}
+
+/* Filter pills – small tweaks so they wrap nicely on mobile */
+.bb-transactions-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.7rem;
+}
+
+.bb-tx-filter {
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    background: rgba(15, 23, 42, 0.95);
+    color: #e5e7eb;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.7rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.bb-tx-filter:hover {
+    border-color: #22c55e;
+}
+
+.bb-tx-filter.is-active {
+    background: radial-gradient(circle at top, #22c55e, #16a34a 45%, #064e3b 100%);
+    color: #0f172a;
+    border-color: transparent;
+}
+
+/* Responsive: make table more compact on small screens */
+@media (max-width: 768px) {
+    .bb-transactions-card {
+        padding: 0.85rem 0.75rem;
+    }
+
+    .bb-transactions-table th,
+    .bb-transactions-table td {
+        padding: 0.35rem 0.35rem;
+        font-size: 0.7rem;
+    }
+
+    .bb-transactions-table td.bb-col-type {
+        max-width: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .bb-transactions-table-wrapper {
+        max-height: 220px;
+    }
+
+    .bb-transactions-table th,
+    .bb-transactions-table td {
+        font-size: 0.65rem;
+    }
+
+    .bb-transactions-table td.bb-col-type {
+        max-width: 130px;
+    }
+}
