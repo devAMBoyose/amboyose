@@ -251,10 +251,16 @@
 
                                             <!-- TYPE = clickable, wraps if long -->
                                             <td class="bb-col-type">
-                                                <a th:href="@{/bambanking/tx/{id}(id=${tx.id})}">
-                                                    <span th:text="${tx.type}">TYPE</span>
+                                                <a th:href="@{/bambanking/tx/{id}(id=${tx.id})}" class="bb-type-link"
+                                                    th:attr="title=${tx.type}">
+
+                                                    <!-- user will always see this text -->
+                                                    <span class="bb-type-chip" th:text="'View Transaction'">
+                                                        View Transaction
+                                                    </span>
                                                 </a>
                                             </td>
+
 
                                             <td th:text="${tx.method}">APP</td>
 
