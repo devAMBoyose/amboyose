@@ -223,3 +223,22 @@
         grid-template-columns: 1fr;
     }
 }
+
+.bb-tx-ref {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.bb-tx-ref span {
+    line-height: 1.1;
+    display: inline-block;
+}
+
+.bb-tx-copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 6px;
+    border-radius: 6px;
+}

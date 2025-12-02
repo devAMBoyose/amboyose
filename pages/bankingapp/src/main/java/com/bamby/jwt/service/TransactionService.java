@@ -144,6 +144,7 @@ public class TransactionService {
         double fromOld = from.getBalance();
         double toOld = to.getBalance();
 
+        // update balances
         from.setBalance(fromOld - amount);
         to.setBalance(toOld + amount);
 
@@ -153,23 +154,28 @@ public class TransactionService {
         db.log("TRANSFER " + DataStore.php(amount) + " from "
                 + from.getUsername() + " to " + to.getUsername());
 
-        // NEW: sender transaction
-        record(
+        // Generate ONE shared reference for this whole transfer
+        String sharedRef = generateReference("Transfer");
+
+        // sender transaction (outgoing)
+        recordWithReference(
                 from.getUsername().toLowerCase(),
                 "Transfer to " + to.getUsername(),
                 amount,
                 from.getBalance(),
-                true);
+                true,
+                sharedRef);
 
-        // NEW: receiver transaction
-        record(
+        // receiver transaction (incoming)
+        recordWithReference(
                 to.getUsername().toLowerCase(),
                 "Transfer from " + from.getUsername(),
                 amount,
                 to.getBalance(),
-                true);
+                true,
+                sharedRef);
 
-        return "✅ Transfer successful!<br>"
+        return " Transfer successful!<br>"
                 + "From: " + from.getUsername() + " (old " + DataStore.php(fromOld) + ")<br>"
                 + "To: " + to.getUsername() + " (old " + DataStore.php(toOld) + ")<br>"
                 + "Amount: " + DataStore.php(amount) + "<br>"
@@ -179,13 +185,31 @@ public class TransactionService {
     // ==========================
     // RECORD TRANSACTION ROW
     // ==========================
+    // ==========================
+    // RECORD TRANSACTION ROW
+    // ==========================
     public String record(String username,
             String type,
             double amount,
             double balanceAfter,
             boolean success) {
 
+        // normal case (deposit, withdraw, balance check, etc.)
         String reference = generateReference(type);
+        recordWithReference(username, type, amount, balanceAfter, success, reference);
+        return reference;
+    }
+
+    /**
+     * Internal helper when we already know the reference
+     * (used by transfer so sender + receiver share the same ref).
+     */
+    private void recordWithReference(String username,
+            String type,
+            double amount,
+            double balanceAfter,
+            boolean success,
+            String reference) {
 
         Transaction tx = new Transaction(
                 LocalDateTime.now(),
@@ -198,7 +222,6 @@ public class TransactionService {
                 username);
 
         txRepo.save(tx);
-        return reference;
     }
 
     private String generateReference(String type) {

@@ -2,6 +2,7 @@
    BD Modal System — ONE CLEAN, MODULAR ENGINE
    ====================================================== */
 
+/* Basic open / close helpers (for any bd-modal) */
 function bdOpen(id) {
     const modal = document.getElementById(id);
     if (!modal) return;
@@ -14,7 +15,7 @@ function bdClose(id) {
     modal.style.display = "none";
 }
 
-/* Close modal via <div class="bd-modal-backdrop"> */
+/* Close when clicking backdrop */
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("bd-modal-backdrop")) {
         const parent = e.target.closest(".bd-modal");
@@ -22,75 +23,71 @@ document.addEventListener("click", function (e) {
     }
 });
 
-/* Close with ESC */
-document.addEventListener("keydown", e => {
+/* Close all bd-modals with ESC */
+document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
-        document.querySelectorAll(".bd-modal").forEach(m => m.style.display = "none");
+        document.querySelectorAll(".bd-modal").forEach(m => {
+            m.style.display = "none";
+        });
     }
 });
 
 
-// ========== Deposit channel selection (UI only) ==========
+/* ======================================================
+   CHANNEL PILLS (Cash / Bank / E-Wallet / Others)
+   Shared by: Deposit + Withdraw
+   ======================================================
+
+Expected HTML in each form:
+
+<div class="bb-modal-field">
+    <label>DEPOSIT FROM</label>
+
+    <div class="bb-channel-options">
+        <button type="button" class="bb-channel-option is-active" data-channel="CASH">
+            <i class="fa-solid fa-money-bill-wave"></i>
+            <span>Cash</span>
+        </button>
+        ...
+    </div>
+
+    <input type="hidden" name="channel" value="CASH">
+</div>
+*/
+
 document.addEventListener("click", function (e) {
     const btn = e.target.closest(".bb-channel-option");
     if (!btn) return;
 
-    const group = btn.closest(".bb-channel-options");
+    const group = btn.closest(".bb-modal-field");
     if (!group) return;
 
-    group.querySelectorAll(".bb-channel-option").forEach(b =>
-        b.classList.remove("is-active")
+    // Toggle active pill in THIS group only
+    group.querySelectorAll(".bb-channel-option").forEach(el =>
+        el.classList.remove("is-active")
     );
     btn.classList.add("is-active");
-});
 
+    // Update hidden channel field inside this group
+    const hidden = group.querySelector('input[type="hidden"][name="channel"]');
+    if (hidden) {
+        hidden.value = btn.dataset.channel || "";
+    }
 
-// ========== Update modal title based on selected deposit channel (optional) ==========
-document.addEventListener("click", function (e) {
-    const channelBtn = e.target.closest(".bb-channel-option");
-    if (!channelBtn) return;
-
-    const group = channelBtn.closest(".bb-channel-options");
-    if (!group) return;
-
-    // toggle active state
-    group.querySelectorAll(".bb-channel-option").forEach(btn =>
-        btn.classList.remove("is-active")
-    );
-    channelBtn.classList.add("is-active");
-
-    // update title text e.g. "Deposit – Cash"
+    // Update modal title: "Deposit – Cash", "Withdraw – E-Wallet", etc.
     const titleEl = document.getElementById("bbQaModalTitle");
     if (titleEl) {
-        const label = channelBtn.querySelector("span")?.textContent?.trim() || "Cash";
-        titleEl.textContent = "Deposit – " + label;
-    }
-});
+        const label =
+            btn.querySelector("span")?.textContent?.trim() || btn.textContent.trim();
 
-
-
-// Deposit channel selector
-document.querySelectorAll('.bb-channel-option').forEach(btn => {
-    btn.addEventListener('click', () => {
-
-        const group = btn.closest('.bb-modal-field');
-        if (!group) return;
-
-        group.querySelectorAll('.bb-channel-option')
-            .forEach(b => b.classList.remove('is-active'));
-
-        btn.classList.add('is-active');
-
-        // update hidden field
-        const hidden = document.getElementById('depositChannel');
-        if (hidden)
-            hidden.value = btn.dataset.channel;
-
-        // update modal header
-        const titleEl = document.getElementById('bbQaModalTitle');
-        if (titleEl) {
-            const text = btn.innerText.trim();
-            titleEl.textContent = "Deposit – " + text;
+        // Cache the verb once (Deposit / Withdraw / Transfer)
+        if (!titleEl.dataset.verb) {
+            const current = titleEl.textContent.trim();   // e.g. "Deposit Cash"
+            const parts = current.split(/\s+/);
+            titleEl.dataset.verb = parts[0] || "Action";
         }
-    });
+
+        const verb = titleEl.dataset.verb;
+        titleEl.textContent = `${verb} – ${label}`;
+    }
 });

@@ -364,19 +364,57 @@
                 <!-- WITHDRAW -->
                 <form class="bb-modal-section" data-action="withdraw" th:action="@{/bambanking/withdraw}" method="post"
                     style="display:none;">
-                    <div class="bb-modal-field">
-                        <label for="qaWithdrawAmount">Withdraw amount</label>
-                        <input type="number" id="qaWithdrawAmount" name="amount" step="0.01" placeholder="Amount"
-                            required>
+
+                    <!-- WITHDRAW FROM (same layout as DEPOSIT FROM) -->
+                    <div class="bb-modal-field"><br>
+                        <label style="letter-spacing:0.12em; color:#9ca3af;">WITHDRAW FROM</label>
+
+                        <div class="bb-channel-options">
+                            <button type="button" class="bb-channel-option is-active" data-channel="CASH">
+                                <i class="fa-solid fa-money-bill-wave"></i>
+                                <span>Cash</span>
+                            </button>
+
+                            <button type="button" class="bb-channel-option" data-channel="BANK">
+                                <i class="fa-solid fa-landmark"></i>
+                                <span>Bank Transfer</span>
+                            </button>
+
+                            <button type="button" class="bb-channel-option" data-channel="EWALLET">
+                                <i class="fa-solid fa-wallet"></i>
+                                <span>E-Wallet</span>
+                            </button>
+
+                            <button type="button" class="bb-channel-option" data-channel="OTHERS">
+                                <i class="fa-solid fa-ellipsis"></i>
+                                <span>Others</span>
+                            </button>
+                        </div>
+
+                        <!-- Hidden field for backend logging of withdraw source -->
+                        <input type="hidden" name="channel" id="withdrawChannel" value="CASH">
                     </div>
+
+                    <!-- WITHDRAW AMOUNT (same styling as deposit amount) -->
+                    <div class="bb-modal-field">
+                        <label for="qaWithdrawAmount">WITHDRAW AMOUNT</label>
+                        <input type="number" id="qaWithdrawAmount" name="amount" step="0.01" min="0"
+                            placeholder="Amount" required>
+                    </div>
+
+                    <!-- FOOTER BUTTONS -->
                     <div class="bb-modal-footer">
-                        <button type="button" class="bb-modal-btn ghost" onclick="closeQaModal()">Cancel</button>
+                        <button type="button" class="bb-modal-btn ghost" onclick="closeQaModal()">
+                            Cancel
+                        </button>
+
                         <button type="submit" class="bb-modal-btn">
                             <i class="fa-solid fa-circle-arrow-up"></i>
                             Withdraw
                         </button>
                     </div>
                 </form>
+
 
                 <!-- TRANSFER -->
                 <form class="bb-modal-section" data-action="transfer" th:action="@{/bambanking/transfer}" method="post"
