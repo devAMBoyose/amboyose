@@ -2,103 +2,150 @@ package com.bamby.jwt.api;
 
 import com.bamby.jwt.model.Account;
 import com.bamby.jwt.model.Transaction;
-import com.bamby.jwt.repository.AccountRepository;
-import com.bamby.jwt.repository.TransactionRepository;
-import com.bamby.jwt.service.DataStore;
-import org.springframework.web.bind.annotation.*;
+import com.bamby.jwt.service.AuthService;
+import com.bamby.jwt.service.TransactionService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * API used by the portfolio warm-up page.
+ * Returns a snapshot of one fixed demo account
+ * (balance + a few recent transactions).
+ */
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/bambanking/api")
 public class DemoInfoController {
 
-    private final DataStore db;
-    private final AccountRepository accountRepo;
-    private final TransactionRepository txRepo;
+    // This should match the username/email you use to log in
+    private static final String DEMO_USERNAME = "bamby.dev@gmail.com";
 
-    public DemoInfoController(DataStore db,
-            AccountRepository accountRepo,
-            TransactionRepository txRepo) {
-        this.db = db;
-        this.accountRepo = accountRepo;
-        this.txRepo = txRepo;
+    private final AuthService authService;
+    private final TransactionService transactionService;
+
+    public DemoInfoController(AuthService authService,
+            TransactionService transactionService) {
+        this.authService = authService;
+        this.transactionService = transactionService;
     }
 
-    // Simple ping
-    @GetMapping("/ping")
-    public String ping() {
-        return "BamBanking API is alive";
-    }
+    @GetMapping("/demo-summary")
+    public DemoSummaryResponse getDemoSummary() {
 
-    // Help text (uses DataStore.helpText())
-    @GetMapping("/help")
-    public String help() {
-        return db.helpText();
-    }
+        // 1) Look up the fixed demo account using your existing AuthService
+        Account acc = authService.findByUsername(DEMO_USERNAME)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Demo account '" + DEMO_USERNAME + "' not found"));
 
-    // List all accounts (basic demo info)
-    @GetMapping("/accounts")
-    public List<String> listAccounts() {
-        return accountRepo.findAll()
-                .stream()
-                .map(Account::getUsername)
-                .collect(Collectors.toList());
-    }
+        // 2) Current balance (your model uses double)
+        double balance = acc.getBalance();
 
-    // Get current balance of a user
-    @GetMapping("/accounts/{username}/balance")
-    public DemoBalanceResponse getBalance(@PathVariable String username) {
-        Account acc = accountRepo.findByUsernameIgnoreCase(username)
-                .orElse(null);
+        // 3) Recent transactions (same method as dashboard)
+        List<Transaction> recent = transactionService
+                .getRecentTransactions(acc.getUsername(), 5);
 
-        BigDecimal balance = (acc != null)
-                ? BigDecimal.valueOf(acc.getBalance())
-                : BigDecimal.ZERO;
-
-        return new DemoBalanceResponse(balance);
-    }
-
-    // Get recent transactions as a small summary list
-    @GetMapping("/accounts/{username}/transactions")
-    public List<DemoTxSummary> getTransactions(@PathVariable String username) {
-        List<Transaction> txList = txRepo.findByUsernameOrderByTimestampDesc(username.toLowerCase());
-
-        return txList.stream()
-                .map(tx -> new DemoTxSummary(
-                        tx.getType(),
-                        BigDecimal.valueOf(tx.getAmount())))
-                .collect(Collectors.toList());
-    }
-
-    // ------------------ DTO CLASSES ------------------
-
-    public static class DemoBalanceResponse {
-        private BigDecimal balance;
-
-        public DemoBalanceResponse(BigDecimal balance) {
-            this.balance = balance;
+        List<TxItem> txDtos = new ArrayList<>();
+        if (recent != null) {
+            for (Transaction tx : recent) {
+                TxItem dto = new TxItem();
+                // Transaction has getTimestamp(), getType(), getAmount(), getStatus()
+                dto.setTimestamp(tx.getTimestamp());
+                dto.setType(tx.getType());
+                dto.setAmount(tx.getAmount());
+                dto.setStatus(tx.getStatus());
+                txDtos.add(dto);
+            }
         }
 
-        public BigDecimal getBalance() {
+        // 4) Build response
+        DemoSummaryResponse res = new DemoSummaryResponse();
+        res.setBalance(balance);
+        res.setCurrency("PHP");
+
+        String label = acc.getFullName();
+        if (label == null || label.isBlank()) {
+            label = acc.getUsername();
+        }
+        res.setAccountLabel(label);
+        res.setUpdatedAt(LocalDateTime.now());
+        res.setLastTransactions(txDtos);
+
+        return res;
+    }
+
+    // ------------- DTO classes returned as JSON -------------
+
+    public static class DemoSummaryResponse {
+        private double balance;
+        private String currency;
+        private String accountLabel;
+        private LocalDateTime updatedAt;
+        private List<TxItem> lastTransactions;
+
+        public double getBalance() {
             return balance;
         }
 
-        public void setBalance(BigDecimal balance) {
+        public void setBalance(double balance) {
             this.balance = balance;
+        }
+
+        public String getCurrency() {
+            return currency;
+        }
+
+        public void setCurrency(String currency) {
+            this.currency = currency;
+        }
+
+        public String getAccountLabel() {
+            return accountLabel;
+        }
+
+        public void setAccountLabel(String accountLabel) {
+            this.accountLabel = accountLabel;
+        }
+
+        public LocalDateTime getUpdatedAt() {
+            return updatedAt;
+        }
+
+        public void setUpdatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+        }
+
+        public List<TxItem> getLastTransactions() {
+            return lastTransactions;
+        }
+
+        public void setLastTransactions(List<TxItem> lastTransactions) {
+            this.lastTransactions = lastTransactions;
         }
     }
 
-    public static class DemoTxSummary {
+    public static class TxItem {
+        // name is "timestamp" on purpose:
+        // JS checks tx.date || tx.createdAt || tx.timestamp
+        private LocalDateTime timestamp;
         private String type;
-        private BigDecimal amount;
+        private double amount;
+        private String status;
 
-        public DemoTxSummary(String type, BigDecimal amount) {
-            this.type = type;
-            this.amount = amount;
+        public LocalDateTime getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(LocalDateTime timestamp) {
+            this.timestamp = timestamp;
         }
 
         public String getType() {
@@ -109,12 +156,20 @@ public class DemoInfoController {
             this.type = type;
         }
 
-        public BigDecimal getAmount() {
+        public double getAmount() {
             return amount;
         }
 
-        public void setAmount(BigDecimal amount) {
+        public void setAmount(double amount) {
             this.amount = amount;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
         }
     }
 }

@@ -1,10 +1,9 @@
 com\bamby\jwt\controller\BamBankingController.class
+com\bamby\jwt\api\DemoInfoController$TxItem.class
 com\bamby\jwt\JwtDemoApplication.class
 com\bamby\jwt\repository\PinResetTokenRepository.class
 com\bamby\jwt\service\PinResetService.class
 com\bamby\jwt\service\EmailJsService.class
-com\bamby\jwt\api\DemoInfoController$DemoTxSummary.class
-com\bamby\jwt\api\DemoInfoController$DemoBalanceResponse.class
 com\bamby\jwt\repository\AccountRepository.class
 com\bamby\jwt\api\DemoInfoController.class
 com\bamby\jwt\controller\DebugController.class
@@ -16,5 +15,6 @@ com\bamby\jwt\service\DataStore.class
 com\bamby\jwt\model\PinResetToken.class
 com\bamby\jwt\model\Account.class
 com\bamby\jwt\service\TransactionService.class
+com\bamby\jwt\api\DemoInfoController$DemoSummaryResponse.class
 com\bamby\jwt\model\Transaction.class
 com\bamby\jwt\service\MaintenanceService.class

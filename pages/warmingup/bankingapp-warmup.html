@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>BamBanking – API Warm-up</title>
+    <link rel="icon" type="image/png" href="/pages/img/mylogo/favicon.png">
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <!-- Your existing global styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <!-- Page-specific styles -->
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .window {
+            max-width: 1080px;
+            margin: 40px auto 80px;
+        }
+
+        .title-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 1rem;
+            background: rgba(15, 23, 42, 0.96);
+            border-radius: 14px 14px 0 0;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            border-bottom: none;
+        }
+
+        .title-bar .dots {
+            display: flex;
+            gap: 0.35rem;
+        }
+
+        .title-bar .dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            display: inline-block;
+        }
+
+        .title-bar .red {
+            background: #ff5f57;
+        }
+
+        .title-bar .yellow {
+            background: #febc2e;
+        }
+
+        .title-bar .green {
+            background: #28c840;
+        }
+
+        .title-bar .filename {
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #e5e7eb;
+        }
+
+        .tb-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tb-menu {
+            display: flex;
+            gap: 0.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .chip i {
+            font-size: 0.75rem;
+        }
+
+        .tb-nav-toggle {
+            display: none;
+        }
+
+        /* ----------------------------
+           Warm-up content
+        -----------------------------*/
+        .warmup-shell {
+            border-radius: 0 0 14px 14px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            border-top: none;
+            background: radial-gradient(circle at top left, #020617 0, #020617 55%, #000 100%);
+            padding: 1.75rem 1.75rem 2rem;
+            color: #e5e7eb;
+        }
+
+        .warmup-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 2fr);
+            gap: 2rem;
+        }
+
+        .badge-free-tier {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            padding: 0.25rem 0.8rem;
+            border-radius: 999px;
+            border: 1px solid rgba(34, 197, 94, 0.6);
+            background: rgba(22, 101, 52, 0.25);
+            margin-bottom: 0.9rem;
+        }
+
+        .badge-free-tier i {
+            color: #4ade80;
+        }
+
+        .warmup-title {
+            font-size: 1.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .warmup-sub {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            max-width: 34rem;
+            line-height: 1.6;
+        }
+
+        .warmup-sub strong {
+            color: #e5e7eb;
+        }
+
+        .warmup-list {
+            margin-top: 1.2rem;
+            font-size: 0.78rem;
+            color: #9ca3af;
+            list-style: none;
+            padding: 0;
+        }
+
+        .warmup-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .warmup-list i {
+            font-size: 0.75rem;
+            color: #22c55e;
+        }
+
+        .warmup-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.4rem;
+        }
+
+        .btn-primary,
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: 0.65rem 1.4rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            border: 1px solid transparent;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            border-color: rgba(34, 197, 94, 0.9);
+            background: radial-gradient(circle at top, #22c55e, #15803d);
+            color: #022c22;
+            font-weight: 600;
+        }
+
+        .btn-primary i {
+            font-size: 0.85rem;
+        }
+
+        .btn-ghost {
+            border-color: rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.6);
+            color: #e5e7eb;
+        }
+
+        /* Right column: console + tech stack */
+        .warmup-console {
+            padding: 1rem 1.1rem 1.2rem;
+            border-radius: 16px;
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 1), #020617 60%, #000 100%);
+            border: 1px solid rgba(30, 64, 175, 0.7);
+            box-shadow: 0 0 30px rgba(30, 64, 175, 0.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .console-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .console-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
+            animation: pulseDot 1.6s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.4);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+        }
+
+        .console-body {
+            font-size: 0.78rem;
+            max-height: 220px;
+            overflow: hidden;
+        }
+
+        .console-line {
+            font-family: "JetBrains Mono", monospace;
+            color: #9ca3af;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+        }
+
+        .console-line span.time {
+            color: #6b7280;
+            margin-right: 0.4rem;
+        }
+
+        .console-line span.accent {
+            color: #22c55e;
+        }
+
+        .console-progress-shell {
+            margin-top: 0.9rem;
+        }
+
+        .console-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #9ca3af;
+            margin-bottom: 0.3rem;
+        }
+
+        .console-progress-bar {
+            position: relative;
+            width: 100%;
+            height: 9px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.9);
+            overflow: hidden;
+            border: 1px solid rgba(30, 64, 175, 0.7);
+        }
+
+        .console-progress-fill {
+            position: absolute;
+            inset: 0;
+            width: 0%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #22c55e, #a3e635);
+            box-shadow: 0 0 18px rgba(34, 197, 94, 0.9);
+            transition: width 0.3s linear;
+        }
+
+        .console-techstack {
+            margin-top: 1.1rem;
+            border-top: 1px dashed rgba(55, 65, 81, 0.8);
+            padding-top: 0.9rem;
+        }
+
+        .console-techstack-title {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-bottom: 0.4rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .tech-tag {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            background: rgba(15, 23, 42, 0.8);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            animation: floatTag 4s ease-in-out infinite;
+        }
+
+        .tech-tag:nth-child(2) {
+            animation-delay: 0.35s;
+        }
+
+        .tech-tag:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+
+        .tech-tag:nth-child(4) {
+            animation-delay: 1.05s;
+        }
+
+        .tech-tag:nth-child(5) {
+            animation-delay: 1.4s;
+        }
+
+        @keyframes floatTag {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .tech-tag i {
+            font-size: 0.75rem;
+        }
+
+        .tech-tag span {
+            white-space: nowrap;
+        }
+
+        /* Demo dashboard card (API snapshot) */
+        .demo-dashboard {
+            margin-top: 1.7rem;
+            border-radius: 16px;
+            border: 1px solid rgba(34, 197, 94, 0.45);
+            background: radial-gradient(circle at top, #022c22 0, #020617 60%, #000 100%);
+            padding: 1.1rem 1.3rem 1.4rem;
+        }
+
+        .demo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .demo-title {
+            font-size: 0.85rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #bbf7d0;
+        }
+
+        .demo-account-label {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .demo-account-label strong {
+            color: #e5e7eb;
+        }
+
+        .demo-pill {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(74, 222, 128, 0.7);
+            background: rgba(22, 101, 52, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            white-space: nowrap;
+        }
+
+        .demo-pill i {
+            font-size: 0.75rem;
+            color: #bbf7d0;
+        }
+
+        .demo-balance-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .demo-balance-main {
+            font-size: 1.7rem;
+            font-weight: 600;
+        }
+
+        .demo-balance-main span.currency {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-left: 0.35rem;
+        }
+
+        .demo-mini-note {
+            font-size: 0.72rem;
+            color: #9ca3af;
+            margin-top: 0.35rem;
+            max-width: 34rem;
+        }
+
+        .demo-meta {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-align: right;
+        }
+
+        .demo-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.3rem;
+            font-size: 0.75rem;
+        }
+
+        .demo-table th,
+        .demo-table td {
+            padding: 0.35rem 0.45rem;
+            text-align: left;
+        }
+
+        .demo-table th {
+            color: #9ca3af;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+        }
+
+        .demo-table tr:nth-child(odd) td {
+            background: rgba(15, 23, 42, 0.6);
+        }
+
+        .demo-table tr:nth-child(even) td {
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .demo-status-ok {
+            color: #4ade80;
+        }
+
+        .demo-status-failed {
+            color: #f97373;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .warmup-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .window {
+                margin: 24px 12px 72px;
+            }
+
+            .warmup-shell {
+                padding: 1.3rem 1.1rem 1.7rem;
+            }
+
+            .warmup-title {
+                font-size: 1.3rem;
+            }
+
+            .tb-nav-toggle {
+                display: inline-flex;
+                flex-direction: column;
+                gap: 3px;
+                border: none;
+                background: transparent;
+                padding: 0;
+                cursor: pointer;
+            }
+
+            .tb-nav-toggle .bar {
+                width: 14px;
+                height: 2px;
+                border-radius: 3px;
+                background: #e5e7eb;
+            }
+
+            .tb-menu {
+                display: none;
+            }
+
+            .demo-meta {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- cursor-follow glow background -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">bambanking-api-warmup.md</span>
+
+            <!-- RIGHT-SIDE NAV -->
+            <div class="tb-right">
+                <!-- Hamburger (mobile) -->
+                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+                    aria-label="Toggle menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+
+                <!-- Nav chips -->
+                <ul id="navMenu" class="tb-menu">
+                    <li class="chip-link">
+                        <a href="/pages/website.html" class="chip chip-back">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="warmup-shell">
+            <div class="warmup-grid">
+                <!-- LEFT: main copy -->
+                <div>
+                    <div class="badge-free-tier">
+                        <i class="fa-solid fa-seedling"></i>
+                        <span>Free-tier cold start</span>
+                    </div>
+
+                    <h1 class="warmup-title">Warming up the BamBanking API…</h1>
+
+                    <p class="warmup-sub">
+                        This demo runs on <strong>Render (free tier)</strong> with a
+                        <strong>Spring Boot</strong> backend and a cloud database.
+                        When the service has been idle, it needs a short moment to “wake up”
+                        (usually around 20–30 seconds). While that happens, the BankingApp login and dashboard
+                        can show loading states.
+                    </p>
+
+                    <ul class="warmup-list">
+                        <li><i class="fa-solid fa-circle-dot"></i> Backend: Java + Spring Boot</li>
+                        <li><i class="fa-solid fa-circle-dot"></i> Frontend: Vanilla JS + Thymeleaf + custom UI</li>
+                        <li><i class="fa-solid fa-circle-dot"></i> Database: MongoDB Atlas (cloud)</li>
+                        <li><i class="fa-solid fa-circle-dot"></i> Hosting: Render free tier with cold-start</li>
+                    </ul>
+
+                    <div class="warmup-actions">
+                        <!-- href will be set in JS too -->
+                        <a id="openDemoBtn" href="#" class="btn-primary">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            <span>Open BamBanking demo</span>
+                        </a>
+
+                        <button id="keepReadingBtn" class="btn-ghost" type="button">
+                            <i class="fa-regular fa-circle-question"></i>
+                            <span>Why does this happen?</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RIGHT: console + tech -->
+                <div class="warmup-console">
+                    <div class="console-header">
+                        <div style="display:flex;align-items:center;gap:0.4rem;">
+                            <span class="console-dot"></span>
+                            <span>Render • cold-start log</span>
+                        </div>
+                        <span id="countdownLabel">preparing…</span>
+                    </div>
+
+                    <div class="console-body" id="consoleBody">
+                        <div class="console-line">
+                            <span class="time">00:00:01</span> <span class="accent">INCOMING HTTP REQUEST
+                                DETECTED</span> …
+                        </div>
+                        <div class="console-line">
+                            <span class="time">00:00:03</span> ALLOCATING COMPUTE RESOURCES …
+                        </div>
+                        <div class="console-line">
+                            <span class="time">00:00:06</span> PREPARING INSTANCE FOR INITIALIZATION …
+                        </div>
+                        <div class="console-line">
+                            <span class="time">00:00:09</span> INJECTING ENVIRONMENT VARIABLES …
+                        </div>
+                        <div class="console-line">
+                            <span class="time">00:00:12</span> CONNECTING TO DATABASE CLUSTER …
+                        </div>
+                        <div class="console-line">
+                            <span class="time">00:00:15</span> BOOTING <span class="accent">Spring Boot</span>
+                            APPLICATION …
+                        </div>
+                        <div class="console-line" id="finalLine">
+                            <span class="time">00:00:20</span> <span class="accent">BAMBANKING API READY • OPENING
+                                DASHBOARD</span> …
+                        </div>
+                    </div>
+
+                    <div class="console-progress-shell">
+                        <div class="console-progress-label">
+                            <span id="statusText">Contacting BamBanking server…</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="console-progress-bar">
+                            <div class="console-progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+
+                    <div class="console-techstack">
+                        <div class="console-techstack-title">Tech powering this demo</div>
+                        <div class="tech-tags">
+                            <div class="tech-tag">
+                                <i class="fa-solid fa-leaf"></i>
+                                <span>Spring Boot</span>
+                            </div>
+                            <div class="tech-tag">
+                                <i class="fa-solid fa-mug-hot"></i>
+                                <span>Java 17</span>
+                            </div>
+                            <div class="tech-tag">
+                                <i class="fa-solid fa-database"></i>
+                                <span>MongoDB / PostgreSQL</span>
+                            </div>
+                            <div class="tech-tag">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <span>Render</span>
+                            </div>
+                            <div class="tech-tag">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                <span>JWT Auth</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DEMO DASHBOARD SNAPSHOT (via API) -->
+            <div class="demo-dashboard" id="demoDashboard">
+                <div class="demo-header">
+                    <div>
+                        <div class="demo-title">Demo account snapshot</div>
+                        <div class="demo-account-label">
+                            Account: <strong id="demoAccountLabel">BamBank • Sandbox User</strong>
+                        </div>
+                    </div>
+                    <div class="demo-pill">
+                        <i class="fa-regular fa-circle-check"></i>
+                        <span>Live API demo</span>
+                    </div>
+                </div>
+
+                <div class="demo-balance-row">
+                    <div>
+                        <div class="demo-balance-main">
+                            <span id="demoBalance">– – – – –</span>
+                            <span class="currency" id="demoCurrency">PHP</span>
+                        </div>
+                        <div class="demo-mini-note">
+                            This is a <strong>demo balance</strong> pulled from your real BamBanking API.
+                            Perform a transaction in the full app, then refresh this page to see the balance
+                            and recent transactions update.
+                        </div>
+                    </div>
+                    <div class="demo-meta">
+                        <div id="demoUpdatedAt">Last updated: —</div>
+                        <div id="demoApiStatus">Connecting to API…</div>
+                    </div>
+                </div>
+
+                <table class="demo-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="demoTxBody">
+                        <tr>
+                            <td colspan="4">Waiting for API response…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Hidden explanation, toggled by “Why does this happen?” -->
+            <div id="extraInfo" style="display:none;margin-top:1.7rem;font-size:0.8rem;color:#9ca3af;line-height:1.6;">
+                <strong>Cold start?</strong>
+                On free hosting tiers, services are put to sleep when nobody uses them for a while.
+                The first request has to spin up the container, inject environment variables,
+                and reconnect to the database. That’s why the first load of the BamBanking demo can take a few seconds,
+                but after that it behaves like a normal always-on app.
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+    <script defer src="/pages/warmingup/js/main.js"></script>
+</body>
+
+</html>
