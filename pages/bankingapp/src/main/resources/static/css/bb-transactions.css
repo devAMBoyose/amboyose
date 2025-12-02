@@ -254,3 +254,106 @@
     background: radial-gradient(circle at top, #22c55e, #16a34a 50%, #064e3b 100%);
     color: #021014;
 }
+
+
+/* ==========================================
+   Recent transactions header + print button
+   ========================================== */
+
+.bb-transactions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Right side: "Last X records" + print button stacked */
+.bb-tx-subheader-right {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9ca3af;
+}
+
+/* Tiny round icon button */
+.bb-tx-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.7);
+    background: transparent;
+    color: #22c55e;
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+
+/* Small pill-style print button */
+.bb-tx-print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    background: radial-gradient(circle at top, #020617, #020617 55%, #000 100%);
+    color: #e5e7eb;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9);
+    transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        border-color 0.12s ease,
+        background 0.12s ease,
+        color 0.12s ease;
+}
+
+.bb-tx-print-btn i {
+    font-size: 0.7rem;
+}
+
+.bb-tx-print-btn:hover {
+    background: #22c55e;
+    color: #020617;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.7);
+}
+
+
+/* Right side: "LAST 10 RECORDS" + print chip */
+.bb-tx-subheader-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9ca3af;
+}
+
+/* Print chip uses same base as .bb-tx-filter, just flex with icon */
+.bb-tx-print {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.16rem 0.65rem;
+    /* a bit smaller than the main pills */
+}
+
+.bb-tx-print i {
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+.bb-tx-print span {
+    line-height: 1;
+}

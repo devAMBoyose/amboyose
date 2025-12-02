@@ -214,9 +214,26 @@
                         <!-- RECENT TRANSACTIONS CARD -->
                         <div class="bb-transactions-card" id="recent-transactions" th:if="${transactions != null}">
                             <div class="bb-transactions-header">
+
                                 <div>Recent Transactions</div>
-                                <span th:text="'Last ' + ${transactions.size()} + ' records'">Last transactions</span>
+
+                                <div class="bb-tx-subheader-right">
+                                    <span th:text="'Last ' + ${transactions.size()} + ' records'">
+                                        Last 10 records
+                                    </span>
+
+                                    <!-- SMALL ICON-ONLY PRINT BUTTON -->
+                                    <button type="button" class="bb-tx-filter bb-tx-print"
+                                        title="Print recent transactions" onclick="bbPrintRecentTransactions()">
+                                        <i class="fa-solid fa-print"></i>
+                                        <span>Print</span>
+                                    </button>
+
+
+                                </div>
+
                             </div>
+
 
                             <!-- FILTER PILLS -->
                             <div class="bb-transactions-filters">

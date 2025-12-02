@@ -100,3 +100,60 @@
         }
     }
 })();
+
+
+// =====================================
+// PRINT: Recent Transactions Table Only
+// =====================================
+function bbPrintRecentTransactions() {
+
+    // get only the table + header
+    const tableWrapper = document.querySelector(".bb-transactions-table-wrapper");
+    if (!tableWrapper) return;
+
+    const tableHTML = tableWrapper.innerHTML;
+
+    // build print page
+    const printWindow = window.open("", "_blank", "width=900,height=650");
+    printWindow.document.open();
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Recent Transactions</title>
+            <style>
+                body {
+                    font-family: "JetBrains Mono", monospace;
+                    padding: 20px;
+                    background: #fff;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 12px;
+                }
+                th, td {
+                    border: 1px solid #333;
+                    padding: 6px;
+                    text-align: left;
+                }
+                th {
+                    background: #e2e8f0;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+        <body>
+            <h2>Recent Transactions</h2>
+            <table>
+                ${tableHTML}
+            </table>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+
+    printWindow.onload = () => {
+        printWindow.print();
+    };
+}
