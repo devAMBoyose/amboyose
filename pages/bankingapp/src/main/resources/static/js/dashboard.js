@@ -7,8 +7,9 @@ function openQaModal(action) {
     const modal = document.getElementById("bbQaModal");
     if (!modal) return;
 
-    // Show modal
-    modal.classList.add("is-open");
+    // Make sure the modal is visible
+    modal.style.display = "flex";         // <-- important
+    modal.classList.add("is-open");       // optional class for animations
 
     // Update title
     const titleEl = document.getElementById("bbQaModalTitle");
@@ -32,6 +33,8 @@ function openQaModal(action) {
             default:
                 titleEl.textContent = "Quick action";
         }
+        // reset verb cache used by bd-modal.js (if any)
+        delete titleEl.dataset.verb;
     }
 
     // Show the appropriate section
@@ -46,6 +49,7 @@ function closeQaModal() {
     const modal = document.getElementById("bbQaModal");
     if (!modal) return;
     modal.classList.remove("is-open");
+    modal.style.display = "none";        // <-- important
 }
 
 // Channel selection (Cash / Bank / E-Wallet / Others) for Deposit & Withdraw
@@ -172,11 +176,6 @@ document.addEventListener("DOMContentLoaded", function () {
 // - auto scroll + optional highlight
 // ============================
 
-/* ==========================================
-   Recent transactions helpers
-   - auto-scroll wrapper
-   - optional highlight by ?ref=... in URL
-   ========================================== */
 document.addEventListener("DOMContentLoaded", function () {
     const wrapper = document.querySelector(".bb-transactions-table-wrapper");
     if (wrapper) {
