@@ -262,18 +262,50 @@
             }
         }
 
+        /* -------------------------------------
+   FIXED CONSOLE TEXT (RESPONSIVE + WRAPS)
+-------------------------------------- */
+
         .console-body {
+            font-family: "JetBrains Mono", monospace;
             font-size: 0.78rem;
             max-height: 220px;
-            overflow: hidden;
+
+            /* allow text to wrap and remain inside */
+            overflow-y: hidden;
+            overflow-x: hidden;
+            line-height: 1.35;
         }
 
         .console-line {
-            font-family: "JetBrains Mono", monospace;
             color: #9ca3af;
-            margin-bottom: 0.25rem;
-            white-space: nowrap;
+            margin-bottom: 0.35rem;
+
+            /* IMPORTANT FIXES */
+            white-space: normal;
+            /* allow wrapping */
+            word-break: break-word;
+            /* break long words if needed */
         }
+
+        .console-line .accent {
+            font-weight: 700;
+            color: #22c55e;
+            margin-right: 0.25rem;
+        }
+
+        /* Make it even better on mobile */
+        @media (max-width: 640px) {
+            .console-body {
+                font-size: 0.72rem;
+            }
+
+            .console-line {
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+
 
         .console-line span.time {
             color: #6b7280;
@@ -635,30 +667,9 @@
                     </div>
 
                     <div class="console-body" id="consoleBody">
-                        <div class="console-line">
-                            <span class="time">00:00:01</span> <span class="accent">INCOMING HTTP REQUEST
-                                DETECTED</span> …
-                        </div>
-                        <div class="console-line">
-                            <span class="time">00:00:03</span> ALLOCATING COMPUTE RESOURCES …
-                        </div>
-                        <div class="console-line">
-                            <span class="time">00:00:06</span> PREPARING INSTANCE FOR INITIALIZATION …
-                        </div>
-                        <div class="console-line">
-                            <span class="time">00:00:09</span> INJECTING ENVIRONMENT VARIABLES …
-                        </div>
-                        <div class="console-line">
-                            <span class="time">00:00:12</span> CONNECTING TO DATABASE CLUSTER …
-                        </div>
-                        <div class="console-line">
-                            <span class="time">00:00:15</span> BOOTING <span class="accent">Spring Boot</span>
-                            APPLICATION …
-                        </div>
-                        <div class="console-line" id="finalLine">
-                            <span class="time">00:00:20</span> <span class="accent">BAMBANKING API READY • OPENING
-                                DASHBOARD</span> …
-                        </div>
+
+
+
                     </div>
 
                     <div class="console-progress-shell">
@@ -670,6 +681,7 @@
                             <div class="console-progress-fill" id="progressFill"></div>
                         </div>
                     </div>
+
 
                     <div class="console-techstack">
                         <div class="console-techstack-title">Tech powering this demo</div>
@@ -684,7 +696,7 @@
                             </div>
                             <div class="tech-tag">
                                 <i class="fa-solid fa-database"></i>
-                                <span>MongoDB / PostgreSQL</span>
+                                <span>MongoDB </span>
                             </div>
                             <div class="tech-tag">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>

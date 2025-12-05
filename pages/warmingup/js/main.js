@@ -165,3 +165,78 @@ async function loadDemoSnapshot() {
 document.addEventListener("DOMContentLoaded", () => {
     loadDemoSnapshot();
 });
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const consoleBody = document.getElementById("consoleBody");
+
+    const logLines = [
+        {
+            accent: "DATABASE SYNC ACTIVE",
+            text: " – Accounts & transactions use the live cloud database in real time."
+        },
+        {
+            accent: "DEMO LOGIN ENABLED",
+            text: " – Demo account: bamby.dev@gmail.com  |  PIN 1234."
+        },
+        {
+            accent: "SECURE AUTH",
+            text: " – JWT login with OTP sent to your Gmail when credentials match."
+        },
+        {
+            accent: "TRANSFERS & HISTORY",
+            text: " – Email-to-email transfers plus printable transaction history & dashboard."
+        },
+        {
+            accent: "SIGN-UP FLOW",
+            text: " – EmailJS registration auto-creates a demo card with generated CVV."
+        }
+    ];
+
+    const typingSpeed = 18;   // ms per character
+    const linePause = 300;  // ms pause between lines
+
+    function typeLine(lineData, lineIndex) {
+        const lineEl = document.createElement("div");
+        lineEl.className = "console-line";
+
+        const accentSpan = document.createElement("span");
+        accentSpan.className = "accent";
+        accentSpan.textContent = lineData.accent;
+
+        const textSpan = document.createElement("span");
+        textSpan.className = "console-text";
+        textSpan.textContent = "";
+
+        lineEl.appendChild(accentSpan);
+        lineEl.appendChild(textSpan);
+        consoleBody.appendChild(lineEl);
+
+        let charIndex = 0;
+
+        function typeChar() {
+            if (charIndex <= lineData.text.length) {
+                textSpan.textContent = lineData.text.slice(0, charIndex);
+                charIndex++;
+                setTimeout(typeChar, typingSpeed);
+            } else {
+                // move to next line after short pause
+                setTimeout(function () {
+                    startTyping(lineIndex + 1);
+                }, linePause);
+            }
+        }
+
+        typeChar();
+    }
+
+    function startTyping(index) {
+        if (index >= logLines.length) return; // done
+        typeLine(logLines[index], index);
+    }
+
+    // kick off animation
+    startTyping(0);
+});
