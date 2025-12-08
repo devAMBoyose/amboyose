@@ -81,9 +81,9 @@ transaction dashboards, signup/login flows, interactive prototypes, and API-powe
 ---
 
 ## 🌍 Live Demo  
-🔗 **View Portfolio:** *([insert your GitHub Pages or domain link here](https://github.com/devAMBoyose/amboyose))*  
+🔗 **View Portfolio:** *([my portfolio](https://github.com/devAMBoyose/amboyose))*  
 Example:  
-[https://devarete.github.io/amboyose/ ](https://github.com/devAMBoyose/amboyose) 
+[github repository ](https://github.com/devAMBoyose/amboyose) 
 
 ---
 
@@ -117,7 +117,7 @@ Every commit reflects genuine progress, experimentation, and improvements.
 - Creator of BamBanking & multiple API demos  
 
 📧 Email: amboyose.dev@gmail.com  
-🌐 Portfolio: *([insert link](https://amboyose.onrender.com/))*  
+🌐 Portfolio: *([amboyose.onrender.com](https://amboyose.onrender.com/))*  
 📍 Philippines  
 
 ---
