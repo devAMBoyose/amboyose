@@ -11,575 +11,16 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
-    <!-- Your existing global styles -->
+    <!-- Global styles -->
     <link rel="stylesheet" href="/css/footer.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/nav.css" />
 
     <!-- Page-specific styles -->
-    <style>
-        body {
-            font-family: "JetBrains Mono", monospace;
-        }
+    <link rel="stylesheet" href="/pages/warmingup/css/warmup.css" />
 
-        .window {
-            max-width: 1080px;
-            margin: 40px auto 80px;
-        }
-
-        .title-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.6rem 1rem;
-            background: rgba(15, 23, 42, 0.96);
-            border-radius: 14px 14px 0 0;
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            border-bottom: none;
-        }
-
-        .title-bar .dots {
-            display: flex;
-            gap: 0.35rem;
-        }
-
-        .title-bar .dots span {
-            width: 10px;
-            height: 10px;
-            border-radius: 999px;
-            display: inline-block;
-        }
-
-        .title-bar .red {
-            background: #ff5f57;
-        }
-
-        .title-bar .yellow {
-            background: #febc2e;
-        }
-
-        .title-bar .green {
-            background: #28c840;
-        }
-
-        .title-bar .filename {
-            font-size: 0.85rem;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: #e5e7eb;
-        }
-
-        .tb-right {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .tb-menu {
-            display: flex;
-            gap: 0.5rem;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 0.25rem 0.7rem;
-            border-radius: 999px;
-            border: 1px solid rgba(148, 163, 184, 0.6);
-            background: rgba(15, 23, 42, 0.9);
-            color: #e5e7eb;
-            font-size: 0.75rem;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .chip i {
-            font-size: 0.75rem;
-        }
-
-        .tb-nav-toggle {
-            display: none;
-        }
-
-        /* ----------------------------
-           Warm-up content
-        -----------------------------*/
-        .warmup-shell {
-            border-radius: 0 0 14px 14px;
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            border-top: none;
-            background: radial-gradient(circle at top left, #020617 0, #020617 55%, #000 100%);
-            padding: 1.75rem 1.75rem 2rem;
-            color: #e5e7eb;
-        }
-
-        .warmup-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 2fr) minmax(0, 2fr);
-            gap: 2rem;
-        }
-
-        .badge-free-tier {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            padding: 0.25rem 0.8rem;
-            border-radius: 999px;
-            border: 1px solid rgba(34, 197, 94, 0.6);
-            background: rgba(22, 101, 52, 0.25);
-            margin-bottom: 0.9rem;
-        }
-
-        .badge-free-tier i {
-            color: #4ade80;
-        }
-
-        .warmup-title {
-            font-size: 1.6rem;
-            margin-bottom: 0.4rem;
-        }
-
-        .warmup-sub {
-            font-size: 0.85rem;
-            color: #9ca3af;
-            max-width: 34rem;
-            line-height: 1.6;
-        }
-
-        .warmup-sub strong {
-            color: #e5e7eb;
-        }
-
-        .warmup-list {
-            margin-top: 1.2rem;
-            font-size: 0.78rem;
-            color: #9ca3af;
-            list-style: none;
-            padding: 0;
-        }
-
-        .warmup-list li {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.35rem;
-        }
-
-        .warmup-list i {
-            font-size: 0.75rem;
-            color: #22c55e;
-        }
-
-        .warmup-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1.4rem;
-        }
-
-        .btn-primary,
-        .btn-ghost {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.45rem;
-            padding: 0.65rem 1.4rem;
-            border-radius: 999px;
-            font-size: 0.8rem;
-            border: 1px solid transparent;
-            cursor: pointer;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-
-        .btn-primary {
-            border-color: rgba(34, 197, 94, 0.9);
-            background: radial-gradient(circle at top, #22c55e, #15803d);
-            color: #022c22;
-            font-weight: 600;
-        }
-
-        .btn-primary i {
-            font-size: 0.85rem;
-        }
-
-        .btn-ghost {
-            border-color: rgba(148, 163, 184, 0.6);
-            background: rgba(15, 23, 42, 0.6);
-            color: #e5e7eb;
-        }
-
-        /* Right column: console + tech stack */
-        .warmup-console {
-            padding: 1rem 1.1rem 1.2rem;
-            border-radius: 16px;
-            background: radial-gradient(circle at top, rgba(15, 23, 42, 1), #020617 60%, #000 100%);
-            border: 1px solid rgba(30, 64, 175, 0.7);
-            box-shadow: 0 0 30px rgba(30, 64, 175, 0.55);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .console-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.8rem;
-            font-size: 0.75rem;
-            color: #9ca3af;
-        }
-
-        .console-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 999px;
-            background: #22c55e;
-            box-shadow: 0 0 12px rgba(34, 197, 94, 0.9);
-            animation: pulseDot 1.6s ease-in-out infinite;
-        }
-
-        @keyframes pulseDot {
-            0% {
-                transform: scale(1);
-                opacity: 0.8;
-            }
-
-            50% {
-                transform: scale(1.4);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 0.8;
-            }
-        }
-
-        /* -------------------------------------
-   FIXED CONSOLE TEXT (RESPONSIVE + WRAPS)
--------------------------------------- */
-
-        .console-body {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 0.78rem;
-            max-height: 220px;
-
-            /* allow text to wrap and remain inside */
-            overflow-y: hidden;
-            overflow-x: hidden;
-            line-height: 1.35;
-        }
-
-        .console-line {
-            color: #9ca3af;
-            margin-bottom: 0.35rem;
-
-            /* IMPORTANT FIXES */
-            white-space: normal;
-            /* allow wrapping */
-            word-break: break-word;
-            /* break long words if needed */
-        }
-
-        .console-line .accent {
-            font-weight: 700;
-            color: #22c55e;
-            margin-right: 0.25rem;
-        }
-
-        /* Make it even better on mobile */
-        @media (max-width: 640px) {
-            .console-body {
-                font-size: 0.72rem;
-            }
-
-            .console-line {
-                white-space: normal;
-                word-break: break-word;
-            }
-        }
-
-
-        .console-line span.time {
-            color: #6b7280;
-            margin-right: 0.4rem;
-        }
-
-        .console-line span.accent {
-            color: #22c55e;
-        }
-
-        .console-progress-shell {
-            margin-top: 0.9rem;
-        }
-
-        .console-progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: #9ca3af;
-            margin-bottom: 0.3rem;
-        }
-
-        .console-progress-bar {
-            position: relative;
-            width: 100%;
-            height: 9px;
-            border-radius: 999px;
-            background: rgba(15, 23, 42, 0.9);
-            overflow: hidden;
-            border: 1px solid rgba(30, 64, 175, 0.7);
-        }
-
-        .console-progress-fill {
-            position: absolute;
-            inset: 0;
-            width: 0%;
-            border-radius: inherit;
-            background: linear-gradient(90deg, #22c55e, #a3e635);
-            box-shadow: 0 0 18px rgba(34, 197, 94, 0.9);
-            transition: width 0.3s linear;
-        }
-
-        .console-techstack {
-            margin-top: 1.1rem;
-            border-top: 1px dashed rgba(55, 65, 81, 0.8);
-            padding-top: 0.9rem;
-        }
-
-        .console-techstack-title {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            margin-bottom: 0.4rem;
-        }
-
-        .tech-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-        }
-
-        .tech-tag {
-            font-size: 0.7rem;
-            padding: 0.25rem 0.6rem;
-            border-radius: 999px;
-            border: 1px solid rgba(148, 163, 184, 0.5);
-            background: rgba(15, 23, 42, 0.8);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            animation: floatTag 4s ease-in-out infinite;
-        }
-
-        .tech-tag:nth-child(2) {
-            animation-delay: 0.35s;
-        }
-
-        .tech-tag:nth-child(3) {
-            animation-delay: 0.7s;
-        }
-
-        .tech-tag:nth-child(4) {
-            animation-delay: 1.05s;
-        }
-
-        .tech-tag:nth-child(5) {
-            animation-delay: 1.4s;
-        }
-
-        @keyframes floatTag {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-4px);
-            }
-
-            100% {
-                transform: translateY(0px);
-            }
-        }
-
-        .tech-tag i {
-            font-size: 0.75rem;
-        }
-
-        .tech-tag span {
-            white-space: nowrap;
-        }
-
-        /* Demo dashboard card (API snapshot) */
-        .demo-dashboard {
-            margin-top: 1.7rem;
-            border-radius: 16px;
-            border: 1px solid rgba(34, 197, 94, 0.45);
-            background: radial-gradient(circle at top, #022c22 0, #020617 60%, #000 100%);
-            padding: 1.1rem 1.3rem 1.4rem;
-        }
-
-        .demo-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .demo-title {
-            font-size: 0.85rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: #bbf7d0;
-        }
-
-        .demo-account-label {
-            font-size: 0.75rem;
-            color: #9ca3af;
-        }
-
-        .demo-account-label strong {
-            color: #e5e7eb;
-        }
-
-        .demo-pill {
-            font-size: 0.7rem;
-            padding: 0.2rem 0.7rem;
-            border-radius: 999px;
-            border: 1px solid rgba(74, 222, 128, 0.7);
-            background: rgba(22, 101, 52, 0.4);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            white-space: nowrap;
-        }
-
-        .demo-pill i {
-            font-size: 0.75rem;
-            color: #bbf7d0;
-        }
-
-        .demo-balance-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 0.9rem;
-        }
-
-        .demo-balance-main {
-            font-size: 1.7rem;
-            font-weight: 600;
-        }
-
-        .demo-balance-main span.currency {
-            font-size: 0.9rem;
-            color: #9ca3af;
-            margin-left: 0.35rem;
-        }
-
-        .demo-mini-note {
-            font-size: 0.72rem;
-            color: #9ca3af;
-            margin-top: 0.35rem;
-            max-width: 34rem;
-        }
-
-        .demo-meta {
-            font-size: 0.7rem;
-            color: #9ca3af;
-            text-align: right;
-        }
-
-        .demo-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 0.3rem;
-            font-size: 0.75rem;
-        }
-
-        .demo-table th,
-        .demo-table td {
-            padding: 0.35rem 0.45rem;
-            text-align: left;
-        }
-
-        .demo-table th {
-            color: #9ca3af;
-            font-weight: 500;
-            border-bottom: 1px solid rgba(55, 65, 81, 0.9);
-        }
-
-        .demo-table tr:nth-child(odd) td {
-            background: rgba(15, 23, 42, 0.6);
-        }
-
-        .demo-table tr:nth-child(even) td {
-            background: rgba(15, 23, 42, 0.3);
-        }
-
-        .demo-status-ok {
-            color: #4ade80;
-        }
-
-        .demo-status-failed {
-            color: #f97373;
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .warmup-grid {
-                grid-template-columns: minmax(0, 1fr);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .window {
-                margin: 24px 12px 72px;
-            }
-
-            .warmup-shell {
-                padding: 1.3rem 1.1rem 1.7rem;
-            }
-
-            .warmup-title {
-                font-size: 1.3rem;
-            }
-
-            .tb-nav-toggle {
-                display: inline-flex;
-                flex-direction: column;
-                gap: 3px;
-                border: none;
-                background: transparent;
-                padding: 0;
-                cursor: pointer;
-            }
-
-            .tb-nav-toggle .bar {
-                width: 14px;
-                height: 2px;
-                border-radius: 3px;
-                background: #e5e7eb;
-            }
-
-            .tb-menu {
-                display: none;
-            }
-
-            .demo-meta {
-                text-align: left;
-            }
-        }
-    </style>
+    <!-- Chart.js for donut/pie chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -666,11 +107,7 @@
                         <span id="countdownLabel">preparing…</span>
                     </div>
 
-                    <div class="console-body" id="consoleBody">
-
-
-
-                    </div>
+                    <div class="console-body" id="consoleBody"></div>
 
                     <div class="console-progress-shell">
                         <div class="console-progress-label">
@@ -681,7 +118,6 @@
                             <div class="console-progress-fill" id="progressFill"></div>
                         </div>
                     </div>
-
 
                     <div class="console-techstack">
                         <div class="console-techstack-title">Tech powering this demo</div>
@@ -744,21 +180,45 @@
                     </div>
                 </div>
 
-                <table class="demo-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="demoTxBody">
-                        <tr>
-                            <td colspan="4">Waiting for API response…</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <!-- 2-column dashboard: LEFT chart, RIGHT table -->
+                <div class="demo-main-grid">
+                    <!-- LEFT: PIE / DONUT CHART -->
+                    <div class="demo-chart-card">
+                        <div class="demo-chart-header">
+                            <span class="demo-chart-title">Cash in / Cash out / Deposit</span>
+                            <span class="demo-chart-sub">Based on latest transactions</span>
+                        </div>
+                        <div class="demo-chart-body">
+                            <canvas id="cashFlowChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: RECENT TRANSACTIONS TABLE -->
+                    <div class="demo-table-wrap">
+                        <div class="demo-table-header">
+                            <span class="demo-table-title">Recent transactions</span>
+                            <span class="demo-table-sub">Live from BamBanking API</span>
+                        </div>
+
+                        <div class="demo-table-scroll">
+                            <table class="demo-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="demoTxBody">
+                                    <tr>
+                                        <td colspan="4">Waiting for API response…</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Hidden explanation, toggled by “Why does this happen?” -->
@@ -783,9 +243,11 @@
         </p>
     </footer>
 
-    <!-- Your existing JS -->
+    <!-- Global JS -->
     <script src="/js/script.js"></script>
     <script defer src="/js/nav.js"></script>
+
+    <!-- Page-specific JS (API + chart + badges) -->
     <script defer src="/pages/warmingup/js/main.js"></script>
 </body>
 

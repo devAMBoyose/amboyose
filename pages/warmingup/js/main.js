@@ -11,8 +11,6 @@ const TOTAL_SECONDS = 26;
 const AUTO_REDIRECT = true;
 const REDIRECT_DELAY_MS = 3000;
 
-
-
 // ========= ELEMENTS =========
 const countdownLabel = document.getElementById("countdownLabel");
 const statusText = document.getElementById("statusText");
@@ -30,16 +28,34 @@ const demoUpdatedAtEl = document.getElementById("demoUpdatedAt");
 const demoApiStatusEl = document.getElementById("demoApiStatus");
 const demoTxBodyEl = document.getElementById("demoTxBody");
 
+// chart + toggle
+const chartCanvas = document.getElementById("cashFlowChart");
+const txToggleBtn = document.getElementById("txToggleBtn");
+
+// ========= STATE =========
+let cashFlowChart = null;
+let allTransactions = [];
+let showAllTx = false;
+
 // set link href
-openDemoBtn.href = DEMO_URL;
+if (openDemoBtn) {
+    openDemoBtn.href = DEMO_URL;
+}
 
-keepReadingBtn.addEventListener("click", () => {
-    extraInfo.style.display = extraInfo.style.display === "none" ? "block" : "none";
-});
+// toggle extra info text
+if (keepReadingBtn && extraInfo) {
+    keepReadingBtn.addEventListener("click", () => {
+        extraInfo.style.display = extraInfo.style.display === "none" ? "block" : "none";
+    });
+}
 
-openDemoBtn.addEventListener("click", (e) => {
-    // allow user to click manually anytime – no JS prevention
-});
+// show 5 vs all transactions
+if (txToggleBtn) {
+    txToggleBtn.addEventListener("click", () => {
+        showAllTx = !showAllTx;
+        renderTransactions();
+    });
+}
 
 // ========= COUNTDOWN / PROGRESS =========
 let elapsed = 0;
@@ -50,28 +66,33 @@ const timer = setInterval(() => {
     const ratio = Math.min(elapsed / TOTAL_SECONDS, 1);
     const percent = Math.round(ratio * 100);
 
-    progressFill.style.width = percent + "%";
-    progressPercent.textContent = percent + "%";
+    if (progressFill) progressFill.style.width = percent + "%";
+    if (progressPercent) progressPercent.textContent = percent + "%";
 
     const secondsLeft = Math.max(TOTAL_SECONDS - elapsed, 0);
-    countdownLabel.textContent = secondsLeft > 0
-        ? `approx ${secondsLeft}s remaining`
-        : "service should be ready";
+    if (countdownLabel) {
+        countdownLabel.textContent =
+            secondsLeft > 0 ? `approx ${secondsLeft}s remaining` : "service should be ready";
+    }
 
-    if (percent < 30) {
-        statusText.textContent = "Allocating resources on Render…";
-    } else if (percent < 60) {
-        statusText.textContent = "Booting Spring Boot application…";
-    } else if (percent < 90) {
-        statusText.textContent = "Connecting to database & loading dashboard…";
-    } else {
-        statusText.textContent = "BamBanking API is almost ready.";
+    if (statusText) {
+        if (percent < 30) {
+            statusText.textContent = "Allocating resources on Render…";
+        } else if (percent < 60) {
+            statusText.textContent = "Booting Spring Boot application…";
+        } else if (percent < 90) {
+            statusText.textContent = "Connecting to database & loading dashboard…";
+        } else {
+            statusText.textContent = "BamBanking API is almost ready.";
+        }
     }
 
     if (ratio >= 1 && !ready) {
         ready = true;
         clearInterval(timer);
-        statusText.textContent = "BamBanking API is ready. Loading demo snapshot…";
+        if (statusText) {
+            statusText.textContent = "BamBanking API is ready. Loading demo snapshot…";
+        }
 
         if (AUTO_REDIRECT) {
             setTimeout(() => {
@@ -81,7 +102,7 @@ const timer = setInterval(() => {
     }
 }, 1000);
 
-// ========= DEMO DASHBOARD VIA API =========
+// ========= HELPERS =========
 function formatMoney(value) {
     if (value == null || isNaN(value)) return "0.00";
     return Number(value).toLocaleString("en-PH", {
@@ -102,6 +123,153 @@ function formatDate(dateStr) {
     });
 }
 
+// ========= PIE / DONUT CHART (DEPOSIT / TRANSFER / WITHDRAW) =========
+function updateCashFlowChart(transactions) {
+    if (!chartCanvas || !window.Chart) return;
+
+    let totalDeposit = 0;
+    let totalTransfer = 0;
+    let totalWithdraw = 0;
+
+    transactions.forEach((tx) => {
+        const typeRaw = (tx.type || tx.kind || "").toString().toLowerCase();
+        const amount = Number(tx.amount ?? tx.value ?? 0) || 0;
+
+        if (typeRaw.includes("deposit")) {
+            totalDeposit += amount;
+        } else if (
+            typeRaw.includes("withdraw") ||
+            typeRaw.includes("cash out") ||
+            typeRaw.includes("cash_out")
+        ) {
+            totalWithdraw += amount;
+        } else if (typeRaw.includes("transfer")) {
+            totalTransfer += amount;
+        }
+    });
+
+    // If no data at all, keep donut visible with equal parts
+    if (totalDeposit === 0 && totalTransfer === 0 && totalWithdraw === 0) {
+        totalDeposit = totalTransfer = totalWithdraw = 1;
+    }
+
+    if (cashFlowChart) {
+        cashFlowChart.destroy();
+    }
+
+    cashFlowChart = new Chart(chartCanvas, {
+        type: "doughnut",
+        data: {
+            labels: ["Deposit", "Transfer", "Withdraw"],
+            datasets: [
+                {
+                    data: [totalDeposit, totalTransfer, totalWithdraw],
+                    // Deposit = green, Transfer = pink, Withdraw = blue (matches badges)
+                    backgroundColor: ["#22c55e", "#ec4899", "#3b82f6"],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }
+            ]
+        },
+        options: {
+            cutout: "55%",
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        color: "#e5e7eb",
+                        boxWidth: 16,
+                        font: { size: 11 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => {
+                            const label = ctx.label || "";
+                            const value = ctx.parsed || 0;
+                            return `${label}: ₱${formatMoney(value)}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// ========= TRANSACTIONS TABLE (5 vs ALL) =========
+function renderTransactions() {
+    if (!demoTxBodyEl) return;
+
+    demoTxBodyEl.innerHTML = "";
+
+    if (!allTransactions.length) {
+        demoTxBodyEl.innerHTML = '<tr><td colspan="4">No recent transactions.</td></tr>';
+        if (txToggleBtn) {
+            txToggleBtn.textContent = "Show latest 5";
+            txToggleBtn.disabled = true;
+        }
+        return;
+    }
+
+    const txsToShow = showAllTx ? allTransactions : allTransactions.slice(0, 5);
+
+    if (txToggleBtn) {
+        if (showAllTx) {
+            txToggleBtn.textContent = "Show latest 5";
+        } else {
+            txToggleBtn.textContent = `Show all (${allTransactions.length})`;
+        }
+        txToggleBtn.disabled = allTransactions.length <= 5;
+    }
+
+    txsToShow.forEach((tx) => {
+        const tr = document.createElement("tr");
+        const status = (tx.status || "OK").toUpperCase();
+        const statusClass =
+            status === "OK" || status === "SUCCESS" ? "demo-status-ok" : "demo-status-failed";
+
+        const when = tx.date || tx.createdAt || tx.timestamp;
+        const typeRaw = tx.type || tx.kind || "—";
+        const amt = tx.amount ?? tx.value ?? 0;
+
+        // badge logic
+        const lower = typeRaw.toLowerCase();
+        let badgeClass = "tx-badge--other";
+        let badgeLabel = typeRaw;
+        let detailText = "";
+
+        if (lower.includes("deposit")) {
+            badgeClass = "tx-badge--deposit";
+            badgeLabel = "Deposit";
+            detailText = typeRaw.replace(/deposit/i, "").trim();
+        } else if (lower.includes("withdraw")) {
+            badgeClass = "tx-badge--withdraw";
+            badgeLabel = "Withdraw";
+            detailText = typeRaw.replace(/withdraw/i, "").trim();
+        } else if (lower.includes("transfer")) {
+            badgeClass = "tx-badge--transfer";
+            badgeLabel = "Transfer";
+            detailText = typeRaw.replace(/transfer/i, "").trim();
+        }
+
+        const typeCellHtml = `
+      <div class="tx-type-cell">
+        <span class="tx-badge ${badgeClass}">${badgeLabel}</span>
+        ${detailText ? `<span class="tx-detail">${detailText}</span>` : ""}
+      </div>
+    `;
+
+        tr.innerHTML = `
+      <td>${formatDate(when)}</td>
+      <td>${typeCellHtml}</td>
+      <td>₱${formatMoney(amt)}</td>
+      <td class="${statusClass}">${status}</td>
+    `;
+        demoTxBodyEl.appendChild(tr);
+    });
+}
+
+// ========= SNAPSHOT RENDER (called after API) =========
 function renderSnapshot(data) {
     const balance = data.balance ?? data.currentBalance ?? 0;
     const currency = data.currency || "PHP";
@@ -109,39 +277,21 @@ function renderSnapshot(data) {
     const updatedAt = data.updatedAt || data.snapshotAt || new Date().toISOString();
     const txs = Array.isArray(data.lastTransactions) ? data.lastTransactions : [];
 
-    demoBalanceEl.textContent = formatMoney(balance);
-    demoCurrencyEl.textContent = currency;
-    demoAccountLabelEl.textContent = accountLabel;
-    demoUpdatedAtEl.textContent = "Last updated: " + formatDate(updatedAt);
-    demoApiStatusEl.textContent = "Snapshot loaded from BamBanking API.";
+    // store everything from API
+    allTransactions = txs;
 
-    demoTxBodyEl.innerHTML = "";
-    if (!txs.length) {
-        demoTxBodyEl.innerHTML = '<tr><td colspan="4">No recent transactions.</td></tr>';
-        return;
-    }
+    if (demoBalanceEl) demoBalanceEl.textContent = formatMoney(balance);
+    if (demoCurrencyEl) demoCurrencyEl.textContent = currency;
+    if (demoAccountLabelEl) demoAccountLabelEl.textContent = accountLabel;
+    if (demoUpdatedAtEl) demoUpdatedAtEl.textContent = "Last updated: " + formatDate(updatedAt);
+    if (demoApiStatusEl) demoApiStatusEl.textContent = "Snapshot loaded from BamBanking API.";
 
-    txs.slice(0, 5).forEach(tx => {
-        const tr = document.createElement("tr");
-        const status = (tx.status || "OK").toUpperCase();
-        const statusClass = status === "OK" || status === "SUCCESS"
-            ? "demo-status-ok"
-            : "demo-status-failed";
-
-        const when = tx.date || tx.createdAt || tx.timestamp;
-        const type = tx.type || tx.kind || "—";
-        const amt = tx.amount ?? tx.value ?? 0;
-
-        tr.innerHTML = `
-                    <td>${formatDate(when)}</td>
-                    <td>${type}</td>
-                    <td>${formatMoney(amt)}</td>
-                    <td class="${statusClass}">${status}</td>
-                `;
-        demoTxBodyEl.appendChild(tr);
-    });
+    // render table and chart
+    renderTransactions();
+    updateCashFlowChart(allTransactions);
 }
 
+// ========= API CALL =========
 let retryCount = 0;
 const MAX_RETRIES = 5;
 
@@ -153,24 +303,22 @@ async function loadDemoSnapshot() {
         renderSnapshot(data);
     } catch (err) {
         retryCount++;
-        demoApiStatusEl.textContent = "Waiting for API… (retry " + retryCount + "/" + MAX_RETRIES + ")";
+        if (demoApiStatusEl) {
+            demoApiStatusEl.textContent =
+                "Waiting for API… (retry " + retryCount + "/" + MAX_RETRIES + ")";
+        }
         if (retryCount <= MAX_RETRIES) {
             setTimeout(loadDemoSnapshot, 5000);
-        } else {
+        } else if (demoApiStatusEl) {
             demoApiStatusEl.textContent = "API snapshot temporarily unavailable.";
         }
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadDemoSnapshot();
-});
-
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
+// ========= CONSOLE TYPING EFFECT =========
+function initConsoleTyping() {
     const consoleBody = document.getElementById("consoleBody");
+    if (!consoleBody) return;
 
     const logLines = [
         {
@@ -195,8 +343,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     ];
 
-    const typingSpeed = 18;   // ms per character
-    const linePause = 300;  // ms pause between lines
+    const typingSpeed = 18;
+    const linePause = 300;
 
     function typeLine(lineData, lineIndex) {
         const lineEl = document.createElement("div");
@@ -222,10 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 charIndex++;
                 setTimeout(typeChar, typingSpeed);
             } else {
-                // move to next line after short pause
-                setTimeout(function () {
-                    startTyping(lineIndex + 1);
-                }, linePause);
+                setTimeout(() => startTyping(lineIndex + 1), linePause);
             }
         }
 
@@ -233,10 +378,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function startTyping(index) {
-        if (index >= logLines.length) return; // done
+        if (index >= logLines.length) return;
         typeLine(logLines[index], index);
     }
 
-    // kick off animation
     startTyping(0);
+}
+
+// ========= INIT =========
+document.addEventListener("DOMContentLoaded", () => {
+    loadDemoSnapshot();
+    initConsoleTyping();
 });
