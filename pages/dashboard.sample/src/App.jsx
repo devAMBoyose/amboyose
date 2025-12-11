@@ -13,7 +13,6 @@ function buildChart(existing, ctx, config) {
     return existing;
 }
 
-// demo data
 // demo data – no external API, always resolves immediately
 async function fetchDashboardData() {
     return {
@@ -69,9 +68,20 @@ async function fetchDashboardData() {
     };
 }
 
-
 function App() {
     const [data, setData] = useState(null);
+
+    // THEME STATE (dark / light)
+    const [theme, setTheme] = useState("dark");
+
+    // apply theme to <html data-theme="...">
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+    }, [theme]);
+
+    const handleThemeChange = (mode) => {
+        setTheme(mode);
+    };
 
     // main charts
     const mini1Ref = useRef(null);
@@ -105,7 +115,6 @@ function App() {
         financeSnap: null,
         productSnap: null
     });
-
 
     const loadData = async () => {
         const result = await fetchDashboardData();
@@ -365,7 +374,6 @@ function App() {
         );
 
         // ---------- PRODUCT ----------
-        // ---------- PRODUCT ----------
         chartsRef.current.product = buildChart(
             chartsRef.current.product,
             productRef.current?.getContext("2d"),
@@ -403,31 +411,23 @@ function App() {
                             labels: { color: "#9ca3af", font: { size: 10 } }
                         }
                     },
-                    // 💄 beautify radial scale
                     scales: {
                         r: {
-                            angleLines: {
-                                color: "rgba(148,163,184,0.15)"
-                            },
-                            grid: {
-                                color: "rgba(15,23,42,0.9)"
-                            },
+                            angleLines: { color: "rgba(148,163,184,0.15)" },
+                            grid: { color: "rgba(15,23,42,0.9)" },
                             ticks: {
-                                display: false,          // ⬅ hide the 1.0 / 0.5 / 0 labels
+                                display: false,
                                 backdropColor: "transparent"
                             },
                             pointLabels: {
                                 color: "#9ca3af",
-                                font: {
-                                    size: 10
-                                }
+                                font: { size: 10 }
                             }
                         }
                     }
                 }
             }
         );
-
 
         // ---------- NEW MINI DASHBOARDS ----------
 
@@ -534,13 +534,35 @@ function App() {
             <header className="dash-header">
                 <div>
                     <h1 className="dash-title">BamBoard · Finance Dashboard</h1>
-                    <p className="dash-subtitle">React · Chart.js · Neon Dark Theme</p>
+                    <p className="dash-subtitle">
+                        React · Chart.js · Neon Theme · {theme === "dark" ? "Dark" : "Light"} mode
+                    </p>
                 </div>
+
                 <div className="dash-controls">
                     <button className="pill">Last 30 days</button>
+
                     <button className="pill pill-primary" onClick={loadData}>
                         Refresh Data
                     </button>
+
+                    {/* Sun / Moon toggle */}
+                    <div className="theme-toggle" aria-label="Theme toggle">
+                        <button
+                            type="button"
+                            className={`theme-btn ${theme === "light" ? "is-active" : ""}`}
+                            onClick={() => handleThemeChange("light")}
+                        >
+                            <i className="fa-regular fa-sun" aria-hidden="true"></i>
+                        </button>
+                        <button
+                            type="button"
+                            className={`theme-btn ${theme === "dark" ? "is-active" : ""}`}
+                            onClick={() => handleThemeChange("dark")}
+                        >
+                            <i className="fa-regular fa-moon" aria-hidden="true"></i>
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -687,7 +709,6 @@ function App() {
                 </article>
 
                 {/* MINI DASHBOARDS WITH THEIR OWN CHARTS */}
-
                 <article className="card card-summary">
                     <div className="card-header">
                         <h2 className="card-title">Sales Snapshot</h2>

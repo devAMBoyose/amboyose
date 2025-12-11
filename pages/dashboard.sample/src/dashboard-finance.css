@@ -1,4 +1,5 @@
 :root {
+    /* DARK THEME (default) */
     --bg-main: #050816;
     --bg-card: #050b1b;
     --bg-strip: #020617;
@@ -13,6 +14,15 @@
     --danger: #f97373;
     --radius-lg: 18px;
     --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
+}
+
+/* LIGHT THEME – only cards & content change, background stays dark */
+html[data-theme="light"] {
+    --bg-card: #ffffff;
+    --border-card: #e5e7eb;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.18);
 }
 
 *,
@@ -30,6 +40,7 @@ body {
 body {
     min-height: 100vh;
     font-family: "JetBrains Mono", monospace;
+    /* dark neon background (same in both themes) */
     background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
     color: var(--text-main);
 }
@@ -57,29 +68,33 @@ body {
     font-weight: 800;
     letter-spacing: 0.16em;
     text-transform: uppercase;
+    /* keep header readable on dark bg in BOTH themes */
+    color: #e5e7eb;
 }
 
 .dash-subtitle {
     margin: 0;
     font-size: 0.8rem;
-    color: var(--text-muted);
+    color: #9ca3af;
 }
 
 .dash-controls {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    align-items: center;
 }
 
+/* header pills (Last 30 days / Refresh Data) */
 .pill {
     border-radius: 999px;
-    padding: 6px 13px;
+    padding: 6px 14px;
     font-size: 0.75rem;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    border: 1px solid rgba(148, 163, 184, 0.4);
-    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.45);
+    background: transparent;
     color: var(--text-muted);
     cursor: pointer;
 }
@@ -114,6 +129,18 @@ body {
     padding: 10px 12px;
     border: 1px solid rgba(30, 64, 175, 0.7);
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.9);
+}
+
+/* light mode: brighten the mini cards too */
+html[data-theme="light"] .strip {
+    background: transparent;
+    border-color: rgba(148, 163, 184, 0.3);
+}
+
+html[data-theme="light"] .strip-card {
+    background: var(--bg-card);
+    border-color: var(--border-card);
+    box-shadow: var(--shadow-soft);
 }
 
 .strip-title {
@@ -172,6 +199,12 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 210px;
+}
+
+/* in light mode, kill the dark gradients and use clean white cards */
+html[data-theme="light"] .card {
+    background: var(--bg-card);
+    box-shadow: var(--shadow-soft);
 }
 
 .card-header {
@@ -241,13 +274,22 @@ body {
     border-bottom: 1px solid rgba(30, 64, 175, 0.6);
 }
 
-/* zebra rows */
+/* zebra rows - dark mode */
 .mini-table tbody tr:nth-child(even) {
     background-color: rgba(15, 23, 42, 0.85);
 }
 
 .mini-table tbody tr:nth-child(odd) {
     background-color: rgba(15, 23, 42, 0.55);
+}
+
+/* zebra rows - light mode */
+html[data-theme="light"] .mini-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+html[data-theme="light"] .mini-table tbody tr:nth-child(odd) {
+    background-color: #f3f4f6;
 }
 
 /* hover highlight */
@@ -345,4 +387,62 @@ body {
 /* mini charts inside strip + snapshot cards */
 .chart-mini {
     min-height: 110px;
+}
+
+/* THEME TOGGLE */
+.theme-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    overflow: hidden;
+    margin-left: 6px;
+    background: rgba(15, 23, 42, 0.95);
+}
+
+.theme-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.theme-btn+.theme-btn {
+    border-top: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+/* active state */
+.theme-btn.is-active {
+    background: #111827;
+    color: #fbbf24;
+}
+
+html[data-theme="light"] .theme-toggle {
+    background: #ffffff;
+    border-color: rgba(148, 163, 184, 0.6);
+}
+
+html[data-theme="light"] .theme-btn.is-active {
+    background: #111827;
+    color: #facc15;
+}
+
+/* keep header controls tidy on mobile */
+@media (max-width: 480px) {
+    .theme-toggle {
+        flex-direction: row;
+        height: 32px;
+    }
+
+    .theme-btn+.theme-btn {
+        border-top: none;
+        border-left: 1px solid rgba(148, 163, 184, 0.4);
+    }
 }

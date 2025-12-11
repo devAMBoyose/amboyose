@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>UI Dashboards | Portfolio</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Your global styles -->
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/nav.css" />
+
+    <!-- Page-specific styles -->
+    <style>
+        body {
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .window {
+            max-width: 1100px;
+            margin: 80px auto 40px;
+            padding-bottom: 32px;
+        }
+
+        .ui-shell {
+            padding: 20px 22px 28px;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+
+        .ui-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .ui-intro {
+            font-size: 0.85rem;
+            max-width: 640px;
+            color: #9ca3af;
+            margin: 6px 0 20px;
+        }
+
+        .ui-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 900px) {
+            .ui-layout {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .ui-card {
+            background:
+                radial-gradient(circle at top left, rgba(56, 189, 248, 0.25), transparent 60%),
+                radial-gradient(circle at bottom right, rgba(244, 114, 182, 0.24), transparent 60%),
+                #020617;
+            border-radius: 18px;
+            border: 1px solid #111827;
+            padding: 18px 20px 18px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .ui-meta {
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #9ca3af;
+        }
+
+        .ui-project-title {
+            margin: 2px 0 4px;
+            font-size: 1.1rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .ui-description {
+            font-size: 0.84rem;
+            color: #e5e7eb;
+            line-height: 1.5;
+            max-width: 640px;
+        }
+
+        /* ===========
+           FEATURE BADGES
+           =========== */
+
+        .feature-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 4px 0 2px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .feature-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.85);
+            font-size: 0.75rem;
+            color: #e5e7eb;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.85);
+            transition:
+                transform 0.15s ease-out,
+                box-shadow 0.15s ease-out,
+                border-color 0.15s ease-out,
+                background 0.15s ease-out;
+        }
+
+        .feature-badge:hover {
+            transform: translateY(-1px);
+            background: rgba(15, 23, 42, 0.95);
+            border-color: rgba(248, 250, 252, 0.85);
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.95);
+        }
+
+        .feature-badge::after {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background: linear-gradient(120deg,
+                    transparent,
+                    rgba(148, 163, 184, 0.7),
+                    transparent);
+            opacity: 0;
+            transform: translateX(-60%);
+            transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+            pointer-events: none;
+        }
+
+        .feature-badge:hover::after {
+            opacity: 0.9;
+            transform: translateX(30%);
+        }
+
+        .feature-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.68rem;
+            color: #0f172a;
+            background: #22c55e;
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.8);
+            animation: badge-pulse-green 2.6s infinite ease-out;
+        }
+
+        .feature-icon.blue {
+            background: #38bdf8;
+            animation-name: badge-pulse-blue;
+        }
+
+        .feature-icon.pink {
+            background: #f472b6;
+            animation-name: badge-pulse-pink;
+        }
+
+        .feature-icon.green {
+            background: #22c55e;
+            animation-name: badge-pulse-green;
+        }
+
+        .feature-icon.orange {
+            background: #fb923c;
+            animation-name: badge-pulse-orange;
+        }
+
+        .feature-icon i {
+            line-height: 1;
+        }
+
+        @keyframes badge-pulse-blue {
+            0% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.0), 0 0 0 0 rgba(56, 189, 248, 0.9);
+            }
+
+            60% {
+                box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.0), 0 0 18px 3px rgba(56, 189, 248, 0.9);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.0), 0 0 12px 1px rgba(56, 189, 248, 0.35);
+            }
+        }
+
+        @keyframes badge-pulse-pink {
+            0% {
+                box-shadow: 0 0 0 0 rgba(244, 114, 182, 0.0), 0 0 0 0 rgba(244, 114, 182, 0.9);
+            }
+
+            60% {
+                box-shadow: 0 0 0 4px rgba(244, 114, 182, 0.0), 0 0 18px 3px rgba(244, 114, 182, 0.9);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(244, 114, 182, 0.0), 0 0 12px 1px rgba(244, 114, 182, 0.35);
+            }
+        }
+
+        @keyframes badge-pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.0), 0 0 0 0 rgba(34, 197, 94, 0.9);
+            }
+
+            60% {
+                box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.0), 0 0 18px 3px rgba(34, 197, 94, 0.9);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.0), 0 0 12px 1px rgba(34, 197, 94, 0.35);
+            }
+        }
+
+        @keyframes badge-pulse-orange {
+            0% {
+                box-shadow: 0 0 0 0 rgba(251, 146, 60, 0.0), 0 0 0 0 rgba(251, 146, 60, 0.9);
+            }
+
+            60% {
+                box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.0), 0 0 18px 3px rgba(251, 146, 60, 0.9);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(251, 146, 60, 0.0), 0 0 12px 1px rgba(251, 146, 60, 0.35);
+            }
+        }
+
+        /* ACTION BUTTONS */
+
+        .ui-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .chip-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: none;
+            font-size: 0.82rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+        }
+
+        .chip-pill-primary {
+            background: linear-gradient(135deg, #f97316, #fb7185);
+            color: #fff;
+            box-shadow: 0 16px 32px rgba(248, 113, 113, 0.45);
+        }
+
+        .chip-pill-secondary {
+            background: transparent;
+            color: #e5e7eb;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+        }
+
+        .chip-pill:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+        }
+
+        .chip-pill i {
+            font-size: 0.85rem;
+        }
+
+        .ui-bullets {
+            font-size: 0.8rem;
+            color: #d1d5db;
+            margin: 10px 0 0;
+            padding-left: 18px;
+        }
+
+        .ui-bullets li {
+            margin-bottom: 4px;
+        }
+
+        /* ===========
+           RIGHT PREVIEW
+           =========== */
+
+        .ui-preview-wrapper {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .ui-preview-card {
+            background: radial-gradient(circle at top left,
+                    rgba(56, 189, 248, 0.18),
+                    transparent 55%),
+                radial-gradient(circle at bottom right,
+                    rgba(15, 23, 42, 0.85),
+                    #020617 70%);
+            border-radius: 18px;
+            border: 1px solid #111827;
+            padding: 10px 10px 14px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+            width: 100%;
+            max-width: 520px;
+            margin-left: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .preview-frame {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(30, 64, 175, 0.9);
+            background: #020617;
+            aspect-ratio: 16 / 10;
+        }
+
+        .preview-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            opacity: 0;
+            transform: scale(1.02);
+            filter: saturate(1.05);
+            transition:
+                opacity 0.7s ease-out,
+                transform 0.7s ease-out;
+        }
+
+        .preview-img.is-active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .preview-label {
+            align-self: center;
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #e5e7eb;
+            padding: 4px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            background: rgba(15, 23, 42, 0.85);
+        }
+
+        .preview-label span {
+            color: #38bdf8;
+        }
+
+        @media (max-width: 900px) {
+            .ui-shell {
+                padding: 18px 16px 28px;
+            }
+
+            .ui-preview-wrapper {
+                justify-content: center;
+            }
+
+            .ui-preview-card {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- cursor-follow glow background -->
+    <div id="cursor-bg" aria-hidden="true"></div>
+
+    <div class="window">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <div class="dots" aria-hidden="true">
+                <span class="red"></span><span class="yellow"></span><span class="green"></span>
+            </div>
+
+            <span class="filename">UI Dashboards</span>
+
+            <!-- RIGHT-SIDE NAV -->
+            <div class="tb-right">
+                <!-- Hamburger (mobile) -->
+                <button id="navToggle" class="tb-nav-toggle" aria-expanded="false" aria-controls="navMenu"
+                    aria-label="Toggle menu">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                </button>
+
+                <!-- Nav chips -->
+                <ul id="navMenu" class="tb-menu">
+                    <li><a href="/index.html">About</a></li>
+
+                    <li class="has-submenu">
+                        <button class="submenu-toggle" aria-expanded="false" aria-controls="portfolioSubmenu">
+                            Portfolio <i class="fa-solid fa-angle-right" aria-hidden="true"></i>
+                        </button>
+                        <ul id="portfolioSubmenu" class="submenu" aria-label="Portfolio submenu">
+                            <li><a href="/pages/website.html">FullStack Projects</a></li>
+                            <li><a href="/pages/graphics.html">Graphics / Design</a></li>
+                            <li><a href="/pages/api-integration.html">APIs / Integrations</a></li>
+                            <li><a href="/pages/interactive-demo.html">Interactive UI/UX</a></li>
+                            <li><a href="/pages/dashboard.sample/ui-dashboards.html">UI Dashboards</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/resume.html" data-current="resume">Resume</a></li>
+                    <li><a href="/credentials.html" data-current="resume">Credentials</a></li>
+                    <li><a href="/contact.html">Contact </a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="ui-shell">
+            <p class="section-label">Selected Work</p>
+            <h1 class="ui-title">UI Dashboards</h1>
+            <p class="ui-intro">
+                A collection of interactive finance and product dashboards designed in my neon dark theme,
+                powered by modern front-end stacks.
+            </p>
+
+            <section class="ui-layout">
+                <!-- LEFT: project info -->
+                <article class="ui-card">
+                    <div>
+                        <div class="ui-meta">React · Vite · Chart.js</div>
+                        <h2 class="ui-project-title">BamBoard Finance Dashboard</h2>
+                        <p class="ui-description">
+                            Modern animated dashboard that visualizes sales, finance lines,
+                            product statistics, and engagement snapshots — styled to match my
+                            portfolio’s neon terminal aesthetic.
+                        </p>
+
+                        <!-- Feature badges -->
+                        <ul class="feature-badges">
+                            <li class="feature-badge">
+                                <span class="feature-icon blue">
+                                    <i class="fa-brands fa-react"></i>
+                                </span>
+                                <span>Component-based React UI</span>
+                            </li>
+
+                            <li class="feature-badge">
+                                <span class="feature-icon pink">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                </span>
+                                <span>Multiple Chart.js visualizations</span>
+                            </li>
+
+                            <li class="feature-badge">
+                                <span class="feature-icon green">
+                                    <i class="fa-solid fa-display"></i>
+                                </span>
+                                <span>Fully responsive layout</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- CTA buttons -->
+                    <div class="ui-actions">
+                        <a href="https://amboyose-dashboard.onrender.com" target="_blank"
+                            class="chip-pill chip-pill-primary">
+                            <i class="fa-solid fa-play"></i>
+                            <span>View Live Dashboard</span>
+                        </a>
+
+                        <a href="https://github.com/devAMBoyose/amboyose-dashboard" target="_blank"
+                            class="chip-pill chip-pill-secondary">
+                            <i class="fa-brands fa-github"></i>
+                            <span>View Source Code</span>
+                        </a>
+                    </div>
+
+                    <ul class="ui-bullets">
+                        <li>Mini-strip KPIs for different revenue segments with sparkline-style bar charts.</li>
+                        <li>Finance lines for cash in / cash out / profit, with smooth area fills and legend.</li>
+                        <li>Product radar chart and snapshot cards using modern Chart.js 4 configuration.</li>
+                        <li>Designed to be API-ready: current data is mocked, but structure can plug into real services.
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- RIGHT: animated preview -->
+                <aside class="ui-preview-wrapper">
+                    <div class="ui-preview-card">
+                        <div class="preview-frame">
+                            <img src="/pages/dashboard.sample/img/ui dashboard.png"
+                                alt="BamBoard Finance Dashboard – dark mode" class="preview-img is-active"
+                                data-mode="dark" />
+                            <img src="/pages/dashboard.sample/img/ui dashboard light.png"
+                                alt="BamBoard Finance Dashboard – light mode" class="preview-img" data-mode="light" />
+                        </div>
+
+                        <div class="preview-label">
+                            <span>BamBoard</span> · Finance Snapshot
+                        </div>
+                    </div>
+                </aside>
+            </section>
+
+            <p style="margin-top: 18px; font-size: 0.78rem; color:#9ca3af;">
+                Next steps: this section will be expanded with additional dashboards such as an Inventory Tracker
+                and BamBanking analytics. Each dashboard will follow the same neon-glassmorphism style and be powered
+                by live API data from my backend projects.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>© 2025 <strong>BAMBY</strong> | Designed &amp; Coded with ❤️</p>
+        <p class="links">
+            <a href="/index.html">About</a> •
+            <a href="/portfolio.html">Portfolio</a> •
+            <a href="/resume.html">Resume</a> •
+            <a href="/contact.html">Contact</a>
+        </p>
+    </footer>
+
+    <!-- Your existing JS -->
+    <script src="/js/script.js"></script>
+    <script defer src="/js/nav.js"></script>
+
+    <!-- Small script to auto-switch preview images -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const slides = document.querySelectorAll(".preview-img");
+            if (!slides.length) return;
+
+            let index = 0;
+            setInterval(() => {
+                slides[index].classList.remove("is-active");
+                index = (index + 1) % slides.length;
+                slides[index].classList.add("is-active");
+            }, 4000);
+        });
+    </script>
+</body>
+
+</html>
