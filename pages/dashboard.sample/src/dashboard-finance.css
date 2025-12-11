@@ -1,0 +1,348 @@
+:root {
+    --bg-main: #050816;
+    --bg-card: #050b1b;
+    --bg-strip: #020617;
+    --border-card: #111827;
+    --accent-green: #4ade80;
+    --accent-pink: #f472b6;
+    --accent-yellow: #fde047;
+    --accent-blue: #38bdf8;
+    --accent-purple: #a855f7;
+    --text-main: #e5e7eb;
+    --text-muted: #9ca3af;
+    --danger: #f97373;
+    --radius-lg: 18px;
+    --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.7);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "JetBrains Mono", monospace;
+    background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+    color: var(--text-main);
+}
+
+/* SHELL */
+.dash-shell {
+    max-width: 1200px;
+    margin: 80px auto 40px;
+    padding: 0 16px 40px;
+}
+
+/* HEADER */
+.dash-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.dash-title {
+    margin: 0 0 4px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.dash-subtitle {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.dash-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pill {
+    border-radius: 999px;
+    padding: 6px 13px;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    background: rgba(15, 23, 42, 0.95);
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.pill-primary {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.pill:hover {
+    filter: brightness(1.06);
+}
+
+/* TOP STRIP */
+.strip {
+    background: rgba(2, 6, 23, 0.95);
+    border-radius: 18px;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(15, 23, 42, 0.9);
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.strip-card {
+    background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 65%),
+        radial-gradient(circle at bottom right, rgba(244, 114, 182, 0.18), transparent 60%),
+        #020617;
+    border-radius: 14px;
+    padding: 10px 12px;
+    border: 1px solid rgba(30, 64, 175, 0.7);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.9);
+}
+
+.strip-title {
+    margin: 0 0 4px;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.strip-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.strip-metric {
+    min-width: 90px;
+}
+
+.strip-metric .label {
+    display: block;
+    font-size: 0.72rem;
+}
+
+.strip-metric .value {
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.strip-metric .up {
+    color: var(--accent-green);
+}
+
+.strip-metric .down {
+    color: var(--danger);
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* CARD */
+.card {
+    background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(244, 114, 182, 0.14), transparent 60%),
+        var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-card);
+    box-shadow: var(--shadow-soft);
+    padding: 14px 16px 12px;
+    display: flex;
+    flex-direction: column;
+    min-height: 210px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 0.82rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.card-tag {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* CHART WRAP */
+.chart-wrap {
+    position: relative;
+    flex: 1;
+    margin-top: 4px;
+    min-height: 170px;
+}
+
+.chart-circle {
+    min-height: 160px;
+}
+
+.chart-wrap canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* TABLE */
+.mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.7rem;
+    margin-top: 4px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+/* header row */
+.mini-table thead tr {
+    background: linear-gradient(to right,
+            rgba(56, 189, 248, 0.18),
+            rgba(88, 28, 135, 0.28));
+}
+
+.mini-table th,
+.mini-table td {
+    padding: 6px 8px;
+}
+
+.mini-table th {
+    text-align: left;
+    color: var(--text-main);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(30, 64, 175, 0.6);
+}
+
+/* zebra rows */
+.mini-table tbody tr:nth-child(even) {
+    background-color: rgba(15, 23, 42, 0.85);
+}
+
+.mini-table tbody tr:nth-child(odd) {
+    background-color: rgba(15, 23, 42, 0.55);
+}
+
+/* hover highlight */
+.mini-table tbody tr:hover {
+    background: radial-gradient(circle at left,
+            rgba(56, 189, 248, 0.28),
+            rgba(15, 23, 42, 0.95));
+}
+
+/* first column label style */
+.mini-table td:first-child {
+    font-weight: 600;
+    letter-spacing: 0.06em;
+}
+
+/* numeric cells */
+.mini-table td:not(:first-child) {
+    text-align: right;
+    color: var(--text-muted);
+}
+
+/* SUMMARY CARDS */
+.card-summary {
+    min-height: 150px;
+}
+
+.summary-body {
+    margin-top: 8px;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.7rem;
+}
+
+.summary-value {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.summary-small {
+    font-size: 0.68rem;
+    margin-left: 4px;
+}
+
+.summary-trend {
+    gap: 6px;
+    font-size: 0.7rem;
+}
+
+.summary-icon {
+    font-size: 0.7rem;
+}
+
+.summary-trend-up {
+    color: var(--accent-green);
+}
+
+.summary-trend-down {
+    color: var(--danger);
+}
+
+.summary-up {
+    color: var(--accent-green);
+}
+
+.summary-down {
+    color: var(--danger);
+}
+
+/* SMALL SCREENS */
+@media (max-width: 768px) {
+    .dash-shell {
+        margin-top: 60px;
+    }
+
+    .card {
+        padding: 12px 12px 10px;
+        min-height: 190px;
+    }
+}
+
+/* mini charts inside strip + snapshot cards */
+.chart-mini {
+    min-height: 110px;
+}

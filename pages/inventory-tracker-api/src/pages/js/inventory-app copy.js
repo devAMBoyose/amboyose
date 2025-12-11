@@ -1,3 +1,5 @@
+// pages/inventory-tracker-api/src/js/inventory-app.js
+
 // ============================
 // CONFIG
 // ============================
@@ -16,12 +18,6 @@ let authToken = localStorage.getItem("inventory_jwt") || null;
 let cachedItems = [];
 let cachedConsignments = [];
 let activityLog = [];
-
-// Chart instances
-let expiryRestockChart = null;
-let consUsageChart = null;
-let itemsStockChart = null;
-let hospitalBalanceChart = null;
 
 // Build default headers with Authorization when we have a token
 function authHeaders(extra = {}) {
@@ -94,7 +90,6 @@ const els = {
     itemsError: document.getElementById("items-error"),
     itemsTbody: document.getElementById("items-tbody"),
     btnRefreshItems: document.getElementById("btn-refresh-items"),
-    itemsChartCanvas: document.getElementById("items-stock-chart"),
 
     // Consignments
     consStatus: document.getElementById("cons-status"),
@@ -115,16 +110,11 @@ const els = {
     restockTbody: document.getElementById("restock-tbody"),
     restockEmpty: document.getElementById("restock-empty"),
     alertsStatus: document.getElementById("alerts-status"),
-    expiryChartCanvas: document.getElementById("expiry-restock-chart"),
 
     // Hospital balance
     hospitalTbody: document.getElementById("hospital-balance-tbody"),
     hospitalEmpty: document.getElementById("hospital-balance-empty"),
     billingStatus: document.getElementById("billing-status"),
-    hospitalChartCanvas: document.getElementById("hospital-balance-chart"),
-
-    // Consignment usage chart
-    consUsageChartCanvas: document.getElementById("cons-usage-chart"),
 
     // Activity + print
     activityList: document.getElementById("activity-list"),
@@ -233,210 +223,6 @@ function renderActivityLog() {
 }
 
 // ============================
-// CHART HELPERS
-// ============================
-
-// ============================
-// CHART HELPERS
-// ============================
-function buildPieChart(existing, ctx, labels, data, title) {
-    if (!ctx || !window.Chart) return existing;
-
-    if (!existing) {
-        return new Chart(ctx, {
-            type: "pie",
-            data: {
-                labels,
-                datasets: [
-                    {
-                        data,
-                        borderWidth: 0,
-                        hoverOffset: 6, // slice pops out on hover
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: {
-                    duration: 700,
-                    easing: "easeOutQuart",
-                },
-                plugins: {
-                    legend: {
-                        position: "bottom",
-                        labels: {
-                            boxWidth: 10,
-                            font: { size: 10 },
-                        },
-                    },
-                    title: {
-                        display: true,
-                        text: title,
-                        font: { size: 11 },
-                    },
-                    tooltip: {
-                        backgroundColor: "rgba(15, 23, 42, 0.95)",
-                        borderColor: "rgba(148, 163, 184, 0.9)",
-                        borderWidth: 1,
-                        titleColor: "#e5e7eb",
-                        bodyColor: "#e5e7eb",
-                        padding: 8,
-                        displayColors: false,
-                        callbacks: {
-                            label: function (ctx) {
-                                const value = ctx.parsed;
-                                const total = ctx.chart.data.datasets[0].data
-                                    .reduce((a, b) => a + b, 0);
-                                const pct = total ? ((value / total) * 100).toFixed(1) : 0;
-                                return `${ctx.label}: ${value} (${pct}%)`;
-                            },
-                        },
-                    },
-                },
-            },
-        });
-    }
-
-    existing.data.labels = labels;
-    existing.data.datasets[0].data = data;
-    existing.options.plugins.title.text = title;
-    existing.update();
-    return existing;
-}
-
-function updateExpiryRestockChart(totalItems, nearExpiryCount, lowStockCount) {
-    if (!els.expiryChartCanvas || !window.Chart) return;
-
-    const okCount = Math.max(totalItems - (nearExpiryCount + lowStockCount), 0);
-
-    const labels = ["Near expiry", "Low stock", "OK"];
-    const data = [nearExpiryCount, lowStockCount, okCount];
-
-    const ctx = els.expiryChartCanvas.getContext("2d");
-    expiryRestockChart = buildPieChart(
-        expiryRestockChart,
-        ctx,
-        labels,
-        data,
-        "Expiry / Restock overview"
-    );
-}
-
-function updateConsUsageChart() {
-    if (!els.consUsageChartCanvas || !window.Chart) return;
-
-    let totalSent = 0;
-    let totalUsed = 0;
-
-    cachedConsignments.forEach((c) => {
-        const sent = c.qtySent ?? 0;
-        const used = c.qtyUsed ?? 0;
-        totalSent += sent;
-        totalUsed += used;
-    });
-
-    const totalRemaining = Math.max(totalSent - totalUsed, 0);
-
-    // If no data, clear chart
-    if (totalSent === 0 && totalUsed === 0 && totalRemaining === 0) {
-        if (consUsageChart) {
-            consUsageChart.destroy();
-            consUsageChart = null;
-        }
-        return;
-    }
-
-    const labels = ["Used", "Remaining"];
-    const data = [totalUsed, totalRemaining];
-
-    const ctx = els.consUsageChartCanvas.getContext("2d");
-    consUsageChart = buildPieChart(
-        consUsageChart,
-        ctx,
-        labels,
-        data,
-        "Consignment usage (all hospitals)"
-    );
-}
-
-function updateItemsChart() {
-    if (!els.itemsChartCanvas || !window.Chart) return;
-
-    if (!cachedItems.length) {
-        if (itemsStockChart) {
-            itemsStockChart.destroy();
-            itemsStockChart = null;
-        }
-        return;
-    }
-
-    // Group quantityOnHand by category
-    const byCategory = new Map();
-    cachedItems.forEach((item) => {
-        const cat = item.category || "Uncategorized";
-        const qty = item.quantityOnHand ?? 0;
-        if (!byCategory.has(cat)) byCategory.set(cat, 0);
-        byCategory.set(cat, byCategory.get(cat) + qty);
-    });
-
-    const labels = Array.from(byCategory.keys());
-    const data = Array.from(byCategory.values());
-
-    const total = data.reduce((a, b) => a + b, 0);
-    if (total === 0) {
-        if (itemsStockChart) {
-            itemsStockChart.destroy();
-            itemsStockChart = null;
-        }
-        return;
-    }
-
-    const ctx = els.itemsChartCanvas.getContext("2d");
-    itemsStockChart = buildPieChart(
-        itemsStockChart,
-        ctx,
-        labels,
-        data,
-        "Stock by category"
-    );
-}
-
-function updateHospitalChart(rows) {
-    if (!els.hospitalChartCanvas || !window.Chart) return;
-
-    if (!rows || !rows.length) {
-        if (hospitalBalanceChart) {
-            hospitalBalanceChart.destroy();
-            hospitalBalanceChart = null;
-        }
-        return;
-    }
-
-    const labels = rows.map((r) => r.hospital);
-    const data = rows.map((r) => r.estBill);
-
-    const total = data.reduce((a, b) => a + b, 0);
-    if (total === 0) {
-        if (hospitalBalanceChart) {
-            hospitalBalanceChart.destroy();
-            hospitalBalanceChart = null;
-        }
-        return;
-    }
-
-    const ctx = els.hospitalChartCanvas.getContext("2d");
-    hospitalBalanceChart = buildPieChart(
-        hospitalBalanceChart,
-        ctx,
-        labels,
-        data,
-        "Est. bill by hospital"
-    );
-}
-
-
-// ============================
 // ITEMS
 // ============================
 
@@ -471,7 +257,6 @@ async function loadItems() {
             els.itemsError.textContent =
                 "No items yet. Create items via the API or Postman.";
             recomputeAlertsFromItems();
-            updateItemsChart();
             return;
         }
 
@@ -496,8 +281,6 @@ async function loadItems() {
 
         // drive expiry + restock based on items
         recomputeAlertsFromItems();
-        // drive items stock chart
-        updateItemsChart();
     } catch (err) {
         console.error("loadItems error:", err);
         setStatus(els.itemsStatus, "Error", "error");
@@ -550,7 +333,6 @@ async function loadConsignments() {
             els.consError.textContent =
                 "No consignments yet. Create one with the form above.";
             recomputeHospitalBalance();
-            updateConsUsageChart();
             return;
         }
 
@@ -589,8 +371,6 @@ async function loadConsignments() {
 
         // drive hospital billing snapshot
         recomputeHospitalBalance();
-        // drive consignment usage pie
-        updateConsUsageChart();
     } catch (err) {
         console.error("loadConsignments error:", err);
         setStatus(els.consStatus, "Error", "error");
@@ -810,13 +590,6 @@ function recomputeAlertsFromItems() {
             hasAlerts ? "ok" : "idle"
         );
     }
-
-    // Update expiry / restock pie chart
-    updateExpiryRestockChart(
-        cachedItems.length,
-        withExpiry.length,
-        lowStock.length
-    );
 }
 
 // ============================
@@ -832,7 +605,6 @@ function recomputeHospitalBalance() {
     if (!cachedConsignments.length) {
         els.hospitalEmpty.textContent =
             "No consignments yet. Create some to see billing snapshot.";
-        updateHospitalChart([]);
         return;
     }
 
@@ -883,9 +655,6 @@ function recomputeHospitalBalance() {
     if (els.billingStatus) {
         setStatus(els.billingStatus, "Snapshot", "ok");
     }
-
-    // Update hospital balance pie
-    updateHospitalChart(rows);
 }
 
 // ============================
@@ -901,6 +670,10 @@ function handlePrintReport() {
 // INIT
 // ============================
 
+// ============================
+// INIT
+// ============================
+
 document.addEventListener("DOMContentLoaded", async () => {
     // Hook up buttons
     els.btnRefreshItems?.addEventListener("click", loadItems);
@@ -910,10 +683,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     els.btnPrintReport?.addEventListener("click", handlePrintReport);
 
     // If the cold-start modal helper exists, show it right away
-    if (
-        window.InventoryColdStartModal &&
-        typeof window.InventoryColdStartModal.show === "function"
-    ) {
+    if (window.InventoryColdStartModal && typeof window.InventoryColdStartModal.show === "function") {
         window.InventoryColdStartModal.show();
     }
 
@@ -925,21 +695,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // ✅ Both status pills are now "OK" (or error handled inside).
         // If all went fine, play "server warmed up" animation + auto-close.
-        if (
-            window.InventoryColdStartModal &&
-            typeof window.InventoryColdStartModal.ready === "function"
-        ) {
+        if (window.InventoryColdStartModal && typeof window.InventoryColdStartModal.ready === "function") {
             window.InventoryColdStartModal.ready();
         }
     } catch (err) {
         console.error("Error during initial inventory load:", err);
 
         // On error we just hide the modal (no green success animation)
-        if (
-            window.InventoryColdStartModal &&
-            typeof window.InventoryColdStartModal.hide === "function"
-        ) {
+        if (window.InventoryColdStartModal && typeof window.InventoryColdStartModal.hide === "function") {
             window.InventoryColdStartModal.hide();
         }
     }
 });
+
+
+
+// document.addEventListener("DOMContentLoaded", async () => {
+// Hook up buttons
+// els.btnRefreshItems?.addEventListener("click", loadItems);
+// els.btnRefreshCons?.addEventListener("click", loadConsignments);
+// els.btnCreateCons?.addEventListener("click", createConsignment);
+// els.consTbody?.addEventListener("click", handleConsTableClick);
+// els.btnPrintReport?.addEventListener("click", handlePrintReport);
+
+// First load: login + fetch data
+//     await ensureLoggedIn();
+//     await Promise.all([loadItems(), loadConsignments()]);
+//     renderActivityLog();
+// });

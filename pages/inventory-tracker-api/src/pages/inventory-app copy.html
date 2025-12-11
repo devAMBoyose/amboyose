@@ -21,96 +21,6 @@
             font-family: "JetBrains Mono", monospace;
         }
 
-        /* ── TOP DASHBOARD STRIP (4 CHARTS IN ONE ROW) ───────────────────── */
-
-        /* ── TOP DASHBOARD STRIP (4 CHARTS IN ONE ROW) ───────────────────── */
-
-        .grid.charts-row {
-            margin-top: 18px;
-            margin-bottom: 26px;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
-
-        /* mini metric cards */
-        .chart-card {
-            position: relative;
-            padding: 20px 20px 16px;
-            cursor: default;
-            overflow: hidden;
-
-            /* smooth hover */
-            transition:
-                transform 0.18s ease-out,
-                box-shadow 0.2s ease-out,
-                border-color 0.18s ease-out,
-                background 0.18s ease-out;
-        }
-
-        /* subtle glow sheen */
-        .chart-card::before {
-            content: "";
-            position: absolute;
-            inset: -40%;
-            background: radial-gradient(circle at top, rgba(96, 165, 250, 0.18), transparent 55%);
-            opacity: 0;
-            transition: opacity 0.25s ease-out;
-            pointer-events: none;
-        }
-
-        /* hover state */
-        .chart-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
-            border-color: rgba(56, 189, 248, 0.75);
-            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
-        }
-
-        .chart-card:hover::before {
-            opacity: 1;
-        }
-
-        /* chart title text */
-        .chart-card-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            color: #9ca3af;
-            margin-bottom: 6px;
-        }
-
-        /* shorter height for top charts */
-        .chart-card .chart-wrapper {
-            height: 160px;
-        }
-
-        /* scale chart slightly on hover */
-        .chart-card .chart-wrapper canvas {
-            transition: transform 0.2s ease-out, filter 0.2s ease-out;
-        }
-
-        .chart-card:hover .chart-wrapper canvas {
-            transform: scale(1.03);
-            filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.9));
-        }
-
-        /* responsive: 2x2 on medium screens */
-        @media (max-width: 1100px) {
-            .grid.charts-row {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        /* responsive: stacked on small screens */
-        @media (max-width: 650px) {
-            .grid.charts-row {
-                grid-template-columns: minmax(0, 1fr);
-            }
-        }
-
-
-
-        /* ── MAIN PAGE STYLES ─────────────────────────────────────────────── */
-
         .page-shell {
             max-width: 1100px;
             margin: 40px auto 80px;
@@ -493,20 +403,6 @@
             color: #9ca3af;
         }
 
-        /* Pie chart layout */
-        .chart-wrapper {
-            margin-top: 12px;
-            height: 190px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chart-wrapper canvas {
-            max-width: 220px;
-            max-height: 190px;
-        }
-
         @media print {
             body {
                 background: white;
@@ -545,6 +441,8 @@
                 border-radius: 0;
             }
         }
+
+
 
         /* IMPORTANT: show content by default */
         #print-area {
@@ -824,7 +722,8 @@
                 <h1 class="demo-title">Inventory Tracker API / MongoDB Demo</h1>
                 <p class="demo-subtitle">
                     Simple inventory module wired my Node.js + MongoDB backend. Uses secured JWT endpoints for items
-                    and consignment tracking.
+                    and
+                    consignment tracking.
                 </p>
 
                 <div class="badge-row">
@@ -839,44 +738,9 @@
                     </span>
                 </div>
 
-                <!-- ── TOP DASHBOARD STRIP: 4 PIE CHARTS ───────────────────────── -->
-                <section class="grid charts-row">
-                    <!-- Items stock by category -->
-                    <div class="inv-card chart-card">
-                        <div class="chart-card-title">Stock by category</div>
-                        <div class="chart-wrapper">
-                            <canvas id="items-stock-chart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Consignments usage -->
-                    <div class="inv-card chart-card">
-                        <div class="chart-card-title">Consignment usage</div>
-                        <div class="chart-wrapper">
-                            <canvas id="cons-usage-chart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Expiry & restock overview -->
-                    <div class="inv-card chart-card">
-                        <div class="chart-card-title">Expiry / restock overview</div>
-                        <div class="chart-wrapper">
-                            <canvas id="expiry-restock-chart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Hospital billing mix -->
-                    <div class="inv-card chart-card">
-                        <div class="chart-card-title">Est. bill by hospital</div>
-                        <div class="chart-wrapper">
-                            <canvas id="hospital-balance-chart"></canvas>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- ── FIRST ROW: ITEMS + CONSIGNMENTS TABLES ───────────────────── -->
+                <!-- FIRST ROW: ITEMS + CONSIGNMENTS -->
                 <div class="grid">
-                    <!-- ITEMS CARD (no chart inside) -->
+                    <!-- ITEMS CARD -->
                     <section class="inv-card">
                         <div class="inv-card-header">
                             <div>
@@ -917,7 +781,7 @@
                         <div id="items-error" class="status-error-text"></div>
                     </section>
 
-                    <!-- CONSIGNMENTS CARD (no chart inside) -->
+                    <!-- CONSIGNMENTS CARD -->
                     <section class="inv-card">
                         <div class="inv-card-header">
                             <div>
@@ -976,7 +840,7 @@
                     </section>
                 </div>
 
-                <!-- ── SECOND ROW: EXPIRY / RESTOCK + HOSPITAL BALANCE (NO CHARTS) ─ -->
+                <!-- SECOND ROW: EXPIRY / RESTOCK + HOSPITAL BALANCE -->
                 <div class="grid" style="margin-top: 22px;">
                     <!-- EXPIRY + RESTOCK -->
                     <section class="inv-card">
@@ -1029,7 +893,7 @@
                         <div id="restock-empty" class="status-error-text"></div>
                     </section>
 
-                    <!-- HOSPITAL BALANCE -->
+                    <!-- HOSPITAL BALANCE (BILLING VIEW) -->
                     <section class="inv-card">
                         <div class="inv-card-header">
                             <div>
@@ -1113,13 +977,12 @@
         </footer>
 
         <!-- Your existing JS -->
+
         <script src="/js/script.js"></script>
         <script defer src="/js/nav.js"></script>
 
-        <!-- Chart.js for dashboards -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
         <!-- Inventory app JS -->
+
         <script defer src="/pages/inventory-tracker-api/src/pages/js/inventory-app.js"></script>
 
         <!-- Cold-start modal helpers -->
@@ -1131,6 +994,7 @@
                 const statusText = modal?.querySelector(".coldstart-status-text");
                 const statusIcon = modal?.querySelector(".coldstart-status-icon");
 
+                // Safety: if HTML is missing, don't break anything
                 if (!modal) {
                     return {
                         show() { },
@@ -1139,14 +1003,16 @@
                     };
                 }
 
+                // --- core helpers ---
                 const show = () => {
-                    modal.classList.add("show");
+                    modal.classList.add("show"); // fade-in handled by CSS
                 };
 
                 const hide = () => {
                     modal.classList.remove("show", "ready");
                 };
 
+                // Called when server is warmed up / first successful API load
                 const ready = () => {
                     modal.classList.add("ready");
 
@@ -1159,17 +1025,21 @@
                         statusIcon.classList.add("fa-circle-check");
                     }
 
+                    // Let the green success animation play, then fade out
                     setTimeout(() => {
                         hide();
                     }, 900);
                 };
 
+                // Allow user to dismiss manually
                 if (dismissBtn) {
                     dismissBtn.addEventListener("click", hide);
                 }
 
+                // ✅ IMPORTANT: auto-show as soon as this script runs
                 show();
 
+                // Fallback: auto-hide after ~45s even if something goes wrong
                 setTimeout(() => {
                     hide();
                 }, 45000);

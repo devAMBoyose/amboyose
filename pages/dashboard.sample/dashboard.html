@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BamBoard – Sales & Activity</title>
+
+    <!-- JetBrains + Icons (same vibes as your portfolio) -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Your global styles (optional if already linked in layout) -->
+    <!-- <link rel="stylesheet" href="/css/nav.css" />
+  <link rel="stylesheet" href="/css/footer.css" /> -->
+
+    <style>
+        :root {
+            --bg-main: #050816;
+            --bg-card: #0b1020;
+            --border-card: #1c2340;
+            --accent-green: #4ade80;
+            --accent-pink: #f472b6;
+            --accent-yellow: #fde047;
+            --accent-blue: #38bdf8;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --radius-lg: 14px;
+            --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "JetBrains Mono", monospace;
+            background: radial-gradient(circle at top, #111827 0, #020617 45%, #000 100%);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-shell {
+            max-width: 1200px;
+            margin: 80px auto 40px;
+            padding: 0 16px 40px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .dashboard-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .dashboard-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .badge-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.5);
+        }
+
+        .badge-live span.dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--accent-green);
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
+        .dashboard-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.75rem;
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 5px 10px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--text-muted);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pill.primary {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        /* GRID LAYOUT */
+        .grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        @media (min-width: 900px) {
+            .grid {
+                grid-template-columns: 2fr 1.2fr;
+                grid-template-rows: auto auto;
+                grid-template-areas:
+                    "value activity"
+                    "sales mini";
+            }
+
+            .card.value {
+                grid-area: value;
+            }
+
+            .card.activity {
+                grid-area: activity;
+            }
+
+            .card.sales {
+                grid-area: sales;
+            }
+
+            .card.mini {
+                grid-area: mini;
+            }
+        }
+
+        /* CARD BASE */
+        .card {
+            background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 60%),
+                radial-gradient(circle at bottom right, rgba(244, 114, 182, 0.16), transparent 55%),
+                var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-card);
+            box-shadow: var(--shadow-soft);
+            padding: 16px 18px 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--text-muted);
+        }
+
+        .card-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pill-mini {
+            border-radius: 999px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+        }
+
+        .pill-mini.up {
+            color: var(--accent-green);
+            border-color: rgba(74, 222, 128, 0.7);
+        }
+
+        .pill-mini.down {
+            color: #f97373;
+            border-color: rgba(248, 113, 113, 0.7);
+        }
+
+        .metric-main {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin: 4px 0 2px;
+        }
+
+        .metric-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .chart-wrapper {
+            margin-top: 8px;
+            height: 170px;
+            position: relative;
+        }
+
+        .chart-wrapper canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* MINI LIST IN BOTTOM CARD */
+        .mini-list {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 8px;
+            font-size: 0.7rem;
+        }
+
+        .mini-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            color: var(--text-muted);
+        }
+
+        .mini-item span.label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+        }
+
+        .dot-blue {
+            background: var(--accent-blue);
+        }
+
+        .dot-pink {
+            background: var(--accent-pink);
+        }
+
+        .dot-yellow {
+            background: var(--accent-yellow);
+        }
+
+        .dot-green {
+            background: var(--accent-green);
+        }
+
+        .mini-item span.value {
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- If you have a global navbar, include it here -->
+
+    <main class="dashboard-shell">
+        <header class="dashboard-header">
+            <div>
+                <div class="dashboard-title">BamBoard · Sales & Activity</div>
+                <div class="dashboard-subtitle">
+                    API-aware analytics dashboard demo · built with Vanilla JS + Chart.js
+                </div>
+                <div class="badge-live">
+                    <span class="dot"></span>
+                    LIVE DATA READY
+                </div>
+            </div>
+            <div class="dashboard-controls">
+                <div class="pill"><i class="fa-regular fa-calendar"></i> Last 30 days</div>
+                <div class="pill primary"><i class="fa-solid fa-bolt"></i> Refresh data</div>
+            </div>
+        </header>
+
+        <section class="grid">
+            <!-- DYNAMICS OF VALUE -->
+            <article class="card value">
+                <div class="card-header">
+                    <div class="card-title">Dynamics of Value</div>
+                    <div class="card-meta">
+                        <span class="pill-mini up" id="valueChange">+15.2%</span>
+                        <span>vs. previous period</span>
+                    </div>
+                </div>
+
+                <div class="metric-main" id="valueTotal">$125.5K</div>
+                <div class="metric-sub">Net revenue · filtered by active customers only</div>
+
+                <div class="chart-wrapper">
+                    <canvas id="valueBarChart"></canvas>
+                </div>
+            </article>
+
+            <!-- ACTIVITY RING -->
+            <article class="card activity">
+                <div class="card-header">
+                    <div class="card-title">Activity Mix</div>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-clock"></i> Real-time ready</span>
+                    </div>
+                </div>
+
+                <div class="metric-main" id="activeUsers">3,214</div>
+                <div class="metric-sub">Active sessions · last 10 minutes</div>
+
+                <div class="chart-wrapper">
+                    <canvas id="activityDonut"></canvas>
+                </div>
+            </article>
+
+            <!-- SALES TIMELINE -->
+            <article class="card sales">
+                <div class="card-header">
+                    <div class="card-title">Sales Timeline</div>
+                    <div class="card-meta">
+                        <span class="pill-mini up" id="salesChange">+9.0%</span>
+                        <span>conversion rate</span>
+                    </div>
+                </div>
+
+                <div class="metric-main" id="ordersTotal">2,254</div>
+                <div class="metric-sub">Orders · current month</div>
+
+                <div class="chart-wrapper">
+                    <canvas id="salesLineChart"></canvas>
+                </div>
+            </article>
+
+            <!-- MINI STATS -->
+            <article class="card mini">
+                <div class="card-header">
+                    <div class="card-title">Fast Stats</div>
+                </div>
+                <div class="mini-list">
+                    <div>
+                        <div class="mini-item">
+                            <span class="label">
+                                <span class="dot-indicator dot-blue"></span> New Customers
+                            </span>
+                            <span class="value" id="miniNewCustomers">+418</span>
+                        </div>
+                        <div class="mini-item">
+                            <span class="label">
+                                <span class="dot-indicator dot-pink"></span> Churn Rate
+                            </span>
+                            <span class="value" id="miniChurn">3.1%</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="mini-item">
+                            <span class="label">
+                                <span class="dot-indicator dot-yellow"></span> Avg. Order
+                            </span>
+                            <span class="value" id="miniAOV">$54.8</span>
+                        </div>
+                        <div class="mini-item">
+                            <span class="label">
+                                <span class="dot-indicator dot-green"></span> NPS Score
+                            </span>
+                            <span class="value" id="miniNPS">71</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <!-- If you have a global footer, include it here -->
+
+    <script>
+        // ===========================
+        // CONFIG – replace with real API later
+        // ===========================
+        const API_URL = "https://example.com/api/bamboard"; // placeholder
+
+        let valueBarChart, activityDonut, salesLineChart;
+
+        function buildChart(existing, ctx, config) {
+            if (!ctx || !window.Chart) return existing;
+            if (!existing) return new Chart(ctx, config);
+            existing.data = config.data;
+            existing.options = config.options;
+            existing.update();
+            return existing;
+        }
+
+        async function fetchDashboardData() {
+            try {
+                const res = await fetch(API_URL);
+                if (!res.ok) throw new Error("API error");
+                return await res.json();
+            } catch (err) {
+                // Fallback demo data when API not available
+                console.warn("Using demo data:", err.message);
+                return {
+                    value: {
+                        total: 125500,
+                        changePct: 15.2,
+                        series: [17.8, 19.3, 22.1, 21.4, 24.9, 26.5],
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+                    },
+                    activity: {
+                        activeUsers: 3214,
+                        segments: [
+                            { label: "Web", value: 42 },
+                            { label: "Mobile", value: 36 },
+                            { label: "Tablet", value: 12 },
+                            { label: "Other", value: 10 }
+                        ]
+                    },
+                    sales: {
+                        totalOrders: 2254,
+                        changePct: 9.0,
+                        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                        values: [210, 248, 260, 231, 310, 298, 240]
+                    },
+                    mini: {
+                        newCustomers: 418,
+                        churnPct: 3.1,
+                        aov: 54.8,
+                        nps: 71
+                    }
+                };
+            }
+        }
+
+        function renderDashboard(data) {
+            // === Main metrics text ===
+            document.getElementById("valueTotal").textContent =
+                "$" + (data.value.total / 1000).toFixed(1) + "K";
+            document.getElementById("valueChange").textContent =
+                (data.value.changePct >= 0 ? "+" : "") + data.value.changePct.toFixed(1) + "%";
+            document.getElementById("valueChange").classList.toggle("down", data.value.changePct < 0);
+            document.getElementById("valueChange").classList.toggle("up", data.value.changePct >= 0);
+
+            document.getElementById("activeUsers").textContent = data.activity.activeUsers.toLocaleString();
+
+            document.getElementById("ordersTotal").textContent = data.sales.totalOrders.toLocaleString();
+            document.getElementById("salesChange").textContent =
+                (data.sales.changePct >= 0 ? "+" : "") + data.sales.changePct.toFixed(1) + "%";
+            document.getElementById("salesChange").classList.toggle("down", data.sales.changePct < 0);
+            document.getElementById("salesChange").classList.toggle("up", data.sales.changePct >= 0);
+
+            document.getElementById("miniNewCustomers").textContent = "+" + data.mini.newCustomers;
+            document.getElementById("miniChurn").textContent = data.mini.churnPct.toFixed(1) + "%";
+            document.getElementById("miniAOV").textContent = "$" + data.mini.aov.toFixed(1);
+            document.getElementById("miniNPS").textContent = data.mini.nps;
+
+            // === Charts ===
+            const valueCtx = document.getElementById("valueBarChart");
+            valueBarChart = buildChart(valueBarChart, valueCtx, {
+                type: "bar",
+                data: {
+                    labels: data.value.labels,
+                    datasets: [{
+                        data: data.value.series,
+                        backgroundColor: [
+                            "rgba(56,189,248,0.9)",
+                            "rgba(74,222,128,0.9)",
+                            "rgba(248,250,109,0.9)",
+                            "rgba(244,114,182,0.9)",
+                            "rgba(129,140,248,0.9)",
+                            "rgba(52,211,153,0.9)"
+                        ],
+                        borderWidth: 0,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            grid: { color: "rgba(148,163,184,0.25)" },
+                            ticks: { color: "#9ca3af", font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            const actCtx = document.getElementById("activityDonut");
+            activityDonut = buildChart(activityDonut, actCtx, {
+                type: "doughnut",
+                data: {
+                    labels: data.activity.segments.map(s => s.label),
+                    datasets: [{
+                        data: data.activity.segments.map(s => s.value),
+                        backgroundColor: [
+                            "rgba(56,189,248,0.9)",
+                            "rgba(244,114,182,0.9)",
+                            "rgba(250,204,21,0.9)",
+                            "rgba(74,222,128,0.9)"
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "68%",
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            labels: { color: "#9ca3af", font: { size: 9 }, boxWidth: 10 }
+                        }
+                    }
+                }
+            });
+
+            const salesCtx = document.getElementById("salesLineChart");
+            salesLineChart = buildChart(salesLineChart, salesCtx, {
+                type: "line",
+                data: {
+                    labels: data.sales.labels,
+                    datasets: [{
+                        label: "Orders",
+                        data: data.sales.values,
+                        borderColor: "rgba(244,114,182,1)",
+                        backgroundColor: "rgba(244,114,182,0.15)",
+                        borderWidth: 2,
+                        pointRadius: 2.8,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: "#9ca3af", font: { size: 10 } }
+                        },
+                        y: {
+                            grid: { color: "rgba(148,163,184,0.25)" },
+                            ticks: { color: "#9ca3af", font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function initDashboard() {
+            const data = await fetchDashboardData();
+            renderDashboard(data);
+        }
+
+        document.addEventListener("DOMContentLoaded", initDashboard);
+    </script>
+</body>
+
+</html>
