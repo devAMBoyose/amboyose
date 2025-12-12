@@ -41,20 +41,16 @@ function authHeaders(extra = {}) {
 // AUTH
 // ============================
 
-// Make sure we are logged in (if not, call /api/auth/login)
-async function ensureLoggedIn() {
-    if (authToken) {
-        return;
-    }
+// Make sure we are logged in (and auto-recover if token is invalid)
+async function ensureLoggedIn(force = false) {
+    if (authToken && !force) return;
 
     try {
         console.log("Logging in to inventory API…");
 
         const res = await fetch(`${API_BASE}/api/auth/login`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 email: DEMO_EMAIL,
                 password: DEMO_PASSWORD,
@@ -64,25 +60,32 @@ async function ensureLoggedIn() {
         if (!res.ok) {
             const text = await res.text();
             console.error("Login failed:", text);
-            alert("Inventory demo login failed. Check API logs.");
+            authToken = null;
+            localStorage.removeItem("inventory_jwt");
+            alert("Inventory demo login failed. Check API logs / demo user.");
             return;
         }
 
         const data = await res.json();
-        authToken = data.token;
+
+        authToken = data.token || null;
+        if (!authToken) {
+            localStorage.removeItem("inventory_jwt");
+            throw new Error("Login succeeded but token is missing.");
+        }
+
         localStorage.setItem("inventory_jwt", authToken);
 
-        console.log(
-            "✅ Logged in. Token:",
-            authToken ? authToken.slice(0, 20) + "…" : "(missing)"
-        );
-
+        console.log("✅ Logged in. Token:", authToken.slice(0, 20) + "…");
         logActivity("auth", "Demo auto-login successful.");
     } catch (err) {
         console.error("Login error:", err);
+        authToken = null;
+        localStorage.removeItem("inventory_jwt");
         alert("Inventory demo login error: " + err.message);
     }
 }
+
 
 // ============================
 // DOM ELEMENTS
