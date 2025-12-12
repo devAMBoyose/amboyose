@@ -1,4 +1,4 @@
-// pages/inventory-tracker-api/src/pages/js/inventory-app.js
+// pages/inventory-tracker-api/src/js/inventory-app.js
 
 // ============================
 // CONFIG
@@ -12,8 +12,6 @@ const DEMO_EMAIL = "bamby@example.com";
 const DEMO_PASSWORD = "password123";
 
 // JWT token (loaded/saved to localStorage so it survives refresh)
-// If JWT_SECRET changed on Render, the old token becomes INVALID -> 401.
-// This script will auto-clear + re-login.
 let authToken = localStorage.getItem("inventory_jwt") || null;
 
 // In-memory cache so we can drive expiry / billing / logs
@@ -21,25 +19,11 @@ let cachedItems = [];
 let cachedConsignments = [];
 let activityLog = [];
 
-// Chart instances
-let expiryRestockChart = null;
-let consUsageChart = null;
-let itemsStockChart = null;
-let hospitalBalanceChart = null;
-
-// ============================
-// HELPERS
-// ============================
-
-function clearAuthToken() {
-    authToken = null;
-    localStorage.removeItem("inventory_jwt");
-}
-
+// Build default headers with Authorization when we have a token
 function authHeaders(extra = {}) {
     const headers = {
         "Content-Type": "application/json",
-        ...extra, // ✅ FIXED (was ".extra," in your file)
+        ...extra,
     };
 
     if (authToken) {
@@ -49,40 +33,24 @@ function authHeaders(extra = {}) {
     return headers;
 }
 
-// Wrapper that auto-retries once if token is invalid (401)
-async function apiFetch(path, options = {}, retry = true) {
-    // Ensure we have a token before requesting protected routes
-    await ensureLoggedIn();
-
-    const res = await fetch(`${API_BASE}${path}`, {
-        ...options,
-        headers: authHeaders(options.headers || {}),
-    });
-
-    // If token expired/invalid -> clear + relogin + retry ONCE
-    if (res.status === 401 && retry) {
-        clearAuthToken();
-        await ensureLoggedIn();
-        return apiFetch(path, options, false);
-    }
-
-    return res;
-}
-
 // ============================
 // AUTH
 // ============================
 
 // Make sure we are logged in (if not, call /api/auth/login)
 async function ensureLoggedIn() {
-    if (authToken) return;
+    if (authToken) {
+        return;
+    }
 
     try {
         console.log("Logging in to inventory API…");
 
         const res = await fetch(`${API_BASE}/api/auth/login`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify({
                 email: DEMO_EMAIL,
                 password: DEMO_PASSWORD,
@@ -92,8 +60,7 @@ async function ensureLoggedIn() {
         if (!res.ok) {
             const text = await res.text();
             console.error("Login failed:", text);
-            clearAuthToken();
-            alert("Inventory demo login failed. Check Render logs + DEMO creds.");
+            alert("Inventory demo login failed. Check API logs.");
             return;
         }
 
@@ -101,12 +68,15 @@ async function ensureLoggedIn() {
         authToken = data.token;
         localStorage.setItem("inventory_jwt", authToken);
 
-        console.log("✅ Logged in. Token:", authToken ? authToken.slice(0, 20) + "…" : "(missing)");
+        console.log(
+            "✅ Logged in. Token:",
+            authToken ? authToken.slice(0, 20) + "…" : "(missing)"
+        );
+
         logActivity("auth", "Demo auto-login successful.");
     } catch (err) {
         console.error("Login error:", err);
-        clearAuthToken();
-        alert("Inventory demo login error: " + (err.message || "Unknown error"));
+        alert("Inventory demo login error: " + err.message);
     }
 }
 
@@ -120,7 +90,6 @@ const els = {
     itemsError: document.getElementById("items-error"),
     itemsTbody: document.getElementById("items-tbody"),
     btnRefreshItems: document.getElementById("btn-refresh-items"),
-    itemsChartCanvas: document.getElementById("items-stock-chart"),
 
     // Consignments
     consStatus: document.getElementById("cons-status"),
@@ -141,53 +110,98 @@ const els = {
     restockTbody: document.getElementById("restock-tbody"),
     restockEmpty: document.getElementById("restock-empty"),
     alertsStatus: document.getElementById("alerts-status"),
-    expiryChartCanvas: document.getElementById("expiry-restock-chart"),
-
-    // Consignment usage chart
-    consUsageCanvas: document.getElementById("consignment-usage-chart"),
 
     // Hospital balance
     hospitalTbody: document.getElementById("hospital-balance-tbody"),
     hospitalEmpty: document.getElementById("hospital-balance-empty"),
     billingStatus: document.getElementById("billing-status"),
-    hospitalChartCanvas: document.getElementById("hospital-balance-chart"),
 
-    // Activity log
+    // Activity + print
     activityList: document.getElementById("activity-list"),
     btnPrintReport: document.getElementById("btn-print-report"),
 };
 
 // ============================
-// UI helpers
+// SMALL HELPERS
 // ============================
 
-function setStatus(el, text, cls) {
+function setStatus(el, text, type = "idle") {
     if (!el) return;
     el.textContent = text;
+    el.classList.remove("inv-pill-ok", "inv-pill-loading", "inv-pill-error");
 
-    el.classList.remove("ok", "error", "loading", "idle");
-    if (cls) el.classList.add(cls);
+    if (type === "ok") el.classList.add("inv-pill-ok");
+    if (type === "loading") el.classList.add("inv-pill-loading");
+    if (type === "error") el.classList.add("inv-pill-error");
 }
 
+// Derive sensible status if backend didn’t set one
+function deriveStatus(c) {
+    const sent = c.qtySent ?? 0;
+    const used = c.qtyUsed ?? 0;
+
+    if (sent <= 0) return "open";
+    if (used <= 0) return "open";
+    if (used < sent) return "partially_closed";
+    return "closed";
+}
+
+function statusPill(status) {
+    const s = status || "open";
+    let cls = "inv-status-open";
+    let label = "Open";
+
+    if (s === "closed") {
+        cls = "inv-status-closed";
+        label = "Closed";
+    } else if (s === "partially_closed") {
+        cls = "inv-status-partial";
+        label = "Partially used";
+    }
+
+    return `<span class="inv-status-pill ${cls}">${label}</span>`;
+}
+
+// Simple date helper for expiry (expects ISO string in item.expiryDate)
+function daysUntil(dateStr) {
+    if (!dateStr) return null;
+    const target = new Date(dateStr);
+    if (Number.isNaN(target.getTime())) return null;
+
+    const now = new Date();
+    const diffMs = target.getTime() - now.getTime();
+    return Math.round(diffMs / (1000 * 60 * 60 * 24));
+}
+
+function formatDateShort(dateStr) {
+    if (!dateStr) return "-";
+    const d = new Date(dateStr);
+    if (Number.isNaN(d.getTime())) return "-";
+    return d.toISOString().slice(0, 10);
+}
+
+// Activity log
 function logActivity(type, message, meta = {}) {
-    activityLog.unshift({
+    const entry = {
+        id: Date.now() + "-" + Math.random().toString(16).slice(2),
         ts: new Date(),
         type,
         message,
         meta,
-    });
+    };
+    activityLog.unshift(entry); // newest on top
+    if (activityLog.length > 50) activityLog.pop();
 
-    // keep last 30
-    activityLog = activityLog.slice(0, 30);
+    renderActivityLog();
 }
 
 function renderActivityLog() {
     if (!els.activityList) return;
     els.activityList.innerHTML = "";
 
-    if (!activityLog.length) {
+    if (activityLog.length === 0) {
         const li = document.createElement("li");
-        li.innerHTML = `<div>No activity yet.</div><div class="activity-meta">—</div>`;
+        li.textContent = "No activity yet. Actions will appear here.";
         els.activityList.appendChild(li);
         return;
     }
@@ -209,175 +223,13 @@ function renderActivityLog() {
 }
 
 // ============================
-// Date helpers
-// ============================
-
-function formatDateShort(dateStr) {
-    if (!dateStr) return "-";
-    const d = new Date(dateStr);
-    if (Number.isNaN(d.getTime())) return "-";
-    return d.toLocaleDateString("en-PH", { year: "numeric", month: "short", day: "2-digit" });
-}
-
-function daysUntil(dateStr) {
-    if (!dateStr) return null;
-    const d = new Date(dateStr);
-    if (Number.isNaN(d.getTime())) return null;
-
-    const now = new Date();
-    const diff = d.getTime() - now.getTime();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
-}
-
-// ============================
-// Chart helpers
-// ============================
-
-function buildPieChart(existing, ctx, labels, data, title) {
-    if (!ctx || !window.Chart) return existing;
-
-    if (!existing) {
-        return new Chart(ctx, {
-            type: "pie",
-            data: {
-                labels,
-                datasets: [{ data, borderWidth: 0 }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: "bottom",
-                        labels: { boxWidth: 10, font: { size: 10 } },
-                    },
-                    title: { display: true, text: title, font: { size: 11 } },
-                    tooltip: {
-                        displayColors: false,
-                        callbacks: {
-                            label: function (ctx2) {
-                                const value = ctx2.parsed;
-                                const total = ctx2.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                const pct = total ? ((value / total) * 100).toFixed(1) : 0;
-                                return `${ctx2.label}: ${value} (${pct}%)`;
-                            },
-                        },
-                    },
-                },
-            },
-        });
-    }
-
-    existing.data.labels = labels;
-    existing.data.datasets[0].data = data;
-    existing.options.plugins.title.text = title;
-    existing.update();
-    return existing;
-}
-
-function updateExpiryRestockChart(totalItems, nearExpiryCount, lowStockCount) {
-    if (!els.expiryChartCanvas || !window.Chart) return;
-
-    const okCount = Math.max(totalItems - (nearExpiryCount + lowStockCount), 0);
-    const labels = ["Near expiry", "Low stock", "OK"];
-    const data = [nearExpiryCount, lowStockCount, okCount];
-
-    const total = data.reduce((a, b) => a + b, 0);
-    if (total === 0) {
-        if (expiryRestockChart) {
-            expiryRestockChart.destroy();
-            expiryRestockChart = null;
-        }
-        return;
-    }
-
-    const ctx = els.expiryChartCanvas.getContext("2d");
-    expiryRestockChart = buildPieChart(expiryRestockChart, ctx, labels, data, "Expiry / Restock overview");
-}
-
-function updateConsUsageChart() {
-    if (!els.consUsageCanvas || !window.Chart) return;
-
-    const sent = cachedConsignments.reduce((sum, c) => sum + (c.qtySent ?? 0), 0);
-    const used = cachedConsignments.reduce((sum, c) => sum + (c.qtyUsed ?? 0), 0);
-    const remaining = Math.max(sent - used, 0);
-
-    const labels = ["Used", "Remaining"];
-    const data = [used, remaining];
-
-    const total = data.reduce((a, b) => a + b, 0);
-    if (total === 0) {
-        if (consUsageChart) {
-            consUsageChart.destroy();
-            consUsageChart = null;
-        }
-        return;
-    }
-
-    const ctx = els.consUsageCanvas.getContext("2d");
-    consUsageChart = buildPieChart(consUsageChart, ctx, labels, data, "Consignment usage");
-}
-
-function updateItemsChart() {
-    if (!els.itemsChartCanvas || !window.Chart) return;
-
-    // Sum qty per category
-    const byCategory = new Map();
-    cachedItems.forEach((item) => {
-        const cat = item.category || "Uncategorized";
-        const qty = item.quantityOnHand ?? 0;
-        byCategory.set(cat, (byCategory.get(cat) || 0) + qty);
-    });
-
-    const labels = Array.from(byCategory.keys());
-    const data = Array.from(byCategory.values());
-
-    const total = data.reduce((a, b) => a + b, 0);
-    if (total === 0) {
-        if (itemsStockChart) {
-            itemsStockChart.destroy();
-            itemsStockChart = null;
-        }
-        return;
-    }
-
-    const ctx = els.itemsChartCanvas.getContext("2d");
-    itemsStockChart = buildPieChart(itemsStockChart, ctx, labels, data, "Stock by category");
-}
-
-function updateHospitalChart(rows) {
-    if (!els.hospitalChartCanvas || !window.Chart) return;
-
-    if (!rows || !rows.length) {
-        if (hospitalBalanceChart) {
-            hospitalBalanceChart.destroy();
-            hospitalBalanceChart = null;
-        }
-        return;
-    }
-
-    const labels = rows.map((r) => r.hospital);
-    const data = rows.map((r) => r.estBill);
-
-    const total = data.reduce((a, b) => a + b, 0);
-    if (total === 0) {
-        if (hospitalBalanceChart) {
-            hospitalBalanceChart.destroy();
-            hospitalBalanceChart = null;
-        }
-        return;
-    }
-
-    const ctx = els.hospitalChartCanvas.getContext("2d");
-    hospitalBalanceChart = buildPieChart(hospitalBalanceChart, ctx, labels, data, "Est. bill by hospital");
-}
-
-// ============================
 // ITEMS
 // ============================
 
 async function loadItems() {
     if (!els.itemsError || !els.itemsTbody || !els.selectItem) return;
+
+    await ensureLoggedIn();
 
     setStatus(els.itemsStatus, "Loading…", "loading");
     els.itemsError.textContent = "";
@@ -385,7 +237,10 @@ async function loadItems() {
     els.selectItem.innerHTML = `<option value="">Pick item…</option>`;
 
     try {
-        const res = await apiFetch("/api/items", { method: "GET" });
+        const res = await fetch(`${API_BASE}/api/items`, {
+            method: "GET",
+            headers: authHeaders(),
+        });
 
         if (!res.ok) {
             const text = await res.text();
@@ -399,13 +254,14 @@ async function loadItems() {
         logActivity("api", `Loaded ${cachedItems.length} items.`);
 
         if (cachedItems.length === 0) {
-            els.itemsError.textContent = "No items yet. Create items via the API or Postman.";
+            els.itemsError.textContent =
+                "No items yet. Create items via the API or Postman.";
             recomputeAlertsFromItems();
-            updateItemsChart();
             return;
         }
 
         cachedItems.forEach((item) => {
+            // Table row
             const tr = document.createElement("tr");
             tr.innerHTML = `
         <td>${item.sku || "-"}</td>
@@ -416,18 +272,20 @@ async function loadItems() {
       `;
             els.itemsTbody.appendChild(tr);
 
+            // Select option for consignment form
             const opt = document.createElement("option");
             opt.value = item._id;
             opt.textContent = `${item.name || "Unnamed"} (${item.sku || "no SKU"})`;
             els.selectItem.appendChild(opt);
         });
 
+        // drive expiry + restock based on items
         recomputeAlertsFromItems();
-        updateItemsChart();
     } catch (err) {
         console.error("loadItems error:", err);
         setStatus(els.itemsStatus, "Error", "error");
-        els.itemsError.textContent = "Error loading items: " + (err.message || "Unknown error");
+        els.itemsError.textContent =
+            "Error loading items: " + (err.message || "Unknown error");
         logActivity("error", "Failed to load items.");
     }
 }
@@ -436,29 +294,20 @@ async function loadItems() {
 // CONSIGNMENTS
 // ============================
 
-function deriveStatus(c) {
-    const sent = c.qtySent ?? 0;
-    const used = c.qtyUsed ?? 0;
-    const remaining = Math.max(sent - used, 0);
-    if (remaining <= 0) return "closed";
-    return "open";
-}
-
-function statusPill(status) {
-    const s = (status || "").toLowerCase();
-    if (s === "closed") return `<span class="pill pill-closed">Closed</span>`;
-    return `<span class="pill pill-open">Open</span>`;
-}
-
 async function loadConsignments() {
     if (!els.consError || !els.consTbody) return;
+
+    await ensureLoggedIn();
 
     setStatus(els.consStatus, "Loading…", "loading");
     els.consError.textContent = "";
     els.consTbody.innerHTML = "";
 
     try {
-        const res = await apiFetch("/api/consignments", { method: "GET" });
+        const res = await fetch(`${API_BASE}/api/consignments`, {
+            method: "GET",
+            headers: authHeaders(),
+        });
 
         if (!res.ok) {
             const text = await res.text();
@@ -481,9 +330,9 @@ async function loadConsignments() {
         logActivity("api", `Loaded ${cachedConsignments.length} consignments.`);
 
         if (list.length === 0) {
-            els.consError.textContent = "No consignments yet. Create one with the form above.";
+            els.consError.textContent =
+                "No consignments yet. Create one with the form above.";
             recomputeHospitalBalance();
-            updateConsUsageChart();
             return;
         }
 
@@ -494,10 +343,14 @@ async function loadConsignments() {
             const effectiveStatus = c.status || deriveStatus(c);
 
             const tr = document.createElement("tr");
-            tr.dataset.id = c._id || "";
+            tr.dataset.id = c._id || ""; // needed for editable usage
 
-            if (effectiveStatus === "closed" || remaining === 0) tr.classList.add("cons-row-closed");
-            else if (remaining > 0 && remaining <= 5) tr.classList.add("cons-row-low");
+            // Style rows depending on remaining qty / status
+            if (effectiveStatus === "closed" || remaining === 0) {
+                tr.classList.add("cons-row-closed");
+            } else if (remaining > 0 && remaining <= 5) {
+                tr.classList.add("cons-row-low");
+            }
 
             tr.innerHTML = `
         <td>${c.item?.name || "-"}</td>
@@ -516,12 +369,13 @@ async function loadConsignments() {
             els.consTbody.appendChild(tr);
         });
 
+        // drive hospital billing snapshot
         recomputeHospitalBalance();
-        updateConsUsageChart();
     } catch (err) {
         console.error("loadConsignments error:", err);
         setStatus(els.consStatus, "Error", "error");
-        els.consError.textContent = "Error loading consignments: " + (err.message || "Unknown error");
+        els.consError.textContent =
+            "Error loading consignments: " + (err.message || "Unknown error");
         logActivity("error", "Failed to load consignments.");
     }
 }
@@ -529,25 +383,27 @@ async function loadConsignments() {
 // Create new consignment from the form
 async function createConsignment(evt) {
     if (evt) evt.preventDefault();
+    await ensureLoggedIn();
 
-    const itemId = els.selectItem?.value;
-    const hospital = els.inputHospital?.value.trim();
-    const doctor = els.inputDoctor?.value.trim();
-    const qty = Number(els.inputQty?.value || "0");
+    const itemId = els.selectItem.value;
+    const hospital = els.inputHospital.value.trim();
+    const doctor = els.inputDoctor.value.trim();
+    const qty = Number(els.inputQty.value || "0");
 
+    // friendlier validation
     if (!itemId) {
         alert("Please pick an item.");
-        els.selectItem?.focus();
+        els.selectItem.focus();
         return;
     }
     if (!hospital) {
         alert("Please enter the hospital name.");
-        els.inputHospital?.focus();
+        els.inputHospital.focus();
         return;
     }
     if (!Number.isFinite(qty) || qty <= 0) {
         alert("Quantity must be greater than 0.");
-        els.inputQty?.focus();
+        els.inputQty.focus();
         return;
     }
 
@@ -562,8 +418,9 @@ async function createConsignment(evt) {
         els.btnCreateCons.disabled = true;
         els.btnCreateCons.textContent = "Creating…";
 
-        const res = await apiFetch("/api/consignments", {
+        const res = await fetch(`${API_BASE}/api/consignments`, {
             method: "POST",
+            headers: authHeaders(),
             body: JSON.stringify(payload),
         });
 
@@ -574,15 +431,22 @@ async function createConsignment(evt) {
 
         await res.json();
 
+        // reset hospital & qty (keep selected item)
         els.inputHospital.value = "";
         els.inputDoctor.value = "";
         els.inputQty.value = "";
 
-        logActivity("consignment", `Created consignment for ${hospital} (qty ${qty}).`);
+        logActivity(
+            "consignment",
+            `Created consignment for ${hospital} (qty ${qty}).`
+        );
+
         await loadConsignments();
     } catch (err) {
         console.error("createConsignment error:", err);
-        alert("Failed to create consignment: " + (err.message || "Unknown error"));
+        alert(
+            "Failed to create consignment: " + (err.message || "Unknown error")
+        );
         logActivity("error", "Failed to create consignment.");
     } finally {
         els.btnCreateCons.disabled = false;
@@ -595,11 +459,17 @@ async function createConsignment(evt) {
 // ============================
 
 async function updateConsignmentUsage(consignmentId, qtyUsed) {
+    await ensureLoggedIn();
+
     try {
-        const res = await apiFetch(`/api/consignments/${consignmentId}/usage`, {
-            method: "PATCH",
-            body: JSON.stringify({ qtyUsed }),
-        });
+        const res = await fetch(
+            `${API_BASE}/api/consignments/${consignmentId}/usage`,
+            {
+                method: "PATCH",
+                headers: authHeaders(),
+                body: JSON.stringify({ qtyUsed }),
+            }
+        );
 
         if (!res.ok) {
             const text = await res.text();
@@ -607,11 +477,17 @@ async function updateConsignmentUsage(consignmentId, qtyUsed) {
         }
 
         await res.json();
-        logActivity("usage", `Updated consignment usage to ${qtyUsed}.`, { consignmentId });
+        logActivity("usage", `Updated consignment usage to ${qtyUsed}.`, {
+            consignmentId,
+        });
+
         await loadConsignments();
     } catch (err) {
         console.error("updateConsignmentUsage error:", err);
-        alert("Failed to update consignment usage: " + (err.message || "Unknown error"));
+        alert(
+            "Failed to update consignment usage: " +
+            (err.message || "Unknown error")
+        );
         logActivity("error", "Failed to update consignment usage.");
     }
 }
@@ -631,8 +507,11 @@ function handleConsTableClick(e) {
     const sent = Number(tr.children[2]?.textContent || "0");
     const usedCurrent = Number(tr.children[3]?.textContent || "0");
 
-    const input = prompt(`Enter total USED units (0–${sent}):`, String(usedCurrent));
-    if (input === null) return;
+    const input = prompt(
+        `Enter total USED units (0–${sent}):`,
+        String(usedCurrent)
+    );
+    if (input === null) return; // cancelled
 
     const newUsed = Number(input);
     if (!Number.isFinite(newUsed) || newUsed < 0 || newUsed > sent) {
@@ -655,17 +534,19 @@ function recomputeAlertsFromItems() {
     els.expiryEmpty.textContent = "";
     els.restockEmpty.textContent = "";
 
+    // Demo: treat item.expiryDate (if exists) and item.minStock (if exists).
     const withExpiry = cachedItems
         .map((item) => {
             const days = daysUntil(item.expiryDate);
             return { item, days };
         })
-        .filter((x) => x.days !== null && x.days <= 60);
+        .filter((x) => x.days !== null && x.days <= 60); // <= 60 days left
 
     withExpiry.sort((a, b) => (a.days ?? 0) - (b.days ?? 0));
 
     if (withExpiry.length === 0) {
-        els.expiryEmpty.textContent = "No expiry alerts. Add expiryDate to items to populate this view.";
+        els.expiryEmpty.textContent =
+            "No expiry alerts. Add expiryDate to items to populate this view.";
     } else {
         withExpiry.forEach(({ item, days }) => {
             const tr = document.createElement("tr");
@@ -680,12 +561,13 @@ function recomputeAlertsFromItems() {
 
     const lowStock = cachedItems.filter((item) => {
         const qty = item.quantityOnHand ?? 0;
-        const min = item.minStock ?? 5;
+        const min = item.minStock ?? 5; // demo threshold
         return qty > 0 && qty <= min;
     });
 
     if (lowStock.length === 0) {
-        els.restockEmpty.textContent = "No restock alerts. Use minStock in your API if you want per-item thresholds.";
+        els.restockEmpty.textContent =
+            "No restock alerts. Use minStock in your API if you want per-item thresholds.";
     } else {
         lowStock.forEach((item) => {
             const qty = item.quantityOnHand ?? 0;
@@ -702,10 +584,12 @@ function recomputeAlertsFromItems() {
 
     if (els.alertsStatus) {
         const hasAlerts = withExpiry.length > 0 || lowStock.length > 0;
-        setStatus(els.alertsStatus, hasAlerts ? "Alerts active" : "No alerts", hasAlerts ? "ok" : "idle");
+        setStatus(
+            els.alertsStatus,
+            hasAlerts ? "Alerts active" : "No alerts",
+            hasAlerts ? "ok" : "idle"
+        );
     }
-
-    updateExpiryRestockChart(cachedItems.length, withExpiry.length, lowStock.length);
 }
 
 // ============================
@@ -719,23 +603,30 @@ function recomputeHospitalBalance() {
     els.hospitalEmpty.textContent = "";
 
     if (!cachedConsignments.length) {
-        els.hospitalEmpty.textContent = "No consignments yet. Create some to see billing snapshot.";
-        updateHospitalChart([]);
+        els.hospitalEmpty.textContent =
+            "No consignments yet. Create some to see billing snapshot.";
         return;
     }
 
+    // Group by hospital
     const byHospital = new Map();
 
     cachedConsignments.forEach((c) => {
         const hospital = c.hospital || "Unknown hospital";
         const used = c.qtyUsed ?? 0;
 
-        // Demo pricing: use billingRate/unitPrice if present else 7,500 per unit
+        // Demo pricing:
+        // - Try c.billingRate or c.unitPrice if present, else assume 7,500 per unit.
         const rate = c.billingRate ?? c.unitPrice ?? 7500;
         const estBill = used * rate;
 
         if (!byHospital.has(hospital)) {
-            byHospital.set(hospital, { hospital, cases: 0, unitsUsed: 0, estBill: 0 });
+            byHospital.set(hospital, {
+                hospital,
+                cases: 0,
+                unitsUsed: 0,
+                estBill: 0,
+            });
         }
 
         const agg = byHospital.get(hospital);
@@ -753,13 +644,17 @@ function recomputeHospitalBalance() {
       <td>${row.hospital}</td>
       <td>${row.cases}</td>
       <td>${row.unitsUsed}</td>
-      <td>${row.estBill.toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+      <td>${row.estBill.toLocaleString("en-PH", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        })}</td>
     `;
         els.hospitalTbody.appendChild(tr);
     });
 
-    if (els.billingStatus) setStatus(els.billingStatus, "Snapshot", "ok");
-    updateHospitalChart(rows);
+    if (els.billingStatus) {
+        setStatus(els.billingStatus, "Snapshot", "ok");
+    }
 }
 
 // ============================
@@ -768,38 +663,63 @@ function recomputeHospitalBalance() {
 
 function handlePrintReport() {
     logActivity("report", "Triggered print / save as PDF.");
-    window.print();
+    window.print(); // user can choose "Save as PDF"
 }
 
 // ============================
 // INIT
 // ============================
 
+// ============================
+// INIT
+// ============================
+
 document.addEventListener("DOMContentLoaded", async () => {
+    // Hook up buttons
     els.btnRefreshItems?.addEventListener("click", loadItems);
     els.btnRefreshCons?.addEventListener("click", loadConsignments);
     els.btnCreateCons?.addEventListener("click", createConsignment);
     els.consTbody?.addEventListener("click", handleConsTableClick);
     els.btnPrintReport?.addEventListener("click", handlePrintReport);
 
-    // show cold start modal (if exists)
+    // If the cold-start modal helper exists, show it right away
     if (window.InventoryColdStartModal && typeof window.InventoryColdStartModal.show === "function") {
         window.InventoryColdStartModal.show();
     }
 
     try {
+        // First load: login + fetch data
         await ensureLoggedIn();
         await Promise.all([loadItems(), loadConsignments()]);
         renderActivityLog();
 
+        // ✅ Both status pills are now "OK" (or error handled inside).
+        // If all went fine, play "server warmed up" animation + auto-close.
         if (window.InventoryColdStartModal && typeof window.InventoryColdStartModal.ready === "function") {
             window.InventoryColdStartModal.ready();
         }
     } catch (err) {
         console.error("Error during initial inventory load:", err);
 
+        // On error we just hide the modal (no green success animation)
         if (window.InventoryColdStartModal && typeof window.InventoryColdStartModal.hide === "function") {
             window.InventoryColdStartModal.hide();
         }
     }
 });
+
+
+
+// document.addEventListener("DOMContentLoaded", async () => {
+// Hook up buttons
+// els.btnRefreshItems?.addEventListener("click", loadItems);
+// els.btnRefreshCons?.addEventListener("click", loadConsignments);
+// els.btnCreateCons?.addEventListener("click", createConsignment);
+// els.consTbody?.addEventListener("click", handleConsTableClick);
+// els.btnPrintReport?.addEventListener("click", handlePrintReport);
+
+// First load: login + fetch data
+//     await ensureLoggedIn();
+//     await Promise.all([loadItems(), loadConsignments()]);
+//     renderActivityLog();
+// });
