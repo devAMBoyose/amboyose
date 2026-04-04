@@ -150,6 +150,25 @@
 
         <ul class="details-grid">
           <li><span class="k">Birthday:</span> <span class="v">27 January 1990</span></li>
+          <li><span class="k">Age:</span> <span class="v" id="age">35</span></li>
+          <li><span class="k">Website:</span> <span class="v"><a href="https://amboyose.onrender.com/" target="_blank"
+                rel="noopener noreferrer">amboyose.com</a></span></li>
+          <li><span class="k">Degree:</span> <span class="v">BSCpE</span></li>
+          <li><span class="k">Phone:</span> <span class="v">+63 962 989 0260</span></li>
+          <li>
+            <span class="k">Email:</span>
+            <span class="v">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=amboyose.dev@gmail.com" target="_blank">
+                amboyose.dev@gmail.com
+              </a>
+            </span>
+          </li>
+          <li><span class="k">City:</span> <span class="v">Philippines</span></li>
+          <li><span class="k">Freelance:</span> <span class="v">Available</span></li>
+        </ul>
+
+        <!-- <ul class="details-grid">
+          <li><span class="k">Birthday:</span> <span class="v">27 January 1990</span></li>
           <li><span class="k">Age:</span> <span class="v">35</span></li>
           <li><span class="k">Website:</span> <span class="v"><a href="https://amboyose.onrender.com/" target="_blank"
                 rel="noopener noreferrer">amboyose.com</a></span></li>
@@ -165,7 +184,7 @@
           </li>
           <li><span class="k">City:</span> <span class="v">Philippines</span></li>
           <li><span class="k">Freelance:</span> <span class="v">Available</span></li>
-        </ul>
+        </ul> -->
       </div>
 
       <!-- RIGHT: Pro section -->
@@ -367,7 +386,27 @@
   <script defer src="/js/about-pro.js"></script>
 
   <!-- BamBoy logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const birthDate = new Date(1990, 0, 27); // Year, Month(0-based), Day
+      const today = new Date();
+
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+
+      if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+      ) {
+        age--;
+      }
+
+      document.getElementById("age").textContent = age;
+    });
+  </script>
 
 </body>
+
+
 
 </html>
